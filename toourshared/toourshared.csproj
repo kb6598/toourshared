@@ -118,6 +118,8 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="login_form.aspx" />
+    <Content Include="login_form.css" />
     <Content Include="Viewer.aspx" />
     <Content Include="Write_form.aspx" />
     <Content Include="Write_get.aspx" />
@@ -181,6 +183,13 @@
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="login_form.aspx.cs">
+      <DependentUpon>login_form.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="login_form.aspx.designer.cs">
+      <DependentUpon>login_form.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Site.Master.cs">
