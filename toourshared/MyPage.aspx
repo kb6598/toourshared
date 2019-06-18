@@ -31,7 +31,7 @@
             <table align="center">
                 <!-- 상단부 -->
                 <tr>
-                    <td rowspan="3" align="center"><asp:Image ID="Image1" runat="server" ImageUrl="~/imgs/umji.jpg" Width="250px" Height="250px" /></td>
+                    <td rowspan="3" align="center"><asp:Image ID="Image1" runat="server" ImageUrl="imgs/umji.jpg" Width="250px" Height="250px" /></td>
                     <td style="width: 90px; height: 50px;" align="center"><asp:Label ID="Label1" runat="server" Text="아이디"></asp:Label></td>
                     <td style="width: 90px; height: 50px;" align="center"><asp:Button ID="Button1" runat="server" Text="사진 변경" /></td>
                     <td style="width: 90px; height: 50px;" align="center"><asp:Button ID="Button2" runat="server" Text="설정" /></td>

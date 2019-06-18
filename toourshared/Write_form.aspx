@@ -1,8 +1,9 @@
-﻿<%@ Page Language="C#" EnableEventValidation="false" %>
+﻿<%@ Page Language="C#" %>
 
 <!DOCTYPE html>
 
 <script runat="server">
+
 
 
 </script>
@@ -19,7 +20,7 @@
     <style>
         .map_wrap {
             width: 100%;
-            vertical-align:middle;
+            vertical-align: middle;
         }
 
         .modes {
@@ -39,33 +40,36 @@
 
 
 
+
     <div class="container">
         <div class="col-sm-12">
             <div id="emailMsg"></div>
-            <form id="form1" action="Write_get.aspx" runat="server">
+            <form id="form1" runat="server" action="Write_get.aspx">
                 <input type="hidden" name="sendEmail" value="ok" />
                 <div class="form-group">
-                    <asp:TextBox ID="TextBox1" runat="server" CssClass="form-control form-control-lg" placeholder="제목을 입력해주세요"></asp:TextBox>
+                    <asp:TextBox ID="title" runat="server" CssClass="form-control form-control-lg" placeholder="제목을 입력해주세요"></asp:TextBox>
                 </div>
                 <div class="map_wrap">
                     <div id="drawingMap"></div>
 
                     <p class="modes">
-                        <button onclick="selectOverlay('MARKER')">마커</button>
-                        <button onclick="selectOverlay('POLYLINE')">선</button>
-                        <button onclick="selectOverlay('CIRCLE')">원</button>
-                        <button onclick="selectOverlay('RECTANGLE')">사각형</button>
-                        <button onclick="selectOverlay('POLYGON')">다각형</button>
+                        <input type="button" onclick="selectOverlay('MARKER')" value="마커" />
+                        <input type="button" onclick="selectOverlay('POLYLINE')" value="선" />
+                        <input type="button" onclick="selectOverlay('CIRCLE')" value="원" />
+                        <input type="button" onclick="selectOverlay('RECTANGLE')" value="사각형" />
+                        <input type="button" onclick="selectOverlay('POLYGON')" value="다각형" />
+                        <asp:TextBox ID="keyword" runat="server"></asp:TextBox>
+                        <input type="button" onclick="" value="검색" />
                     </p>
                 </div>
                 <div class="form-group">
-                    <asp:TextBox ID="TextBox2" runat="server" TextMode="MultiLine" />
+                    <asp:TextBox ID="article" runat="server" TextMode="MultiLine" />
                 </div>
                 <div class="form-group">
-                    <asp:TextBox ID="TextBox3" runat="server" CssClass="form-control form-control-lg" placeholder="#해시태그를 입력해주세요"></asp:TextBox>
+                    <asp:TextBox ID="hashtag" runat="server" CssClass="form-control form-control-lg" placeholder="#해시태그를 입력해주세요"></asp:TextBox>
                 </div>
                 <div class="form-group">
-                    <input type="submit" value="넘기기" />
+                    <input type="button" onclick="postToNext()" value="넘기기" />
                 </div>
             </form>
         </div>
@@ -80,7 +84,7 @@
             });
         });
     </script>
-        <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=ebcd0c1accbe0ff4bbb47bd777ef2fcf&libraries=drawing"></script>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=ebcd0c1accbe0ff4bbb47bd777ef2fcf&libraries=service&libraries=drawing"></script>
     <script>
         // Drawing Manager로 도형을 그릴 지도 div
         var drawingMapContainer = document.getElementById('drawingMap'),
@@ -164,8 +168,8 @@
         //    };
 
         // 지도 div와 지도 옵션으로 지도를 생성합니다
-        var map = new daum.maps.Map(mapContainer, mapOptions),
-            overlays = []; // 지도에 그려진 도형을 담을 배열
+        //var map = new daum.maps.Map(mapContainer, mapOptions),
+        overlays = []; // 지도에 그려진 도형을 담을 배열
 
         // 가져오기 버튼을 클릭하면 호출되는 핸들러 함수입니다
         // Drawing Manager로 그려진 객체 데이터를 가져와 아래 지도에 표시합니다
@@ -318,19 +322,77 @@
             return path;
 
         }
+        // 마커를 클릭하면 장소명을 표출할 인포윈도우 입니다
+var infowindow = new daum.maps.InfoWindow({zIndex:1});
+
+
+        // 장소 검색 객체를 생성합니다
+var ps = new daum.maps.services.Places(); 
+
+// 키워드로 장소를 검색합니다
+        function search() {
+
+
+            var keyword = document.getElementById("keyword").value;
+            ps.keywordSearch(keyword, placesSearchCB); 
+        }
+
+
+// 키워드 검색 완료 시 호출되는 콜백함수 입니다
+function placesSearchCB (data, status, pagination) {
+    if (status === daum.maps.services.Status.OK) {
+
+        // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
+        // LatLngBounds 객체에 좌표를 추가합니다
+        var bounds = new daum.maps.LatLngBounds();
+
+        for (var i=0; i<data.length; i++) {
+            displayMarker(data[i]);    
+            bounds.extend(new daum.maps.LatLng(data[i].y, data[i].x));
+        }       
+
+        // 검색된 장소 위치를 기준으로 지도 범위를 재설정합니다
+        drawingMap.setBounds(bounds);
+    } 
+}
+
+// 지도에 마커를 표시하는 함수입니다
+function displayMarker(place) {
+    
+    // 마커를 생성하고 지도에 표시합니다
+    var marker = new daum.maps.Marker({
+        map: drawingMap,
+        position: new daum.maps.LatLng(place.y, place.x) 
+    });
+
+    // 마커에 클릭이벤트를 등록합니다
+    daum.maps.event.addListener(marker, 'click', function() {
+        // 마커를 클릭하면 장소명이 인포윈도우에 표출됩니다
+        infowindow.setContent('<div style="padding:5px;font-size:12px;">' + place.place_name + '</div>');
+        infowindow.open(drawingMap, marker);
+    });
+}
+
+
+
+
+
+
+
+
 
         function postToNext() {
             var data = manager.getData();
-
+            //rects  circles   polygons 
             markers = data[daum.maps.drawing.OverlayType.MARKER];
             polylines = data[daum.maps.drawing.OverlayType.POLYLINE];
-            rectangles = data[daum.maps.drawing.OverlayType.RECTANGLE];
+            rects = data[daum.maps.drawing.OverlayType.RECTANGLE];
             circles = data[daum.maps.drawing.OverlayType.CIRCLE];
             polygons = data[daum.maps.drawing.OverlayType.POLYGON];
 
             markersPath = [];
             polylinesPath = [];
-            rectanglesPath = [];
+            rectsPath = [];
             circlesPath = [];
             polygonsPath = [];
 
@@ -350,35 +412,89 @@
 
             for (; i < len; i++) {
                 var path = pointsToPath(polylines[i].points);
+                polylinesPath.push(i + ":");
+                polylinesPath.push(path);
+
+            }
+
+
+            var len = circles.length, i = 0;
+
+            for (; i < len; i++) {
+                circlesPath.push(i + ":");
+                circlesPath.push(new daum.maps.LatLng(circles[i].center.y, circles[i].center.x));
+                circlesPath.push(circles[i].radius);
+
+            }
+
+            var len = rects.length, i = 0;
+
+            for (; i < len; i++) {
+
+
+                rectsPath.push(i + ":");
+                rectsPath.push(rects[i].sPoint.y, rects[i].sPoint.x, rects[i].ePoint.y, rects[i].ePoint.x);
+
+
+            }
+
+            var len = polygons.length, i = 0;
+
+            for (; i < len; i++) {
+                var path = pointsToPath(polygons[i].points);
                 polygonsPath.push(i + ":");
                 polygonsPath.push(path);
 
             }
 
 
-            document.getElementById("marker").value = markersPath;
-            document.getElementById("polygon").value = polygonsPath;
 
 
-            //     var form = document.createElement("form");      // form 엘리멘트 생성
-            //     form.setAttribute("method","post");             // method 속성 설정
-            //     form.setAttribute("action","marker.php");       // action 속성 설정
-            //     document.body.appendChild(form);                // 현재 페이지에 form 엘리멘트 추가
-
-            //     var insert1 = document.createElement("input");   // input 엘리멘트 생성
-            //     insert1.setAttribute("type","hidden");           // type 속성을 hidden으로 설정
-            //     insert1.setAttribute("name","marker");               // name 속성을 'stadium'으로 설정
-            //     insert1.setAttribute("value",markersPath);             // value 속성을 삽입
-            //     form.appendChild(insert1);                       // form 엘리멘트에 input 엘리멘트 추가
-
-            // var insert2 = document.createElement("input");   // input 엘리멘트 생성
-            //     insert2.setAttribute("type","hidden");           // type 속성을 hidden으로 설정
-            //     insert2.setAttribute("name","polyline");               // name 속성을 'stadium'으로 설정
-            //     insert2.setAttribute("value",polylinesPath);             // value 속성을 삽입
-            //     form.appendChild(insert2);  
+            //document.getElementById("marker").value = markersPath;
+            //document.getElementById("polygon").value = polylinesPath;
+            var title = document.getElementById("title").value;
+            var article = document.getElementById("article").value;
+            var hashtag = document.getElementById("hashtag").value;
 
 
-            //     form.submit();                                  // 전송
+            var form = document.getElementById("form1");
+
+
+
+
+            var insert1 = document.createElement("input");   // input 엘리멘트 생성
+            insert1.setAttribute("type", "hidden");           // type 속성을 hidden으로 설정
+            insert1.setAttribute("name", "marker");               // name 속성을 'stadium'으로 설정
+            insert1.setAttribute("value", markersPath);             // value 속성을 삽입
+            form.appendChild(insert1);                       // form 엘리멘트에 input 엘리멘트 추가
+
+            var insert2 = document.createElement("input");   // input 엘리멘트 생성
+            insert2.setAttribute("type", "hidden");           // type 속성을 hidden으로 설정
+            insert2.setAttribute("name", "polyline");               // name 속성을 'stadium'으로 설정
+            insert2.setAttribute("value", polylinesPath);             // value 속성을 삽입
+            form.appendChild(insert2);
+            //rects  circles   polygons 
+            var insert3 = document.createElement("input");   // input 엘리멘트 생성
+            insert3.setAttribute("type", "hidden");           // type 속성을 hidden으로 설정
+            insert3.setAttribute("name", "rects");               // name 속성을 'stadium'으로 설정
+            insert3.setAttribute("value", rectsPath);             // value 속성을 삽입
+            form.appendChild(insert3);
+
+            var insert4 = document.createElement("input");   // input 엘리멘트 생성
+            insert4.setAttribute("type", "hidden");           // type 속성을 hidden으로 설정
+            insert4.setAttribute("name", "circles");               // name 속성을 'stadium'으로 설정
+            insert4.setAttribute("value", circlesPath);             // value 속성을 삽입
+            form.appendChild(insert4);
+
+            var insert5 = document.createElement("input");   // input 엘리멘트 생성
+            insert5.setAttribute("type", "hidden");           // type 속성을 hidden으로 설정
+            insert5.setAttribute("name", "polygons");               // name 속성을 'stadium'으로 설정
+            insert5.setAttribute("value", polygonsPath);             // value 속성을 삽입
+            form.appendChild(insert5);
+
+
+
+            form.submit();                                  // 전송
         }
     </script>
 </body>
