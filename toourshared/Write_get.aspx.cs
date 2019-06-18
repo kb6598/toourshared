@@ -14,6 +14,10 @@ namespace toourshared
             Request.QueryString.Get("TextBox1");
             Request.QueryString.Get("TextBox2");
             Request.QueryString.Get("TextBox3");
+
+            
+
+            
         }
     }
 }
