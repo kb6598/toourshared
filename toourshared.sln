@@ -3,23 +3,40 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.572
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "toourshared", "toourshared\toourshared.csproj", "{671EA9C3-8107-4FD4-8748-89ADA9832FD1}"
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "toourshared(1)", "toourshared\", "{FD9118A4-9252-4720-A258-CC5858C281BC}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.6.1"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_6118"
+		Debug.AspNetCompiler.PhysicalPath = "toourshared\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_6118\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/localhost_6118"
+		Release.AspNetCompiler.PhysicalPath = "toourshared\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_6118\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "6118"
+		SlnRelativePath = "toourshared\"
+		DefaultWebSiteLanguage = "Visual C#"
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
-		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{671EA9C3-8107-4FD4-8748-89ADA9832FD1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{671EA9C3-8107-4FD4-8748-89ADA9832FD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{671EA9C3-8107-4FD4-8748-89ADA9832FD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{671EA9C3-8107-4FD4-8748-89ADA9832FD1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD9118A4-9252-4720-A258-CC5858C281BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD9118A4-9252-4720-A258-CC5858C281BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {810CC845-F577-4FDE-9015-8BB46FE4C196}
+		SolutionGuid = {518DFB40-47AB-40BA-B9BF-C887909C8869}
 	EndGlobalSection
 EndGlobal
