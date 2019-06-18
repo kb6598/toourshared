@@ -8,47 +8,52 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-    <style>
-        .sidenav {
-          height: 100%;
-          width: 0;
-          position: fixed;
-          z-index: 1;
-          top: 0;
-          left: 0;
-          background-color: #F7FFF7;
-          overflow-x: hidden;
-          transition: 0.5s;
-          padding-top: 60px;
-        }
+          <style>
+          body {
+              padding:0;
+              margin:0;
 
-        .sidenav a {
-          padding: 8px 8px 8px 32px;
-          text-decoration: none;
-          font-size: 25px;
-          color: #424A54;
-          display: block;
-          transition: 0.3s;
-        }
-
-        .sidenav a:hover {
-          color: #F17897;
-        }
-
-        .sidenav .closebtn {
-          position: absolute;
-          top: 0;
-          right: 25px;
-          font-size: 36px;
-          margin-left: 50px;
-        }
-
-        @media screen and (max-height: 450px) {
-          .sidenav {padding-top: 15px;}
-          .sidenav a {font-size: 18px;}
-        }
-
-    </style>
+              background-image: url(3.jpg);
+              width: 100%;
+              height: 100%;
+              overflow: hidden;
+              background-position: 0 0;
+              background-repeat: no-repeat;
+              background-attachment: fixed;
+              background-size: cover;
+              position: relative;
+              overflow-y: auto;
+          }
+          aside{
+              width:400px;
+              height:3000px;
+              position:fixed;
+              background:#f9622e;
+              color:white;
+              overflow:hidden;
+              float:left;
+          }
+          nav{
+              margin-left:200px;
+              width:100%;
+              height:50px;
+              background:white;
+          }
+          section{
+              margin-top:100px;
+              margin-left:450px;
+              margin-right:500px;
+              margin-bottom:100px;
+              background:white;
+          }
+          .text{
+              background:#000000;
+              color:white;
+              height:50px;
+              padding:10px;
+              vertical-align:middle;
+          }
+      </style>
 
     <script>
             function openNav()
@@ -67,26 +72,22 @@
 </head>
 <body>
     <form id="form1" runat="server">
-    <div>
-        
-        <div id="mySidenav" class="sidenav">
-          <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-            <div style="width: 80%; margin-left:30px; height:15%;">
-                <asp:TextBox ID="TextBox1" runat="server" Width="80%" Height="40px"></asp:TextBox>
-                <asp:Button ID="Button1" runat="server" Text="Button"  Height="40px"/>
-            </div>
+<aside>좌측 사이드 메뉴</aside>
+      <nav>상단 메뉴입니다.</nav>
+      <section>
+          <div class="text">Your it to gave life whom as</div>    
+           <div class="text">Your it to gave life whom as</div>
+           <div class="text">Your it to gave life whom as</div>    
+           <div class="text">Your it to gave life whom as</div>    
 
-        </div>
+           <div class="text">Your it to gave life whom as</div>    
+           <div class="text">Your it to gave life whom as</div>    
+           <div class="text">Your it to gave life whom as</div>    
+           <div class="text">Your it to gave life whom as</div>    
+      </section>
+        <nav>하단 메뉴</nav>
 
-    <p></p>
-        <hr />
-
-             <span style="font-size:60px; padding-top:0px;  padding-left:0px; color:#424A54; cursor:pointer" onclick="openNav()">&#9776;</span>
-               <br />
-            
-        <br />
-        <br />
-    </div>
     </form>
+      
 </body>
 </html>
