@@ -11,13 +11,16 @@ namespace toourshared
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            Request.QueryString.Get("TextBox1");
-            Request.QueryString.Get("TextBox2");
-            Request.QueryString.Get("TextBox3");
+           TextBox1.Text =  Request.QueryString.Get("TextBox1");
+            TextBox2.Text = Request.QueryString.Get("TextBox2");
+            TextBox3.Text = Request.QueryString.Get("TextBox3");
+
+            
 
             
 
             
         }
+        
     }
 }
