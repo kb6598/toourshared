@@ -1,5 +1,11 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Write_form.aspx.cs" Inherits="toourshared.Write_form" ValidateRequest="false" %>
+﻿<%@ Page Language="C#" EnableEventValidation="false" %>
+
 <!DOCTYPE html>
+
+<script runat="server">
+
+
+</script>
 
 
 <html xmlns="http://www.w3.org/1999/xhtml">
