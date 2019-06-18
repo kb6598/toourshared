@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="login_form.aspx.cs" Inherits="toourshared.login_form" %>
+﻿<%@ Page Language="C#" %>
 
 <!DOCTYPE html>
 

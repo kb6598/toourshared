@@ -44,8 +44,11 @@
         <div class = "backgroundTransition">
             <div class="div_sty0">
                 <ul>
-                    <li><a href ="">Sign up</a></li>
-                    <li><a href ="http://itbuddy.iptime.org/project/toourshared/src/main/webapp/login_form.html">Log in</a></li>
+                    <li><a href ="Write_form.aspx">글 작성</a></li>
+                    <li><a href ="Viewer.aspx">검색 페이지</a></li>
+                    <li><a href ="MyPage.aspx">My Page</a></li>
+                    <li><a href ="join.aspx">Sign up</a></li>
+                    <li><a href ="login_form.aspx">Log in</a></li>
                     <li class ="team">
                         <a href="javascript:void(0)" class="teambtn">Team</a>
                         <div class ="team-drop">
@@ -57,7 +60,7 @@
                         </div>
                     </li>
                     <li class = "ToOurShared">
-                        <a href = "">To Our Shared</a>
+                        <a href = "index.aspx">To Our Shared</a>
                     </li>
                 </ul>
             </div>
