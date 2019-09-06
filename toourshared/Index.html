@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1"/>
+	
+<head>
+	<title>TO OUR SHARED</title>
+        
+	<!-- 웹 폰트 경로 -->
+	<link href="https://fonts.googleapis.com/css?family=Libre+Baskerville|Merriweather|Nanum+Gothic+Coding|Noto+Serif+KR|Playfair+Display|Song+Myung" rel="stylesheet"/>
+	
+	<!-- 배경 맞추기 위한 설정 -->
+	<link rel="stylesheet" type="text/css" href="./backgroundTransition.css" />
+	
+	<!-- jQuery 사용을 위한 설정 -->
+	<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+	
+	<style>
+		
+		.nav{
+			height: 40px;
+			background-color: whitesmoke;
+			border-bottom: 0.5px solid gainsboro;
+			display: flex;
+			align-items: center;
+		}
+		
+		.nav-align-left{
+			display:flex;
+			margin-right: auto;
+		}
+		
+		.nav-align-right{
+			display:flex;
+			margin-left: auto;
+			font-weight: bold;
+		}
+		
+		.nav-item{
+			display: flex;
+			margin: 20px;
+		}
+		
+		.nav-item-href{
+			text-decoration: none;
+			color: black;
+		}
+		
+		.nav-item-logo{
+			font-size: 20px;
+			font-family: 'Libre Baskerville', serif;
+		}
+		
+		.background{
+			width: 100%;
+			height: 1080px;
+			
+    		background-image: url("./imgs/Car-11490.gif");
+			background-size: cover;
+			background-repeat: no-repeat;
+		}
+		
+		.background-main{
+			padding-top: 150px;
+		}
+		
+		.background-title{
+			text-align: center;
+		}
+		
+		.background-title-label{
+    		color: black;
+    		font-size: 72px;
+    		font-family: 'Libre Baskerville', serif;
+		}
+		
+		.background-subtitle{
+			text-align: center;
+		}
+		
+		.background-subtitle-label{
+   			color: black;
+    		font-size: 16px;
+    		font-family: 'Libre Baskerville', serif;
+		}
+		
+		.search{
+			display: flex;
+			position:absolute;
+  			top:42.5%;
+  			left:50%;
+  			transform:translate(-50%, -50%)
+		}
+		
+		.search-item{
+			align-items: center;
+		}
+		
+		.search-item-text{
+    		width: 500px;
+    		height: 50px;
+    		margin-left: auto;
+			padding-right: 10px;
+			padding-left: 10px;
+			
+			background-color: transparent;
+			border-top: transparent;
+			border-left: transparent;
+			border-right: transparent;
+			
+			border-bottom: 1px solid black;
+			
+			border-top-left-radius: 4px;
+			border-bottom-left-radius: 4px;
+                
+    		outline: none;
+    		font-size: 17px;
+    		/* font-family: 영, 일, 한글 폰트로 설정 됨*/
+    		font-family: 'Merriweather', 'Noto Serif KR';
+		}
+		
+		.search-item-button{
+			width: 87px;
+    		height: 52px;
+			border: none;
+			outline: none;
+    		cursor: pointer;
+			
+			color: white;
+			font-family: FontAwesome;
+			border-top-right-radius: 4px;
+			border-bottom-right-radius: 4px;
+                
+    		background-size: cover;
+    		background-repeat: no-repeat;
+			background-color: black;
+		}
+		
+		.search-item-button:hover{
+			font-weight: bold;
+		}
+		
+		.mouseDiv{
+			position:absolute;
+  			top:80%;
+  			left:50%;
+  			transform:translate(-50%, -50%);
+		}
+		
+		.mouse{
+			max-width: 2.5rem;
+			width: 100%;
+    		height: auto;
+		}
+		
+		@keyframes scroll{
+			0%, 20% {
+				transform: translateY(0) scaleY(1);
+			}
+
+			100% {
+				transform: translateY(36px) scaleY(2);
+				opacity: 0;
+			}
+		}
+		
+		.scroll {
+			animation-name: scroll;
+			animation-duration: 1.5s;
+			animation-timing-function: cubic-bezier(0.650, -0.550, 0.250, 1.500);
+			animation-iteration-count: infinite;
+			transform-origin: 50% 20.5px;
+			will-change: transform, opacity;
+			opacity: 1;
+		}
+		
+		.contents{
+			background-color: rgb(250,250,250);
+		}
+		
+		.container{
+    		position: relative;
+    		width: 0%;
+    		max-width: auto;
+		}
+		
+		.container-image{
+    		width: 350px;
+    		height: 300px;
+    		border-radius: 10px;
+    		margin: 50px;
+    		display: block;
+		}
+
+		.overlay {
+    		position: absolute; 
+    		bottom: 0; 
+    		background: rgb(0, 0, 0);
+    		background: rgba(0, 0, 0, 0.5); /* Black see-through */
+    		color: #f1f1f1; 
+    		width: 350px;
+    		transition: .5s ease;
+    		opacity:0;
+    		color: white;
+    		font-size: 20px;
+    		text-align: center;
+    		margin-left: 50px;
+    		padding: 123px 0px;
+    		border-radius: 10px;
+		}
+
+		.container:hover .overlay{
+    		opacity: 1;
+		}
+		
+		.contents-label{
+			padding: 60px 0px 15px 0px;
+			text-align: center;
+			font-size: 40px;
+			font-family: 'Song Myung', serif;
+		}
+		
+		.contents-country{
+			style="overflow: hidden;
+		}
+		
+		.contents-label-detail{
+			font-size: 15px;
+			font-family: 'Noto Sans KR', sans-serif;
+		}
+		
+	</style>
+	
+	<script>
+		jQuery(document).ready(function($){
+			$('a.scroll-link').click(function(e){
+				e.preventDefault();
+				$id = $(this).attr('href');
+				$('body,html').animate({
+					scrollTop: $($id).offset().top -20
+				}, 750);
+			});	
+		});
+	</script>
+	
+</head>
+<body>
+	<form>
+		<div class="nav">
+			<!-- 좌측 상단 로고 -->
+			<div class="nav-align-left">
+				<div class = "nav-item">
+					<div class = "nav-item-logo">
+						<a href ="#" class="nav-item-href">To Our Shared</a>
+					</div>
+				</div>
+			</div>
+			<!-- 우측 상단 메뉴 -->
+			<div class = "nav-align-right">
+				<div class = "nav-item"><a href ="#" class="nav-item-href">글 작성</a></div>
+				<div class = "nav-item"><a href ="#" class="nav-item-href">검색 페이지</a></div>
+				<div class = "nav-item"><a href ="#" class="nav-item-href">마이 페이지</a></div>
+				<div class = "nav-item"><a href ="#" class="nav-item-href">로그인</a></div>
+				<div class = "nav-item"><a href ="#" class="nav-item-href">회원가입</a></div>
+			</div>	
+		</div>
+		<div class = "background">
+			<!-- 타이틀 -->
+			<div class = "background-main">
+				<div class="background-title">
+					<div class="background-title-label">To Our Shared</div>
+	            </div>
+	            <div class = "background-subtitle">
+	                <div class ="background-subtitle-label">share memorable memories while you travel.</div>
+	            </div>
+			</div>
+			<!-- 검색창 -->
+			<div class = "search">
+				<div class = "search-item">
+					<div>
+						<input type = "text" placeholder = "관심있는 지역을 입력하세요.&nbsp&nbsp서울, 부산..." class = "search-item-text"/>
+					</div>
+				</div>
+				<div class = "search-item">
+					<div>
+						<input type = "button" value="검색" class = "search-item-button"/>
+					</div>
+				</div>
+			</div>
+			<!-- 마우스 -->
+			<div class = "mouseDiv">
+				<a class="scroll-link" href="#contents">
+					<svg class="mouse" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 76 130" preserveAspectRatio="xMidYmid meet">
+						<g fill="none" fill-rule="evenodd">
+							<rect width="70" height="118" x="1.5" y="1.5" stroke="#fff" stroke-width="3" rx="36"/>
+							<circle class = "scroll" cx="36.5" cy="31.5" r="4.5" fill="#fff"/>
+						</g>
+					</svg>
+				</a>
+			</div>
+		</div>
+		<div class = "contents">
+			<div class = "contents-label">
+				<div>대한민국 8대 명소</div>
+				<div class="contents-label-detail">사진 위에 마우스를 올리시면 지역명이 나타납니다.</div>
+			</div>
+			<div id = "contents">
+				<div class = "contents-country">
+	            	<table>
+	                	<tr>
+							<td>
+	                    		<div class="container"><img src="./imgs/서울.jpg" class="container-image">
+    	                    		<a href="#"><div class="overlay">서울<br/>SEOUL</div></a>
+								</div>
+							</td>
+                            
+	                    	<td>
+		                        <div class="container"><img src="./imgs/경기도.jpg" class="container-image">
+		                            <a href="#"><div class="overlay">경기도<br/>GYEONGGIDO</div></a>
+		                        </div>
+		                    </td>
+		                            
+    	                	<td>
+		                        <div class="container"><img src="./imgs/인천.jpg" class="container-image">
+		                            <a href="#"><div class="overlay">인천<br/>INCHEON</div></a>
+		                        </div>
+		                    </td>
+                            
+	                    	<td>
+		                        <div class="container"><img src="./imgs/충청도.jpg" class="container-image">
+		                            <a href="#"><div class="overlay">충청도<br/>CHUNGCHEONGDO</div></a>
+		                        </div>
+		                    </td>
+		                </tr>
+	                	<tr>
+		                    <td>
+		                        <div class="container"><img src="./imgs/강원도.jpg" class="container-image">
+		                            <a href="#"><div class="overlay">강원도<br/>GANGWONDO</div></a>
+		                        </div>
+		                    </td>
+                            
+		                    <td>
+		                        <div class="container"><img src="./imgs/전라도.jpg" class="container-image">
+		                            <a href="#"><div class="overlay">전라도<br/>JEOLLADO</div></a>
+		                        </div>
+		                    </td>
+                            
+		                    <td>
+		                        <div class="container"><img src="./imgs/경상도.jpg" class="container-image">
+		                            <a href="#"><div class="overlay">경상도<br/>GYEONGSANGDO</div></a>
+		                        </div>
+		                    </td>
+                            
+	                    	<td>
+		                        <div class="container"><img src="./imgs/제주도.jpg" class="container-image">
+		                            <a href="#"><div class="overlay">제주도<br/>JEJUDO</div></a>
+		                        </div>
+		                    </td>
+		                </tr>
+	            	</table>
+    	        </div>
+			</div>
+		</div>
+	</form>
+</body>
+</html>
