@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1"/>
+	
+<head>
+	<title>TO OUR SHARED</title>
+	
+	<!-- 배경 맞추기 위한 설정 -->
+	<link rel="stylesheet" type="text/css" href="./backgroundTransition.css" />
+	
+	<!-- 아이콘 유니코드 설정-->
+	<script src="https://kit.fontawesome.com/a076d05399.js"></script>
+	
+	<style>
+		
+		.nav{
+			height: 40px;
+			background-color: whitesmoke;
+			border-bottom: 0.5px solid gainsboro;
+			display: flex;
+			align-items: center;
+		}
+		
+		.nav-align-left{
+			display:flex;
+			margin-right: auto;
+		}
+		
+		.nav-align-right{
+			display:flex;
+			margin-left: auto;
+			font-weight: bold;
+		}
+		
+		.nav-item{
+			display: flex;
+			margin: 20px;
+		}
+		
+		.nav-item-href{
+			text-decoration: none;
+			color: black;
+		}
+		
+		.nav-item-logo{
+			font-size: 20px;
+			font-family: 'Libre Baskerville', serif;
+		}
+		
+		.background{
+			width: 100%;
+			height: 100%;
+			background-color: rgb(222, 222, 222);
+		}
+		
+		.main{
+			text-align: center;
+		}
+		
+		.title-container{
+			position:absolute;
+  			top:35%;
+  			left:50%;
+  			transform:translate(-50%, -50%);
+			
+			font-size: 60px;
+			width: 100%;
+		}
+		
+		.write{
+			padding: 30px 0px 50px 0px;
+		}
+		
+		.article{
+			position:absolute;
+  			top:45%;
+  			left:40%;
+  			transform:translate(-50%, -50%);
+			
+			margin: 0;
+			font-size: 4rem;
+			line-height: 1;
+			transform: translateY(6rem);
+			animation: up 500ms linear forwards;
+			z-index: 1;
+	
+			&::before,
+			&::after {
+				position: absolute;
+				content: '';
+				width: 0px;
+				height: 1px;
+				left: 0;
+				background-color: rgba(0,0,0,0.2);
+				z-index: -1;
+			}
+	
+			&::before {
+				top: 1.4rem;
+				animation: draw 500ms linear 1s forwards;
+			}
+	
+			&::after {
+				bottom: 0.4rem;
+				animation: draw 500ms linear 1s forwards;
+			}
+		}
+		
+		.article-write{
+			width: 130px;
+			height: 50px;
+			
+			border-left: none;
+			border-right: none;
+			border-top: none;
+			border-bottom: 2px solid black;
+			
+			outline: none;
+			font-size: 30px;
+			text-align: center;
+			
+			background-color: transparent;
+		}
+		
+		.article-write2{
+			margin-top: 25px;
+			font-size: 25px;
+			font-weight: bold;
+		}
+		
+		.write span{
+			font-size: 30px;
+		}
+		
+		.finish-button{
+			position:absolute;
+  			top: 100%;
+  			left: 50%;
+  			transform:translate(-50%, -50%);
+			
+			width: 500px;
+			height: 70px;
+			
+			font-size: 20px;
+			font-weight: bold;
+			
+			outline: none;
+			border: none;
+			cursor: pointer;
+			
+			margin-top: 200px;
+			
+			color: white;
+			background-color: black;
+		}
+		
+		.back{
+			position:absolute;
+  			top: 8%;
+  			left: 4%;
+  			transform:translate(-50%, -50%);
+		}
+		
+		.backIcon{
+			font-size: 25px;
+			color: black;
+		}
+		
+		.backIcon a{
+			font-size: 20px;
+			
+			color: black;
+			text-decoration: none;
+		}
+		
+		.backIcon a:hover{
+			font-weight: bold;
+		}
+		
+		*,
+		*::before,
+		*::after {
+			box-sizing: border-box;
+		}
+		
+		.container {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			min-height: 60vh;
+			background-color: white;
+		}
+		
+		h1 {
+			position: relative;
+			display: block;
+			margin: 0;
+			font-size: 4rem;
+			line-height: 1;
+			transform: translateY(6rem);
+			animation: up 500ms linear forwards;
+			z-index: 1;
+			text-shadow: 0px 1px 1px rgba(255,255,255,1);
+	
+			&::before,
+			&::after {
+				position: absolute;
+				content: '';
+				width: 0px;
+				height: 1px;
+				left: 0;
+				background-color: rgba(0,0,0,0.2);
+				z-index: -1;
+			}
+	
+			&::before {
+				top: 1.4rem;
+				animation: draw 500ms linear 1s forwards;
+			}
+	
+			&::after {
+				bottom: 0.4rem;
+				animation: draw 500ms linear 1s forwards;
+			}
+		}
+		
+		.title-container {
+			font-size: 0;
+			position: relative;
+			overflow: hidden;
+			padding-bottom: 0.4rem;
+		}
+		
+		@keyframes up {
+			0%{
+				opacity: 0;
+			}
+			
+			100%{
+				transform: translateY(0);
+			}
+		}
+		
+		@keyframes draw {	
+			100% {
+				width: 100%;
+			}
+		}
+		
+	</style>
+</head>
+
+<body>
+	<form>
+		<!-- 상단 메뉴 -->
+		<div class="nav">
+			<!-- 좌측 상단 로고 -->
+			<div class="nav-align-left">
+				<div class = "nav-item">
+					<div class = "nav-item-logo">
+						<a href ="#" class="nav-item-href">To Our Shared</a>
+					</div>
+				</div>
+			</div>
+			<!-- 우측 상단 메뉴 -->
+			<div class = "nav-align-right">
+				<div class = "nav-item"><a href ="#" class="nav-item-href">글 작성</a></div>
+				<div class = "nav-item"><a href ="#" class="nav-item-href">검색 페이지</a></div>
+				<div class = "nav-item"><a href ="#" class="nav-item-href">마이 페이지</a></div>
+				<div class = "nav-item"><a href ="#" class="nav-item-href">로그인</a></div>
+				<div class = "nav-item"><a href ="#" class="nav-item-href">회원가입</a></div>
+			</div>	
+		</div>
+		<!-- 뒤로가기 -->
+		<div class = "back">
+			<div class = "backIcon">
+				<a href = "#"><i class= "fas fa-reply" style="font-size:20px"></i> 뒤로가기</a>
+			</div>
+		</div>
+		<!-- 메인 -->
+		<div class = "background">
+			<div class = "main">
+				<div class = "container">
+					<div class = "title-container">
+						<h1>몇박 며칠간의 여행이셨나요?</h1>
+					</div>
+				</div>
+			</div>
+			<div class = "article">
+				<table>
+					<tr>
+						<td><input type = "text" class = "article-write"></td>
+						<td><div class = "article-write2">박</div></td>
+						<td><input type = "text" class = "article-write"></td>
+						<td><div class = "article-write2">일</div></td>
+					</tr>
+				</table>
+				<div class = "finish">
+					<input type = "button" class="finish-button" value = "다음으로"/>
+				</div>
+			</div>
+		</div>
+	</form>
+</body>
+</html>

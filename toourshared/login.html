@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1"/>
+	
+<head>
+	<title>TO OUR SHARED - SIGN IN</title>
+	
+	<!-- FONT 적용 -->
+	<link href="https://fonts.googleapis.com/css?family=Libre+Baskerville|Merriweather|Noto+Sans+KR|Nanum+Gothic+Coding|Noto+Serif+KR|Playfair+Display" rel="stylesheet"/>
+	
+	<!-- 배경 맞추기 위한 설정 -->
+	<link rel = "stylesheet" type="text/css" href="./backgroundTransition.css" />
+	
+	<style>
+		.nav{
+			height: 40px;
+			background-color: whitesmoke;
+			border-bottom: 0.5px solid gainsboro;
+			display: flex;
+			align-items: center;
+		}
+		
+		.nav-align-left{
+			display:flex;
+			margin-right: auto;
+		}
+		
+		.nav-align-right{
+			display:flex;
+			margin-left: auto;
+			font-weight: bold;
+		}
+		
+		.nav-item{
+			display: flex;
+			margin: 20px;
+		}
+		
+		.nav-item-href{
+			text-decoration: none;
+			color: black;
+		}
+		
+		.nav-item-logo{
+			font-size: 20px;
+			font-family: 'Libre Baskerville', serif;
+		}
+		
+		.main{
+			min-width: 100%;
+			min-height: 100%;
+			position: absolute;
+			background-color: rgb(250, 250, 250);
+			
+			text-align: center;
+			display: inline-block;
+		}
+		
+		.title {
+			padding: 100px 0px;
+			text-align: center;
+	
+            font-size: 60px;
+            font-family: 'Libre Baskerville', serif;
+		}
+		
+		.article-id input{
+			width: 410px;
+			height: 60px;
+			padding-left: 10px;
+			padding-right: 30px;
+			font-size: 17px;
+			font-family: 'Merriweather';
+    		border-bottom: none;
+    		border-left-style: solid;
+    		border-right-style: solid;
+    		border-top-style: solid;
+    		border-left-width: thin;
+    		border-right-width: thin;
+    		border-top-width: thin;
+    		border-left-color: gainsboro;
+    		border-right-color: gainsboro;
+    		border-top-color: gainsboro;
+		}
+		
+		.article-id input:focus{
+			outline: none;
+			border: 0.5px solid dimgrey;
+		}
+		
+		.article-pw input{
+			width: 410px;
+			height: 60px;
+			padding-left: 10px;
+	    	padding-right: 30px;
+	    	font-size: 17px;
+	    	border: solid;
+		    border-width: thin;
+		    border-color: gainsboro;
+		}
+		
+		.article-pw input:focus{
+			outline: none;
+			border: 0.5px solid dimgrey;
+		}
+		
+		.article-btn input{
+			width: 452px;
+			height: 60px;
+			font-size: 17px;
+			outline: none;
+			cursor: pointer;
+			border: none;
+			color: white;
+			background-color: #333;
+		}
+		
+		.article-hr{
+			width: 450px;
+			margin-top: 60px;
+			border: 0.5px solid gray;
+		}
+		
+		.article-find{
+			margin-left: 280px;
+		}
+		
+		.article-span{
+			opacity: 0.5;
+			color: black;
+			font-size: 15px;
+			font-family: 'Noto Sans KR', sans-serif;
+		}
+		
+		.article-span a{
+			color: black;
+			text-decoration: none;
+		}
+		
+		.article-span a:hover{
+			color: firebrick;
+		}
+		
+		.article-join{
+			margin-top: 150px;
+		}
+		
+		.article-join-lbl{
+			opacity: 0.5;
+			color: black;
+			font-size: 15px;
+			font-family: 'Noto Sans KR', sans-serif;
+		}
+		
+		.article-join-btn input{
+			width: 450px;
+	    	height: 60px;
+	    	font-size: 17px;
+	    	outline: none;
+	    	cursor: pointer;
+		    border: 0.5px solid gainsboro;
+		    background-color: white;
+		}
+		
+		.article-join-btn input:hover{
+			color: white;
+			background-color: #333;
+		}
+		
+	</style>
+</head>
+
+<body>
+	<form>
+		<!-- TABLE COLUMNS: ID PW NAME GENDER PHONE QUESTION ANSWER -->
+		
+		<div class="nav">
+			<!-- 좌측 상단 로고 -->
+			<div class="nav-align-left">
+				<div class = "nav-item">
+					<div class = "nav-item-logo">
+						<a href ="#" class="nav-item-href">To Our Shared</a>
+					</div>
+				</div>
+			</div>
+			<!-- 우측 상단 메뉴 -->
+			<div class = "nav-align-right">
+				<div class = "nav-item"><a href ="#" class="nav-item-href">글 작성</a></div>
+				<div class = "nav-item"><a href ="#" class="nav-item-href">검색 페이지</a></div>
+				<div class = "nav-item"><a href ="#" class="nav-item-href">마이 페이지</a></div>
+				<div class = "nav-item"><a href ="#" class="nav-item-href">로그인</a></div>
+				<div class = "nav-item"><a href ="#" class="nav-item-href">회원가입</a></div>
+			</div>	
+		</div>
+		
+		<div class = "main">
+			<div class = "title">
+				<div class = "title-label">
+					To Our Shared
+				</div>
+			</div>
+			
+			<div class = "article">
+				<div class = "article-id">
+					<input type = "text" placeholder=" 아이디" maxlength="15"/>
+				</div>
+				<div class = "article-pw">
+					<input type = "password" placeholder=" 비밀번호" maxlength="18"/>
+				</div>
+				<div class = "article-btn">
+					<input type = "button" value = "로그인"/>
+				</div>
+				<div>
+					<hr class ="article-hr"/>
+				</div>
+				<div class = "article-find">
+					<span class = "article-span"><a href = "#">아이디찾기</a></span>
+					<span class = "article-span">|</span>
+					<span class = "article-span"><a href = "#">비밀번호찾기</a></span>
+				</div>
+				
+				<div class = "article-join">
+					<div class = "article-join-lbl">
+						<span>아직 회원이 아니신가요?</span>
+					</div>
+					<div class = "article-join-btn">
+                        <input type = "button" value = "회원가입"/>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+</body>
+</html>

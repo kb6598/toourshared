@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1"/>
+	
+<head>
+	<title>TO OUR SHARED</title>
+	
+	<!-- FONT 적용 -->
+	<link href="https://fonts.googleapis.com/css?family=Libre+Baskerville|Merriweather|Noto+Sans+KR|Nanum+Gothic+Coding|Noto+Serif+KR|Playfair+Display" rel="stylesheet"/>
+	
+	<!-- 배경 맞추기 위한 설정 -->
+	<link rel="stylesheet" type="text/css" href="./backgroundTransition.css" />
+	
+	<style>
+		
+		.nav{
+			height: 40px;
+			background-color: whitesmoke;
+			border-bottom: 0.5px solid gainsboro;
+			display: flex;
+			align-items: center;
+		}
+		
+		.nav-align-left{
+			display:flex;
+			margin-right: auto;
+		}
+		
+		.nav-align-right{
+			display:flex;
+			margin-left: auto;
+			font-weight: bold;
+		}
+		
+		.nav-item{
+			display: flex;
+			margin: 20px;
+		}
+		
+		.nav-item-href{
+			text-decoration: none;
+			color: black;
+		}
+		
+		.nav-item-logo{
+			font-size: 20px;
+			font-family: 'Libre Baskerville', serif;
+		}
+		
+		.main{
+			width: 100%;
+			height: 100%;
+			background-color: rgb(250, 250, 250);
+		}
+		
+		.title {
+			padding: 100px 0px;
+			text-align: center;
+	
+            font-size: 60px;
+            font-family: 'Libre Baskerville', serif;
+		}
+		
+		.article{
+			text-align: center;
+		}
+		
+		.article-id-lbl{
+			padding-right: 420px;
+		}
+		
+		.article-id-lbl-star{
+			color: rgba(229,17,17,1.00);
+		}
+		
+		.article-id-lbl span{
+			font-size: 14px;
+		}
+		
+		.article-id-align{
+			text-align: center;
+			display: inline-block;
+		}
+		
+		.article-id-item{
+			display:flex;
+		}
+		
+		.article-id-item-input input{
+			width: 300px;
+			height: 60px;
+			
+			font-size: 17px;
+			font-family: 'Merriweather';
+			border: 0.5px solid gainsboro;
+			
+			padding-left: 10px;
+			padding-right: 10px;
+		}
+		
+		.article-id-item-button input{
+			width: 150px;
+			height: 63px;
+			
+			outline: none;
+			cursor: pointer;
+			border: 0.5px solid gainsboro;
+			
+			color: black;
+			background-color: #dedede;
+		}
+		
+		.article-id-item-button input:hover{
+			color: white;
+			opacity: 0.9	;
+			background-color: black;
+		}
+		
+		.article-pw-lbl{
+			padding-right: 410px;
+		}
+		
+		.article-pw-lbl-star{
+			color: rgba(229,17,17,1.00);
+		}
+		
+		.article-pw-lbl span{
+			font-size: 14px;
+		}
+		
+		.article-pw-text input{
+			width: 450px;
+			height: 60px;
+			
+			font-size: 17px;
+			font-family: 'Merriweather';
+			border: 0.5px solid gainsboro;
+			
+			padding-left: 10px;
+			padding-right: 10px;
+		}
+		
+		.article-name-lbl{
+			padding-right: 435px;
+		}
+		
+		.article-name-lbl-star{
+			color: rgba(229,17,17,1.00);
+		}
+		
+		.article-name-lbl span{
+			font-size: 14px;
+		}
+		
+		.article-name-text input{
+			width: 450px;
+			height: 60px;
+			
+			font-size: 17px;
+			font-family: 'Merriweather';
+			border: 0.5px solid gainsboro;
+			
+			padding-left: 10px;
+			padding-right: 10px;
+		}
+		
+		.article-gender-lbl{
+			padding-right: 435px;
+		}
+		
+		.article-gender-lbl-star{
+			color: rgba(229,17,17,1.00);
+		}
+		
+		.article-gender-lbl span{
+			font-size: 14px;
+		}
+		
+		/* 성별 라디오 배치를 위한 사각형 css */
+		.article-gender-rect{
+			width: 470px;
+			height: 60px;
+			
+			/* div 수평 중앙 정렬 */
+			text-align: center;
+			display: inline-block;
+			
+			border: 1px solid gainsboro;
+			background-color: white;
+		}
+		
+		.article-gender-rect-item{
+			text-align:center;
+			display:inline-block;
+		}
+		
+		.article-gender-rect-item-detail{
+			display:flex;
+			margin: 1.3rem;
+		}
+		
+		.article-gender-rect-item-label1{
+			margin: 0px 100px 0px 0px;
+		}
+		
+		.article-tel-lbl{
+			padding-right: 420px;
+		}
+		
+		.article-tel-lbl-star{
+			color: rgba(229,17,17,1.00);
+		}
+		
+		.article-tel-lbl span{
+			font-size: 14px;
+		}
+		
+		.article-tel-text input{
+			width: 450px;
+			height: 60px;
+			
+			font-size: 17px;
+			font-family: 'Merriweather';
+			border: 0.5px solid gainsboro;
+			
+			padding-left: 10px;
+			padding-right: 10px;
+		}
+		
+		.article-qna-lbl{
+			padding-right: 345px;
+		}
+		
+		.article-qna-lbl-star{
+			color: rgba(229,17,17,1.00);
+		}
+		
+		.article-qna-lbl span{
+			font-size: 14px;
+		}
+		
+		.article-qna-question select{
+			width: 475px;
+			height: 60px;
+			
+			font-size: 17px;
+			font-family: 'Merriweather';
+			border: 0.5px solid gainsboro;
+			
+			padding-left: 10px;
+			padding-right: 10px;
+		}
+		
+		.article-qna-answer input{
+			width: 454px;
+			height: 60px;
+			
+			font-size: 17px;
+			font-family: 'Merriweather';
+			border: 0.5px solid gainsboro;
+			border-top: none;
+			
+			padding-left: 10px;
+			padding-right: 10px;
+		}
+		
+		.enter{
+			padding: 100px 0px;
+		}
+		
+		.enter-align{
+			text-align: center;
+		}
+		
+		.enter-button input{
+			width: 470px;
+			height: 60px;
+			
+			font-size: 17px;
+			font-family: 'Merriweather';
+
+			outline: none;
+			cursor: pointer;
+			border: none;
+			
+			color: white;
+			background-color: black;
+		}
+		
+		
+	</style>
+	
+</head>
+
+<body>
+	<form>
+		<!-- TABLE COLUMNS: ID PW NAME GENDER PHONE QUESTION ANSWER -->
+		
+		<div class="nav">
+			<!-- 좌측 상단 로고 -->
+			<div class="nav-align-left">
+				<div class = "nav-item">
+					<div class = "nav-item-logo">
+						<a href ="#" class="nav-item-href">To Our Shared</a>
+					</div>
+				</div>
+			</div>
+			<!-- 우측 상단 메뉴 -->
+			<div class = "nav-align-right">
+				<div class = "nav-item"><a href ="#" class="nav-item-href">글 작성</a></div>
+				<div class = "nav-item"><a href ="#" class="nav-item-href">검색 페이지</a></div>
+				<div class = "nav-item"><a href ="#" class="nav-item-href">마이 페이지</a></div>
+				<div class = "nav-item"><a href ="#" class="nav-item-href">로그인</a></div>
+				<div class = "nav-item"><a href ="#" class="nav-item-href">회원가입</a></div>
+			</div>	
+		</div>
+		
+		<div class = "main">
+			<div class = "title">
+				<div class = "title-label">
+					To Our Shared
+				</div>
+			</div>
+			
+			<div class = "article">
+				<p><!-- 아디 -->
+					<div class = "article-id">
+						<div class = "article-id-lbl">
+							<span class = "article-id-lbl-star">*</span><span>아이디</span>
+						</div>
+						<div class = "article-id-align">
+							<div class = "article-id-item">
+								<div class = "article-id-item-input">
+									<input type = "text" placeholder = "아이디"/>
+								</div>
+								<div class = "article-id-item-button">
+									<input type = "button" value = "중복확인"/>
+								</div>
+							</div>
+						</div>
+					</div>
+				</p>
+			
+				<p><!-- 비번 -->
+					<div class = "article-pw">
+						<div class = "article-pw-lbl">
+							<span class = "article-pw-lbl-star">*</span><span>비밀번호</span>
+						</div>
+						<div class = "article-pw-text">
+							<input type = "password" placeholder="비밀번호"/>
+						</div>
+					</div>
+				</p>
+	
+				<p><!-- 이름 -->
+					<div class = "article-name">
+						<div class = "article-name-lbl">
+							<span class = "article-name-lbl-star">*</span><span>이름</span>
+						</div>
+						<div class = "article-name-text">
+							<input type = "text" placeholder="이름"/>
+						</div>
+					</div>
+				</p>
+	
+				<p><!-- 성별 -->
+					<div class = "article-gender">
+						<div class = "article-gender-lbl">
+							<span class = "article-gender-lbl-star">*</span><span>성별</span>
+						</div>
+						<div class = "article-gender-rect">
+							<div class = "article-gender-rect-item">
+								<div class = "article-gender-rect-item-detail">
+									<div class = "article-gender-rect-item-input1">
+										<input type = "radio" name = "gender" value = "m" id="genderM" checked="checked"/>
+									</div>
+									<div class = "article-gender-rect-item-label1">
+										<label for="genderM">남자</label>
+									</div>
+									<div class = "article-gender-rect-item-input2">
+										<input type = "radio" name = "gender" value = "g"/>
+									</div>
+									<div class = "article-gender-rect-item-label2">
+										<label>여자</label>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</p>
+	
+				<p><!-- 연락 -->
+					<div class = "article-tel">
+						<div class = "article-tel-lbl">
+							<span class = "article-tel-lbl-star">*</span><span>연락처</span>
+						</div>
+						<div class = "article-tel-text">
+							<input type = "text" placeholder="연락처 (-제외)"/>
+						</div>
+					</div>
+				</p>
+
+				<p><!-- 본인확인 질문 -->
+					<div class = "article-qna">
+						<div class = "article-qna-lbl">
+							<span class = "article-qna-lbl-star">*</span><span>본인확인 질문/답변</span>
+						</div>
+						<div class = "article-qna-question">
+							<select>
+								<option value = "1">본인이 태어난 곳은?</option>
+								<option value = "2">처음 키운 반려견은?</option>
+								<option value = "3">본인의 출신 초등학교는?</option>
+								<option value = "4">내 부모님의 고향은?</option>
+								<option value = "5">학창시절 나의 별명은?</option>
+							</select>
+						</div>
+						<div class = "article-qna-answer">
+							<input type = "text" placeholder="질문에 대한 답변"/>
+						</div>
+					</div>
+				</p>
+			</div>
+			<div class = "enter">
+				<div class = "enter-align">
+					<div class = "enter-button">
+						<input type = "button" value = "회원가입"/>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+</body>
+	
+</html>
