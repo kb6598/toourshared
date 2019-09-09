@@ -234,7 +234,7 @@
                 <div class="map_wrap">
                     <div id="map" style="width: 100%; height: 100%; position: relative; overflow: hidden;"></div>
 
-                   
+
                 </div>
 
                 <div class="form-group">
@@ -247,23 +247,22 @@
                     <input type="button" onclick="postToNext()" value="넘기기" />
                 </div>
             </form>
-             <div id="menu_wrap" class="bg_white">
-                        <div class="option">
-                            <div>
-                                
-                                    키워드 :
+            <div id="menu_wrap" class="bg_white">
+                <div class="option">
+                    <div>
+                        키워드 :
 
                                 <input id="keyword" value="이태원 맛집" type="text" />
 
-                                    <button onclick ="searchPlaces();">검색하기</button>
+                        <button onclick="searchPlaces();">검색하기</button>
 
-   
-                            </div>
-                        </div>
-                        <hr>
-                        <ul id="placesList"></ul>
-                        <div id="pagination"></div>
+
                     </div>
+                </div>
+                <hr>
+                <ul id="placesList"></ul>
+                <div id="pagination"></div>
+            </div>
         </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
@@ -284,15 +283,13 @@
         var markers = [];
 
         var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
-            mapOption = {
+            mapDrawing = {
                 center: new kakao.maps.LatLng(37.566826, 126.9786567), // 지도의 중심좌표
                 level: 3 // 지도의 확대 레벨
             };
 
         // 지도를 생성합니다    
-        var map = new kakao.maps.Map(mapContainer,
-
-        );
+        var map = new kakao.maps.Map(mapContainer, mapDrawing);
 
         // 장소 검색 객체를 생성합니다
         var ps = new kakao.maps.services.Places();
