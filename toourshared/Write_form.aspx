@@ -21,6 +21,7 @@
         .map_wrap {
             width: 100%;
             vertical-align: middle;
+            margin-bottom:30px;
         }
 
         .modes {
@@ -36,7 +37,7 @@
         }
 
         .map_wrap, .map_wrap * {
-            margin: 0;
+            margin: 10;
             padding: 0;
             font-family: 'Malgun Gothic',dotum,'돋움',sans-serif;
             font-size: 12px;
@@ -53,8 +54,9 @@
             height: 500px;
         }
 
+
+
         #menu_wrap {
-            position: relative;
             width: 250px;
             height: 500px;
             margin: 10px 0 30px 10px;
@@ -224,51 +226,55 @@
     <div class="container">
         <div class="col-sm-12">
             <div id="emailMsg"></div>
-            <form id="form1" runat="server" action="Write_get.aspx">
-                <input type="hidden" name="sendEmail" value="ok" />
-                <div class="form-group">
-                    <asp:TextBox ID="title" runat="server" CssClass="form-control form-control-lg" placeholder="제목을 입력해주세요"></asp:TextBox>
-                </div>
-                <div class="map_wrap">
-                    <div id="drawingMap"></div>
+            <div id="edit_right">
+                <form id="form1" runat="server" action="Write_get.aspx">
+                    <input type="hidden" name="sendEmail" value="ok" />
+                    <div class="form-group">
+                        <asp:TextBox ID="title" runat="server" CssClass="form-control form-control-lg" placeholder="제목을 입력해주세요"></asp:TextBox>
+                    </div>
+                    <div class="map_wrap">
+                        <div id="drawingMap"></div>
 
-                    <p class="modes">
-                        <input type="button" onclick="selectOverlay('MARKER')" value="마커" />
-                        <input type="button" onclick="selectOverlay('POLYLINE')" value="선" />
-                        <input type="button" onclick="selectOverlay('CIRCLE')" value="원" />
-                        <input type="button" onclick="selectOverlay('RECTANGLE')" value="사각형" />
-                        <input type="button" onclick="selectOverlay('POLYGON')" value="다각형" />
-                        <input type="button" onclick="" value="검색" />
-                    </p>
-                </div>
-                <div class="form-group">
-                    <asp:TextBox ID="article" runat="server" TextMode="MultiLine" />
-                </div>
-                <div class="form-group">
-                    <asp:TextBox ID="hashtag" runat="server" CssClass="form-control form-control-lg" placeholder="#해시태그를 입력해주세요"></asp:TextBox>
-                </div>
-                <div class="form-group">
-                    <input type="button" onclick="postToNext()" value="넘기기" />
-                </div>
-            </form>
+                        <p class="modes">
+                            <input type="button" onclick="selectOverlay('MARKER')" value="마커" />
+                            <input type="button" onclick="selectOverlay('POLYLINE')" value="선" />
+                            <input type="button" onclick="selectOverlay('CIRCLE')" value="원" />
+                            <input type="button" onclick="selectOverlay('RECTANGLE')" value="사각형" />
+                            <input type="button" onclick="selectOverlay('POLYGON')" value="다각형" />
+                            <input type="button" onclick="" value="검색" />
+                        </p>
+                    </div>
+                    <div class="form-group">
+                        <asp:TextBox ID="article" runat="server" TextMode="MultiLine" />
+                    </div>
+                    <div class="form-group">
+                        <asp:TextBox ID="hashtag" runat="server" CssClass="form-control form-control-lg" placeholder="#해시태그를 입력해주세요"></asp:TextBox>
+                    </div>
+                    <div class="form-group">
+                        <input type="button" onclick="postToNext()" value="넘기기" />
+                    </div>
+                </form>
+            </div>
+
         </div>
-        <div id="menu_wrap" class="bg_white">
-            <div class="option">
-                <div>
-                    키워드 :
+
+
+    </div>
+    <div id="menu_wrap" class="bg_white">
+        <div class="option">
+            <div>
+                키워드 :
 
                                 <input id="keyword" value="이태원 맛집" type="text" />
 
-                    <button onclick="searchPlaces();">검색하기</button>
+                <button onclick="searchPlaces();">검색하기</button>
 
 
-                </div>
             </div>
-            <hr>
-            <ul id="placesList"></ul>
-            <div id="pagination"></div>
         </div>
-
+        <hr>
+        <ul id="placesList"></ul>
+        <div id="pagination"></div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
