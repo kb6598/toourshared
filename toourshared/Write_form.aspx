@@ -21,7 +21,7 @@
         .map_wrap {
             width: 100%;
             vertical-align: middle;
-            margin-bottom:30px;
+            margin-bottom: 30px;
         }
 
         .modes {
@@ -57,8 +57,6 @@
 
 
         #menu_wrap {
-            width: 250px;
-            height: 500px;
             margin: 10px 0 30px 10px;
             padding: 5px;
             overflow-y: auto;
@@ -223,6 +221,8 @@
 
 
 
+
+
     <div class="container">
         <div class="col-sm-12">
             <div id="emailMsg"></div>
@@ -236,12 +236,15 @@
                         <div id="drawingMap"></div>
 
                         <p class="modes">
-                            <input type="button" onclick="selectOverlay('MARKER')" value="마커" />
-                            <input type="button" onclick="selectOverlay('POLYLINE')" value="선" />
-                            <input type="button" onclick="selectOverlay('CIRCLE')" value="원" />
-                            <input type="button" onclick="selectOverlay('RECTANGLE')" value="사각형" />
-                            <input type="button" onclick="selectOverlay('POLYGON')" value="다각형" />
-                            <input type="button" onclick="" value="검색" />
+                            <input type="button" class="btn btn-secondary" onclick="selectOverlay('MARKER')" value="마커" />
+                            <input type="button" class="btn btn-secondary" onclick="selectOverlay('POLYLINE')" value="선" />
+                            <input type="button" class="btn btn-secondary" onclick="selectOverlay('CIRCLE')" value="원" />
+                            <input type="button" class="btn btn-secondary" onclick="selectOverlay('RECTANGLE')" value="사각형" />
+                            <input type="button" class="btn btn-secondary" onclick="selectOverlay('POLYGON')" value="다각형" />
+                            <!-- Button trigger modal -->
+                            <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#exampleModalScrollable">
+                                검색
+                            </button>
                         </p>
                     </div>
                     <div class="form-group">
@@ -259,23 +262,46 @@
         </div>
 
 
+
+
+
+
     </div>
-    <div id="menu_wrap" class="bg_white">
-        <div class="option">
-            <div>
-                키워드 :
-
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModalScrollable" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalScrollableTitle">장소 검색</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="menu_wrap" class="bg_white">
+                        <div class="option">
+                            <div>
+                                키워드 :
                                 <input id="keyword" value="이태원 맛집" type="text" />
-
-                <button onclick="searchPlaces();">검색하기</button>
-
-
+                                <button onclick="searchPlaces();">검색하기</button>
+                            </div>
+                        </div>
+                        <hr>
+                        <ul id="placesList"></ul>
+                        <div id="pagination"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
             </div>
         </div>
-        <hr>
-        <ul id="placesList"></ul>
-        <div id="pagination"></div>
     </div>
+
+
+
+
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bs4-summernote@0.8.10/dist/summernote-bs4.min.js"></script>
@@ -706,6 +732,9 @@
 
             }
         }
+     
+
+
 
         // 검색 결과 목록과 마커를 표출하는 함수입니다
         function displayPlaces(places) {
@@ -772,13 +801,13 @@
             var el = document.createElement('li'),
                 itemStr = '<span class="markerbg marker_' + (index + 1) + '"></span>' +
                     '<div class="info">' +
-                    '   <h5>' + places.place_name + '</h5>';
+                    '   <h5 data-dismiss="modal">' + places.place_name + '</h5>';
 
             if (places.road_address_name) {
-                itemStr += '    <span>' + places.road_address_name + '</span>' +
-                    '   <span class="jibun gray">' + places.address_name + '</span>';
+                itemStr += '    <span data-dismiss="modal">' + places.road_address_name + '</span>' +
+                    '   <span class="jibun gray" data-dismiss="modal">' + places.address_name + '</span>';
             } else {
-                itemStr += '    <span>' + places.address_name + '</span>';
+                itemStr += '    <span data-dismiss="modal">' + places.address_name + '</span>';
             }
 
             itemStr += '  <span class="tel">' + places.phone + '</span>' +
@@ -853,7 +882,7 @@
         // 검색결과 목록 또는 마커를 클릭했을 때 호출되는 함수입니다
         // 인포윈도우에 장소명을 표시합니다
         function displayInfowindow(marker, title) {
-            var content = '<div style="padding:5px;z-index:1;">' + title + '</div>';
+            var content = '<div style="padding:5px;z-index:1;">' + title + ' <button >추가</button></div>';
 
             infowindow.setContent(content);
             infowindow.open(drawingMap, marker);
