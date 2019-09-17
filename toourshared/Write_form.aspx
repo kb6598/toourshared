@@ -932,7 +932,7 @@
                 '                <div class="jibun ellipsis">' + place.address_name + '</div>' + 
              '   <div class="jibun ellipsis">' + place.phone + '</div>' + 
                 '                <div><a href="' + place.place_url + '" target="_blank" class="link">상세페이지</a></div>' + 
-                '<div class="btn btn-secondary" onclick="addTravelRoute()">여행경로에 추가</div>'+
+                '<div class="btn btn-secondary" onclick=\'addTravelRoute("' + place.place_name + '","' + place.road_address_name + '","' + place.ddress_name + '","' + place.phone + '","' + place.place_url+'")\'>여행경로에 추가</div>'+
             '            </div>' + 
             '        </div>' + 
             '    </div>' +    
@@ -955,13 +955,12 @@
 
 
         //
-        function addTravelRoute() {
+        function addTravelRoute(place_name, road_address_name, address_name, phone, place_url ) {
 
              var listEl = document.getElementById('travelRoute'),
                 menuEl = document.getElementById('travelRoute_wrap'),
                  fragment = document.createDocumentFragment(),
                  searchBox = document.getElementById('keyword'),
-
                 listStr = '';
 
             //검색 키워드 삭제
@@ -974,18 +973,25 @@
             //지도에 표시되고 있는 인포윈도우 제거
             closeOverlay();
             $('#travelRoute_wrap').collapse('show');
+
+            
             var el = document.createElement('li'),
-                itemStr = '<span class="markerbg marker_' + '1' + '"></span>' +
-                    '<div class="info">' +
-                    '   <h5 data-dismiss="modal">' + '테스트' + '</h5>';
-
-
-                itemStr += '    <span data-dismiss="modal">' + '테스트' + '</span>';
-
-
-            itemStr += '  <span class="tel">' + '테스트' + '</span>' +
-                '</div>';
-
+                itemStr = '<div class="wrap">' +
+                    '    <div class="info">' +
+                    '        <div class="title">' +
+                    place_name +
+                    '            <div class="close" onclick="closeOverlay()" title="닫기"></div>' +
+                    '        </div>' +
+                    '        <div class="body">' +
+                    '            <div class="desc">' +
+                    '                <div class="ellipsis">' + road_address_name + '</div>' +
+                    '                <div class="jibun ellipsis">' + address_name + '</div>' +
+                    '   <div class="jibun ellipsis">' + phone + '</div>' +
+                    '                <div><a href="' + place_url + '" target="_blank" class="link">상세페이지</a></div>' +
+                    '            </div>' +
+                    '        </div>' +
+                    '    </div>' +
+                    '</div>';
             el.innerHTML = itemStr;
             el.className = 'item';
 
