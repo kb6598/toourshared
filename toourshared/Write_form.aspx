@@ -959,11 +959,16 @@
 
              var listEl = document.getElementById('travelRoute'),
                 menuEl = document.getElementById('travelRoute_wrap'),
-                fragment = document.createDocumentFragment(),
+                 fragment = document.createDocumentFragment(),
+                 searchBox = document.getElementById('keyword'),
+
                 listStr = '';
-            
 
+            //검색 키워드 삭제
+            searchBox.value = '';
 
+            // 검색 결과 목록에 추가된 항목들을 제거합니다
+            removeAllChildNods(document.getElementById('placesList'));
                         // 지도에 표시되고 있는 마커를 제거합니다
             removeMarker();
             //지도에 표시되고 있는 인포윈도우 제거
