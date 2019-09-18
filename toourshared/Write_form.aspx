@@ -932,7 +932,7 @@
                 '                <div class="jibun ellipsis">' + place.address_name + '</div>' + 
              '   <div class="jibun ellipsis">' + place.phone + '</div>' + 
                 '                <div><a href="' + place.place_url + '" target="_blank" class="link">상세페이지</a></div>' + 
-                '<div class="btn btn-secondary" onclick=\'addTravelRoute("' + place.place_name + '","' + place.road_address_name + '","' + place.ddress_name + '","' + place.phone + '","' + place.place_url+'")\'>여행경로에 추가</div>'+
+                '<div class="btn btn-secondary" onclick=\'addTravelRoute("' + place.place_name + '","' + place.road_address_name + '","' + place.ddress_name + '","' + place.phone + '","' + place.place_url+ '","' + place.x+ '","' + place.y+'")\'>여행경로에 추가</div>'+
             '            </div>' + 
             '        </div>' + 
             '    </div>' +    
@@ -940,7 +940,7 @@
             infowindow.setContent(content);
             infowindow.open(drawingMap, marker);
         }
-
+        // 모든 인포윈도우 닫음
         function closeOverlay() {
     infowindow.close();   
 }
@@ -954,20 +954,26 @@
         }
 
 
-        //
-        function addTravelRoute(place_name, road_address_name, address_name, phone, place_url ) {
+        // 검색결과에서 선택된 마커의 인포윈도우에서 travelRoute로 요소 추가
+        function addTravelRoute(place_name, road_address_name, address_name, phone, place_url,x,y ) {
 
              var listEl = document.getElementById('travelRoute'),
                 menuEl = document.getElementById('travelRoute_wrap'),
                  fragment = document.createDocumentFragment(),
                  searchBox = document.getElementById('keyword'),
+                paginationEl = document.getElementById('pagination'),
                 listStr = '';
 
             //검색 키워드 삭제
-            searchBox.value = '';
+            //searchBox.value = '';
 
             // 검색 결과 목록에 추가된 항목들을 제거합니다
             removeAllChildNods(document.getElementById('placesList'));
+
+                        // 기존에 추가된 페이지번호를 삭제합니다
+            while (paginationEl.hasChildNodes()) {
+                paginationEl.removeChild(paginationEl.lastChild);
+            }
                         // 지도에 표시되고 있는 마커를 제거합니다
             removeMarker();
             //지도에 표시되고 있는 인포윈도우 제거
@@ -975,11 +981,11 @@
             $('#travelRoute_wrap').collapse('show');
 
             
+
             var el = document.createElement('li'),
                 itemStr = '<div class="wrap">' +
                     '    <div class="info">' +
-                    '        <div class="title">' +
-                    place_name +
+                    '        <div class="title">' + place_name +
                     '            <div class="close" onclick="closeOverlay()" title="닫기"></div>' +
                     '        </div>' +
                     '        <div class="body">' +
@@ -988,9 +994,12 @@
                     '                <div class="jibun ellipsis">' + address_name + '</div>' +
                     '   <div class="jibun ellipsis">' + phone + '</div>' +
                     '                <div><a href="' + place_url + '" target="_blank" class="link">상세페이지</a></div>' +
+                                       
                     '            </div>' +
                     '        </div>' +
                     '    </div>' +
+                    '<input id=x type=hidden value=' + x + '/>' +
+                    '<input id=y type=hidden value='+y+'/>' +
                     '</div>';
             el.innerHTML = itemStr;
             el.className = 'item';
@@ -998,7 +1007,11 @@
             var itemEl = el; // 검색 결과 항목 Element를 생성합니다
          
 
-                fragment.appendChild(itemEl);
+            fragment.appendChild(itemEl);
+
+            // drawing 메니저에 마커 추가
+            var position = new kakao.maps.LatLng(y, x);
+            manager.put(kakao.maps.drawing.OverlayType.MARKER, position, 1);
 
 
             // 검색결과 항목들을 검색결과 목록 Elemnet에 추가합니다
@@ -1006,88 +1019,18 @@
             menuEl.scrollTop = 0;
         }
 
+
+        //자바스크립트는 배열을 참조로 전달
+
+        var arr_travelRouteTags = new Array();
         //여행 경로 추가
-        function displayTravelRoute(place,index) {
-
-            var listEl = document.getElementById('travelRoute'),
-                menuEl = document.getElementById('travelRoute_wrap'),
-                fragment = document.createDocumentFragment(),
-                listStr = '';
-            
-
-            // 검색 결과 목록에 추가된 항목들을 제거합니다
-            //removeAllChildNods(listEl);
-
-            // 지도에 표시되고 있는 마커를 제거합니다
-            removeMarker();
-            //지도에 표시되고 있는 인포윈도우 제거
-            closeOverlay();
-            $('#travelRoute_wrap').collapse('show');
-            var itemEl = getListItem(index, place); // 검색 결과 항목 Element를 생성합니다
-            //for (var i = 0; i < places.length; i++) {
-
-                // 마커를 생성하고 지도에 표시합니다
-                //var itemEl = getListItem(i, places[i]); // 검색 결과 항목 Element를 생성합니다
-
-                // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
-                // LatLngBounds 객체에 좌표를 추가합니다
-                //bounds.extend(placePosition);
-
-                // 마커와 검색결과 항목에 mouseover 했을때
-                // 해당 장소에 인포윈도우에 장소명을 표시합니다
-                // mouseout 했을 때는 인포윈도우를 닫습니다
-                //(function (marker, title) {
-                //    kakao.maps.event.addListener(marker, 'click', function () {                        
-                //        displayInfowindow(marker, title);
-                //    });
-
-
-                //    itemEl.onmouseover = function () {
-                //        displayInfowindow(marker, title);
-                //    };
-
-                //    itemEl.onmouseclick = function () {
-                //        displayInfowindow(marker, title);
-                //        $('#searchPlaceModal').modal('hide')
-
-                //    };
-
-
-                //})(marker, places[i]);
-
-                fragment.appendChild(itemEl);
-            //}
-
-            // 검색결과 항목들을 검색결과 목록 Elemnet에 추가합니다
-            listEl.appendChild(fragment);
-            menuEl.scrollTop = 0;
-
+        function displayTravelRoute(arr_travelRouteTagList) {
 
         }
-                // 검색결과 항목을 Element로 반환하는 함수입니다
-        //function getListItem(index, places) {
 
-        //    var el = document.createElement('li'),
-        //        itemStr = '<span class="markerbg marker_' + (index + 1) + '"></span>' +
-        //            '<div class="info">' +
-        //            '   <h5 data-dismiss="modal">' + places.place_name + '</h5>';
 
-        //    if (places.road_address_name) {
-        //        itemStr += '    <span data-dismiss="modal">' + places.road_address_name + '</span>' +
-        //            '   <span class="jibun gray" data-dismiss="modal">' + places.address_name + '</span>';
-        //    } else {
-        //        itemStr += '    <span data-dismiss="modal">' + places.address_name + '</span>';
-        //    }
 
-        //    itemStr += '  <span class="tel">' + places.phone + '</span>' +
-        //        '</div>';
-
-        //    el.innerHTML = itemStr;
-        //    el.className = 'item';
-
-        //    return el;
-        //}
-
+        
 
 
 
