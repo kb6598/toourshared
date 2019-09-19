@@ -1,0 +1,264 @@
+<html>
+
+<head>
+    <!-- 합쳐지고 최소화된 최신 CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+
+
+
+    <style>
+        #travelRoute_wrap {
+            position: relative;
+            text-align: center;
+            height: 500px;
+            z-index: 3;
+            background-color: whitesmoke;
+        }
+
+        < !--커스텀 오버레이 스타일-->.wrap {
+            position: relative;
+            left: 0;
+            bottom: 40px;
+            width: 250px;
+            height: 132px;
+            margin-left: -144px;
+            text-align: left;
+            overflow: hidden;
+            font-size: 12px;
+            font-family: 'Malgun Gothic', dotum, '돋움', sans-serif;
+            line-height: 1.5;
+        }
+
+        .wrap * {
+            padding: 0;
+            margin: 0;
+        }
+
+        .wrap .info {
+            width: 286px;
+            height: 140px;
+            border-radius: 5px;
+            border-bottom: 2px solid #ccc;
+            border-right: 1px solid #ccc;
+            overflow: hidden;
+            background: #fff;
+        }
+
+        .wrap .info:nth-child(1) {
+            border: 0;
+            box-shadow: 0px 1px 2px #888;
+        }
+
+        .info .title {
+            padding: 5px 0 0 10px;
+            height: 30px;
+            background: #eee;
+            border-bottom: 1px solid #ddd;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .info .close {
+            position: relative;
+            top: 10px;
+            right: 10px;
+            color: #888;
+            width: 17px;
+            height: 17px;
+            background: url('http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/overlay_close.png');
+        }
+
+        .info .close:hover {
+            cursor: pointer;
+        }
+
+        .info .body {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .info .desc {
+            position: relative;
+            margin: 13px 0 0 0px;
+            height: 120px;
+        }
+
+        .desc .ellipsis {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .desc .jibun {
+            font-size: 11px;
+            color: #888;
+            margin-top: -2px;
+        }
+
+        .info:after {
+            content: '';
+            position: relative;
+            margin-left: -12px;
+            left: 50%;
+            bottom: 0;
+            width: 22px;
+            height: 12px;
+            background: url('http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')
+        }
+
+        .info .link {
+            color: #5085BB;
+        }
+    </style>
+
+
+
+</head>
+
+<body>
+    <table>
+        <tr>
+            <td>
+                <div id="travelRoute_wrap" class="collapse">
+                    <ul id="travelRoute">
+                    </ul>
+                </div>
+
+            </td>
+            <td>
+                <div class="wrap">
+                    <div class="info">
+                        <div class="title">메시야 <div class="close" onclick="closeOverlay()" title="닫기"></div>
+                        </div>
+                        <div class="body">
+                            <div class="desc">
+                                <div class="ellipsis">서울 용산구 회나무로13가길 23</div>
+                                <div class="jibun ellipsis">서울 용산구 이태원동 260-141</div>
+                                <div class="jibun ellipsis">02-6402-0208</div>
+                                <div><a href="http://place.map.kakao.com/20128056" target="_blank" class="link">상세페이지</a></div>
+                                <div class="btn btn-secondary" onclick="addTravelRoute(&quot;메시야&quot;,&quot;서울 용산구 회나무로13가길 23&quot;,&quot;undefined&quot;,&quot;02-6402-0208&quot;,&quot;http://place.map.kakao.com/20128056&quot;,&quot;126.990762302788&quot;,&quot;37.5410590341706&quot;)">여행경로에 추가</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="wrap">
+                    <div class="info">
+                        <div class="title">로코스비비큐 <div class="close" onclick="closeOverlay()" title="닫기"></div>
+                        </div>
+                        <div class="body">
+                            <div class="desc">
+                                <div class="ellipsis">서울 용산구 회나무로 83</div>
+                                <div class="jibun ellipsis">서울 용산구 이태원동 2-5</div>
+                                <div class="jibun ellipsis"></div>
+                                <div><a href="http://place.map.kakao.com/618020526" target="_blank" class="link">상세페이지</a></div>
+                                <div class="btn btn-secondary" onclick="addTravelRoute(&quot;로코스비비큐&quot;,&quot;서울 용산구 회나무로 83&quot;,&quot;undefined&quot;,&quot;&quot;,&quot;http://place.map.kakao.com/618020526&quot;,&quot;126.995528253629&quot;,&quot;37.5409728148364&quot;)">여행경로에 추가</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="wrap">
+                    <div class="info">
+                        <div class="title">더할랄가이즈 이태원본점 <div class="close" onclick="closeOverlay()" title="닫기"></div>
+                        </div>
+                        <div class="body">
+                            <div class="desc">
+                                <div class="ellipsis">서울 용산구 이태원로 187</div>
+                                <div class="jibun ellipsis">서울 용산구 이태원동 123-32</div>
+                                <div class="jibun ellipsis">02-794-8308</div>
+                                <div><a href="http://place.map.kakao.com/276673831" target="_blank" class="link">상세페이지</a></div>
+                                <div class="btn btn-secondary" onclick="addTravelRoute(&quot;더할랄가이즈 이태원본점&quot;,&quot;서울 용산구 이태원로 187&quot;,&quot;undefined&quot;,&quot;02-794-8308&quot;,&quot;http://place.map.kakao.com/276673831&quot;,&quot;126.99478641606&quot;,&quot;37.5347090300668&quot;)">여행경로에 추가</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="wrap">
+                    <div class="info">
+                        <div class="title">모터시티 <div class="close" onclick="closeOverlay()" title="닫기"></div>
+                        </div>
+                        <div class="body">
+                            <div class="desc">
+                                <div class="ellipsis">서울 용산구 이태원로 140-1</div>
+                                <div class="jibun ellipsis">서울 용산구 이태원동 56-30</div>
+                                <div class="jibun ellipsis">02-794-8877</div>
+                                <div><a href="http://place.map.kakao.com/124338573" target="_blank" class="link">상세페이지</a></div>
+                                <div class="btn btn-secondary" onclick="addTravelRoute(&quot;모터시티&quot;,&quot;서울 용산구 이태원로 140-1&quot;,&quot;undefined&quot;,&quot;02-794-8877&quot;,&quot;http://place.map.kakao.com/124338573&quot;,&quot;126.98943716648&quot;,&quot;37.5339662480439&quot;)">여행경로에 추가</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <button type="button" class="btn btn-secondary" data-toggle="collapse" data-target="#travelRoute_wrap">
+                    여행경로
+                </button>
+            </td>
+        </tr>
+    </table>
+
+
+
+
+</body>
+
+
+
+
+<script>
+    function addTravelRoute(place_name, road_address_name, address_name, phone, place_url, x, y) {
+
+        var listEl = document.getElementById('travelRoute'),
+            menuEl = document.getElementById('travelRoute_wrap'),
+            fragment = document.createDocumentFragment(),
+            searchBox = document.getElementById('keyword'),
+            listStr = '';
+
+
+
+        //$('#travelRoute_wrap').collapse('show');
+
+        //travelRouteCnt 증가
+        //++travelRouteCnt;
+
+        var el = document.createElement('div'),
+            itemStr = '<div id="travelPoint" class="wrap" ondrop="drop(event)" ondragover="allowDrop(event)">' +
+            '    <div class="info" draggable="true" ondragstart="drag(event)">' +
+            '        <div class="title">' + place_name +
+            '            <div class="close" onclick="closeOverlay()" title="닫기"></div>' +
+            '        </div>' +
+            '        <div class="body">' +
+            '            <div class="desc">' +
+            '                <div class="ellipsis">' + road_address_name + '</div>' +
+            '                <div class="jibun ellipsis">' + address_name + '</div>' +
+            '   <div class="jibun ellipsis">' + phone + '</div>' +
+            '                <div><a href="' + place_url + '" target="_blank" class="link">상세페이지</a></div>' +
+
+            '            </div>' +
+            '        </div>' +
+            '    </div>' +
+            '<input id=x type=hidden value=' + x + '/>' +
+            '<input id=y type=hidden value=' + y + '/>' +
+            '</div>';
+        el.innerHTML = itemStr;
+        el.className = 'item';
+
+        var itemEl = el; // 검색 결과 항목 Element를 생성합니다
+
+
+        fragment.appendChild(itemEl);
+
+        // drawing 메니저에 마커 추가
+        //var position = new kakao.maps.LatLng(y, x);
+        //manager.put(kakao.maps.drawing.OverlayType.MARKER, position, 1);
+
+
+        // 검색결과 항목들을 검색결과 목록 Elemnet에 추가합니다
+        listEl.appendChild(fragment);
+        menuEl.scrollTop = 0;
+    }
+</script></html>
