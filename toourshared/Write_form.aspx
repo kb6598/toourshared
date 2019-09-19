@@ -36,10 +36,11 @@
             height: 500px;
             text-align: center;
         }
+
         #travelRoute_wrap {
             position: absolute;
             text-align: center;
-            z-index:3;
+            z-index: 3;
             background-color: whitesmoke;
         }
 
@@ -222,23 +223,106 @@
                 color: #777;
             }
 
+        #travelPoint {
+            padding-bottom: 10px;
+            border: 1px solid #aaaaaa;
+        }
 
-            <!--커스텀 오버레이 스타일-->
-    .wrap {position: absolute;left: 0;bottom: 40px;width: 250px;height: 132px;margin-left: -144px;text-align: left;overflow: hidden;font-size: 12px;font-family: 'Malgun Gothic', dotum, '돋움', sans-serif;line-height: 1.5;}
-    .wrap * {padding: 0;margin: 0;}
-    .wrap .info {width: 286px;height: 140px;border-radius: 5px;border-bottom: 2px solid #ccc;border-right: 1px solid #ccc;overflow: hidden;background: #fff;}
-    .wrap .info:nth-child(1) {border: 0;box-shadow: 0px 1px 2px #888;}
-    .info .title {padding: 5px 0 0 10px;height: 30px;background: #eee;border-bottom: 1px solid #ddd;font-size: 18px;font-weight: bold;}
-    .info .close {position: absolute;top: 10px;right: 10px;color: #888;width: 17px;height: 17px;background: url('http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/overlay_close.png');}
-    .info .close:hover {cursor: pointer;}
-    .info .body {position: relative;overflow: hidden;}
-    .info .desc {position: relative;margin: 13px 0 0 0px;height: 120px;}
-    .desc .ellipsis {overflow: hidden;text-overflow: ellipsis;white-space: nowrap;}
-    .desc .jibun {font-size: 11px;color: #888;margin-top: -2px;}
-    .info:after {content: '';position: absolute;margin-left: -12px;left: 50%;bottom: 0;width: 22px;height: 12px;background: url('http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')}
-    .info .link {color: #5085BB;}
+        <!-- 커스텀 오버레이 스타일-- >
+        .wrap {
+            position: absolute;
+            left: 0;
+            bottom: 40px;
+            width: 250px;
+            height: 132px;
+            margin-left: -144px;
+            text-align: left;
+            overflow: hidden;
+            font-size: 12px;
+            font-family: 'Malgun Gothic', dotum, '돋움', sans-serif;
+            line-height: 1.5;
+        }
 
+        .wrap * {
+            padding: 0;
+            margin: 0;
+        }
 
+        .wrap .info {
+            width: 286px;
+            height: 140px;
+            border-radius: 5px;
+            border-bottom: 2px solid #ccc;
+            border-right: 1px solid #ccc;
+            overflow: hidden;
+            background: #fff;
+        }
+
+            .wrap .info:nth-child(1) {
+                border: 0;
+                box-shadow: 0px 1px 2px #888;
+            }
+
+        .info .title {
+            padding: 5px 0 0 10px;
+            height: 30px;
+            background: #eee;
+            border-bottom: 1px solid #ddd;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .info .close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            color: #888;
+            width: 17px;
+            height: 17px;
+            background: url('http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/overlay_close.png');
+        }
+
+            .info .close:hover {
+                cursor: pointer;
+            }
+
+        .info .body {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .info .desc {
+            position: relative;
+            margin: 13px 0 0 0px;
+            height: 120px;
+        }
+
+        .desc .ellipsis {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .desc .jibun {
+            font-size: 11px;
+            color: #888;
+            margin-top: -2px;
+        }
+
+        .info:after {
+            content: '';
+            position: absolute;
+            margin-left: -12px;
+            left: 50%;
+            bottom: 0;
+            width: 22px;
+            height: 12px;
+            background: url('http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')
+        }
+
+        .info .link {
+            color: #5085BB;
+        }
     </style>
 </head>
 <body>
@@ -257,12 +341,14 @@
                     <div class="form-group">
                         <asp:TextBox ID="title" runat="server" CssClass="form-control form-control-lg" placeholder="제목을 입력해주세요"></asp:TextBox>
                     </div>
-                    
+
                     <div class="map_wrap">
-                        <div id="travelRoute_wrap" class="collapse"><ul id="travelRoute"></ul></div>
+                        <div id="travelRoute_wrap" class="collapse">
+                            <ul id="travelRoute"></ul>
+                        </div>
 
                         <div id="drawingMap"></div>
-                        
+
 
                         <p class="modes">
                             <input type="button" class="btn btn-secondary" onclick="selectOverlay('MARKER')" value="마커" />
@@ -766,7 +852,7 @@
             }
         }
 
-        
+
 
 
 
@@ -779,7 +865,7 @@
                 fragment = document.createDocumentFragment(),
                 bounds = new kakao.maps.LatLngBounds(),
                 listStr = '';
-            
+
 
             // 검색 결과 목록에 추가된 항목들을 제거합니다
             removeAllChildNods(listEl);
@@ -802,7 +888,7 @@
                 // 해당 장소에 인포윈도우에 장소명을 표시합니다
                 // mouseout 했을 때는 인포윈도우를 닫습니다
                 (function (marker, place) {
-                    kakao.maps.event.addListener(marker, 'click', function () {                        
+                    kakao.maps.event.addListener(marker, 'click', function () {
                         displayInfowindow(marker, place);
                     });
 
@@ -920,30 +1006,30 @@
         // 인포윈도우에 장소명을 표시합니다
         function displayInfowindow(marker, place) {
             //var content = '<div style="padding:5px;z-index:1;">' + title + ' <button >추가</button></div>';
-            var content = '<div class="wrap">' + 
-            '    <div class="info">' + 
+            var content = '<div class="wrap">' +
+                '    <div class="info">' +
                 '        <div class="title">' +
-                place.place_name + 
-            '            <div class="close" onclick="closeOverlay()" title="닫기"></div>' + 
-            '        </div>' + 
-            '        <div class="body">' + 
+                place.place_name +
+                '            <div class="close" onclick="closeOverlay()" title="닫기"></div>' +
+                '        </div>' +
+                '        <div class="body">' +
                 '            <div class="desc">' +
                 '                <div class="ellipsis">' + place.road_address_name + '</div>' +
-                '                <div class="jibun ellipsis">' + place.address_name + '</div>' + 
-             '   <div class="jibun ellipsis">' + place.phone + '</div>' + 
-                '                <div><a href="' + place.place_url + '" target="_blank" class="link">상세페이지</a></div>' + 
-                '<div class="btn btn-secondary" onclick=\'addTravelRoute("' + place.place_name + '","' + place.road_address_name + '","' + place.ddress_name + '","' + place.phone + '","' + place.place_url+ '","' + place.x+ '","' + place.y+'")\'>여행경로에 추가</div>'+
-            '            </div>' + 
-            '        </div>' + 
-            '    </div>' +    
-            '</div>';
+                '                <div class="jibun ellipsis">' + place.address_name + '</div>' +
+                '   <div class="jibun ellipsis">' + place.phone + '</div>' +
+                '                <div><a href="' + place.place_url + '" target="_blank" class="link">상세페이지</a></div>' +
+                '<div class="btn btn-secondary" onclick=\'addTravelRoute("' + place.place_name + '","' + place.road_address_name + '","' + place.ddress_name + '","' + place.phone + '","' + place.place_url + '","' + place.x + '","' + place.y + '")\'>여행경로에 추가</div>' +
+                '            </div>' +
+                '        </div>' +
+                '    </div>' +
+                '</div>';
             infowindow.setContent(content);
             infowindow.open(drawingMap, marker);
         }
         // 모든 인포윈도우 닫음
         function closeOverlay() {
-    infowindow.close();   
-}
+            infowindow.close();
+        }
 
 
         // 검색결과 목록의 자식 Element를 제거하는 함수입니다
@@ -953,14 +1039,15 @@
             }
         }
 
+        var travelRouteCnt = 0;
 
         // 검색결과에서 선택된 마커의 인포윈도우에서 travelRoute로 요소 추가
-        function addTravelRoute(place_name, road_address_name, address_name, phone, place_url,x,y ) {
+        function addTravelRoute(place_name, road_address_name, address_name, phone, place_url, x, y) {
 
-             var listEl = document.getElementById('travelRoute'),
+            var listEl = document.getElementById('travelRoute'),
                 menuEl = document.getElementById('travelRoute_wrap'),
-                 fragment = document.createDocumentFragment(),
-                 searchBox = document.getElementById('keyword'),
+                fragment = document.createDocumentFragment(),
+                searchBox = document.getElementById('keyword'),
                 paginationEl = document.getElementById('pagination'),
                 listStr = '';
 
@@ -970,21 +1057,22 @@
             // 검색 결과 목록에 추가된 항목들을 제거합니다
             removeAllChildNods(document.getElementById('placesList'));
 
-                        // 기존에 추가된 페이지번호를 삭제합니다
+            // 기존에 추가된 페이지번호를 삭제합니다
             while (paginationEl.hasChildNodes()) {
                 paginationEl.removeChild(paginationEl.lastChild);
             }
-                        // 지도에 표시되고 있는 마커를 제거합니다
+            // 지도에 표시되고 있는 마커를 제거합니다
             removeMarker();
             //지도에 표시되고 있는 인포윈도우 제거
             closeOverlay();
             $('#travelRoute_wrap').collapse('show');
 
-            
+            //travelRouteCnt 증가
+            ++travelRouteCnt;
 
             var el = document.createElement('li'),
-                itemStr = '<div class="wrap">' +
-                    '    <div class="info">' +
+                itemStr = '<div  class="wrap" ondrop="drop(event)" ondragover="allowDrop(event)">' +
+                    '    <div class="info" draggable="true" ondragstart="drag(event)">' +
                     '        <div class="title">' + place_name +
                     '            <div class="close" onclick="closeOverlay()" title="닫기"></div>' +
                     '        </div>' +
@@ -994,18 +1082,18 @@
                     '                <div class="jibun ellipsis">' + address_name + '</div>' +
                     '   <div class="jibun ellipsis">' + phone + '</div>' +
                     '                <div><a href="' + place_url + '" target="_blank" class="link">상세페이지</a></div>' +
-                                       
+
                     '            </div>' +
                     '        </div>' +
                     '    </div>' +
                     '<input id=x type=hidden value=' + x + '/>' +
-                    '<input id=y type=hidden value='+y+'/>' +
+                    '<input id=y type=hidden value=' + y + '/>' +
                     '</div>';
             el.innerHTML = itemStr;
-            el.className = 'item';
+            el.className = 'dragContainer';
 
             var itemEl = el; // 검색 결과 항목 Element를 생성합니다
-         
+
 
             fragment.appendChild(itemEl);
 
@@ -1017,6 +1105,137 @@
             // 검색결과 항목들을 검색결과 목록 Elemnet에 추가합니다
             listEl.appendChild(fragment);
             menuEl.scrollTop = 0;
+        }
+        //여행경로 드래그 앤 드롭
+
+        //function allowDrop (ev) {
+        //   ev.preventDefault ();
+        //}
+
+        //function drag (ev) {
+        //  ev.dataTransfer.setData("text", ev.target.id);
+        //}
+
+        //function drop (ev) {
+        //  ev.preventDefault ();
+        //  var data = ev.dataTransfer.getData("text");
+        //  var dataParent = data.parentNode;
+        //  var tgt = ev.currentTarget.firstElementChild;
+
+        //  ev.currentTarget.replaceChild (data, tgt);
+        //  dataParent.appendChild (tgt);
+        //}
+
+        var DragManager = {
+            dragContainers: [],
+            currentContainer: null,
+
+            add: function (dragContainer) {
+                this.dragContainers.push(dragContainer);
+            },
+
+            handleEvent: function (event) {
+                if (event.type == 'dragstart') {
+                    var containers = this.dragContainers.filter(function (container) {
+                        return container.contains(event.target);
+                    });
+
+                    if (containers.length > 0) {
+                        this.currentContainer = containers[0];
+                        this.currentContainer.activate();
+                    }
+                }
+
+                if (this.currentContainer !== null) {
+                    this.currentContainer.handleEvent(event);
+                    if (event.type == 'dragend') {
+                        this.currentContainer.deactivate();
+                        this.currentContainer = null;
+                    }
+                }
+            }
+        };
+
+        window.addEventListener('dragstart', DragManager);
+        window.addEventListener('dragend', DragManager);
+
+        function DragContainer(container, type) {
+            this.element = container;
+            this.type = type || 'swap';
+            this.items = $('> li', this.element);
+            this.draggingItem = null;
+
+            DragManager.add(this);
+        }
+
+        DragContainer.prototype.contains = function (target) {
+            return $(this.element).find(target).length;
+        }
+
+        DragContainer.prototype.handleEvent = function (event) {
+            // NOTE: We've bound `this` to the DragContainer object, not
+            // the element the event was fired on.
+            var $t = $(event.target);
+
+            if (event.type == 'dragstart') {
+                this.draggingItem = event.target;
+                event.dataTransfer.setData('text/html', this.draggingItem.innerHTML);
+            }
+
+            if (event.type == 'dragover' && this.draggingItem != event.target) {
+                $t.addClass('js-active');
+                // Preventing the default action _enables_ drop. Because JS APIs.
+                if (event.preventDefault) {
+                    event.preventDefault();
+                }
+                event.dataTransfer.dropEffect = 'move';
+            }
+
+            if (event.type == 'dragleave') {
+                $t.removeClass('js-active');
+            }
+
+            if (event.type == 'drop' && this.draggingItem != null) {
+                if (this.type == 'swap') {
+                    this.draggingItem.innerHTML = event.target.innerHTML;
+                    event.target.innerHTML = event.dataTransfer.getData('text/html');
+                } else if (this.type == 'reorder') {
+                    console.log('reorder');
+                    console.log(this.items.index(event.target));
+                }
+            }
+
+            if (event.type == 'dragend' || event.type == 'drop') {
+                this.items.removeClass('js-active');
+                this.draggingItem = null;
+            }
+        }
+
+        DragContainer.prototype.activate = function () {
+            for (var i = 0, j = this.items.length; i < j; i++) {
+                // Make sure `this` is always a DragContainer instead of the element the
+                // event was activated on.
+                this.items[i].addEventListener('dragenter', this.handleEvent.bind(this));
+                this.items[i].addEventListener('dragover', this.handleEvent.bind(this));
+                this.items[i].addEventListener('dragleave', this.handleEvent.bind(this));
+                this.items[i].addEventListener('drop', this.handleEvent.bind(this));
+            }
+        }
+
+        DragContainer.prototype.deactivate = function () {
+            this.draggingItem = null;
+            for (var i = 0, j = this.items.length; i < j; i++) {
+                //this.items[i].removeEventListener('dragenter', this.handleEvent);
+                //this.items[i].removeEventListener('dragover', this.handleEvent);
+                //this.items[i].removeEventListener('dragleave', this.handleEvent);
+                //this.items[i].removeEventListener('drop', this.handleEvent);
+            }
+        }
+
+        var dragContainers = document.getElementsByClassName('dragContainer');
+
+        for (var i = 0, j = dragContainers.length; i < j; i++) {
+            new DragContainer(dragContainers[i], (i % 2 == 0) ? 'swap' : 'reorder');
         }
 
 
@@ -1030,7 +1249,7 @@
 
 
 
-        
+
 
 
 
