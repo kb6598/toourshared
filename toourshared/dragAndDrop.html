@@ -2,15 +2,16 @@
 
 <head>
     <!-- 합쳐지고 최소화된 최신 CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-
-
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous" />
+    <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'>
+    <script src='https://www.google.com/recaptcha/api.js'></script>
 
     <style>
         #travelRoute_wrap {
             position: relative;
             text-align: center;
             height: 500px;
+            width: 250px;
             z-index: 3;
             background-color: whitesmoke;
         }
@@ -109,6 +110,51 @@
         .info .link {
             color: #5085BB;
         }
+
+
+
+
+        .dragContainer {
+            list-style-type: none;
+            margin: 0 0 1em 0;
+            padding: 1em;
+            border: 2px solid transparent;
+
+            &:hover {
+                border: 2px solid #222;
+            }
+        }
+
+        .dragContainer li {
+            display: block;
+
+            border: 1px solid #ccc;
+            margin-bottom: 1em;
+            line-height: 3em;
+            padding: 0 2em;
+
+            &:last-of-type {
+                margin-bottom: 0;
+            }
+
+            &:before {
+                content: '≔';
+                //content: '⇅';
+                position: relative;
+                left: -.5em;
+                font-size: 2em;
+                cursor: move;
+            }
+
+            &:hover {
+                background-color: #eee;
+            }
+
+            &.js-active {
+                border: 1px dashed #444;
+                background-color: #09f;
+            }
+        }
     </style>
 
 
@@ -118,9 +164,9 @@
 <body>
     <table>
         <tr>
-            <td>
-                <div id="travelRoute_wrap" class="collapse">
-                    <ul id="travelRoute">
+            <td style="width: 250px;">
+                <div id="travelRoute_wrap"=>
+                    <ul id="travelRoute" class='dragContainer'>
                     </ul>
                 </div>
 
@@ -199,6 +245,16 @@
                 </button>
             </td>
         </tr>
+        <tr>
+        <td>
+            <ul class='dragContainer'>
+  <li draggable="true">Item 1</li>
+  <li draggable="true">Item 2</li>
+  <li draggable="true">Item 3</li>
+  <li draggable="true">Item 4</li>
+  <li draggable="true">Item 5</li>
+</ul>
+            </td></tr>
     </table>
 
 
@@ -225,9 +281,11 @@
         //travelRouteCnt 증가
         //++travelRouteCnt;
 
-        var el = document.createElement('div'),
+        var el = document.createElement('li'),
             itemStr = '<div id="travelPoint" class="wrap" ondrop="drop(event)" ondragover="allowDrop(event)">' +
-            '    <div class="info" draggable="true" ondragstart="drag(event)">' +
+            '    <div class="info" draggable="true" ondragstart="dragstart(event)">' +
+ //                       itemStr = '<div id="travelPoint" class="wrap" >' +
+ //           '    <div class="info">' +
             '        <div class="title">' + place_name +
             '            <div class="close" onclick="closeOverlay()" title="닫기"></div>' +
             '        </div>' +
@@ -245,8 +303,8 @@
             '<input id=y type=hidden value=' + y + '/>' +
             '</div>';
         el.innerHTML = itemStr;
-        el.className = 'item';
-
+        el.setAttribute("draggable","true")
+        el.setAttribute("style","z-index:80;")
         var itemEl = el; // 검색 결과 항목 Element를 생성합니다
 
 
@@ -261,4 +319,77 @@
         listEl.appendChild(fragment);
         menuEl.scrollTop = 0;
     }
-</script></html>
+
+        var dragged;
+        function allowDrop(ev) {
+            ev.preventDefault();
+        }
+    
+
+        function dragstart(ev){
+            dragged=ev.target;
+            
+        }
+    
+        function drop(ev) {
+            ev.preventDefault();
+            
+            var data = dragged;
+//            var dataNode = document.createDocumentFragment();
+//            dataNode.appendChild(data);
+//            
+            console.info(data);
+            while(1){
+                if(data.tagName == "LI")
+                    break;
+                data = data.parentNode;
+            }
+            console.info(data);
+            var tgt = ev.currentTarget;
+            console.info(tgt);
+            //태그가 li가 될때까지 상위로 올라감
+           while(1){
+                if(tgt.tagName == "LI")
+                    break;
+                tgt = tgt.parentNode;
+                }
+            console.info(tgt);
+            
+            var curTartgetParent = ev.currentTarget;
+            
+                       while(1){
+                if(curTartgetParent.tagName == "UL")
+                    break;
+                curTartgetParent = curTartgetParent.parentNode;
+                }
+            
+            console.info(curTartgetParent);
+            //tgt를 data로 대체
+            var tgtCopy = document.createDocumentFragment();            
+            tgtCopy.appendChild(tgt);
+            tgtCopy = tgtCopy.firstChild;
+            console.info(tgtCopy);
+            
+            var dataCopy = document.createDocumentFragment();            
+            dataCopy.appendChild(data);
+            dataCopy = dataCopy.firstChild;
+            console.info(dataCopy);
+            
+            //tgt.replaceWith(dataCopy);
+            //data.replaceWith(tgtCopy);
+            
+            curTartgetParent.replaceChild(tgt,data);
+            
+            
+            
+    
+    
+    
+        }
+function exchangeElements(element1, element2){
+    
+}
+
+</script>
+
+</html>
