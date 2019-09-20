@@ -367,14 +367,14 @@
             
             console.info(curTartgetParent);
             //tgt를 data로 대체
-            var tgtCopy = document.createDocumentFragment();            
-            tgtCopy.appendChild(tgt);
-            tgtCopy = tgtCopy.firstChild;
-            //console.info(tgtCopy);
-            
-            var dataCopy = document.createDocumentFragment();            
-            dataCopy.appendChild(data);
-            dataCopy = dataCopy.firstChild;
+//            var tgtCopy = document.createDocumentFragment();            
+//            tgtCopy.appendChild(tgt);
+//            tgtCopy = tgtCopy.firstChild;
+//            //console.info(tgtCopy);
+//            
+//            var dataCopy = document.createDocumentFragment();            
+//            dataCopy.appendChild(data);
+//            dataCopy = dataCopy.firstChild;
             //console.info(dataCopy);
             
             //tgt.removedNodes;
@@ -384,7 +384,7 @@
             //tgt.appendChild(dataCopy);
             //data.appendChild(tgtCopy);
             
-            curTartgetParent.replaceChild(tgt,data);
+            curTartgetParent.replaceChild(data,tgt);
             
             
             
