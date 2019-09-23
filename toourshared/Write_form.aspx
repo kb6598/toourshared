@@ -935,7 +935,7 @@
                 '                <div class="jibun ellipsis">' + place.address_name + '</div>' + 
              '   <div class="jibun ellipsis">' + place.phone + '</div>' + 
                 '                <div><a href="' + place.place_url + '" target="_blank" class="link">상세페이지</a></div>' + 
-                '<div class="btn btn-secondary" onclick=\'addTravelRoute("' + place.place_name + '","' + place.road_address_name + '","' + place.ddress_name + '","' + place.phone + '","' + place.place_url+'")\'>여행경로에 추가</div>'+
+                '<div class="btn btn-secondary" onclick=\'addTravelRoute("' + place.place_name + '","' + place.road_address_name + '","' + place.ddress_name + '","' + place.phone + '","' + place.place_url+ '","' + place.x+ '","' + place.y+'")\'>여행경로에 추가</div>'+
             '            </div>' + 
             '        </div>' + 
             '    </div>' +    
@@ -943,7 +943,7 @@
             infowindow.setContent(content);
             infowindow.open(drawingMap, marker);
         }
-
+        // 모든 인포윈도우 닫음
         function closeOverlay() {
     infowindow.close();   
 }
@@ -956,33 +956,41 @@
             }
         }
 
+        var travelRouteCnt = 0;
 
-        //
-        function addTravelRoute(place_name, road_address_name, address_name, phone, place_url ) {
+        // 검색결과에서 선택된 마커의 인포윈도우에서 travelRoute로 요소 추가
+        function addTravelRoute(place_name, road_address_name, address_name, phone, place_url,x,y ) {
 
              var listEl = document.getElementById('travelRoute'),
                 menuEl = document.getElementById('travelRoute_wrap'),
                  fragment = document.createDocumentFragment(),
                  searchBox = document.getElementById('keyword'),
+                paginationEl = document.getElementById('pagination'),
                 listStr = '';
 
             //검색 키워드 삭제
-            searchBox.value = '';
+            //searchBox.value = '';
 
             // 검색 결과 목록에 추가된 항목들을 제거합니다
             removeAllChildNods(document.getElementById('placesList'));
+
+                        // 기존에 추가된 페이지번호를 삭제합니다
+            while (paginationEl.hasChildNodes()) {
+                paginationEl.removeChild(paginationEl.lastChild);
+            }
                         // 지도에 표시되고 있는 마커를 제거합니다
             removeMarker();
             //지도에 표시되고 있는 인포윈도우 제거
             closeOverlay();
             $('#travelRoute_wrap').collapse('show');
 
-            
-            var el = document.createElement('li'),
-                itemStr = '<div class="wrap">' +
-                    '    <div class="info">' +
-                    '        <div class="title">' +
-                    place_name +
+            //travelRouteCnt 증가
+            ++travelRouteCnt;
+
+            var el = document.createElement('div'),
+                itemStr = '<div id="travelPoint_'+travelRouteCnt+'" class="wrap" ondrop="drop(event)" ondragover="allowDrop(event)">' +
+                    '    <div class="info" draggable="true" ondragstart="drag(event)">' +
+                    '        <div class="title">' + place_name +
                     '            <div class="close" onclick="closeOverlay()" title="닫기"></div>' +
                     '        </div>' +
                     '        <div class="body">' +
@@ -991,9 +999,12 @@
                     '                <div class="jibun ellipsis">' + address_name + '</div>' +
                     '   <div class="jibun ellipsis">' + phone + '</div>' +
                     '                <div><a href="' + place_url + '" target="_blank" class="link">상세페이지</a></div>' +
+                                       
                     '            </div>' +
                     '        </div>' +
                     '    </div>' +
+                    '<input id=x type=hidden value=' + x + '/>' +
+                    '<input id=y type=hidden value='+y+'/>' +
                     '</div>';
             el.innerHTML = itemStr;
             el.className = 'item';
@@ -1001,15 +1012,18 @@
             var itemEl = el; // 검색 결과 항목 Element를 생성합니다
          
 
-                fragment.appendChild(itemEl);
+            fragment.appendChild(itemEl);
+
+            // drawing 메니저에 마커 추가
+            var position = new kakao.maps.LatLng(y, x);
+            manager.put(kakao.maps.drawing.OverlayType.MARKER, position, 1);
 
 
             // 검색결과 항목들을 검색결과 목록 Elemnet에 추가합니다
             listEl.appendChild(fragment);
             menuEl.scrollTop = 0;
         }
-
-       
+        //여행경로 드래그 앤 드롭
 
 
 
