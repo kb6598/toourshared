@@ -37,6 +37,9 @@
             text-align: center;
         }
         #travelRoute_wrap {
+            max-height:500px;
+            overflow-x: hidden;
+            overflow-y:scroll;
             position: absolute;
             text-align: center;
             z-index:3;
@@ -1006,87 +1009,7 @@
             menuEl.scrollTop = 0;
         }
 
-        //여행 경로 추가
-        function displayTravelRoute(place,index) {
-
-            var listEl = document.getElementById('travelRoute'),
-                menuEl = document.getElementById('travelRoute_wrap'),
-                fragment = document.createDocumentFragment(),
-                listStr = '';
-            
-
-            // 검색 결과 목록에 추가된 항목들을 제거합니다
-            //removeAllChildNods(listEl);
-
-            // 지도에 표시되고 있는 마커를 제거합니다
-            removeMarker();
-            //지도에 표시되고 있는 인포윈도우 제거
-            closeOverlay();
-            $('#travelRoute_wrap').collapse('show');
-            var itemEl = getListItem(index, place); // 검색 결과 항목 Element를 생성합니다
-            //for (var i = 0; i < places.length; i++) {
-
-                // 마커를 생성하고 지도에 표시합니다
-                //var itemEl = getListItem(i, places[i]); // 검색 결과 항목 Element를 생성합니다
-
-                // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
-                // LatLngBounds 객체에 좌표를 추가합니다
-                //bounds.extend(placePosition);
-
-                // 마커와 검색결과 항목에 mouseover 했을때
-                // 해당 장소에 인포윈도우에 장소명을 표시합니다
-                // mouseout 했을 때는 인포윈도우를 닫습니다
-                //(function (marker, title) {
-                //    kakao.maps.event.addListener(marker, 'click', function () {                        
-                //        displayInfowindow(marker, title);
-                //    });
-
-
-                //    itemEl.onmouseover = function () {
-                //        displayInfowindow(marker, title);
-                //    };
-
-                //    itemEl.onmouseclick = function () {
-                //        displayInfowindow(marker, title);
-                //        $('#searchPlaceModal').modal('hide')
-
-                //    };
-
-
-                //})(marker, places[i]);
-
-                fragment.appendChild(itemEl);
-            //}
-
-            // 검색결과 항목들을 검색결과 목록 Elemnet에 추가합니다
-            listEl.appendChild(fragment);
-            menuEl.scrollTop = 0;
-
-
-        }
-                // 검색결과 항목을 Element로 반환하는 함수입니다
-        //function getListItem(index, places) {
-
-        //    var el = document.createElement('li'),
-        //        itemStr = '<span class="markerbg marker_' + (index + 1) + '"></span>' +
-        //            '<div class="info">' +
-        //            '   <h5 data-dismiss="modal">' + places.place_name + '</h5>';
-
-        //    if (places.road_address_name) {
-        //        itemStr += '    <span data-dismiss="modal">' + places.road_address_name + '</span>' +
-        //            '   <span class="jibun gray" data-dismiss="modal">' + places.address_name + '</span>';
-        //    } else {
-        //        itemStr += '    <span data-dismiss="modal">' + places.address_name + '</span>';
-        //    }
-
-        //    itemStr += '  <span class="tel">' + places.phone + '</span>' +
-        //        '</div>';
-
-        //    el.innerHTML = itemStr;
-        //    el.className = 'item';
-
-        //    return el;
-        //}
+       
 
 
 
