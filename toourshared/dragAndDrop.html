@@ -177,7 +177,7 @@
         <tr>
             <td style="width: 250px;">
                 <div id="travelRoute_wrap">
-                    <ul id="travelRoute" class='dragContainer'></ul>
+                    <ul id="travelRoute" class='travelRoute'></ul>
                 </div>
 
             </td>
@@ -296,8 +296,11 @@
         //travelRouteCnt 증가
         //++travelRouteCnt;
 
+        
+        
+        
         var el = document.createElement('li'),
-            itemStr = '<div id="travelPoint" class="wrap">' +
+            itemStr = '<div id="travelPoint" >' +
             '    <div class="info">' +
             //                       itemStr = '<div id="travelPoint" class="wrap" >' +
             //           '    <div class="info">' +
@@ -381,7 +384,7 @@
     }
 
     travelRoute.prototype.contains = function(target) {
-        //console.info(target);
+        console.info(target);
         return $(this.element).find(target).length;
     }
 
