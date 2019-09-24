@@ -6,7 +6,8 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous" />
 
     <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'>
-                    <script src='https://www.google.com/recaptcha/api.js'></script>
+        < script src = 'https://www.google.com/recaptcha/api.js' >
+    </script>
 
 
     <!-- Required script files -->
@@ -17,6 +18,8 @@
 
     <!-- Grid script components -->
     <script src="/jui/jui-grid/dist/jui-grid.min.js"></script>
+    
+    
     <style>
         #travelRoute_wrap {
             position: relative;
@@ -27,7 +30,7 @@
             background-color: whitesmoke;
         }
 
-        < !--커스텀 오버레이 스타일-- > .wrap {
+        < !--커스텀 오버레이 스타일-->.wrap {
             position: relative;
             left: 0;
             bottom: 40px;
@@ -56,10 +59,10 @@
             background: #fff;
         }
 
-            .wrap .info:nth-child(1) {
-                border: 0;
-                box-shadow: 0px 1px 2px #888;
-            }
+        .wrap .info:nth-child(1) {
+            border: 0;
+            box-shadow: 0px 1px 2px #888;
+        }
 
         .info .title {
             padding: 5px 0 0 10px;
@@ -80,9 +83,9 @@
             background: url('http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/overlay_close.png');
         }
 
-            .info .close:hover {
-                cursor: pointer;
-            }
+        .info .close:hover {
+            cursor: pointer;
+        }
 
         .info .body {
             position: relative;
@@ -130,11 +133,10 @@
             margin: 0 0 1em 0;
             padding: 1em;
             border: 2px solid transparent;
-            &:hover
 
-        {
-            border: 2px solid #222;
-        }
+            &:hover {
+                border: 2px solid #222;
+            }
 
         }
 
@@ -144,33 +146,32 @@
             margin-bottom: 1em;
             line-height: 3em;
             padding: 0 2em;
-            &:last-of-type
 
-        {
-            margin-bottom: 0;
-        }
+            &:last-of-type {
+                margin-bottom: 0;
+            }
 
-        &:before {
-            content: '≔';
-            //content: '⇅';
-            position: relative;
-            left: -.5em;
-            font-size: 2em;
-            cursor: move;
-        }
+            &:before {
+                content: '≔';
+                //content: '⇅';
+                position: relative;
+                left: -.5em;
+                font-size: 2em;
+                cursor: move;
+            }
 
-        &:hover {
-            background-color: #eee;
-        }
+            &:hover {
+                background-color: #eee;
+            }
 
-        &.js-active {
-            border: 1px dashed #444;
-            background-color: #09f;
-        }
+            &.js-active {
+                border: 1px dashed #444;
+                background-color: #09f;
+            }
         }
     </style>
 
-        
+
 
 
 
@@ -190,8 +191,8 @@
             </thead>
             <tbody></tbody>
         </table>
-<script data-jui="#table_1" data-tpl="row" type="text/template">
-    <tr>
+        <script data-jui="#table_1" data-tpl="row" type="text/template">
+            <tr>
         <td><!= name !></td>
         <td><!= age !></td>
         <td><!= location !></td>
@@ -204,7 +205,7 @@
     <table>
         <tr>
             <td style="width: 250px;">
-                <div id="travelRoute_wrap" =>
+                <div id="travelRoute_wrap"=>
                     <ul id="travelRoute" class='dragContainer'></ul>
                 </div>
 
@@ -309,161 +310,193 @@
 
 
 <script>
-        function addTravelRoute(place_name, road_address_name, address_name, phone, place_url, x, y) {
+    function addTravelRoute(place_name, road_address_name, address_name, phone, place_url, x, y) {
 
-            var listEl = document.getElementById('travelRoute'),
-                menuEl = document.getElementById('travelRoute_wrap'),
-                fragment = document.createDocumentFragment(),
-                searchBox = document.getElementById('keyword'),
-                listStr = '';
-
-
-
-            //$('#travelRoute_wrap').collapse('show');
-
-            //travelRouteCnt 증가
-            //++travelRouteCnt;
-
-            var el = document.createElement('li'),
-                itemStr = '<div id="travelPoint" class="wrap" ondrop="drop(event)" ondragover="allowDrop(event)">' +
-                '    <div class="info" draggable="true" ondragstart="dragstart(event)">' +
-     //                       itemStr = '<div id="travelPoint" class="wrap" >' +
-     //           '    <div class="info">' +
-                '        <div class="title">' + place_name +
-                '            <div class="close" onclick="closeOverlay()" title="닫기"></div>' +
-                '        </div>' +
-                '        <div class="body">' +
-                '            <div class="desc">' +
-                '                <div class="ellipsis">' + road_address_name + '</div>' +
-                '                <div class="jibun ellipsis">' + address_name + '</div>' +
-                '   <div class="jibun ellipsis">' + phone + '</div>' +
-                '                <div><a href="' + place_url + '" target="_blank" class="link">상세페이지</a></div>' +
-
-                '            </div>' +
-                '        </div>' +
-                '    </div>' +
-                '<input id=x type=hidden value=' + x + '/>' +
-                '<input id=y type=hidden value=' + y + '/>' +
-                '</div>';
-            el.innerHTML = itemStr;
-            el.setAttribute("draggable","true")
-            el.setAttribute("style","z-index:80;")
-            var itemEl = el; // 검색 결과 항목 Element를 생성합니다
+        var listEl = document.getElementById('travelRoute'),
+            menuEl = document.getElementById('travelRoute_wrap'),
+            fragment = document.createDocumentFragment(),
+            searchBox = document.getElementById('keyword'),
+            listStr = '';
 
 
-            fragment.appendChild(itemEl);
 
-            // drawing 메니저에 마커 추가
-            //var position = new kakao.maps.LatLng(y, x);
-            //manager.put(kakao.maps.drawing.OverlayType.MARKER, position, 1);
+        //$('#travelRoute_wrap').collapse('show');
+
+        //travelRouteCnt 증가
+        //++travelRouteCnt;
+
+        var el = document.createElement('li'),
+            itemStr = '<div id="travelPoint" class="wrap" ondrop="drop(event)" ondragover="allowDrop(event)">' +
+            '    <div class="info" draggable="true" ondragstart="dragstart(event)">' +
+            //                       itemStr = '<div id="travelPoint" class="wrap" >' +
+            //           '    <div class="info">' +
+            '        <div class="title">' + place_name +
+            '            <div class="close" onclick="closeOverlay()" title="닫기"></div>' +
+            '        </div>' +
+            '        <div class="body">' +
+            '            <div class="desc">' +
+            '                <div class="ellipsis">' + road_address_name + '</div>' +
+            '                <div class="jibun ellipsis">' + address_name + '</div>' +
+            '   <div class="jibun ellipsis">' + phone + '</div>' +
+            '                <div><a href="' + place_url + '" target="_blank" class="link">상세페이지</a></div>' +
+
+            '            </div>' +
+            '        </div>' +
+            '    </div>' +
+            '<input id=x type=hidden value=' + x + '/>' +
+            '<input id=y type=hidden value=' + y + '/>' +
+            '</div>';
+        el.innerHTML = itemStr;
+        el.setAttribute("draggable", "true")
+        el.setAttribute("style", "z-index:80;")
+        var itemEl = el; // 검색 결과 항목 Element를 생성합니다
 
 
-            // 검색결과 항목들을 검색결과 목록 Elemnet에 추가합니다
-            listEl.appendChild(fragment);
-            menuEl.scrollTop = 0;
+        fragment.appendChild(itemEl);
+
+        // drawing 메니저에 마커 추가
+        //var position = new kakao.maps.LatLng(y, x);
+        //manager.put(kakao.maps.drawing.OverlayType.MARKER, position, 1);
+
+
+        // 검색결과 항목들을 검색결과 목록 Elemnet에 추가합니다
+        listEl.appendChild(fragment);
+        menuEl.scrollTop = 0;
+    }
+
+    var dragged;
+
+    function allowDrop(ev) {
+        ev.preventDefault();
+    }
+
+
+    function dragstart(ev) {
+        dragged = ev.target;
+
+    }
+
+    function drop(ev) {
+        ev.preventDefault();
+
+        var data = dragged;
+        //            var dataNode = document.createDocumentFragment();
+        //            dataNode.appendChild(data);
+        //
+        //console.info(data);
+        while (1) {
+            //if(data.id == "travelPoint")
+            if (data.tagName == "LI")
+                break;
+            data = data.parentNode;
+        }
+        console.info(data);
+        var tgt = ev.currentTarget;
+        //console.info(tgt);
+        //태그가 li가 될때까지 상위로 올라감
+        while (1) {
+            //if(tgt.id == "travelPoint")
+            if (tgt.tagName == "LI")
+                break;
+            tgt = tgt.parentNode;
+        }
+        console.info(tgt);
+
+        var curTartgetParent = ev.currentTarget;
+
+        while (1) {
+            if (curTartgetParent.tagName == "UL")
+                break;
+            curTartgetParent = curTartgetParent.parentNode;
         }
 
-            var dragged;
-            function allowDrop(ev) {
-                ev.preventDefault();
-            }
+        console.info(curTartgetParent);
+        //            tgt를 data로 대체
+        //            var tgtCopy = document.createDocumentFragment();
+        //            tgtCopy.appendChild(tgt);
+        //            tgtCopy = tgtCopy.firstChild;
+        //            //console.info(tgtCopy);
+        //
+        //            var dataCopy = document.createDocumentFragment();
+        //            dataCopy.appendChild(data);
+        //            dataCopy = dataCopy.firstChild;
+        //            console.info(dataCopy);
+
+        //            tgt.removedNodes;
+        //            data.removedNodes;
 
 
-            function dragstart(ev){
-                dragged=ev.target;
+        tgt.appendChild(dataCopy);
+        //data.appendChild(tgtCopy);
 
-            }
-
-            function drop(ev) {
-                ev.preventDefault();
-
-                var data = dragged;
-//            var dataNode = document.createDocumentFragment();
-//            dataNode.appendChild(data);
-//
-                //console.info(data);
-                while(1){
-                    //if(data.id == "travelPoint")
-                    if(data.tagName == "LI")
-                        break;
-                    data = data.parentNode;
-                }
-                console.info(data);
-                var tgt = ev.currentTarget;
-                //console.info(tgt);
-                //태그가 li가 될때까지 상위로 올라감
-               while(1){
-                    //if(tgt.id == "travelPoint")
-                   if(tgt.tagName == "LI")
-                        break;
-                    tgt = tgt.parentNode;
-                    }
-                console.info(tgt);
-
-                var curTartgetParent = ev.currentTarget;
-
-                           while(1){
-                    if(curTartgetParent.tagName == "UL")
-                        break;
-                    curTartgetParent = curTartgetParent.parentNode;
-                    }
-
-                console.info(curTartgetParent);
-                //tgt를 data로 대체
-//            var tgtCopy = document.createDocumentFragment();
-//            tgtCopy.appendChild(tgt);
-//            tgtCopy = tgtCopy.firstChild;
-//            //console.info(tgtCopy);
-//
-//            var dataCopy = document.createDocumentFragment();
-//            dataCopy.appendChild(data);
-//            dataCopy = dataCopy.firstChild;
-                //console.info(dataCopy);
-
-                //tgt.removedNodes;
-                //data.removedNodes;
+        curTartgetParent.replaceChild(data, tgt);
+        curTartgetParent.appendChild(tgt);
+        //data.replaceWith(tgt);
+        //console.info(data);
+        //console.info(tgt);
 
 
-                //tgt.appendChild(dataCopy);
-                //data.appendChild(tgtCopy);
-
-                curTartgetParent.replaceChild(data,tgt);
-                curTartgetParent.appendChild(tgt);
-                //data.replaceWith(tgt);
-                //console.info(data);
-               //console.info(tgt);
-
-
-                //this.draggingItem.innerHTML = curTartgetParent.innerHTML;
-          //ev.target.innerHTML = data;
+        //this.draggingItem.innerHTML = curTartgetParent.innerHTML;
+        //ev.target.innerHTML = data;
 
 
 
 
 
-            }
-function exchangeElements(element1, element2){
+    }
 
-}
+    function exchangeElements(element1, element2) {
 
-
+    }
 </script>
 
 
 <script>
-    jui.ready([ "grid.table" ], function(table) {
-    table_1 = table("#table_1", {
-        data: [
-            { name: "Hong", age: "20", location: "Ilsan" },
-            { name: "Jung", age: "30", location: "Seoul" },
-            { name: "Park", age: "15", location: "Yeosu" },
-            { name: "Kang", age: "32", location: "Seoul" },
-            { name: "Song", age: "12", location: "Gwangju" },
-            { name: "Yoon", age: "22", location: "Damyang" },
-            { name: "Kim", age: "33", location: "Busan" },
-            { name: "Hwang", age: "21", location: "Seoul" }
-        ]
+    jui.ready(["grid.table"], function(table) {
+        table_1 = table("#table_1", {
+            data: [{
+                    name: "Hong",
+                    age: "20",
+                    location: "Ilsan"
+                },
+                {
+                    name: "Jung",
+                    age: "30",
+                    location: "Seoul"
+                },
+                {
+                    name: "Park",
+                    age: "15",
+                    location: "Yeosu"
+                },
+                {
+                    name: "Kang",
+                    age: "32",
+                    location: "Seoul"
+                },
+                {
+                    name: "Song",
+                    age: "12",
+                    location: "Gwangju"
+                },
+                {
+                    name: "Yoon",
+                    age: "22",
+                    location: "Damyang"
+                },
+                {
+                    name: "Kim",
+                    age: "33",
+                    location: "Busan"
+                },
+                {
+                    name: "Hwang",
+                    age: "21",
+                    location: "Seoul"
+                }
+            ]
+        });
     });
-});
-    </script>
+</script>
+
 </html>
