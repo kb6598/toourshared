@@ -10,6 +10,8 @@
     </script>
 
 
+
+
     <style>
         #travelRoute_wrap {
             position: relative;
@@ -165,14 +167,14 @@
 
 </head>
 
-<body >
+<body>
 
 
 
 
 
 
-    </div>
+
     <table>
         <tr>
             <td style="width: 250px;">
@@ -259,17 +261,7 @@
                 </button>
             </td>
         </tr>
-        <tr>
-            <td>
-                <ul class='dragContainer'>
-                    <li draggable="true">Item 1</li>
-                    <li draggable="true">Item 2</li>
-                    <li draggable="true">Item 3</li>
-                    <li draggable="true">Item 4</li>
-                    <li draggable="true">Item 5</li>
-                </ul>
-            </td>
-        </tr>
+
     </table>
 
 
@@ -296,9 +288,9 @@
         //travelRouteCnt 증가
         //++travelRouteCnt;
 
-        
-        
-        
+
+
+
         var el = document.createElement('li'),
             itemStr = '<div id="travelPoint" >' +
             '    <div class="info">' +
@@ -321,8 +313,8 @@
             '<input id=y type=hidden value=' + y + '/>' +
             '</div>';
         el.innerHTML = itemStr;
-        el.setAttribute("draggable", "true")
-        el.setAttribute("style", "z-index:80;")
+        el.setAttribute("draggable", "true");
+        el.setAttribute("style", "z-index:80;");
         var itemEl = el; // 검색 결과 항목 Element를 생성합니다
 
 
@@ -336,146 +328,164 @@
         // 검색결과 항목들을 검색결과 목록 Elemnet에 추가합니다
         listEl.appendChild(fragment);
         menuEl.scrollTop = 0;
-    }
 
-    var DragManager = {
-        travelRoutes: [],
-        currentContainer: null,
 
-        add: function(travelRoute) {
-            this.travelRoutes.push(travelRoute);
-        },
+        var DragManager = {
+            travelRoutes: [],
+            currentContainer: null,
 
-        handleEvent: function(event) {
-            //console.info(event.target);
+            add: function(travelRoute) {
+                this.travelRoutes.push(travelRoute);
+            },
+
+            handleEvent: function(event) {
+                //console.info(event.target);
+                if (event.type == 'dragstart') {
+                    console.info("dragstart");
+                    var containers = this.travelRoutes.filter(function(container) {
+
+                        return container.contains(event.target);
+                    });
+
+                    if (containers.length > 0) {
+                        console.info("container.length > 0");
+                        this.currentContainer = containers[0];
+                        this.currentContainer.activate();
+                    }
+                }
+
+                if (this.currentContainer !== null) {
+                    this.currentContainer.handleEvent(event);
+                    if (event.type == 'dragend') {
+                        console.info("dragend");
+                        this.currentContainer.deactivate();
+                        this.currentContainer = null;
+                    }
+                }
+            }
+
+        };
+
+        window.addEventListener('dragstart', DragManager);
+        window.addEventListener('dragend', DragManager);
+
+        function travelRoute(container, type) {
+            this.element = container;
+            this.type = type || 'swap';
+            this.items = $('> li', this.element);
+
+            this.draggingItem = null;
+            console.info("this is");
+            console.info(this);
+            DragManager.add(this);
+        }
+
+        travelRoute.prototype.contains = function(target) {
+            //console.info(target);
+            return $(this.element).find(target).length;
+        }
+
+        travelRoute.prototype.handleEvent = function(event) {
+            console.info("handle event");
+            // NOTE: We've bound `this` to the travelRoute object, not
+            // the element the event was fired on.
+            var $t = $(event.target);
+
             if (event.type == 'dragstart') {
-                var containers = this.travelRoutes.filter(function(container) {
-
-                    return container.contains(event.target);
-                });
-
-                if (containers.length > 0) {
-                    this.currentContainer = containers[0];
-                    this.currentContainer.activate();
-                }
-            }
-
-            if (this.currentContainer !== null) {
-                this.currentContainer.handleEvent(event);
-                if (event.type == 'dragend') {
-                    this.currentContainer.deactivate();
-                    this.currentContainer = null;
-                }
-            }
-        }
-
-    };
-
-    window.addEventListener('dragstart', DragManager);
-    window.addEventListener('dragend', DragManager);
-
-    function travelRoute(container, type) {
-        this.element = container;
-        this.type = type || 'swap';
-        this.items = $('> li', this.element);
-        this.draggingItem = null;
-
-        DragManager.add(this);
-    }
-
-    travelRoute.prototype.contains = function(target) {
-        console.info(target);
-        return $(this.element).find(target).length;
-    }
-
-    travelRoute.prototype.handleEvent = function(event) {
-        // NOTE: We've bound `this` to the travelRoute object, not
-        // the element the event was fired on.
-        var $t = $(event.target);
-
-        if (event.type == 'dragstart') {
-            this.draggingItem = event.target;
-            console.info(event.target);
-            //setdata에 최상위 LIdml HTML을 데이터로 보낸다
-            var tgtItem = this.draggingItem;
-            while (1) {
-                //if(data.id == "travelPoint")
-                if (tgtItem.tagName == "LI")
-                    break;
-                tgtItem = tgtItem.parentNode;
-            }
-            console.info("전송할 태그" + tgtItem);
-
-            event.dataTransfer.setData('text/html', tgtItem.innerHTML);
-        }
-
-        if (event.type == 'dragover' && this.draggingItem != event.target) {
-
-            $t.addClass('js-active');
-            // Preventing the default action _enables_ drop. Because JS APIs.
-            if (event.preventDefault) {
-                event.preventDefault();
-            }
-            event.dataTransfer.dropEffect = 'move';
-        }
-
-        if (event.type == 'dragleave') {
-            $t.removeClass('js-active');
-        }
-
-        if (event.type == 'drop' && this.draggingItem != null) {
-            if (this.type == 'swap') {
-
-
-                // 최상단 LI태그를 탐색
-                var tgtItem = event.target;
+                console.info("dragstart 2");
+                this.draggingItem = event.target;
+                console.info(event.target);
+                //setdata에 최상위 LIdml HTML을 데이터로 보낸다
+                var tgtItem = this.draggingItem;
                 while (1) {
                     //if(data.id == "travelPoint")
                     if (tgtItem.tagName == "LI")
                         break;
                     tgtItem = tgtItem.parentNode;
                 }
+                //console.info("전송할 태그" + tgtItem);
 
-                //최상단  LI로만 옮김.
-                this.draggingItem.innerHTML = tgtItem.innerHTML;
-                tgtItem.innerHTML = event.dataTransfer.getData('text/html');
-            } else if (this.type == 'reorder') {
-                console.info('reorder');
-                console.info(this.items.index(event.target));
+                event.dataTransfer.setData('text/html', tgtItem.innerHTML);
+            }
+
+            if (event.type == 'dragover' && this.draggingItem != event.target) {
+
+                $t.addClass('js-active');
+                // Preventing the default action _enables_ drop. Because JS APIs.
+                if (event.preventDefault) {
+                    event.preventDefault();
+                }
+                event.dataTransfer.dropEffect = 'move';
+            }
+
+            if (event.type == 'dragleave') {
+                $t.removeClass('js-active');
+            }
+
+            if (event.type == 'drop' && this.draggingItem != null) {
+
+                console.info("drop");
+                if (this.type == 'swap') {
+
+
+                    // 최상단 LI태그를 탐색
+                    var tgtItem = event.target;
+                    while (1) {
+                        //if(data.id == "travelPoint")
+                        if (tgtItem.tagName == "LI")
+                            break;
+                        tgtItem = tgtItem.parentNode;
+                    }
+
+                    //최상단  LI로만 옮김.
+                    console.info("-----------------------");
+                    console.info(this.draggingItem);
+                    console.info(event.target);
+                    console.info("-----------------------");
+                    this.draggingItem.innerHTML = tgtItem.innerHTML;
+                    tgtItem.innerHTML = event.dataTransfer.getData('text/html');
+                } else if (this.type == 'reorder') {
+                    console.info('reorder');
+                    console.info(this.items.index(event.target));
+                }
+            }
+
+            if (event.type == 'dragend' || event.type == 'drop') {
+                this.items.removeClass('js-active');
+                this.draggingItem = null;
             }
         }
 
-        if (event.type == 'dragend' || event.type == 'drop') {
-            this.items.removeClass('js-active');
+        travelRoute.prototype.activate = function() {
+            for (var i = 0, j = this.items.length; i < j; i++) {
+                // Make sure `this` is always a travelRoute instead of the element the
+                // event was activated on.  
+
+                this.items[i].addEventListener('dragenter', this.handleEvent.bind(this));
+                this.items[i].addEventListener('dragover', this.handleEvent.bind(this));
+                this.items[i].addEventListener('dragleave', this.handleEvent.bind(this));
+                this.items[i].addEventListener('drop', this.handleEvent.bind(this));
+            }
+        }
+
+        travelRoute.prototype.deactivate = function() {
             this.draggingItem = null;
+            for (var i = 0, j = this.items.length; i < j; i++) {
+                //this.items[i].removeEventListener('dragenter', this.handleEvent);
+                //this.items[i].removeEventListener('dragover', this.handleEvent);
+                //this.items[i].removeEventListener('dragleave', this.handleEvent);
+                //this.items[i].removeEventListener('drop', this.handleEvent);
+            }
         }
-    }
 
-    travelRoute.prototype.activate = function() {
-        for (var i = 0, j = this.items.length; i < j; i++) {
-            // Make sure `this` is always a travelRoute instead of the element the
-            // event was activated on.
-            this.items[i].addEventListener('dragenter', this.handleEvent.bind(this));
-            this.items[i].addEventListener('dragover', this.handleEvent.bind(this));
-            this.items[i].addEventListener('dragleave', this.handleEvent.bind(this));
-            this.items[i].addEventListener('drop', this.handleEvent.bind(this));
+        var travelRoutes = document.getElementsByClassName('travelRoute');
+
+        for (var i = 0, j = travelRoutes.length; i < j; i++) {
+            new travelRoute(travelRoutes[i], (i % 2 == 0) ? 'swap' : 'reorder');
         }
-    }
 
-    travelRoute.prototype.deactivate = function() {
-        this.draggingItem = null;
-        for (var i = 0, j = this.items.length; i < j; i++) {
-            //this.items[i].removeEventListener('dragenter', this.handleEvent);
-            //this.items[i].removeEventListener('dragover', this.handleEvent);
-            //this.items[i].removeEventListener('dragleave', this.handleEvent);
-            //this.items[i].removeEventListener('drop', this.handleEvent);
-        }
-    }
 
-    var travelRoutes = document.getElementsByClassName('travelRoute');
 
-    for (var i = 0, j = travelRoutes.length; i < j; i++) {
-        new travelRoute(travelRoutes[i], (i % 2 == 0) ? 'swap' : 'reorder');
     }
 </script>
 
