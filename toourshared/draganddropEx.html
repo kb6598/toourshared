@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- source from https://codepen.io/cilestin/pen/ogQQBP-->
+
+<head>
+    <meta charset="UTF-8">
+    <title>Drag & Drop: Swap Items (refactor)</title>
+    <style>
+        .travelRoute {
+            list-style-type: none;
+            margin: 0 0 1em 0;
+            padding: 1em;
+            border: 2px solid transparent;
+        }
+
+        .travelRoute:hover {
+            border: 2px solid #222;
+        }
+
+        .travelRoute li {
+            display: block;
+            
+            border: 1px solid #ccc;
+            margin-bottom: 1em;
+            line-height: 3em;
+            padding: 0 2em;
+        }
+
+        .travelRoute li:last-of-type {
+            margin-bottom: 0;
+        }
+
+        .travelRoute li:before {
+            content: '≔';
+            position: relative;
+            left: -.5em;
+            font-size: 2em;
+            cursor: move;
+        }
+
+        .travelRoute li:hover {
+            background-color: #eee;
+        }
+
+        .travelRoute li.js-active {
+            border: 1px dashed #444;
+            background-color: #09f;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- partial:index.partial.html -->
+    <ul class='travelRoute'>
+        <li draggable="true">
+            <div id="travelPoint" class="wrap" >
+                <div class="info" >
+                    <div class="title">메시야 <div class="close" onclick="closeOverlay()" title="닫기"></div>
+                    </div>
+                    <div class="body">
+                        <div class="desc">
+                            <div class="ellipsis">서울 용산구 회나무로13가길 23</div>
+                            <div class="jibun ellipsis">undefined</div>
+                            <div class="jibun ellipsis">02-6402-0208</div>
+                            <div><a href="http://place.map.kakao.com/20128056" target="_blank" class="link">상세페이지</a></div>
+                        </div>
+                    </div>
+                </div><input id="x" type="hidden" value="126.990762302788/"><input id="y" type="hidden" value="37.5410590341706/">
+            </div>
+        </li>
+        <li draggable="true" style="z-index: 80;">
+            <div id="travelPoint" class="wrap" >
+                <div class="info" >
+                    <div class="title">더할랄가이즈 이태원본점 <div class="close" onclick="closeOverlay()" title="닫기"></div>
+                    </div>
+                    <div class="body">
+                        <div class="desc">
+                            <div class="ellipsis">서울 용산구 이태원로 187</div>
+                            <div class="jibun ellipsis">undefined</div>
+                            <div class="jibun ellipsis">02-794-8308</div>
+                            <div><a href="http://place.map.kakao.com/276673831" target="_blank" class="link">상세페이지</a></div>
+                        </div>
+                    </div>
+                </div><input id="x" type="hidden" value="126.99478641606/"><input id="y" type="hidden" value="37.5347090300668/">
+            </div>
+        </li>
+        <li draggable="true" style="z-index: 80;">
+            <div id="travelPoint" class="wrap" >
+                <div class="info" draggable="true" >
+                    <div class="title">더할랄가이즈 이태원본점 <div class="close" onclick="closeOverlay()" title="닫기"></div>
+                    </div>
+                    <div class="body">
+                        <div class="desc">
+                            <div class="ellipsis">서울 용산구 이태원로 187</div>
+                            <div class="jibun ellipsis">undefined</div>
+                            <div class="jibun ellipsis">02-794-8308</div>
+                            <div><a href="http://place.map.kakao.com/276673831" target="_blank" class="link">상세페이지</a></div>
+                        </div>
+                    </div>
+                </div><input id="x" type="hidden" value="126.99478641606/"><input id="y" type="hidden" value="37.5347090300668/">
+            </div>
+        </li>
+        <li draggable="true" style="z-index: 80;">
+
+            <div id="travelPoint" class="wrap" >
+                <div class="info" >
+                    <div class="title">모터시티 <div class="close" onclick="closeOverlay()" title="닫기"></div>
+                    </div>
+                    <div class="body">
+                        <div class="desc">
+                            <div class="ellipsis">서울 용산구 이태원로 140-1</div>
+                            <div class="jibun ellipsis">undefined</div>
+                            <div class="jibun ellipsis">02-794-8877</div>
+                            <div><a href="http://place.map.kakao.com/124338573" target="_blank" class="link">상세페이지</a></div>
+                        </div>
+                    </div>
+                </div><input id="x" type="hidden" value="126.98943716648/"><input id="y" type="hidden" value="37.5339662480439/">
+            </div>
+        </li>
+        <li draggable="true" style="z-index: 80;">
+            <div id="travelPoint" class="wrap" >
+                <div class="info" >
+                    <div class="title">로코스비비큐 <div class="close" onclick="closeOverlay()" title="닫기"></div>
+                    </div>
+                    <div class="body">
+                        <div class="desc">
+                            <div class="ellipsis">서울 용산구 회나무로 83</div>
+                            <div class="jibun ellipsis">undefined</div>
+                            <div class="jibun ellipsis"></div>
+                            <div><a href="http://place.map.kakao.com/618020526" target="_blank" class="link">상세페이지</a></div>
+                        </div>
+                    </div>
+                </div><input id="x" type="hidden" value="126.995528253629/"><input id="y" type="hidden" value="37.5409728148364/">
+            </div>
+        </li>
+    </ul>
+
+    <ul class='travelRoute alternate'>
+        <li draggable="true">Other Item 1</li>
+        <li draggable="true">Other Item 2</li>
+        <li draggable="true">Other Item 3</li>
+        <li draggable="true">Other Item 4</li>
+        <li draggable="true">Other Item 5</li>
+    </ul>
+    <!-- partial -->
+    <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+    <script>
+        var DragManager = {
+            travelRoutes: [],
+            currentContainer: null,
+
+            add: function(travelRoute) {
+                this.travelRoutes.push(travelRoute);
+            },
+
+            handleEvent: function(event) {
+                //console.info(event.target);
+                if (event.type == 'dragstart') {
+                    var containers = this.travelRoutes.filter(function(container) {
+
+                        return container.contains(event.target);
+                    });
+
+                    if (containers.length > 0) {
+                        this.currentContainer = containers[0];
+                        this.currentContainer.activate();
+                    }
+                }
+
+                if (this.currentContainer !== null) {
+                    this.currentContainer.handleEvent(event);
+                    if (event.type == 'dragend') {
+                        this.currentContainer.deactivate();
+                        this.currentContainer = null;
+                    }
+                }
+            }
+
+        };
+
+        window.addEventListener('dragstart', DragManager);
+        window.addEventListener('dragend', DragManager);
+
+        function travelRoute(container, type) {
+            this.element = container;
+            this.type = type || 'swap';
+            this.items = $('> li', this.element);
+            this.draggingItem = null;
+
+            DragManager.add(this);
+        }
+
+        travelRoute.prototype.contains = function(target) {
+            //console.info(target);
+            return $(this.element).find(target).length;
+        }
+
+        travelRoute.prototype.handleEvent = function(event) {
+            // NOTE: We've bound `this` to the travelRoute object, not
+            // the element the event was fired on.
+            var $t = $(event.target);
+
+            if (event.type == 'dragstart') {
+                this.draggingItem = event.target;
+                console.info(event.target);
+                //setdata에 최상위 LIdml HTML을 데이터로 보낸다
+                var tgtItem = this.draggingItem;
+                while (1) {
+                    //if(data.id == "travelPoint")
+                    if (tgtItem.tagName == "LI")
+                        break;
+                    tgtItem = tgtItem.parentNode;
+                }
+                console.info("전송할 태그" + tgtItem);
+
+                event.dataTransfer.setData('text/html', tgtItem.innerHTML);
+            }
+
+            if (event.type == 'dragover' && this.draggingItem != event.target) {
+
+                $t.addClass('js-active');
+                // Preventing the default action _enables_ drop. Because JS APIs.
+                if (event.preventDefault) {
+                    event.preventDefault();
+                }
+                event.dataTransfer.dropEffect = 'move';
+            }
+
+            if (event.type == 'dragleave') {
+                $t.removeClass('js-active');
+            }
+
+            if (event.type == 'drop' && this.draggingItem != null) {
+                if (this.type == 'swap') {
+
+
+                    // 최상단 LI태그를 탐색
+                    var tgtItem = event.target;
+                    while (1) {
+                        //if(data.id == "travelPoint")
+                        if (tgtItem.tagName == "LI")
+                            break;
+                        tgtItem = tgtItem.parentNode;
+                    }
+                    
+                    //최상단  LI로만 옮김.
+                    this.draggingItem.innerHTML = tgtItem.innerHTML;
+                    tgtItem.innerHTML = event.dataTransfer.getData('text/html');
+                } else if (this.type == 'reorder') {
+                    console.info('reorder');
+                    console.info(this.items.index(event.target));
+                }
+            }
+
+            if (event.type == 'dragend' || event.type == 'drop') {
+                this.items.removeClass('js-active');
+                this.draggingItem = null;
+            }
+        }
+
+        travelRoute.prototype.activate = function() {
+            for (var i = 0, j = this.items.length; i < j; i++) {
+                // Make sure `this` is always a travelRoute instead of the element the
+                // event was activated on.
+                this.items[i].addEventListener('dragenter', this.handleEvent.bind(this));
+                this.items[i].addEventListener('dragover', this.handleEvent.bind(this));
+                this.items[i].addEventListener('dragleave', this.handleEvent.bind(this));
+                this.items[i].addEventListener('drop', this.handleEvent.bind(this));
+            }
+        }
+
+        travelRoute.prototype.deactivate = function() {
+            this.draggingItem = null;
+            for (var i = 0, j = this.items.length; i < j; i++) {
+                //this.items[i].removeEventListener('dragenter', this.handleEvent);
+                //this.items[i].removeEventListener('dragover', this.handleEvent);
+                //this.items[i].removeEventListener('dragleave', this.handleEvent);
+                //this.items[i].removeEventListener('drop', this.handleEvent);
+            }
+        }
+
+        var travelRoutes = document.getElementsByClassName('travelRoute');
+
+        for (var i = 0, j = travelRoutes.length; i < j; i++) {
+            new travelRoute(travelRoutes[i], (i % 2 == 0) ? 'swap' : 'reorder');
+        }
+    </script>
+
+</body>
+
+</html>
