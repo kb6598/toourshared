@@ -14,8 +14,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.11/dist/summernote-bs4.min.css" rel="stylesheet" />
     <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
     <script src='https://www.google.com/recaptcha/api.js'></script>
@@ -325,9 +325,6 @@
         .info .link {
             color: #5085BB;
         }
-
-
-
     </style>
 </head>
 <body>
@@ -361,6 +358,8 @@
                             <input type="button" class="btn btn-secondary" onclick="selectOverlay('CIRCLE')" value="원" />
                             <input type="button" class="btn btn-secondary" onclick="selectOverlay('RECTANGLE')" value="사각형" />
                             <input type="button" class="btn btn-secondary" onclick="selectOverlay('POLYGON')" value="다각형" />
+                            <button id="undo" class="disabled" onclick="undo()" disabled>UNDO</button>
+                            <button id="redo" class="disabled" onclick="redo()" disabled>REDO</button>
                             <!-- Button trigger modal -->
                             <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#searchPlaceModal">
                                 검색
@@ -463,12 +462,12 @@
             // 사용자에게 도형을 그릴때, 드래그할때, 수정할때 가이드 툴팁을 표시하도록 설정합니다
             guideTooltip: ['draw', 'drag', 'edit'],
             markerOptions: { // 마커 옵션입니다 
-                draggable: true, // 마커를 그리고 나서 드래그 가능하게 합니다 
-                removable: true // 마커를 삭제 할 수 있도록 x 버튼이 표시됩니다  
+                draggable: true//, // 마커를 그리고 나서 드래그 가능하게 합니다 
+                //removable: true // 마커를 삭제 할 수 있도록 x 버튼이 표시됩니다  
             },
             polylineOptions: { // 선 옵션입니다
                 draggable: true, // 그린 후 드래그가 가능하도록 설정합니다
-                removable: true, // 그린 후 삭제 할 수 있도록 x 버튼이 표시됩니다
+                // removable: true, // 그린 후 삭제 할 수 있도록 x 버튼이 표시됩니다
                 editable: true, // 그린 후 수정할 수 있도록 설정합니다 
                 strokeColor: '#39f', // 선 색
                 hintStrokeStyle: 'dash', // 그리중 마우스를 따라다니는 보조선의 선 스타일
@@ -476,7 +475,7 @@
             },
             rectangleOptions: {
                 draggable: true,
-                removable: true,
+                //removable: true,
                 editable: true,
                 strokeColor: '#39f', // 외곽선 색
                 fillColor: '#39f', // 채우기 색
@@ -484,7 +483,7 @@
             },
             circleOptions: {
                 draggable: true,
-                removable: true,
+                //removable: true,
                 editable: true,
                 strokeColor: '#39f',
                 fillColor: '#39f',
@@ -492,7 +491,7 @@
             },
             polygonOptions: {
                 draggable: true,
-                removable: true,
+                //removable: true,
                 editable: true,
                 strokeColor: '#39f',
                 fillColor: '#39f',
@@ -505,6 +504,8 @@
         // 위에 작성한 옵션으로 Drawing Manager를 생성합니다
         var manager = new daum.maps.drawing.DrawingManager(options);
 
+
+
         // 버튼 클릭 시 호출되는 핸들러 입니다
         function selectOverlay(type) {
             // 그리기 중이면 그리기를 취소합니다
@@ -513,6 +514,70 @@
             // 클릭한 그리기 요소 타입을 선택합니다
             manager.select(daum.maps.drawing.OverlayType[type]);
         }
+
+        //주소 - 좌표간 변환 서비스 객체를 생성한다.
+        var geocoder = new kakao.maps.services.Geocoder();
+
+        var callback = function (result, status) {
+
+            if (status === kakao.maps.services.Status.OK) {
+                console.log('그런 너를 마주칠까 ' + result[0].address.address_name + '을 못가');
+            }
+        };
+
+        //그리기 끝났을때 동작
+        manager.addListener('draw', function (data) {
+
+            console.log('drawend', data.coords);
+
+            
+            console.log('drawend', data.overlayType);
+            // 생성되는 overlay에 이벤트 추가 
+
+
+
+            kakao.maps.event.addListener(data.target, 'click', function () {
+                console.info("clicked");
+                var Ga = data.coords.Ga
+                var Ha = data.coords.Ha
+                console.info(Ga);
+                console.info(Ha);
+                geocoder.coord2Address(Ga,Ha, callback);
+            });
+        });
+
+        kakao.maps.event.addListener(marker, 'dragend', function () {
+            alert('marker dragend!');
+        });
+
+
+
+
+
+
+        function displayInfowindowOnOverlay(marker) {
+            //var content = '<div style="padding:5px;z-index:1;">' + title + ' <button >추가</button></div>';
+            var content = '<div class="wrap">' +
+                '    <div class="info">' +
+                '        <div class="title">' +
+                place.place_name +
+                '            <div class="close" onclick="closeOverlay()" title="닫기"></div>' +
+                '        </div>' +
+                '        <div class="body">' +
+                '            <div class="desc">' +
+                '                <div class="ellipsis">' + place.road_address_name + '</div>' +
+                '                <div class="jibun ellipsis">' + place.address_name + '</div>' +
+                '   <div class="jibun ellipsis">' + place.phone + '</div>' +
+                '                <div><a href="' + place.place_url + '" target="_blank" class="link">상세페이지</a></div>' +
+                '<div class="btn btn-secondary" onclick=\'addTravelRoute("' + place.place_name + '","' + place.road_address_name + '","' + place.ddress_name + '","' + place.phone + '","' + place.place_url + '","' + place.x + '","' + place.y + '")\'>여행경로에 추가</div>' +
+                '            </div>' +
+                '        </div>' +
+                '    </div>' +
+                '</div>';
+            infowindow.setContent(content);
+            infowindow.open(drawingMap, marker);
+        }
+
 
         // Drawing Manager에서 데이터를 가져와 도형을 표시할 아래쪽 지도 div
         //var mapContainer = document.getElementById('map'),
@@ -524,6 +589,8 @@
         // 지도 div와 지도 옵션으로 지도를 생성합니다
         //var map = new daum.maps.Map(mapContainer, mapOptions),
         overlays = []; // 지도에 그려진 도형을 담을 배열
+
+
 
         // 가져오기 버튼을 클릭하면 호출되는 핸들러 함수입니다
         // Drawing Manager로 그려진 객체 데이터를 가져와 아래 지도에 표시합니다
@@ -554,128 +621,129 @@
             overlays = [];
         }
 
-        // Drawing Manager에서 가져온 데이터 중 마커를 아래 지도에 표시하는 함수입니다
-        function drawMarker(markers) {
-            var len = markers.length, i = 0;
+        //// Drawing Manager에서 가져온 데이터 중 마커를 아래 지도에 표시하는 함수입니다
+        //function drawMarker(markers) {
+        //    var len = markers.length, i = 0;
 
-            for (; i < len; i++) {
-                var marker = new daum.maps.Marker({
-                    map: map,
-                    position: new daum.maps.LatLng(markers[i].y, markers[i].x),
-                    zIndex: markers[i].zIndex
-                });
+        //    for (; i < len; i++) {
+        //        var marker = new daum.maps.Marker({
+        //            map: map,
+        //            position: new daum.maps.LatLng(markers[i].y, markers[i].x),
+        //            zIndex: markers[i].zIndex
+        //        });
 
-                overlays.push(marker);
+        //        overlays.push(marker);
 
-                //alert (new daum.maps.LatLng(markers[0].y, markers[0].x)) ;
 
-            }
-        }
+        //        //alert (new daum.maps.LatLng(markers[0].y, markers[0].x)) ;
 
-        // Drawing Manager에서 가져온 데이터 중 선을 아래 지도에 표시하는 함수입니다
-        function drawPolyline(lines) {
-            var len = lines.length, i = 0;
+        //    }
+        //}
 
-            for (; i < len; i++) {
-                var path = pointsToPath(lines[i].points);
-                var style = lines[i].options;
-                var polyline = new daum.maps.Polyline({
-                    map: map,
-                    path: path,
-                    strokeColor: style.strokeColor,
-                    strokeOpacity: style.strokeOpacity,
-                    strokeStyle: style.strokeStyle,
-                    strokeWeight: style.strokeWeight
-                });
+        //// Drawing Manager에서 가져온 데이터 중 선을 아래 지도에 표시하는 함수입니다
+        //function drawPolyline(lines) {
+        //    var len = lines.length, i = 0;
 
-                overlays.push(polyline);
-            }
-        }
+        //    for (; i < len; i++) {
+        //        var path = pointsToPath(lines[i].points);
+        //        var style = lines[i].options;
+        //        var polyline = new daum.maps.Polyline({
+        //            map: map,
+        //            path: path,
+        //            strokeColor: style.strokeColor,
+        //            strokeOpacity: style.strokeOpacity,
+        //            strokeStyle: style.strokeStyle,
+        //            strokeWeight: style.strokeWeight
+        //        });
 
-        // Drawing Manager에서 가져온 데이터 중 사각형을 아래 지도에 표시하는 함수입니다
-        function drawRectangle(rects) {
-            var len = rects.length, i = 0;
+        //        overlays.push(polyline);
+        //    }
+        //}
 
-            for (; i < len; i++) {
-                var style = rects[i].options;
-                var rect = new daum.maps.Rectangle({
-                    map: map,
-                    bounds: new daum.maps.LatLngBounds(
-                        new daum.maps.LatLng(rects[i].sPoint.y, rects[i].sPoint.x),
-                        new daum.maps.LatLng(rects[i].ePoint.y, rects[i].ePoint.x)
-                    ),
-                    strokeColor: style.strokeColor,
-                    strokeOpacity: style.strokeOpacity,
-                    strokeStyle: style.strokeStyle,
-                    strokeWeight: style.strokeWeight,
-                    fillColor: style.fillColor,
-                    fillOpacity: style.fillOpacity
-                });
+        //// Drawing Manager에서 가져온 데이터 중 사각형을 아래 지도에 표시하는 함수입니다
+        //function drawRectangle(rects) {
+        //    var len = rects.length, i = 0;
 
-                overlays.push(rect);
-            }
-        }
+        //    for (; i < len; i++) {
+        //        var style = rects[i].options;
+        //        var rect = new daum.maps.Rectangle({
+        //            map: map,
+        //            bounds: new daum.maps.LatLngBounds(
+        //                new daum.maps.LatLng(rects[i].sPoint.y, rects[i].sPoint.x),
+        //                new daum.maps.LatLng(rects[i].ePoint.y, rects[i].ePoint.x)
+        //            ),
+        //            strokeColor: style.strokeColor,
+        //            strokeOpacity: style.strokeOpacity,
+        //            strokeStyle: style.strokeStyle,
+        //            strokeWeight: style.strokeWeight,
+        //            fillColor: style.fillColor,
+        //            fillOpacity: style.fillOpacity
+        //        });
 
-        // Drawing Manager에서 가져온 데이터 중 원을 아래 지도에 표시하는 함수입니다
-        function drawCircle(circles) {
-            var len = circles.length, i = 0;
+        //        overlays.push(rect);
+        //    }
+        //}
 
-            for (; i < len; i++) {
-                var style = circles[i].options;
-                var circle = new daum.maps.Circle({
-                    map: map,
-                    center: new daum.maps.LatLng(circles[i].center.y, circles[i].center.x),
-                    radius: circles[i].radius,
-                    strokeColor: style.strokeColor,
-                    strokeOpacity: style.strokeOpacity,
-                    strokeStyle: style.strokeStyle,
-                    strokeWeight: style.strokeWeight,
-                    fillColor: style.fillColor,
-                    fillOpacity: style.fillOpacity
-                });
+        //// Drawing Manager에서 가져온 데이터 중 원을 아래 지도에 표시하는 함수입니다
+        //function drawCircle(circles) {
+        //    var len = circles.length, i = 0;
 
-                overlays.push(circle);
-            }
-        }
+        //    for (; i < len; i++) {
+        //        var style = circles[i].options;
+        //        var circle = new daum.maps.Circle({
+        //            map: map,
+        //            center: new daum.maps.LatLng(circles[i].center.y, circles[i].center.x),
+        //            radius: circles[i].radius,
+        //            strokeColor: style.strokeColor,
+        //            strokeOpacity: style.strokeOpacity,
+        //            strokeStyle: style.strokeStyle,
+        //            strokeWeight: style.strokeWeight,
+        //            fillColor: style.fillColor,
+        //            fillOpacity: style.fillOpacity
+        //        });
 
-        // Drawing Manager에서 가져온 데이터 중 다각형을 아래 지도에 표시하는 함수입니다
-        function drawPolygon(polygons) {
-            var len = polygons.length, i = 0;
+        //        overlays.push(circle);
+        //    }
+        //}
 
-            for (; i < len; i++) {
-                var path = pointsToPath(polygons[i].points);
-                var style = polygons[i].options;
-                var polygon = new daum.maps.Polygon({
-                    map: map,
-                    path: path,
-                    strokeColor: style.strokeColor,
-                    strokeOpacity: style.strokeOpacity,
-                    strokeStyle: style.strokeStyle,
-                    strokeWeight: style.strokeWeight,
-                    fillColor: style.fillColor,
-                    fillOpacity: style.fillOpacity
-                });
+        //// Drawing Manager에서 가져온 데이터 중 다각형을 아래 지도에 표시하는 함수입니다
+        //function drawPolygon(polygons) {
+        //    var len = polygons.length, i = 0;
 
-                overlays.push(polygon);
-            }
-        }
+        //    for (; i < len; i++) {
+        //        var path = pointsToPath(polygons[i].points);
+        //        var style = polygons[i].options;
+        //        var polygon = new daum.maps.Polygon({
+        //            map: map,
+        //            path: path,
+        //            strokeColor: style.strokeColor,
+        //            strokeOpacity: style.strokeOpacity,
+        //            strokeStyle: style.strokeStyle,
+        //            strokeWeight: style.strokeWeight,
+        //            fillColor: style.fillColor,
+        //            fillOpacity: style.fillOpacity
+        //        });
 
-        // Drawing Manager에서 가져온 데이터 중 
-        // 선과 다각형의 꼭지점 정보를 daum.maps.LatLng객체로 생성하고 배열로 반환하는 함수입니다 
-        function pointsToPath(points) {
-            var len = points.length,
-                path = [],
-                i = 0;
+        //        overlays.push(polygon);
+        //    }
+        //}
 
-            for (; i < len; i++) {
-                var latlng = new daum.maps.LatLng(points[i].y, points[i].x);
-                //path.push(i+":");
-                path.push(latlng);
-            }
+        //// Drawing Manager에서 가져온 데이터 중 
+        //// 선과 다각형의 꼭지점 정보를 daum.maps.LatLng객체로 생성하고 배열로 반환하는 함수입니다 
+        //function pointsToPath(points) {
+        //    var len = points.length,
+        //        path = [],
+        //        i = 0;
 
-            return path;
+        //    for (; i < len; i++) {
+        //        var latlng = new daum.maps.LatLng(points[i].y, points[i].x);
+        //        //path.push(i+":");
+        //        path.push(latlng);
+        //    }
 
-        }
+        //    return path;
+
+        //}
 
 
         // 다음페이지로 markers, polyline, rect, circle, polygon 보내는 기능
@@ -1076,12 +1144,12 @@
             ++travelRouteCnt;
 
             var el = document.createElement('li'),
-                itemStr = '<div  class="card" style="width:10rem">' +
+                itemStr = '<div  class="card" style="width:12rem">' +
                     '    <div class="card-body" >' +
-                    '        <h4 class="card-title">' + place_name +'</h4>'+
-                    ' <p class="card-text">'+ road_address_name +'</p>'+
-                    ' <p class="card-text">'+ address_name +'</p>'+
-                    ' <p class="card-text">'+ phone  +'</p>'+
+                    '        <h4 class="card-title">' + place_name + '</h4>' +
+                    ' <p class="card-text">' + road_address_name + '</p>' +
+                    ' <p class="card-text">' + address_name + '</p>' +
+                    ' <p class="card-text">' + phone + '</p>' +
                     ' <a class="card-link" href="' + place_url + '" target="_blank" class="link">상세페이지</a>' +
 
                     '    </div>' +
