@@ -352,14 +352,14 @@
                         <div id="drawingMap"></div>
 
 
-                        <p class="modes">
-                            <input type="button" class="btn btn-secondary" onclick="selectOverlay('MARKER')" value="마커" />
-                            <input type="button" class="btn btn-secondary" onclick="selectOverlay('POLYLINE')" value="선" />
-                            <input type="button" class="btn btn-secondary" onclick="selectOverlay('CIRCLE')" value="원" />
-                            <input type="button" class="btn btn-secondary" onclick="selectOverlay('RECTANGLE')" value="사각형" />
-                            <input type="button" class="btn btn-secondary" onclick="selectOverlay('POLYGON')" value="다각형" />
-                            <button id="undo" class="disabled" onclick="undo()" disabled>UNDO</button>
-                            <button id="redo" class="disabled" onclick="redo()" disabled>REDO</button>
+                        <!--폼 내부에서 버튼객체를 쓰려면 type=button을 써주면 된다.-->
+                            <button type="button" class="btn btn-secondary" onclick="selectOverlay('MARKER')" >마커</button>
+                            <button type="button" class="btn btn-secondary" onclick="selectOverlay('POLYLINE')" >선</button>
+                            <button type="button" class="btn btn-secondary" onclick="selectOverlay('CIRCLE')" >원</button>
+                            <button type="button"  class="btn btn-secondary" onclick="selectOverlay('RECTANGLE')" >사각형</button>
+                            <button type="button" class="btn btn-secondary" onclick="selectOverlay('POLYGON')" >다각형</button>
+                            <button type="button" class="btn btn-secondary" id="undo"  onclick="undoAction()"  disabled> UNDO</button>
+                            <button type="button" class="btn btn-secondary"  id="redo"  onclick="redoAction()"  disabled> REDO</button>
                             <!-- Button trigger modal -->
                             <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#searchPlaceModal">
                                 검색
@@ -367,7 +367,7 @@
                             <button type="button" class="btn btn-secondary" data-toggle="collapse" data-target="#travelRoute_wrap">
                                 여행경로
                             </button>
-                        </p>
+                        
                     </div>
                     <div class="form-group">
                         <asp:TextBox ID="article" runat="server" TextMode="MultiLine" />
@@ -504,8 +504,33 @@
         // 위에 작성한 옵션으로 Drawing Manager를 생성합니다
         var manager = new daum.maps.drawing.DrawingManager(options);
 
+                // undo, redo 버튼의 disabled 속성을 설정하기 위해 엘리먼트를 변수에 설정합니다
+        var undoBtn = document.getElementById('undo');
+        var redoBtn = document.getElementById('redo');
 
+        // Drawing Manager 객체에 state_changed 이벤트를 등록합니다
+        // state_changed 이벤트는 그리기 요소의 생성/수정/이동/삭제 동작 
+        // 또는 Drawing Manager의 undo, redo 메소드가 실행됐을 때 발생합니다
+        manager.addListener('state_changed', function () {
 
+            // 되돌릴 수 있다면 undo 버튼을 활성화 시킵니다 
+            if (manager.undoable()) {
+                undoBtn.disabled = false;
+                
+            } else { // 아니면 undo 버튼을 비활성화 시킵니다 
+                undoBtn.disabled = true;
+            }
+
+            // 취소할 수 있다면 redo 버튼을 활성화 시킵니다 
+            if (manager.redoable()) {
+                redoBtn.disabled = false;
+            } else { // 아니면 redo 버튼을 비활성화 시킵니다 
+                redoBtn.disabled = true;
+            }
+
+        });
+
+        
         // 버튼 클릭 시 호출되는 핸들러 입니다
         function selectOverlay(type) {
             // 그리기 중이면 그리기를 취소합니다
@@ -514,6 +539,21 @@
             // 클릭한 그리기 요소 타입을 선택합니다
             manager.select(daum.maps.drawing.OverlayType[type]);
         }
+
+
+
+        // undo 버튼 클릭시 호출되는 함수입니다.
+        function undoAction() {
+            // 그리기 요소를 이전 상태로 되돌립니다
+            manager.undo();
+        }
+
+        // redo 버튼 클릭시 호출되는 함수입니다.
+        function redoAction() {
+            // 이전 상태로 되돌린 상태를 취소합니다
+            manager.redo();
+        }
+
 
         //주소 - 좌표간 변환 서비스 객체를 생성한다.
         var geocoder = new kakao.maps.services.Geocoder();
@@ -536,19 +576,19 @@
 
 
 
-            kakao.maps.event.addListener(data.target, 'click', function () {
-                console.info("clicked");
-                var Ga = data.coords.Ga
-                var Ha = data.coords.Ha
-                console.info(Ga);
-                console.info(Ha);
-                geocoder.coord2Address(Ga,Ha, callback);
-            });
+            //kakao.maps.event.addListener(data.target, 'click', function () {
+            //    console.info("clicked");
+            //    var Ga = data.coords.Ga
+            //    var Ha = data.coords.Ha
+            //    console.info(Ga);
+            //    console.info(Ha);
+            //    geocoder.coord2Address(Ga,Ha, callback);
+            //});
         });
 
-        kakao.maps.event.addListener(marker, 'dragend', function () {
-            alert('marker dragend!');
-        });
+        //kakao.maps.event.addListener(marker, 'dragend', function () {
+        //    alert('marker dragend!');
+        //});
 
 
 
@@ -610,16 +650,18 @@
 
         //}
 
-        // 아래 지도에 그려진 도형이 있다면 모두 지웁니다
-        function removeOverlays() {
-            var len = overlays.length, i = 0;
+        //// 아래 지도에 그려진 도형이 있다면 모두 지웁니다
+        //function removeOverlays() {
+        //    var len = overlays.length, i = 0;
 
-            for (; i < len; i++) {
-                overlays[i].setMap(null);
-            }
+        //    for (; i < len; i++) {
+        //        overlays[i].setMap(null);
+        //    }
 
-            overlays = [];
-        }
+        //    overlays = [];
+        //}
+
+
 
         //// Drawing Manager에서 가져온 데이터 중 마커를 아래 지도에 표시하는 함수입니다
         //function drawMarker(markers) {
