@@ -631,15 +631,8 @@
             //kakao.maps.event.removeListener(e.target, 'click', handler);
         });
 
-        function addListeners(data) {
-            kakao.maps.event.addListener(data.target, "click",overlayClickHandler("target"));
-
-        }
 
 
-        function overlayClickHandler(target) {
-            console.info(target);
-        }
 
 
 
