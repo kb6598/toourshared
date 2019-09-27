@@ -566,25 +566,146 @@
         };
 
         //그리기 끝났을때 동작
-        manager.addListener('draw', function (data) {
+        manager.addListener('drawend', function (data) {
 
-            console.log('drawend', data.coords);
+            console.log('drawend', data);
 
             
-            console.log('drawend', data.overlayType);
+
             // 생성되는 overlay에 이벤트 추가 
+            //marker에 이벤트를 추천하면 ExtendesMarker
+
+            if (data.overlayType == "marker") {
+                console.info("this is marker");
+            }
+            else if (data.overlayType == "polyline") {
+                console.info("this is polyline");
+            }
+            else if (data.overlayType == "polygon") {
+                console.info("this is polygon");
+            }
+            else if (data.overlayType == "rectangle") {
+                console.info("this is rectangle");
+            }
+            else if (data.overlayType == "circle") {
+                console.info("this is circle");
+            }
 
 
+            // 여기서 리스너를 추가하면 redo때 추가가 안됨
+            //kakao.maps.event.addListener(data.target, "click", function () {
+            //    console.info(this);
+            //    console.info(this.k);
+                
+                
+            //});
 
-            //kakao.maps.event.addListener(data.target, 'click', function () {
-            //    console.info("clicked");
-            //    var Ga = data.coords.Ga
-            //    var Ha = data.coords.Ha
-            //    console.info(Ga);
-            //    console.info(Ha);
-            //    geocoder.coord2Address(Ga,Ha, callback);
+
+             
+
+        });
+
+        // drawManager의 상태가 변경되고
+        // travelRoute와 변경
+        manager.addListener('state_changed', function () {
+            console.info("state_changed");
+
+            //console.info(this._historyStroage);
+
+            addListenerFromDrawingMap(this._historyStroage);
+
+            //this._historyStroage._stack.forEach(function (currentValue, index, array) {
+            //    console.log(currentValue);
+            //    console.log(index);
+            //    console.log(array);
             //});
         });
+        // e 는 삭제되는 대상 오버레이가 삭제될때 listener 삭제
+        // 대상이 삭제되면 listener 도 같이 삭제됨
+        // 애초에 리스너가 ExtenedMarker의 부분 요소로 들어가기 때문에
+        // 같이 삭제됨
+        manager.addListener('remove', function (e) {
+             console.info("삭제");
+            console.info(e);
+            //var handler;
+            //kakao.maps.event.removeListener(e.target, 'click', handler);
+        });
+
+        function addListeners(data) {
+            kakao.maps.event.addListener(data.target, "click",overlayClickHandler("target"));
+
+        }
+
+
+        function overlayClickHandler(target) {
+            console.info(target);
+        }
+
+
+
+        
+        function addListenerFromDrawingMap(history) {
+            // Drawing Manager에서 그려진 데이터 정보를 가져옵니다 
+            // getData를 통하여 얻은 값에는 Addlintener 안됨
+            //var data = manager.getData();
+
+            console.info(history);
+            var data = manager.getOverlays();
+
+            //marker
+            data[daum.maps.drawing.OverlayType.MARKER].forEach(function (currentValue, index, array) {
+                console.log(currentValue);
+                console.log(index);
+                console.log(array);
+                
+                kakao.maps.event.addListener(currentValue, 'click', function () {
+                    alert('marker click!');
+                });
+            });
+
+                        //marker
+            data[daum.maps.drawing.OverlayType.POLYLINE].forEach(function (currentValue, index, array) {
+                console.log(currentValue);
+                console.log(index);
+                console.log(array);
+            });
+
+                        //marker
+            data[daum.maps.drawing.OverlayType.RECTANGLE].forEach(function (currentValue, index, array) {
+                console.log(currentValue);
+                console.log(index);
+                console.log(array);
+            });
+
+                        //marker
+            data[daum.maps.drawing.OverlayType.CIRCLE].forEach(function (currentValue, index, array) {
+                console.log(currentValue);
+                console.log(index);
+                console.log(array);
+            });
+
+                        //marker
+            data[daum.maps.drawing.OverlayType.POLYGON].forEach(function (currentValue, index, array) {
+                console.log(currentValue);
+                console.log(index);
+                console.log(array);
+            });
+
+
+
+
+
+
+            // 지도에 가져온 데이터로 도형들을 그립니다
+            //drawMarker(data[daum.maps.drawing.OverlayType.MARKER]);
+            //drawPolyline(data[daum.maps.drawing.OverlayType.POLYLINE]);
+            //drawRectangle(data[daum.maps.drawing.OverlayType.RECTANGLE]);
+            //drawCircle(data[daum.maps.drawing.OverlayType.CIRCLE]);
+            //drawPolygon(data[daum.maps.drawing.OverlayType.POLYGON]);
+
+        }
+
+
 
         //kakao.maps.event.addListener(marker, 'dragend', function () {
         //    alert('marker dragend!');
@@ -632,23 +753,7 @@
 
 
 
-        // 가져오기 버튼을 클릭하면 호출되는 핸들러 함수입니다
-        // Drawing Manager로 그려진 객체 데이터를 가져와 아래 지도에 표시합니다
-        //function getDataFromDrawingMap() {
-        //    // Drawing Manager에서 그려진 데이터 정보를 가져옵니다 
-        //    var data = manager.getData();
-
-        //    // 아래 지도에 그려진 도형이 있다면 모두 지웁니다
-        //    removeOverlays();
-
-        //    // 지도에 가져온 데이터로 도형들을 그립니다
-        //    //drawMarker(data[daum.maps.drawing.OverlayType.MARKER]);
-        //    //drawPolyline(data[daum.maps.drawing.OverlayType.POLYLINE]);
-        //    //drawRectangle(data[daum.maps.drawing.OverlayType.RECTANGLE]);
-        //    //drawCircle(data[daum.maps.drawing.OverlayType.CIRCLE]);
-        //    //drawPolygon(data[daum.maps.drawing.OverlayType.POLYGON]);
-
-        //}
+  
 
         //// 아래 지도에 그려진 도형이 있다면 모두 지웁니다
         //function removeOverlays() {
