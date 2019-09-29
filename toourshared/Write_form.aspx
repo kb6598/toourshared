@@ -752,8 +752,8 @@
                                     console.info(index + "번째 마커 좌표 수정됨!");
                                     var Func;
                                     //이전 액션 리스너 삭제
-
-                                    kakao.maps.event.removeListener(data[daum.maps.drawing.OverlayType.MARKER][index], 'click', function () { });
+                                    //20190930 - removeLitener 작동 잘안함
+                                    kakao.maps.event.removeListener(data[daum.maps.drawing.OverlayType.MARKER][index], 'click', Func);
                                     //액션리스너 새로 추가
                                     kakao.maps.event.addListener(data[daum.maps.drawing.OverlayType.MARKER][index], 'click', function () {
                                         console.info("x : " + data[daum.maps.drawing.OverlayType.MARKER][index].x + "y : " + data[daum.maps.drawing.OverlayType.MARKER][index].y)
