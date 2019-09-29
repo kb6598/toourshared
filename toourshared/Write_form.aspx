@@ -640,8 +640,8 @@
         manager.addListener('state_changed', function () {
             console.info("state_changed");
 
-            //console.info(this._historyStroage);
-
+            console.info(this._historyStroage);
+           
             addListenerFromDrawingMap(this._historyStroage);
 
             //this._historyStroage._stack.forEach(function (currentValue, index, array) {
@@ -693,89 +693,104 @@
 
                                     // historyStackLength의 최초 생성시 길이는 2이기때문에 인덱스 오류 걱정 없음 하지만 처리해주어야 속편함
             console.info(history._stack);
-                            console.info("****************marker");
-            if (historyStackLength == 2) {
-                //첫번째 히스토리의 마커 첫번째
-                console.info(history._stack[1]);
-                if (history._stack[1].marker.length > 0) {
-                    // *****************************************************************20190929 작업중
-                    // 히스토리와 overlay에 저장되는 좌표 타입이 다른듯.
-                    kakao.maps.event.addListener(data[daum.maps.drawing.OverlayType.MARKER][0], 'click', function () {
-                        console.info("marker 오브젝트 dataget");
-                        console.info(data[daum.maps.drawing.OverlayType.MARKER][0]);
-                        console.info(data[daum.maps.drawing.OverlayType.MARKER][0].k.Ga + ":" + data[daum.maps.drawing.OverlayType.MARKER][0].k.Ha);
+            console.info("****************marker");
 
-                        console.info("marker 오브젝트 history");
-                        console.info(history._stack[1].marker[0]);
-                        console.info(history._stack[1].marker[0].y + ":" + history._stack[1].marker[0].x);
+
+            if (history._cursor == historyStackLength) {
+                console.info("추가, 수정");
+
+                if (historyStackLength == 2) {
+                    //첫번째 히스토리의 마커 첫번째
+                    console.info(history._stack[1]);
+                    if (history._stack[1].marker.length > 0) {
+                        // *****************************************************************20190929 작업중
 
 
 
-                        alert("x:"+data[daum.maps.drawing.OverlayType.MARKER][0].k.Ga+"y:"+data[daum.maps.drawing.OverlayType.MARKER][0].k.Ha+'MARKER click!');
-                    });
-                    console.info(history._stack[1].marker);
-                }
-            }
-            else if (historyStackLength >= 3) {
-                
-                preState = history._stack[historyStackLength - 2];//아무리 작아도 0
-                curState = history._stack[historyStackLength - 1];//아무리 작아도 1
-                console.info(preState.marker);
-                console.info(curState.marker);
+                        // 히스토리와 overlay에 저장되는 좌표 타입이 다른듯.
+                        kakao.maps.event.addListener(data[daum.maps.drawing.OverlayType.MARKER][0], 'click', function () {
+                            console.info("marker 오브젝트 dataget");
+                            console.info(data[daum.maps.drawing.OverlayType.MARKER][0]);
+                            console.info(data[daum.maps.drawing.OverlayType.MARKER][0].k.Ga + ":" + data[daum.maps.drawing.OverlayType.MARKER][0].k.Ha);
 
-                
-                
-                // 이부분 오류남. 
-                // curState.(value) 로는 불가
-                //curState.marker, curState.circle 식으로 써야함
+                            console.info("marker 오브젝트 history");
+                            console.info(history._stack[1].marker[0]);
+                            console.info(history._stack[1].marker[0].y + ":" + history._stack[1].marker[0].x);
 
-                //갯수가 변하지 않았다면 좌표값을 비교하여 액션 리스너 재생성
 
-                //지도에 생성된 marker가 1개이상일때 부터 동작
-                if (curState.marker.length > 0) {
-                    if (curState.marker.length == preState.marker.length) {
-                        console.info("length is same");
-                        //현재 기록의 marker 배열의 목록을 조회
-                        curState.marker.forEach(function (value, index, array) {
-                            //현재 index의 marker x,y 좌표와 과거의 x,y 좌표가 일치하지 않을때,
-                            if (value.x != preState.marker[index].x && value.y != preState.marker[index].y) {
-                                console.info(index + "번째 마커 좌표 수정됨!");
-                                var Func;
-                                //이전 액션 리스너 삭제
-                                kakao.maps.event.removeListener(data[daum.maps.drawing.OverlayType.MARKER][index], 'click', function () { });
-                                //액션리스너 새로 추가
-                                kakao.maps.event.addListener(data[daum.maps.drawing.OverlayType.MARKER][index], 'click', function () {
-                                    console.info("x : " + data[daum.maps.drawing.OverlayType.MARKER][index].x + "y : " + data[daum.maps.drawing.OverlayType.MARKER][index].y)
-                                    alert("x : " + data[daum.maps.drawing.OverlayType.MARKER][index].x + "y : " + data[daum.maps.drawing.OverlayType.MARKER][index].y + '<br>MARKER click!');
-                                });
-                            }
+
+                            alert("x:" + data[daum.maps.drawing.OverlayType.MARKER][0].k.Ga + "y:" + data[daum.maps.drawing.OverlayType.MARKER][0].k.Ha + 'MARKER click!');
                         });
+                        console.info(history._stack[1].marker);
                     }
-                    else if (curState.marker.length > preState.marker.length) {
-                        console.info("length is not same");
+                }
+                else if (historyStackLength >= 3) {
 
-                        //가장 최근에 추가된 노드에 액션 추가
-                        kakao.maps.event.addListener(data[daum.maps.drawing.OverlayType.MARKER][curState.marker.length - 1], 'click', function () {
-                            console.info("x : " + data[daum.maps.drawing.OverlayType.MARKER][curState.marker.length - 1].x + "y : " + data[daum.maps.drawing.OverlayType.MARKER][curState.marker.length - 1].y );
-                            alert("x : " + data[daum.maps.drawing.OverlayType.MARKER][curState.marker.length - 1].x + "y : " + data[daum.maps.drawing.OverlayType.MARKER][curState.marker.length - 1].y + '<br>MARKER click!');
-                        });
+                    preState = history._stack[historyStackLength - 2];//아무리 작아도 0
+                    curState = history._stack[historyStackLength - 1];//아무리 작아도 1
+                    console.info(preState.marker);
+                    console.info(curState.marker);
+
+
+
+                    // 이부분 오류남. 
+                    // curState.(value) 로는 불가
+                    //curState.marker, curState.circle 식으로 써야함
+
+                    //갯수가 변하지 않았다면 좌표값을 비교하여 액션 리스너 재생성
+
+                    //지도에 생성된 marker가 1개이상일때 부터 동작
+                    //undo시에 마커가 삭제될때도 인식하기 위해 datdaGet을 통해 가져오는 overlay의 길이도 확인
+                    if (curState.marker.length > 0 && data[daum.maps.drawing.OverlayType.MARKER].length > 0) {
+                        if (curState.marker.length == preState.marker.length) {
+                            console.info("length is same");
+                            //현재 기록의 marker 배열의 목록을 조회
+
+                            curState.marker.forEach(function (value, index, array) {
+                                //현재 index의 marker x,y 좌표와 과거의 x,y 좌표가 일치하지 않을때,
+                                if (value.x != preState.marker[index].x && value.y != preState.marker[index].y) {
+                                    console.info(index + "번째 마커 좌표 수정됨!");
+                                    var Func;
+                                    //이전 액션 리스너 삭제
+
+                                    kakao.maps.event.removeListener(data[daum.maps.drawing.OverlayType.MARKER][index], 'click', function () { });
+                                    //액션리스너 새로 추가
+                                    kakao.maps.event.addListener(data[daum.maps.drawing.OverlayType.MARKER][index], 'click', function () {
+                                        console.info("x : " + data[daum.maps.drawing.OverlayType.MARKER][index].x + "y : " + data[daum.maps.drawing.OverlayType.MARKER][index].y)
+                                        alert("x : " + data[daum.maps.drawing.OverlayType.MARKER][index].x + "y : " + data[daum.maps.drawing.OverlayType.MARKER][index].y + '<br>MARKER click!');
+                                    });
+                                }
+                            });
+                        }
+                        else if (curState.marker.length > preState.marker.length) {
+                            console.info("length is not same");
+
+                            //가장 최근에 추가된 노드에 액션 추가
+                            kakao.maps.event.addListener(data[daum.maps.drawing.OverlayType.MARKER][curState.marker.length - 1], 'click', function () {
+                                console.info("x : " + data[daum.maps.drawing.OverlayType.MARKER][curState.marker.length - 1].x + "y : " + data[daum.maps.drawing.OverlayType.MARKER][curState.marker.length - 1].y);
+                                alert("x : " + data[daum.maps.drawing.OverlayType.MARKER][curState.marker.length - 1].x + "y : " + data[daum.maps.drawing.OverlayType.MARKER][curState.marker.length - 1].y + '<br>MARKER click!');
+                            });
+                        }
+
                     }
+
+
+
+                    //preState.marker.forEach(function (currentValue, index, array) {
+                    //    console.log(index);
+                    //    console.log(currentValue);
+                    //    //console.log(array);
+
+
+                    //});
 
                 }
 
-
-
-                //preState.marker.forEach(function (currentValue, index, array) {
-                //    console.log(index);
-                //    console.log(currentValue);
-                //    //console.log(array);
-
-
-                //});
-
             }
-
-
+            else if (history._cursor < historyStackLength) {
+                var undoCnt = historyStackLength - history._cursor;
+                console.info("undoCnt : " + undoCnt);
+            }
             //console.info(curState);
 
 
