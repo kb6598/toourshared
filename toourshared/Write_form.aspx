@@ -353,21 +353,23 @@
 
 
                         <!--폼 내부에서 버튼객체를 쓰려면 type=button을 써주면 된다.-->
-                            <button type="button" class="btn btn-secondary" onclick="selectOverlay('MARKER')" >마커</button>
-                            <button type="button" class="btn btn-secondary" onclick="selectOverlay('POLYLINE')" >선</button>
-                            <button type="button" class="btn btn-secondary" onclick="selectOverlay('CIRCLE')" >원</button>
-                            <button type="button"  class="btn btn-secondary" onclick="selectOverlay('RECTANGLE')" >사각형</button>
-                            <button type="button" class="btn btn-secondary" onclick="selectOverlay('POLYGON')" >다각형</button>
-                            <button type="button" class="btn btn-secondary" id="undo"  onclick="undoAction()"  disabled> UNDO</button>
-                            <button type="button" class="btn btn-secondary"  id="redo"  onclick="redoAction()"  disabled> REDO</button>
-                            <!-- Button trigger modal -->
-                            <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#searchPlaceModal">
-                                검색
-                            </button>
-                            <button type="button" class="btn btn-secondary" data-toggle="collapse" data-target="#travelRoute_wrap">
-                                여행경로
-                            </button>
-                        
+                        <button type="button" class="btn btn-secondary" onclick="selectOverlay('MARKER')">마커</button>
+                        <button type="button" class="btn btn-secondary" onclick="selectOverlay('POLYLINE')">선</button>
+                        <button type="button" class="btn btn-secondary" onclick="selectOverlay('CIRCLE')">원</button>
+                        <button type="button" class="btn btn-secondary" onclick="selectOverlay('RECTANGLE')">사각형</button>
+                        <button type="button" class="btn btn-secondary" onclick="selectOverlay('POLYGON')">다각형</button>
+                        <button type="button" class="btn btn-secondary" onclick="selectOverlay('ELLIPSE')">타원</button>
+                        <button type="button" class="btn btn-secondary" onclick="selectOverlay('ARROW')">화살표</button>
+                        <button type="button" class="btn btn-secondary" id="undo" onclick="undoAction()" disabled>UNDO</button>
+                        <button type="button" class="btn btn-secondary" id="redo" onclick="redoAction()" disabled>REDO</button>
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#searchPlaceModal">
+                            검색
+                        </button>
+                        <button type="button" class="btn btn-secondary" data-toggle="collapse" data-target="#travelRoute_wrap">
+                            여행경로
+                        </button>
+
                     </div>
                     <div class="form-group">
                         <asp:TextBox ID="article" runat="server" TextMode="MultiLine" />
@@ -452,59 +454,85 @@
         var options = { // Drawing Manager를 생성할 때 사용할 옵션입니다
             map: drawingMap, // Drawing Manager로 그리기 요소를 그릴 map 객체입니다
             drawingMode: [ // Drawing Manager로 제공할 그리기 요소 모드입니다
+                daum.maps.drawing.OverlayType.ARROW,
+                daum.maps.drawing.OverlayType.CIRCLE,
+                daum.maps.drawing.OverlayType.ELLIPSE,
                 daum.maps.drawing.OverlayType.MARKER,
                 daum.maps.drawing.OverlayType.POLYLINE,
-                daum.maps.drawing.OverlayType.RECTANGLE,
-                daum.maps.drawing.OverlayType.CIRCLE,
-                daum.maps.drawing.OverlayType.POLYGON
+                daum.maps.drawing.OverlayType.POLYGON,
+                daum.maps.drawing.OverlayType.RECTANGLE
             ],
             // 사용자에게 제공할 그리기 가이드 툴팁입니다
             // 사용자에게 도형을 그릴때, 드래그할때, 수정할때 가이드 툴팁을 표시하도록 설정합니다
             guideTooltip: ['draw', 'drag', 'edit'],
-            markerOptions: { // 마커 옵션입니다 
-                draggable: true//, // 마커를 그리고 나서 드래그 가능하게 합니다 
-                //removable: true // 마커를 삭제 할 수 있도록 x 버튼이 표시됩니다  
-            },
-            polylineOptions: { // 선 옵션입니다
-                draggable: true, // 그린 후 드래그가 가능하도록 설정합니다
-                // removable: true, // 그린 후 삭제 할 수 있도록 x 버튼이 표시됩니다
-                editable: true, // 그린 후 수정할 수 있도록 설정합니다 
-                strokeColor: '#39f', // 선 색
-                hintStrokeStyle: 'dash', // 그리중 마우스를 따라다니는 보조선의 선 스타일
-                hintStrokeOpacity: 0.5  // 그리중 마우스를 따라다니는 보조선의 투명도
-            },
-            rectangleOptions: {
+            arrowOptions: {
                 draggable: true,
-                //removable: true,
+                removable: false,
                 editable: true,
-                strokeColor: '#39f', // 외곽선 색
-                fillColor: '#39f', // 채우기 색
-                fillOpacity: 0.5 // 채우기색 투명도
+                strokeWeight: 3,
+                strokeOpacity: 0.8,
+                strokeColor: '#39f',
+                strokeStyle: 'solid',
+                hintStrokeStyle: 'dashdot',
+                hintStrokeOpacity: 0.3,
+                startArrow: false
             },
             circleOptions: {
                 draggable: true,
-                //removable: true,
+                removable: false,
                 editable: true,
                 strokeColor: '#39f',
                 fillColor: '#39f',
                 fillOpacity: 0.5
             },
+            ellipseOptions: {
+                draggable: true,
+                removable: false,
+                editable: true,
+                strokeWeight: 2,
+                strokeOpacity: 0.8,
+                strokeColor: '#39f',
+                strokeStyle: 'solid',
+                fillColor: '#39f',
+                fillOpacity: 0.3
+            },
+            markerOptions: { // 마커 옵션입니다 
+                draggable: true, // 마커를 그리고 나서 드래그 가능하게 합니다 
+                removable: false // 마커를 삭제 할 수 있도록 x 버튼이 표시됩니다  
+            },
+            polylineOptions: { // 선 옵션입니다
+                draggable: true, // 그린 후 드래그가 가능하도록 설정합니다
+                removable: false, // 그린 후 삭제 할 수 있도록 x 버튼이 표시됩니다
+                editable: true, // 그린 후 수정할 수 있도록 설정합니다 
+                strokeColor: '#39f', // 선 색
+                hintStrokeStyle: 'dash', // 그리중 마우스를 따라다니는 보조선의 선 스타일
+                hintStrokeOpacity: 0.5  // 그리중 마우스를 따라다니는 보조선의 투명도
+            },
             polygonOptions: {
                 draggable: true,
-                //removable: true,
+                removable: false,
                 editable: true,
                 strokeColor: '#39f',
                 fillColor: '#39f',
                 fillOpacity: 0.5,
                 hintStrokeStyle: 'dash',
                 hintStrokeOpacity: 0.5
+            },
+            rectangleOptions: {
+                draggable: true,
+                removable: false,
+                editable: true,
+                strokeColor: '#39f', // 외곽선 색
+                fillColor: '#39f', // 채우기 색
+                fillOpacity: 0.5 // 채우기색 투명도
             }
+
         };
 
         // 위에 작성한 옵션으로 Drawing Manager를 생성합니다
         var manager = new daum.maps.drawing.DrawingManager(options);
 
-                // undo, redo 버튼의 disabled 속성을 설정하기 위해 엘리먼트를 변수에 설정합니다
+        // undo, redo 버튼의 disabled 속성을 설정하기 위해 엘리먼트를 변수에 설정합니다
         var undoBtn = document.getElementById('undo');
         var redoBtn = document.getElementById('redo');
 
@@ -516,7 +544,7 @@
             // 되돌릴 수 있다면 undo 버튼을 활성화 시킵니다 
             if (manager.undoable()) {
                 undoBtn.disabled = false;
-                
+
             } else { // 아니면 undo 버튼을 비활성화 시킵니다 
                 undoBtn.disabled = true;
             }
@@ -530,7 +558,7 @@
 
         });
 
-        
+
         // 버튼 클릭 시 호출되는 핸들러 입니다
         function selectOverlay(type) {
             // 그리기 중이면 그리기를 취소합니다
@@ -568,42 +596,44 @@
         //그리기 끝났을때 동작
         manager.addListener('drawend', function (data) {
 
-            console.log('drawend', data);
+            //console.log('drawend', data);
 
-            
+
 
             // 생성되는 overlay에 이벤트 추가 
             //marker에 이벤트를 추천하면 ExtendesMarker
 
-            if (data.overlayType == "marker") {
-                console.info("this is marker");
-            }
-            else if (data.overlayType == "polyline") {
-                console.info("this is polyline");
-            }
-            else if (data.overlayType == "polygon") {
-                console.info("this is polygon");
-            }
-            else if (data.overlayType == "rectangle") {
-                console.info("this is rectangle");
-            }
-            else if (data.overlayType == "circle") {
-                console.info("this is circle");
-            }
+            //if (data.overlayType == "marker") {
+            //    console.info("this is marker");
+            //}
+            //else if (data.overlayType == "polyline") {
+            //    console.info("this is polyline");
+            //}
+            //else if (data.overlayType == "polygon") {
+            //    console.info("this is polygon");
+            //}
+            //else if (data.overlayType == "rectangle") {
+            //    console.info("this is rectangle");
+            //}
+            //else if (data.overlayType == "circle") {
+            //    console.info("this is circle");
+            //}
 
 
             // 여기서 리스너를 추가하면 redo때 추가가 안됨
             //kakao.maps.event.addListener(data.target, "click", function () {
             //    console.info(this);
             //    console.info(this.k);
-                
-                
+
+
             //});
 
 
-             
+
 
         });
+
+
 
         // drawManager의 상태가 변경되고
         // travelRoute와 변경
@@ -625,8 +655,8 @@
         // 애초에 리스너가 ExtenedMarker의 부분 요소로 들어가기 때문에
         // 같이 삭제됨
         manager.addListener('remove', function (e) {
-             console.info("삭제");
-            console.info(e);
+            //console.info("삭제");
+            //console.info(e);
             //var handler;
             //kakao.maps.event.removeListener(e.target, 'click', handler);
         });
@@ -636,53 +666,138 @@
 
 
 
-        
+
         function addListenerFromDrawingMap(history) {
             // Drawing Manager에서 그려진 데이터 정보를 가져옵니다 
             // getData를 통하여 얻은 값에는 Addlintener 안됨
             //var data = manager.getData();
 
+
+
             console.info(history);
-            var data = manager.getOverlays();
+            console.info(typeof (history._stack));
+            //console.info(history._stack);
+            //_stack
 
-            //marker
-            data[daum.maps.drawing.OverlayType.MARKER].forEach(function (currentValue, index, array) {
-                console.log(currentValue);
-                console.log(index);
-                console.log(array);
-                
-                kakao.maps.event.addListener(currentValue, 'click', function () {
-                    alert('marker click!');
+            var historyStackLength = history._stack.length;
+
+            var preState = new Array();
+            var curState = new Array();
+            var overlayName = ["arrow", "circle", "ellipse", "marker", "polyline", "polygon", "rectangle"];
+            if (historyStackLength >= 3) {
+                preState = history._stack[historyStackLength - 2];
+                curState = history._stack[historyStackLength - 1];
+                console.info(preState.marker);
+                console.info(curState.marker);
+
+                // 이부분 오류남. 
+                // curState.(value) 로는 불가
+                //curState.marker, curState.circle 식으로 써야함
+                overlayName.forEach(function (value, index, array) {
+
+                    if (curState.(value).length == preState.(value).length) {
+                        console.info(value+"length is same");
+                    }
+                    else if (curState.(value).length != preState.(value).length) {
+                        console.info(value+"length is not same");
+                    }
                 });
-            });
 
-                        //marker
-            data[daum.maps.drawing.OverlayType.POLYLINE].forEach(function (currentValue, index, array) {
-                console.log(currentValue);
-                console.log(index);
-                console.log(array);
-            });
 
-                        //marker
-            data[daum.maps.drawing.OverlayType.RECTANGLE].forEach(function (currentValue, index, array) {
-                console.log(currentValue);
-                console.log(index);
-                console.log(array);
-            });
 
-                        //marker
-            data[daum.maps.drawing.OverlayType.CIRCLE].forEach(function (currentValue, index, array) {
-                console.log(currentValue);
-                console.log(index);
-                console.log(array);
-            });
+                //preState.marker.forEach(function (currentValue, index, array) {
+                //    console.log(index);
+                //    console.log(currentValue);
+                //    //console.log(array);
 
-                        //marker
-            data[daum.maps.drawing.OverlayType.POLYGON].forEach(function (currentValue, index, array) {
-                console.log(currentValue);
-                console.log(index);
-                console.log(array);
-            });
+
+                //});
+
+            }
+
+
+            //console.info(curState);
+
+
+
+
+
+
+
+            var data = manager.getOverlays();
+            var marker_lastNode;
+            var polyline_lastNode;
+            var polygon_lastNode;
+            var circle_lastNode;
+            var rectangle_lastNode;
+            //MARKER
+
+            //marker_lastNode = data[daum.maps.drawing.OverlayType.MARKER].length - 1;
+            //console.info(data[daum.maps.drawing.OverlayType.MARKER]);
+            //console.info(marker_lastNode);
+
+            //if (marker_lastNode >= 0) {
+            //    kakao.maps.event.addListener(data[daum.maps.drawing.OverlayType.MARKER][marker_lastNode], 'click', function () {
+            //        alert('MARKER click!');
+            //    });
+            //}
+
+            ////data[daum.maps.drawing.OverlayType.MARKER].forEach(function (currentValue, index, array) {
+            ////    console.log(currentValue);
+            ////    //console.log(index);
+            ////    //console.log(array);
+
+
+
+
+            ////    kakao.maps.event.addListener(currentValue, 'click', function () {
+            ////        alert('MARKER click!');
+            ////    });
+            ////});
+
+            //            //POLYLINE
+            //data[daum.maps.drawing.OverlayType.POLYLINE].forEach(function (currentValue, index, array) {
+            //    console.log(currentValue);
+            //    //console.log(index);
+            //    //console.log(array);
+
+            //                    kakao.maps.event.addListener(currentValue, 'click', function () {
+            //        alert('POLYLINE click!');
+            //    });
+            //});
+
+            //            //RECTANGLE
+            //data[daum.maps.drawing.OverlayType.RECTANGLE].forEach(function (currentValue, index, array) {
+            //    console.log(currentValue);
+            //    //console.log(index);
+            //    //console.log(array);
+
+            //                    kakao.maps.event.addListener(currentValue, 'click', function () {
+            //        alert('RECTANGLE click!');
+            //    });
+            //});
+
+            //            //CIRCLE
+            //data[daum.maps.drawing.OverlayType.CIRCLE].forEach(function (currentValue, index, array) {
+            //    console.log(currentValue);
+            //   // console.log(index);
+            //   // console.log(array);
+
+            //                    kakao.maps.event.addListener(currentValue, 'click', function () {
+            //        alert('CIRCLE click!');
+            //    });
+            //});
+
+            //            //POLYGON
+            //data[daum.maps.drawing.OverlayType.POLYGON].forEach(function (currentValue, index, array) {
+            //    console.log(currentValue);
+            //   // console.log(index);
+            //   // console.log(array);
+
+            //                    kakao.maps.event.addListener(currentValue, 'click', function () {
+            //        alert('POLYGON click!');
+            //    });
+            //});
 
 
 
@@ -746,7 +861,7 @@
 
 
 
-  
+
 
         //// 아래 지도에 그려진 도형이 있다면 모두 지웁니다
         //function removeOverlays() {
@@ -997,6 +1112,12 @@
             insert5.setAttribute("name", "polygons");               // name 속성을 'stadium'으로 설정
             insert5.setAttribute("value", polygonsPath);             // value 속성을 삽입
             form.appendChild(insert5);
+
+            var insert6 = document.createElement("input");   // input 엘리멘트 생성
+            insert5.setAttribute("type", "hidden");           // type 속성을 hidden으로 설정
+            insert5.setAttribute("name", "data");               // name 속성을 'stadium'으로 설정
+            insert5.setAttribute("value", manager.getData());             // value 속성을 삽입
+            form.appendChild(insert6);
 
 
 

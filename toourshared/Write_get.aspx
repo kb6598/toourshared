@@ -14,6 +14,7 @@
 <head runat="server">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title></title>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=ebcd0c1accbe0ff4bbb47bd777ef2fcf&libraries=service&libraries=services,clusterer,drawing"></script>
 </head>
 <body>
     <form id="form1" runat="server">
@@ -62,5 +63,6 @@
             </table>
         </div>
     </form>
+
 </body>
 </html>
