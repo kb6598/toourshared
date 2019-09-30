@@ -707,20 +707,22 @@
 
 
 
-                        // 히스토리와 overlay에 저장되는 좌표 타입이 다른듯.
-                        kakao.maps.event.addListener(data[daum.maps.drawing.OverlayType.MARKER][0], 'click', function () {
-                            console.info("marker 오브젝트 dataget");
-                            console.info(data[daum.maps.drawing.OverlayType.MARKER][0]);
-                            console.info(data[daum.maps.drawing.OverlayType.MARKER][0].k.Ga + ":" + data[daum.maps.drawing.OverlayType.MARKER][0].k.Ha);
+                        //// 히스토리와 overlay에 저장되는 좌표 타입이 다른듯.
+                        //kakao.maps.event.addListener(data[daum.maps.drawing.OverlayType.MARKER][0], 'click', function () {
+                        //    console.info("marker 오브젝트 dataget");
+                        //    console.info(data[daum.maps.drawing.OverlayType.MARKER][0]);
+                        //    console.info(data[daum.maps.drawing.OverlayType.MARKER][0].k.Ga + ":" + data[daum.maps.drawing.OverlayType.MARKER][0].k.Ha);
 
-                            console.info("marker 오브젝트 history");
-                            console.info(history._stack[1].marker[0]);
-                            console.info(history._stack[1].marker[0].y + ":" + history._stack[1].marker[0].x);
+                        //    console.info("marker 오브젝트 history");
+                        //    console.info(history._stack[1].marker[0]);
+                        //    console.info(history._stack[1].marker[0].y + ":" + history._stack[1].marker[0].x);
 
 
 
-                            alert("x:" + data[daum.maps.drawing.OverlayType.MARKER][0].k.Ga + "y:" + data[daum.maps.drawing.OverlayType.MARKER][0].k.Ha + 'MARKER click!');
-                        });
+                        //    alert("x:" + data[daum.maps.drawing.OverlayType.MARKER][0].k.Ga + "y:" + data[daum.maps.drawing.OverlayType.MARKER][0].k.Ha + 'MARKER click!');
+                        //});
+                        kakao.maps.event.addListener(data[daum.maps.drawing.OverlayType.MARKER][0], 'click',onClick_marker);
+                        
                         console.info(history._stack[1].marker);
                     }
                 }
@@ -750,16 +752,13 @@
                                 //현재 index의 marker x,y 좌표와 과거의 x,y 좌표가 일치하지 않을때,
                                 if (value.x != preState.marker[index].x && value.y != preState.marker[index].y) {
                                     console.info(index + "번째 마커 좌표 수정됨!");
-                                    var Func;
+
                                     //이전 액션 리스너 삭제
                                     //20190930 - removeLitener 작동 잘안함
                                     //  공통함수로 처리하게 된다면 삭제 가능.
-                                    kakao.maps.event.removeListener(data[daum.maps.drawing.OverlayType.MARKER][index], 'click', Func);
+                                    kakao.maps.event.removeListener(data[daum.maps.drawing.OverlayType.MARKER][index], 'click', onClick_marker);
                                     //액션리스너 새로 추가
-                                    kakao.maps.event.addListener(data[daum.maps.drawing.OverlayType.MARKER][index], 'click', function () {
-                                        console.info("x : " + data[daum.maps.drawing.OverlayType.MARKER][index].x + "y : " + data[daum.maps.drawing.OverlayType.MARKER][index].y)
-                                        alert("x : " + data[daum.maps.drawing.OverlayType.MARKER][index].x + "y : " + data[daum.maps.drawing.OverlayType.MARKER][index].y + '<br>MARKER click!');
-                                    });
+                                    kakao.maps.event.addListener(data[daum.maps.drawing.OverlayType.MARKER][index], 'click', onClick_marker);
                                 }
                             });
                         }
@@ -767,10 +766,7 @@
                             console.info("length is not same");
 
                             //가장 최근에 추가된 노드에 액션 추가
-                            kakao.maps.event.addListener(data[daum.maps.drawing.OverlayType.MARKER][curState.marker.length - 1], 'click', function () {
-                                console.info("x : " + data[daum.maps.drawing.OverlayType.MARKER][curState.marker.length - 1].x + "y : " + data[daum.maps.drawing.OverlayType.MARKER][curState.marker.length - 1].y);
-                                alert("x : " + data[daum.maps.drawing.OverlayType.MARKER][curState.marker.length - 1].x + "y : " + data[daum.maps.drawing.OverlayType.MARKER][curState.marker.length - 1].y + '<br>MARKER click!');
-                            });
+                            kakao.maps.event.addListener(data[daum.maps.drawing.OverlayType.MARKER][curState.marker.length - 1], 'click', onClick_marker);
                         }
 
                     }
@@ -889,7 +885,10 @@
 
         }
 
-
+        var onClick_marker = function () {
+            console.info(this);            
+            alert("k : "+ this.k+"Ga : " + this.k.Ga + "Ha : " + this.k.Ha + 'MARKER click!');
+        }
 
         //kakao.maps.event.addListener(marker, 'dragend', function () {
         //    alert('marker dragend!');
