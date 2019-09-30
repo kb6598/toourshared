@@ -666,7 +666,7 @@
 
 
 
-
+        var preCurosr;
         function addListenerFromDrawingMap(history) {
             // Drawing Manager에서 그려진 데이터 정보를 가져옵니다 
             // getData를 통하여 얻은 값에는 Addlintener 안됨
@@ -688,6 +688,16 @@
 
             // 오버레이 객체 실제로 액션을 추가할 대상
             var data = manager.getOverlays();
+            var arrows = data[daum.maps.drawing.OverlayType.ARROW];
+            var circles = data[daum.maps.drawing.OverlayType.CIRCLE];
+            var ellipse = data[daum.maps.drawing.OverlayType.ELLIPSE];
+            var markers = data[daum.maps.drawing.OverlayType.MARKER];
+            var polylines = data[daum.maps.drawing.OverlayType.POLYLINE];
+            var polygons = data[daum.maps.drawing.OverlayType.POLYGON];
+            var rectangles = data[daum.maps.drawing.OverlayType.RECTANGLE];
+
+           
+
 
             // 알고리즘 다시짜자
 
@@ -695,34 +705,16 @@
             console.info(history._stack);
             console.info("****************marker");
 
-
+            
             if (history._cursor == historyStackLength) {
+
                 console.info("추가, 수정");
 
                 if (historyStackLength == 2) {
                     //첫번째 히스토리의 마커 첫번째
                     console.info(history._stack[1]);
                     if (history._stack[1].marker.length > 0) {
-                        // *****************************************************************20190929 작업중
-
-
-
-                        //// 히스토리와 overlay에 저장되는 좌표 타입이 다른듯.
-                        //kakao.maps.event.addListener(data[daum.maps.drawing.OverlayType.MARKER][0], 'click', function () {
-                        //    console.info("marker 오브젝트 dataget");
-                        //    console.info(data[daum.maps.drawing.OverlayType.MARKER][0]);
-                        //    console.info(data[daum.maps.drawing.OverlayType.MARKER][0].k.Ga + ":" + data[daum.maps.drawing.OverlayType.MARKER][0].k.Ha);
-
-                        //    console.info("marker 오브젝트 history");
-                        //    console.info(history._stack[1].marker[0]);
-                        //    console.info(history._stack[1].marker[0].y + ":" + history._stack[1].marker[0].x);
-
-
-
-                        //    alert("x:" + data[daum.maps.drawing.OverlayType.MARKER][0].k.Ga + "y:" + data[daum.maps.drawing.OverlayType.MARKER][0].k.Ha + 'MARKER click!');
-                        //});
-                        kakao.maps.event.addListener(data[daum.maps.drawing.OverlayType.MARKER][0], 'click',onClick_marker);
-                        
+                        kakao.maps.event.addListener(markers[0], 'click',onClick_marker);                        
                         console.info(history._stack[1].marker);
                     }
                 }
@@ -743,7 +735,7 @@
 
                     //지도에 생성된 marker가 1개이상일때 부터 동작
                     //undo시에 마커가 삭제될때도 인식하기 위해 datdaGet을 통해 가져오는 overlay의 길이도 확인
-                    if (curState.marker.length > 0 && data[daum.maps.drawing.OverlayType.MARKER].length > 0) {
+                    if (curState.marker.length > 0 && markers.length > 0) {
                         if (curState.marker.length == preState.marker.length) {
                             console.info("length is same");
                             //현재 기록의 marker 배열의 목록을 조회
@@ -756,9 +748,9 @@
                                     //이전 액션 리스너 삭제
                                     //20190930 - removeLitener 작동 잘안함
                                     //  공통함수로 처리하게 된다면 삭제 가능.
-                                    kakao.maps.event.removeListener(data[daum.maps.drawing.OverlayType.MARKER][index], 'click', onClick_marker);
+                                    kakao.maps.event.removeListener(markers[index], 'click', onClick_marker);
                                     //액션리스너 새로 추가
-                                    kakao.maps.event.addListener(data[daum.maps.drawing.OverlayType.MARKER][index], 'click', onClick_marker);
+                                    kakao.maps.event.addListener(markers[index], 'click', onClick_marker);
                                 }
                             });
                         }
@@ -766,7 +758,7 @@
                             console.info("length is not same");
 
                             //가장 최근에 추가된 노드에 액션 추가
-                            kakao.maps.event.addListener(data[daum.maps.drawing.OverlayType.MARKER][curState.marker.length - 1], 'click', onClick_marker);
+                            kakao.maps.event.addListener(markers[curState.marker.length - 1], 'click', onClick_marker);
                         }
 
                     }
@@ -784,105 +776,101 @@
                 }
 
             }
+            //cursor의 최솟값은 1이다
             else if (history._cursor < historyStackLength) {
+
+                console.info("preCursor: " + preCurosr);
+                console.info("current cursor: " + history._cursor);
+                
+                //
+                if ( history._cursor == 1) {
+
+                    
+                }
+                //redo
+                else if (preCurosr < history._cursor) {
+                    console.info(history._stack[history._cursor - 1].marker);
+                    kakao.maps.event.addListener(markers[history._cursor - 1], 'click', onClick_marker);
+
+
+                }
+                    //노드 삭제의 실행
+                    //undo
+                else if (preCurosr > history._cursor) {
+
+                }
+
+
+                //redo
+
+
+                //redo undo는 어떻게 구분?
+
                 var undoCnt = historyStackLength - history._cursor;
                 console.info("undoCnt : " + undoCnt);
+                // 두번째를 가르키게 될때
+              
+                //else if (historyStackLength >= 3) {
+
+                //    preState = history._stack[historyStackLength - 2];//아무리 작아도 0
+                //    curState = history._stack[historyStackLength - 1];//아무리 작아도 1
+                //    console.info(preState.marker);
+                //    console.info(curState.marker);
+
+
+
+                //    // 이부분 오류남. 
+                //    // curState.(value) 로는 불가
+                //    //curState.marker, curState.circle 식으로 써야함
+
+                //    //갯수가 변하지 않았다면 좌표값을 비교하여 액션 리스너 재생성
+
+                //    //지도에 생성된 marker가 1개이상일때 부터 동작
+                //    //undo시에 마커가 삭제될때도 인식하기 위해 datdaGet을 통해 가져오는 overlay의 길이도 확인
+                //    if (curState.marker.length > 0 && markers.length > 0) {
+                //        if (curState.marker.length == preState.marker.length) {
+                //            console.info("length is same");
+                //            //현재 기록의 marker 배열의 목록을 조회
+
+                //            curState.marker.forEach(function (value, index, array) {
+                //                //현재 index의 marker x,y 좌표와 과거의 x,y 좌표가 일치하지 않을때,
+                //                if (value.x != preState.marker[index].x && value.y != preState.marker[index].y) {
+                //                    console.info(index + "번째 마커 좌표 수정됨!");
+
+                //                    //이전 액션 리스너 삭제
+                //                    //20190930 - removeLitener 작동 잘안함
+                //                    //  공통함수로 처리하게 된다면 삭제 가능.
+                //                    kakao.maps.event.removeListener(markers[index], 'click', onClick_marker);
+                //                    //액션리스너 새로 추가
+                //                    kakao.maps.event.addListener(markers[index], 'click', onClick_marker);
+                //                }
+                //            });
+                //        }
+                //        else if (curState.marker.length > preState.marker.length) {
+                //            console.info("length is not same");
+
+                //            //가장 최근에 추가된 노드에 액션 추가
+                //            kakao.maps.event.addListener(markers[curState.marker.length - 1], 'click', onClick_marker);
+                //        }
+
+                //    }
+
+
+
+                //    preState.marker.forEach(function (currentValue, index, array) {
+                //        console.log(index);
+                //        console.log(currentValue);
+                //        //console.log(array);
+
+
+                //    });
+
+                //}
+
             }
             //console.info(curState);
-
-
-
-
-
-
-
-            
-            var marker_lastNode;
-            var polyline_lastNode;
-            var polygon_lastNode;
-            var circle_lastNode;
-            var rectangle_lastNode;
-            //MARKER
-
-            //marker_lastNode = data[daum.maps.drawing.OverlayType.MARKER].length - 1;
-            //console.info(data[daum.maps.drawing.OverlayType.MARKER]);
-            //console.info(marker_lastNode);
-
-            //if (marker_lastNode >= 0) {
-            //    kakao.maps.event.addListener(data[daum.maps.drawing.OverlayType.MARKER][marker_lastNode], 'click', function () {
-            //        alert('MARKER click!');
-            //    });
-            //}
-
-            ////data[daum.maps.drawing.OverlayType.MARKER].forEach(function (currentValue, index, array) {
-            ////    console.log(currentValue);
-            ////    //console.log(index);
-            ////    //console.log(array);
-
-
-
-
-            ////    kakao.maps.event.addListener(currentValue, 'click', function () {
-            ////        alert('MARKER click!');
-            ////    });
-            ////});
-
-            //            //POLYLINE
-            //data[daum.maps.drawing.OverlayType.POLYLINE].forEach(function (currentValue, index, array) {
-            //    console.log(currentValue);
-            //    //console.log(index);
-            //    //console.log(array);
-
-            //                    kakao.maps.event.addListener(currentValue, 'click', function () {
-            //        alert('POLYLINE click!');
-            //    });
-            //});
-
-            //            //RECTANGLE
-            //data[daum.maps.drawing.OverlayType.RECTANGLE].forEach(function (currentValue, index, array) {
-            //    console.log(currentValue);
-            //    //console.log(index);
-            //    //console.log(array);
-
-            //                    kakao.maps.event.addListener(currentValue, 'click', function () {
-            //        alert('RECTANGLE click!');
-            //    });
-            //});
-
-            //            //CIRCLE
-            //data[daum.maps.drawing.OverlayType.CIRCLE].forEach(function (currentValue, index, array) {
-            //    console.log(currentValue);
-            //   // console.log(index);
-            //   // console.log(array);
-
-            //                    kakao.maps.event.addListener(currentValue, 'click', function () {
-            //        alert('CIRCLE click!');
-            //    });
-            //});
-
-            //            //POLYGON
-            //data[daum.maps.drawing.OverlayType.POLYGON].forEach(function (currentValue, index, array) {
-            //    console.log(currentValue);
-            //   // console.log(index);
-            //   // console.log(array);
-
-            //                    kakao.maps.event.addListener(currentValue, 'click', function () {
-            //        alert('POLYGON click!');
-            //    });
-            //});
-
-
-
-
-
-
-            // 지도에 가져온 데이터로 도형들을 그립니다
-            //drawMarker(data[daum.maps.drawing.OverlayType.MARKER]);
-            //drawPolyline(data[daum.maps.drawing.OverlayType.POLYLINE]);
-            //drawRectangle(data[daum.maps.drawing.OverlayType.RECTANGLE]);
-            //drawCircle(data[daum.maps.drawing.OverlayType.CIRCLE]);
-            //drawPolygon(data[daum.maps.drawing.OverlayType.POLYGON]);
-
+            //현재의 커서값을 과거의 커서 값으로 설정
+            preCurosr = history._cursor;
         }
 
         var onClick_marker = function () {
@@ -890,9 +878,7 @@
             alert("k : "+ this.k+"Ga : " + this.k.Ga + "Ha : " + this.k.Ha + 'MARKER click!');
         }
 
-        //kakao.maps.event.addListener(marker, 'dragend', function () {
-        //    alert('marker dragend!');
-        //});
+
 
 
 
