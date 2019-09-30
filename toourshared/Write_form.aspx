@@ -638,7 +638,7 @@
         // drawManager의 상태가 변경되고
         // travelRoute와 변경
         manager.addListener('state_changed', function () {
-            console.info("state_changed");
+            console.info("state_changed++++++++++++++++++++++++");
 
             console.info(this._historyStroage);
            
@@ -666,7 +666,7 @@
 
 
 
-        var preCurosr;
+        var preCursor;
         function addListenerFromDrawingMap(history) {
             // Drawing Manager에서 그려진 데이터 정보를 가져옵니다 
             // getData를 통하여 얻은 값에는 Addlintener 안됨
@@ -703,27 +703,29 @@
 
                                     // historyStackLength의 최초 생성시 길이는 2이기때문에 인덱스 오류 걱정 없음 하지만 처리해주어야 속편함
             console.info(history._stack);
-            console.info("****************marker");
+            //console.info("****************marker");
 
             
             if (history._cursor == historyStackLength) {
 
-                console.info("추가, 수정");
+                //console.info("추가, 수정");
 
                 if (historyStackLength == 2) {
                     //첫번째 히스토리의 마커 첫번째
                     console.info(history._stack[1]);
                     if (history._stack[1].marker.length > 0) {
                         kakao.maps.event.addListener(markers[0], 'click',onClick_marker);                        
-                        console.info(history._stack[1].marker);
+                        //console.info(history._stack[1].marker);
                     }
                 }
                 else if (historyStackLength >= 3) {
 
                     preState = history._stack[historyStackLength - 2];//아무리 작아도 0
                     curState = history._stack[historyStackLength - 1];//아무리 작아도 1
-                    console.info(preState.marker);
-                    console.info(curState.marker);
+                    //console.info("preState.marker");
+                    //console.info(preState.marker);
+                    //console.info("curState.marker");
+                    //console.info(curState.marker);
 
 
 
@@ -737,13 +739,13 @@
                     //undo시에 마커가 삭제될때도 인식하기 위해 datdaGet을 통해 가져오는 overlay의 길이도 확인
                     if (curState.marker.length > 0 && markers.length > 0) {
                         if (curState.marker.length == preState.marker.length) {
-                            console.info("length is same");
+                            //console.info("length is same");
                             //현재 기록의 marker 배열의 목록을 조회
 
                             curState.marker.forEach(function (value, index, array) {
                                 //현재 index의 marker x,y 좌표와 과거의 x,y 좌표가 일치하지 않을때,
                                 if (value.x != preState.marker[index].x && value.y != preState.marker[index].y) {
-                                    console.info(index + "번째 마커 좌표 수정됨!");
+                                    //console.info(index + "번째 마커 좌표 수정됨!");
 
                                     //이전 액션 리스너 삭제
                                     //20190930 - removeLitener 작동 잘안함
@@ -755,7 +757,7 @@
                             });
                         }
                         else if (curState.marker.length > preState.marker.length) {
-                            console.info("length is not same");
+                            //console.info("length is not same");
 
                             //가장 최근에 추가된 노드에 액션 추가
                             kakao.maps.event.addListener(markers[curState.marker.length - 1], 'click', onClick_marker);
@@ -779,103 +781,54 @@
             //cursor의 최솟값은 1이다
             else if (history._cursor < historyStackLength) {
 
-                console.info("preCursor: " + preCurosr);
+                console.info("preCursor: " + preCursor);
                 console.info("current cursor: " + history._cursor);
                 
                 //
-                if ( history._cursor == 1) {
-
-                    
+                //cursor가 1을 가리킨다는것
+                // 최대 undo에서 redo 한번
+                if (history._cursor == 2 && preCursor == 1) {
+                    console.info("history._cursor == 2 && preCursor == 1");
+                    console.info(markers);
+                        console.info(markers[0]);
+                    kakao.maps.event.addListener(markers[0], 'click', onClick_marker);
                 }
-                //redo
-                else if (preCurosr < history._cursor) {
-                    console.info(history._stack[history._cursor - 1].marker);
-                    kakao.maps.event.addListener(markers[history._cursor - 1], 'click', onClick_marker);
-
+                else if ( history._cursor > 0 && history._cursor > preCursor) {
+                    console.info("history._cursor > 0 && history._cursor > preCursor");
+                        console.info(history._stack[history._cursor - 1].marker);
+                    console.info("current marker");
+                    console.info(markers);
+                    console.info(markers[markers.length-1]);
+                    kakao.maps.event.addListener(markers[markers.length-1], 'click', onClick_marker);
+                    
 
                 }
                     //노드 삭제의 실행
                     //undo
-                else if (preCurosr > history._cursor) {
-
+                else if (history._cursor > 0 && history._cursor < preCursor ) {
+                    console.info("history._cursor > 0 && history._cursor < preCursor");
                 }
-
-
+                
                 //redo
-
 
                 //redo undo는 어떻게 구분?
 
-                var undoCnt = historyStackLength - history._cursor;
-                console.info("undoCnt : " + undoCnt);
+                //var undoCnt = historyStackLength - history._cursor;
+                //console.info("undoCnt : " + undoCnt);
                 // 두번째를 가르키게 될때
               
-                //else if (historyStackLength >= 3) {
-
-                //    preState = history._stack[historyStackLength - 2];//아무리 작아도 0
-                //    curState = history._stack[historyStackLength - 1];//아무리 작아도 1
-                //    console.info(preState.marker);
-                //    console.info(curState.marker);
-
-
-
-                //    // 이부분 오류남. 
-                //    // curState.(value) 로는 불가
-                //    //curState.marker, curState.circle 식으로 써야함
-
-                //    //갯수가 변하지 않았다면 좌표값을 비교하여 액션 리스너 재생성
-
-                //    //지도에 생성된 marker가 1개이상일때 부터 동작
-                //    //undo시에 마커가 삭제될때도 인식하기 위해 datdaGet을 통해 가져오는 overlay의 길이도 확인
-                //    if (curState.marker.length > 0 && markers.length > 0) {
-                //        if (curState.marker.length == preState.marker.length) {
-                //            console.info("length is same");
-                //            //현재 기록의 marker 배열의 목록을 조회
-
-                //            curState.marker.forEach(function (value, index, array) {
-                //                //현재 index의 marker x,y 좌표와 과거의 x,y 좌표가 일치하지 않을때,
-                //                if (value.x != preState.marker[index].x && value.y != preState.marker[index].y) {
-                //                    console.info(index + "번째 마커 좌표 수정됨!");
-
-                //                    //이전 액션 리스너 삭제
-                //                    //20190930 - removeLitener 작동 잘안함
-                //                    //  공통함수로 처리하게 된다면 삭제 가능.
-                //                    kakao.maps.event.removeListener(markers[index], 'click', onClick_marker);
-                //                    //액션리스너 새로 추가
-                //                    kakao.maps.event.addListener(markers[index], 'click', onClick_marker);
-                //                }
-                //            });
-                //        }
-                //        else if (curState.marker.length > preState.marker.length) {
-                //            console.info("length is not same");
-
-                //            //가장 최근에 추가된 노드에 액션 추가
-                //            kakao.maps.event.addListener(markers[curState.marker.length - 1], 'click', onClick_marker);
-                //        }
-
-                //    }
-
-
-
-                //    preState.marker.forEach(function (currentValue, index, array) {
-                //        console.log(index);
-                //        console.log(currentValue);
-                //        //console.log(array);
-
-
-                //    });
-
-                //}
+                
 
             }
             //console.info(curState);
             //현재의 커서값을 과거의 커서 값으로 설정
-            preCurosr = history._cursor;
+            preCursor = history._cursor;
+            console.info("++++++++++++++++++");
         }
 
         var onClick_marker = function () {
             console.info(this);            
-            alert("k : "+ this.k+"Ga : " + this.k.Ga + "Ha : " + this.k.Ha + 'MARKER click!');
+            alert(this._index +"번째 마커" +"\nk : "+ this.k+"\nGa : " + this.k.Ga + "\nHa : " + this.k.Ha + '\nMARKER click!');
         }
 
 
