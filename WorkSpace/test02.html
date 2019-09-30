@@ -1,0 +1,291 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<title>TO OUR SHARED</title>
+	
+	<!-- Link -->
+	<link href="https://fonts.googleapis.com/css?family=Mansalva&display=swap" rel="stylesheet">
+	
+	<style>
+		body{
+			margin: 0;
+			padding: 0;
+			list-style: none;
+			
+			line-height: 1;
+			
+			/* 전체 배경색 */
+			background-color: rgb(83, 131, 232);
+//			background-color: white;
+		}
+		
+		ul, li{
+			margin: 0;
+			padding: 0;
+			
+			list-style: none;
+			text-decoration: none;
+		}
+		
+		#nav{
+			position: absolute;
+			width: 100%; /* absolute는 부피를 못잡으니까 width 100% */
+			overflow: hidden;
+			font-size: 25px;
+		}
+		
+		a{
+			color: white;
+			text-decoration: none;
+		}
+		
+		#nav:hover{
+			height: 250px;
+			transition: background .5s;
+			background-color: rgb(43, 43, 55);
+		}
+		
+		#nav > ul{
+			text-align: center;
+		}
+		
+		#nav > ul > li{
+			display: inline-block;
+			position: relative;
+			
+			padding: 0px 50px;	
+		}
+		
+		#nav > ul > li > a{
+			display: block;
+			padding: 30px 15px 20px;
+			line-height: 30px;
+			transition: color 0.9s;
+			transition: background-color 0.4s;
+			
+			/* 상단 메뉴 글씨 색 */
+			color: white;
+		}
+		
+		#nav > ul > li:hover > a{
+			/* 메뉴에 마우스 올렸을 때 발생할 스타일(1Depth) */
+			color: rgb(246, 129, 28);
+			transition: border-bottom .5s;
+			border-bottom: 3px solid rgb(246, 129, 28);
+		}
+		
+		#nav ul ul{
+			/*display: none;*/
+			position: absolute;
+			width: 100%; /* absolute는 부피를 가질 수 없다 */
+			
+			margin: 0px -50px;
+		}
+
+		
+		#nav ul ul a {
+			/* 2Depth li Style */
+			display: block;
+			line-height: 40px;
+			font-size: 14px;
+			color: white;
+		}
+		
+		#nav ul ul a:hover{
+			color: rgb(246, 129, 28);
+		}
+		
+		#nav li:hover ul{
+			display: block;
+		}
+		
+		#nav li:nth-child(1) ul{
+			left: 0;
+			width: 100%;
+		}
+		
+		#content{
+			top: 100%;
+			padding: 40px;
+			
+			color: white;
+			text-align: center;
+			background-color: #000;
+		}
+		
+		.section{
+			text-align: center;
+			padding-top: 90px;
+			
+			color: white;
+		}
+		
+		.section01 {
+			text-align: center;
+			display: inline-block;
+			
+			height: 600px;
+		}
+		
+		.nav-logo{
+			/* 웹 사이트 좌측 상단에 위치한 로고 div style */
+		}
+		
+		.nav-logo-item{
+			font-family: 'Mansalva', cursive;
+			font-size: 25px;
+		}
+		
+		.section01-input{
+			width: 500px;
+			display: flex;
+			background-color: white;
+			border-radius: 5px;
+		}
+		
+		.section01-inputText1{
+			width: 450px;
+    		padding: 15px 150px 18px 17px;
+    		border: none;
+    		line-height: 17px;
+    		font-size: 14px;
+    		color: #9b9b9b;
+    		box-sizing: border-box;
+    		outline: none;
+    		box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.19);
+			border-top-left-radius: 5px;
+			border-bottom-left-radius: 5px;
+		}
+		
+		.section01-inputButton1{
+			width: 50px;
+			height: 50px;
+			border: none;
+			outline: none;
+			cursor: pointer;
+			box-sizing: border-box;
+			box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.19);
+			transition: .5s;
+			color: white;
+			background-color: skyblue;
+			border-top-right-radius: 5px;
+			border-bottom-right-radius: 5px;
+		}
+		
+		.section01-inputButton1:hover{
+			opacity: .5s;
+			background-color: deepskyblue;
+		}
+		
+		.section02{
+			height: 800px;
+//			background-color: white;
+			background-color: rgb(83, 131, 232);
+		}
+		
+		.w3-container {
+			color: black;
+		}
+		
+		.nav-log{
+		}
+		
+		.nav-log-area{
+			width: 150px;
+			height: 40px;
+
+			border: 2px solid white;
+			border-radius: 15px;
+			
+		}
+		
+		.nav-log-area:hover{
+			transition: background .3s;
+			background-color: white;
+		}
+		
+		.nav-log-item{
+			font-size: 20px;
+			border: none;
+			outline: none;
+			cursor: pointer;
+
+			margin-top: 7px;
+			color: white;
+			background-color: transparent;
+		}
+		
+	</style>
+</head>
+<body>
+    <nav>
+	<div id = "nav">
+		<ul>
+			<li class="nav-item">
+				<div class = "nav-logo">
+					<a class="navbar-brand" href = "#" class = "nav-logo-item">To Our Shared</a>
+				</div>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href = "#">홈</a>
+			</li>
+			<li class="nav-item"><a class="nav-link" href = "#">이민혁</a>
+				<ul>
+					<li class="nav-item"><a class="nav-link" href = "#">2 Depth(2)</a></li>
+					<li class="nav-item"><a class="nav-link" href = "#">2 Depth(2)</a></li>
+					<li class="nav-item"><a class="nav-link" href = "#">2 Depth(2)</a></li>
+				</ul>
+			</li>
+			<li class="nav-item"><a class="nav-link" href = "#">ABCDEF</a>
+				<ul>
+					<li class="nav-item"><a class="nav-link" href = "#">2 Depth(3)</a></li>
+					<li class="nav-item"><a class="nav-link" href = "#">2 Depth(3)</a></li>
+					<li class="nav-item"><a class="nav-link" href = "#">2 Depth(3)</a></li>
+				</ul>
+			</li>
+			<li class="nav-item"><a class="nav-link" href = "#">커뮤니티</a>
+				<ul>
+					<li class="nav-item"><a class="nav-link" href = "#">자유게시판</a></li>
+					<li class="nav-item"><a class="nav-link" href = "#">리뷰게시판</a></li>
+				</ul>
+			</li>
+			<li class="nav-item"><a class="nav-link" href = "#">고객센터</a>
+				<ul>
+					<li class="nav-item"><a class="nav-link" href = "#">도움말</a></li>
+					<li class="nav-item"><a class="nav-link" href = "#">건의사항</a></li>
+				</ul>
+			</li>
+			<li class="nav-item">
+				<div class = "nav-log">
+					<a class="nav-link" href = "#">
+						<div class = "nav-log-area">
+							<input type = "button" value = "Login" class = "nav-log-item">
+						</div>
+					</a>
+				</div>
+			</li>
+		</ul>
+	</div>
+	</nav>
+	<div class = "section">
+		<div class = "section01">
+			<div>
+				<img src = "./img/map.png" style="width: 350px; height: auto; padding-top: 150px; padding-bottom: 30px;" />
+			</div>
+			<div class = "section01-input">
+				<div>
+					<input type = "text" placeholder = "지역 명을 입력하세요.." class = "section01-inputText1" />
+				</div>
+				<div>
+					<input type = "button" value = "검 색" class = "section01-inputButton1" />
+				</div>
+			</div>
+		</div>
+		<div class = "">
+		</div>
+	</div>
+</body>
+</html>
