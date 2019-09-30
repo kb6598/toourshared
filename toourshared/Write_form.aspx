@@ -753,6 +753,7 @@
                                     var Func;
                                     //이전 액션 리스너 삭제
                                     //20190930 - removeLitener 작동 잘안함
+                                    //  공통함수로 처리하게 된다면 삭제 가능.
                                     kakao.maps.event.removeListener(data[daum.maps.drawing.OverlayType.MARKER][index], 'click', Func);
                                     //액션리스너 새로 추가
                                     kakao.maps.event.addListener(data[daum.maps.drawing.OverlayType.MARKER][index], 'click', function () {
