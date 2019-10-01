@@ -759,46 +759,19 @@
         }
 
         var onClick_marker = function () {
-            console.info(this);
-            // 마커의 좌표를 법정동 상세 주소로 만듬
-            var latlng = new kakao.maps.LatLng(this.k.Ga, this.k.Ha);
-            
-            searchDetailAddrFromCoords(latlng, function (result, status) {
-                if (status === kakao.maps.services.Status.OK) {
-                    var detailAddr = !!result[0].road_address ? '<div>도로명주소 : ' + result[0].road_address.address_name + '</div>' : '';
-                    detailAddr += '<div>지번 주소 : ' + result[0].address.address_name + '</div>';
-
-                    var content = '<div class="bAddr">' +
-                        '<span class="title">법정동 주소정보</span>' +
-                        detailAddr +
-                        '</div>';
-
-
-
-                    // 인포윈도우에 클릭한 위치에 대한 법정동 상세 주소정보를 표시합니다
-                    infowindow.setContent(content);
-                    infowindow.open(map, this);
-                }
-
-
-                //alert(this._index + "번째 마커" + "\nk : " + this.k + "\nGa : " + this.k.Ga + "\nHa : " + this.k.Ha + '\nMARKER click!');
-            });
+            console.info(this);            
+            alert(this._index +"번째 마커" +"\nk : "+ this.k+"\nGa : " + this.k.Ga + "\nHa : " + this.k.Ha + '\nMARKER click!');
         }
 
 
 
 
-        function searchDetailAddrFromCoords(coords, callback) {
-            // 좌표로 법정동 상세 주소 정보를 요청합니다
-            geocoder.coord2Address(coords.getLng(), coords.getLat, callback);
-        }
+
 
 
 
 
         function displayInfowindowOnOverlay(marker) {
-
-
             //var content = '<div style="padding:5px;z-index:1;">' + title + ' <button >추가</button></div>';
             var content = '<div class="wrap">' +
                 '    <div class="info">' +
