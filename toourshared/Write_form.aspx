@@ -593,45 +593,7 @@
             }
         };
 
-        //그리기 끝났을때 동작
-        manager.addListener('drawend', function (data) {
 
-            //console.log('drawend', data);
-
-
-
-            // 생성되는 overlay에 이벤트 추가 
-            //marker에 이벤트를 추천하면 ExtendesMarker
-
-            //if (data.overlayType == "marker") {
-            //    console.info("this is marker");
-            //}
-            //else if (data.overlayType == "polyline") {
-            //    console.info("this is polyline");
-            //}
-            //else if (data.overlayType == "polygon") {
-            //    console.info("this is polygon");
-            //}
-            //else if (data.overlayType == "rectangle") {
-            //    console.info("this is rectangle");
-            //}
-            //else if (data.overlayType == "circle") {
-            //    console.info("this is circle");
-            //}
-
-
-            // 여기서 리스너를 추가하면 redo때 추가가 안됨
-            //kakao.maps.event.addListener(data.target, "click", function () {
-            //    console.info(this);
-            //    console.info(this.k);
-
-
-            //});
-
-
-
-
-        });
 
 
 
@@ -644,21 +606,13 @@
            
             addListenerFromDrawingMap(this._historyStroage);
 
-            //this._historyStroage._stack.forEach(function (currentValue, index, array) {
-            //    console.log(currentValue);
-            //    console.log(index);
-            //    console.log(array);
-            //});
         });
         // e 는 삭제되는 대상 오버레이가 삭제될때 listener 삭제
         // 대상이 삭제되면 listener 도 같이 삭제됨
         // 애초에 리스너가 ExtenedMarker의 부분 요소로 들어가기 때문에
         // 같이 삭제됨
         manager.addListener('remove', function (e) {
-            //console.info("삭제");
-            //console.info(e);
-            //var handler;
-            //kakao.maps.event.removeListener(e.target, 'click', handler);
+
         });
 
 
@@ -699,9 +653,9 @@
            
 
 
-            // 알고리즘 다시짜자
 
-                                    // historyStackLength의 최초 생성시 길이는 2이기때문에 인덱스 오류 걱정 없음 하지만 처리해주어야 속편함
+            // historyStackLength는 최초 1의 값을 (null 아무 오버레이도 없는 깨끗한 상태)를 가지짖만
+            //stat_changed 발생시 읽어오는 값이 2이기때문에 인덱스 오류 걱정 없음 하지만 처리해주어야 속편함
             console.info(history._stack);
             //console.info("****************marker");
 
@@ -722,16 +676,6 @@
 
                     preState = history._stack[historyStackLength - 2];//아무리 작아도 0
                     curState = history._stack[historyStackLength - 1];//아무리 작아도 1
-                    //console.info("preState.marker");
-                    //console.info(preState.marker);
-                    //console.info("curState.marker");
-                    //console.info(curState.marker);
-
-
-
-                    // 이부분 오류남. 
-                    // curState.(value) 로는 불가
-                    //curState.marker, curState.circle 식으로 써야함
 
                     //갯수가 변하지 않았다면 좌표값을 비교하여 액션 리스너 재생성
 
@@ -765,16 +709,6 @@
 
                     }
 
-
-
-                    //preState.marker.forEach(function (currentValue, index, array) {
-                    //    console.log(index);
-                    //    console.log(currentValue);
-                    //    //console.log(array);
-
-
-                    //});
-
                 }
 
             }
@@ -787,37 +721,35 @@
                 //
                 //cursor가 1을 가리킨다는것
                 // 최대 undo에서 redo 한번
+                // cursor 아무것도 없을때가 1
+                // 오버레이 하나라도 추가되면 2
                 if (history._cursor == 2 && preCursor == 1) {
                     console.info("history._cursor == 2 && preCursor == 1");
                     console.info(markers);
-                        console.info(markers[0]);
+                    console.info(markers[0]);
+                    //가장 첫번째 마커에 액션 추가
                     kakao.maps.event.addListener(markers[0], 'click', onClick_marker);
                 }
-                else if ( history._cursor > 0 && history._cursor > preCursor) {
+                //현재 커서의 값이 과거보다 크다면, redo 하는 중
+                else if ( history._cursor > 2 && history._cursor > preCursor) {
                     console.info("history._cursor > 0 && history._cursor > preCursor");
                         console.info(history._stack[history._cursor - 1].marker);
                     console.info("current marker");
                     console.info(markers);
-                    console.info(markers[markers.length-1]);
+                    console.info(markers[markers.length - 1]);
+                    //가장 마지막 마커에 액션추가
+                    //새로 생선된 마커는 가장 뒤의 마커
                     kakao.maps.event.addListener(markers[markers.length-1], 'click', onClick_marker);
                     
 
                 }
                     //노드 삭제의 실행
                     //undo
-                else if (history._cursor > 0 && history._cursor < preCursor ) {
+                    // 현재 커서의 값이 과거보다 작다면 undo 하는중
+                else if (history._cursor > 2 && history._cursor < preCursor ) {
                     console.info("history._cursor > 0 && history._cursor < preCursor");
-                }
-                
-                //redo
+                }            
 
-                //redo undo는 어떻게 구분?
-
-                //var undoCnt = historyStackLength - history._cursor;
-                //console.info("undoCnt : " + undoCnt);
-                // 두번째를 가르키게 될때
-              
-                
 
             }
             //console.info(curState);
@@ -830,6 +762,7 @@
             console.info(this);            
             alert(this._index +"번째 마커" +"\nk : "+ this.k+"\nGa : " + this.k.Ga + "\nHa : " + this.k.Ha + '\nMARKER click!');
         }
+
 
 
 
@@ -861,32 +794,11 @@
             infowindow.open(drawingMap, marker);
         }
 
-
-        // Drawing Manager에서 데이터를 가져와 도형을 표시할 아래쪽 지도 div
-        //var mapContainer = document.getElementById('map'),
-        //    mapOptions = { 
-        //        center: new daum.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
-        //        level: 3 // 지도의 확대 레벨
-        //    };
-
-        // 지도 div와 지도 옵션으로 지도를 생성합니다
-        //var map = new daum.maps.Map(mapContainer, mapOptions),
         overlays = []; // 지도에 그려진 도형을 담을 배열
 
 
 
 
-
-        //// 아래 지도에 그려진 도형이 있다면 모두 지웁니다
-        //function removeOverlays() {
-        //    var len = overlays.length, i = 0;
-
-        //    for (; i < len; i++) {
-        //        overlays[i].setMap(null);
-        //    }
-
-        //    overlays = [];
-        //}
 
 
 
