@@ -230,12 +230,13 @@
             }
 
 
-        <!-- 커스텀 오버레이 스타일-- >
+        <!--
+        커스텀 오버레이 스타일-- >
         .wrap {
             position: absolute;
             left: 0;
             bottom: 40px;
-            width: 250px;
+            width: 288px;
             height: 132px;
             margin-left: -144px;
             text-align: left;
@@ -252,7 +253,7 @@
 
         .wrap .info {
             width: 286px;
-            height: 140px;
+            height: 120px;
             border-radius: 5px;
             border-bottom: 2px solid #ccc;
             border-right: 1px solid #ccc;
@@ -295,8 +296,8 @@
 
         .info .desc {
             position: relative;
-            margin: 13px 0 0 0px;
-            height: 120px;
+            margin: 13px 0 0 90px;
+            height: 75px;
         }
 
         .desc .ellipsis {
@@ -309,6 +310,17 @@
             font-size: 11px;
             color: #888;
             margin-top: -2px;
+        }
+
+        .info .img {
+            position: absolute;
+            top: 6px;
+            left: 5px;
+            width: 73px;
+            height: 71px;
+            border: 1px solid #ddd;
+            color: #888;
+            overflow: hidden;
         }
 
         .info:after {
@@ -631,17 +643,27 @@
 
             // 오버레이 객체 실제로 액션을 추가할 대상
             var data = manager.getOverlays();
+
+
+            var arrow = daum.maps.drawing.OverlayType.ARROW;
+            var circle = daum.maps.drawing.OverlayType.CIRCLE;
+            var ellipse = daum.maps.drawing.OverlayType.ELLIPSE;
+            var marker = daum.maps.drawing.OverlayType.MARKER;
+            var polyline = daum.maps.drawing.OverlayType.POLYLINE;
+            var polygon = daum.maps.drawing.OverlayType.POLYGON;
+            var rectangle = daum.maps.drawing.OverlayType.RECTANGLE;
+            
             var arrows = data[daum.maps.drawing.OverlayType.ARROW];
             var circles = data[daum.maps.drawing.OverlayType.CIRCLE];
-            var ellipse = data[daum.maps.drawing.OverlayType.ELLIPSE];
+            var ellipsese = data[daum.maps.drawing.OverlayType.ELLIPSE];
             var markers = data[daum.maps.drawing.OverlayType.MARKER];
             var polylines = data[daum.maps.drawing.OverlayType.POLYLINE];
             var polygons = data[daum.maps.drawing.OverlayType.POLYGON];
             var rectangles = data[daum.maps.drawing.OverlayType.RECTANGLE];
 
-           
+            var overlayType = ["arrow","circle","ellipse","marker","polyline","polygon","rectangle"];
 
-
+            console.info(overlayType);
 
             // historyStackLength는 최초 1의 값을 (null 아무 오버레이도 없는 깨끗한 상태)를 가지짖만
             //stat_changed 발생시 읽어오는 값이 2이기때문에 인덱스 오류 걱정 없음 하지만 처리해주어야 속편함
@@ -656,10 +678,14 @@
                 if (historyStackLength == 2) {
                     //첫번째 히스토리의 마커 첫번째
                     console.info(history._stack[1]);
-                    if (history._stack[1].marker.length > 0) {
-                        kakao.maps.event.addListener(markers[0], 'click',onClick_marker);                        
-                        //console.info(history._stack[1].marker);
-                    }
+                    console.info(history._stack[1][marker]);
+                    overlayType.forEach(function (value, index, array) {
+                        if (history._stack[1][value].length > 0) {
+                            kakao.maps.event.addListener(data[marker][0], 'click', onClick_marker);
+                            //console.info(history._stack[1].marker);
+                        }
+                    });
+
                 }
                 else if (historyStackLength >= 3) {
 
@@ -753,7 +779,7 @@
         var customOverlay = new kakao.maps.CustomOverlay({
             clickable: true,
             xAnchor: 0.5,
-            yAnchor: 1.25,
+            yAnchor: 1.25, 
             zIndex: 3
         });
 
