@@ -583,15 +583,8 @@
         }
 
 
-        //주소 - 좌표간 변환 서비스 객체를 생성한다.
-        var geocoder = new kakao.maps.services.Geocoder();
 
-        var callback = function (result, status) {
 
-            if (status === kakao.maps.services.Status.OK) {
-                console.log('그런 너를 마주칠까 ' + result[0].address.address_name + '을 못가');
-            }
-        };
 
 
 
@@ -758,19 +751,77 @@
             console.info("++++++++++++++++++");
         }
 
+        //주소 - 좌표간 변환 서비스 객체를 생성한다.
+        var geocoder = new kakao.maps.services.Geocoder();
+
+
         var onClick_marker = function () {
             console.info(this);            
+<<<<<<< HEAD
             alert(this._index +"번째 마커" +"\nk : "+ this.k+"\nGa : " + this.k.Ga + "\nHa : " + this.k.Ha + '\nMARKER click!');
+=======
+            //alert(this._index + "번째 마커" + "\nk : " + this.k + "\nGa : " + this.k.Ga + "\nHa : " + this.k.Ha + '\nMARKER click!');
+            
+            var overlayLatLng = new kakao.maps.LatLng(this.k.Ga, this.k.Ha);
+            console.info(overlayLatLng);
+            searchDetailAddrFromCoords(overlayLatLng, function (result, status) {
+                console.info(result);
+                if (status === kakao.maps.services.Status.OK) {
+                    var detailAddr = !!result[0].road_address ? '<div>도로명주소 : ' + result[0].road_address.address_name + '</div>' : '';
+                    detailAddr += '<div>지번 주소 : ' + result[0].address.address_name + '</div>';
+
+                    var content = '<div class="bAddr">' +
+                        '<span class="title">법정동 주소정보</span>' +
+                        detailAddr +
+                        '</div>';
+
+
+                    // 인포윈도우에 클릭한 위치에 대한 법정동 상세 주소정보를 표시합니다
+
+                    infowindow.setContent(content);
+                    infowindow.open(drawingMap, this);
+                }
+            });
+
+
+>>>>>>> pk
+        }
+        //-----------------------------------------------
+        // 좌표를 주소로
+        //----------------------------------------------
+        // 현재 지도 중심좌표로 주소를 검색해서 지도 좌측 상단에 표시합니다
+        // 주소-좌표 변환 객체를 생성합니다
+        //var geocoder = new kakao.maps.services.Geocoder();
+
+       
+
+
+
+<<<<<<< HEAD
+
+
+
+
+
+=======
+        function searchDetailAddrFromCoords(coords, callback) {
+            // 좌표로 법정동 상세 주소 정보를 요청합니다
+            console.info("좌표로 법정동 상세 주소 정보를 요청합니다");
+            geocoder.coord2Address(coords.getLng(), coords.getLat(), callback);
+            
         }
 
 
 
 
+        //---------------------------------------------
 
 
 
 
 
+
+>>>>>>> pk
         function displayInfowindowOnOverlay(marker) {
             //var content = '<div style="padding:5px;z-index:1;">' + title + ' <button >추가</button></div>';
             var content = '<div class="wrap">' +
