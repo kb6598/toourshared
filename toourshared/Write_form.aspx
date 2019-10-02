@@ -586,7 +586,9 @@
 
 
 
-
+        manager.addListener('drawstart', function(data) {
+   closeCusOverlay();
+});
 
 
 
@@ -594,7 +596,7 @@
         // travelRoute와 변경
         manager.addListener('state_changed', function () {
             console.info("state_changed++++++++++++++++++++++++");
-
+            
             console.info(this._historyStroage);
            
             addListenerFromDrawingMap(this._historyStroage);
@@ -754,29 +756,76 @@
         //주소 - 좌표간 변환 서비스 객체를 생성한다.
         var geocoder = new kakao.maps.services.Geocoder();
 
+        var customOverlay = new kakao.maps.CustomOverlay({
+            clickable: true,
+            xAnchor: 0.5,
+            yAnchor: 1.25,
+            zIndex: 3
+        });
+
+        function closeCusOverlay() {
+            customOverlay.setMap(null);
+        }
 
         var onClick_marker = function () {
             console.info(this);            
             //alert(this._index + "번째 마커" + "\nk : " + this.k + "\nGa : " + this.k.Ga + "\nHa : " + this.k.Ha + '\nMARKER click!');
-            
-            var overlayLatLng = new kakao.maps.LatLng(this.k.Ga, this.k.Ha);
-            console.info(overlayLatLng);
-            searchDetailAddrFromCoords(overlayLatLng, function (result, status) {
-                console.info(result);
-                if (status === kakao.maps.services.Status.OK) {
-                    var detailAddr = !!result[0].road_address ? '<div>도로명주소 : ' + result[0].road_address.address_name + '</div>' : '';
-                    detailAddr += '<div>지번 주소 : ' + result[0].address.address_name + '</div>';
 
-                    var content = '<div class="bAddr">' +
-                        '<span class="title">법정동 주소정보</span>' +
+
+            wtmX = this.k.Ga;
+            wtmY = this.k.Ha;
+
+            searchDetailAddrFromCoords(wtmX, wtmY, function (result, status) {
+
+                if (status === kakao.maps.services.Status.OK) {
+                    console.info(result);
+
+
+                    var detailAddr = !!result[0].road_address ? '<div class="ellipsis">' + result[0].road_address.address_name + '</div>' : '';
+                    detailAddr += '<div class="jibun ellipsis">' + result[0].address.address_name + '</div>';
+
+                    var content = '<div class="wrap">' +
+                        '    <div class="info">' +
+                        '        <div class="title">' +
+                        "place.place_name" +
+                        '            <div class="close" onclick="closeCusOverlay()" title="닫기"></div>' +
+                        '        </div>' +
+                        '        <div class="body">' +
+                        '            <div class="desc">' +
                         detailAddr +
+                        '   <div class="jibun ellipsis">' + "place.phone" + '</div>' +
+                        '                <div><a href="' + "place.place_url" + '" target="_blank" class="link">상세페이지</a></div>' +
+                        '            </div>' +
+                        '        </div>' +
+                        '    </div>' +
                         '</div>';
 
+                    geocoder.transCoord(wtmX, wtmY,
+                        function (result, status) {
 
-                    // 인포윈도우에 클릭한 위치에 대한 법정동 상세 주소정보를 표시합니다
+                            // 정상적으로 검색이 완료됐으면 
+                            if (status === kakao.maps.services.Status.OK) {
 
-                    infowindow.setContent(content);
-                    infowindow.open(drawingMap, this);
+                                customOverlay.setContent(content);
+                                customOverlay.setPosition(new kakao.maps.LatLng(result[0].y, result[0].x));
+                                customOverlay.setMap(drawingMap);
+                                
+                                
+                            }
+                        }
+                        , {
+                            input_coord: kakao.maps.services.Coords.WCONGNAMUL, // 변환을 위해 입력한 좌표계 입니다
+                            output_coord: kakao.maps.services.Coords.WGS84 // 변환 결과로 받을 좌표계 입니다 
+                        });
+
+
+                    console.info(content);
+
+
+                    
+
+                    //infowindow.setContent(content);
+                    //infowindow.open(drawingMap, this);
                 }
             });
 
@@ -788,15 +837,36 @@
         // 현재 지도 중심좌표로 주소를 검색해서 지도 좌측 상단에 표시합니다
         // 주소-좌표 변환 객체를 생성합니다
         //var geocoder = new kakao.maps.services.Geocoder();
+        //// WTM 좌표를 WGS84 좌표계의 좌표로 변환합니다
 
-       
+        //geocoder.transCoord(wtmX, wtmY, transCoordCB, {
+        //    input_coord: kakao.maps.services.Coords.WCONGNAMUL, // 변환을 위해 입력한 좌표계 입니다
+        //    output_coord: kakao.maps.services.Coords.WGS84 // 변환 결과로 받을 좌표계 입니다 
+        //});
+
+        //// 좌표 변환 결과를 받아서 처리할 콜백함수 입니다.
+        //function transCoordCB(result, status) {
+
+        //    // 정상적으로 검색이 완료됐으면 
+        //    if (status === kakao.maps.services.Status.OK) {
+
+        //        // 마커를 변환된 위치에 표시합니다
+        //        var marker = new kakao.maps.Marker({
+        //            position: new kakao.maps.LatLng(result[0].y, result[0].x), // 마커를 표시할 위치입니다
+        //            map: map // 마커를 표시할 지도객체입니다
+        //        })
+        //    }
+        //}
 
 
 
-        function searchDetailAddrFromCoords(coords, callback) {
+        function searchDetailAddrFromCoords(wtmX, wtmY, callback) {
             // 좌표로 법정동 상세 주소 정보를 요청합니다
             console.info("좌표로 법정동 상세 주소 정보를 요청합니다");
-            geocoder.coord2Address(coords.getLng(), coords.getLat(), callback);
+
+            // extendedMarker로부터 오는 좌표값 k.ga k.ha 는 WCONGNAMUL 형식 좌표
+            geocoder.coord2Address( wtmX, wtmY, callback, { input_coord: kakao.maps.services.Coords.WCONGNAMUL });
+            
             
         }
 
