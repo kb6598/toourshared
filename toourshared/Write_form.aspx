@@ -586,17 +586,11 @@
 
 
 
-        manager.addListener('drawstart', function(data) {
-   closeCusOverlay();
-});
-
-
-
         // drawManager의 상태가 변경되고
         // travelRoute와 변경
         manager.addListener('state_changed', function () {
             console.info("state_changed++++++++++++++++++++++++");
-            
+            closeCusOverlay();
             console.info(this._historyStroage);
            
             addListenerFromDrawingMap(this._historyStroage);
