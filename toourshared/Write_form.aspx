@@ -631,9 +631,10 @@
 
             // 오버레이 객체 실제로 액션을 추가할 대상
             var data = manager.getOverlays();
+            console.info(data);
             var arrows = data[daum.maps.drawing.OverlayType.ARROW];
             var circles = data[daum.maps.drawing.OverlayType.CIRCLE];
-            var ellipse = data[daum.maps.drawing.OverlayType.ELLIPSE];
+            var ellipses = data[daum.maps.drawing.OverlayType.ELLIPSE];
             var markers = data[daum.maps.drawing.OverlayType.MARKER];
             var polylines = data[daum.maps.drawing.OverlayType.POLYLINE];
             var polygons = data[daum.maps.drawing.OverlayType.POLYGON];
@@ -652,14 +653,49 @@
             if (history._cursor == historyStackLength) {
 
                 //console.info("추가, 수정");
-
+                //첫번째 오버레이 처리
                 if (historyStackLength == 2) {
                     //첫번째 히스토리의 마커 첫번째
                     console.info(history._stack[1]);
-                    if (history._stack[1].marker.length > 0) {
-                        kakao.maps.event.addListener(markers[0], 'click',onClick_marker);                        
+                    //화살표
+
+                    if (history._stack[1].arrow.length > 0) {
+                        kakao.maps.event.addListener(arrows[0], 'click', onClick_marker);
                         //console.info(history._stack[1].marker);
                     }
+                    //원
+                    if (history._stack[1].circle.length > 0) {
+                        kakao.maps.event.addListener(circles[0], 'click', onClick_marker);
+                        //console.info(history._stack[1].marker);
+                    }
+                    //타원
+                    if (history._stack[1].ellipse.length > 0) {
+                        kakao.maps.event.addListener(ellipses[0], 'click', onClick_marker);
+                        //console.info(history._stack[1].marker);
+                    }
+                    //폴리라인
+                    if (history._stack[1].polyline.length > 0) {
+                        kakao.maps.event.addListener(polylines[0], 'click', onClick_marker);
+                        //console.info(history._stack[1].marker);
+                    }
+
+                    //다각형
+                    if (history._stack[1].polygon.length > 0) {
+                        kakao.maps.event.addListener(polygons[0], 'click', onClick_marker);
+                        //console.info(history._stack[1].marker);
+                    }
+                    //사각형
+                    if (history._stack[1].rectangle.length > 0) {
+                        kakao.maps.event.addListener(rectangles[0], 'click', onClick_marker);
+                        //console.info(history._stack[1].marker);
+                    }
+
+                    //마커
+                    if (history._stack[1].marker.length > 0) {
+                        kakao.maps.event.addListener(markers[0], 'click', onClick_marker);
+                        //console.info(history._stack[1].marker);
+                    }
+
                 }
                 else if (historyStackLength >= 3) {
 
@@ -768,7 +804,9 @@
 
             wtmX = this.k.Ga;
             wtmY = this.k.Ha;
-
+                    //-----------------------------------------------
+        // 좌표를 주소로
+        //----------------------------------------------
             searchDetailAddrFromCoords(wtmX, wtmY, function (result, status) {
 
                 if (status === kakao.maps.services.Status.OK) {
@@ -825,9 +863,7 @@
 
 
         }
-        //-----------------------------------------------
-        // 좌표를 주소로
-        //----------------------------------------------
+
         // 현재 지도 중심좌표로 주소를 검색해서 지도 좌측 상단에 표시합니다
         // 주소-좌표 변환 객체를 생성합니다
         //var geocoder = new kakao.maps.services.Geocoder();
@@ -874,28 +910,7 @@
 
 
 
-        function displayInfowindowOnOverlay(marker) {
-            //var content = '<div style="padding:5px;z-index:1;">' + title + ' <button >추가</button></div>';
-            var content = '<div class="wrap">' +
-                '    <div class="info">' +
-                '        <div class="title">' +
-                place.place_name +
-                '            <div class="close" onclick="closeOverlay()" title="닫기"></div>' +
-                '        </div>' +
-                '        <div class="body">' +
-                '            <div class="desc">' +
-                '                <div class="ellipsis">' + place.road_address_name + '</div>' +
-                '                <div class="jibun ellipsis">' + place.address_name + '</div>' +
-                '   <div class="jibun ellipsis">' + place.phone + '</div>' +
-                '                <div><a href="' + place.place_url + '" target="_blank" class="link">상세페이지</a></div>' +
-                '<div class="btn btn-secondary" onclick=\'addTravelRoute("' + place.place_name + '","' + place.road_address_name + '","' + place.ddress_name + '","' + place.phone + '","' + place.place_url + '","' + place.x + '","' + place.y + '")\'>여행경로에 추가</div>' +
-                '            </div>' +
-                '        </div>' +
-                '    </div>' +
-                '</div>';
-            infowindow.setContent(content);
-            infowindow.open(drawingMap, marker);
-        }
+    
 
         overlays = []; // 지도에 그려진 도형을 담을 배열
 
