@@ -760,7 +760,8 @@
 
         var onClick_marker = function () {
             console.info(this);            
-            alert(this._index +"번째 마커" +"\nk : "+ this.k+"\nGa : " + this.k.Ga + "\nHa : " + this.k.Ha + '\nMARKER click!');
+            alert(this._index + "번째 마커" + "\nk : " + this.k + "\nGa : " + this.k.Ga + "\nHa : " + this.k.Ha + '\nMARKER click!');
+            displayInfowindowOnOverlay(this);
         }
 
 
