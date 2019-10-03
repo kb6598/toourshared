@@ -230,12 +230,13 @@
             }
 
 
-        <!-- 커스텀 오버레이 스타일-- >
+        <!--
+        커스텀 오버레이 스타일-- >
         .wrap {
             position: absolute;
             left: 0;
             bottom: 40px;
-            width: 250px;
+            width: 288px;
             height: 132px;
             margin-left: -144px;
             text-align: left;
@@ -252,7 +253,7 @@
 
         .wrap .info {
             width: 286px;
-            height: 140px;
+            height: 120px;
             border-radius: 5px;
             border-bottom: 2px solid #ccc;
             border-right: 1px solid #ccc;
@@ -295,8 +296,8 @@
 
         .info .desc {
             position: relative;
-            margin: 13px 0 0 0px;
-            height: 120px;
+            margin: 13px 0 0 10px;
+            height: 75px;
         }
 
         .desc .ellipsis {
@@ -309,6 +310,17 @@
             font-size: 11px;
             color: #888;
             margin-top: -2px;
+        }
+
+        .info .img {
+            position: absolute;
+            top: 6px;
+            left: 5px;
+            width: 73px;
+            height: 71px;
+            border: 1px solid #ddd;
+            color: #888;
+            overflow: hidden;
         }
 
         .info:after {
@@ -467,7 +479,7 @@
             guideTooltip: ['draw', 'drag', 'edit'],
             arrowOptions: {
                 draggable: true,
-                removable: false,
+                removable: true,
                 editable: true,
                 strokeWeight: 3,
                 strokeOpacity: 0.8,
@@ -502,7 +514,7 @@
             },
             polylineOptions: { // 선 옵션입니다
                 draggable: true, // 그린 후 드래그가 가능하도록 설정합니다
-                removable: false, // 그린 후 삭제 할 수 있도록 x 버튼이 표시됩니다
+                removable: true, // 그린 후 삭제 할 수 있도록 x 버튼이 표시됩니다
                 editable: true, // 그린 후 수정할 수 있도록 설정합니다 
                 strokeColor: '#39f', // 선 색
                 hintStrokeStyle: 'dash', // 그리중 마우스를 따라다니는 보조선의 선 스타일
@@ -631,18 +643,28 @@
 
             // 오버레이 객체 실제로 액션을 추가할 대상
             var data = manager.getOverlays();
-            console.info(data);
+
+
+            var arrow = daum.maps.drawing.OverlayType.ARROW;
+            var circle = daum.maps.drawing.OverlayType.CIRCLE;
+            var ellipse = daum.maps.drawing.OverlayType.ELLIPSE;
+            var marker = daum.maps.drawing.OverlayType.MARKER;
+            var polyline = daum.maps.drawing.OverlayType.POLYLINE;
+            var polygon = daum.maps.drawing.OverlayType.POLYGON;
+            var rectangle = daum.maps.drawing.OverlayType.RECTANGLE;
+            
             var arrows = data[daum.maps.drawing.OverlayType.ARROW];
             var circles = data[daum.maps.drawing.OverlayType.CIRCLE];
-            var ellipses = data[daum.maps.drawing.OverlayType.ELLIPSE];
+            var ellipsese = data[daum.maps.drawing.OverlayType.ELLIPSE];
+
             var markers = data[daum.maps.drawing.OverlayType.MARKER];
             var polylines = data[daum.maps.drawing.OverlayType.POLYLINE];
             var polygons = data[daum.maps.drawing.OverlayType.POLYGON];
             var rectangles = data[daum.maps.drawing.OverlayType.RECTANGLE];
 
-           
-
-
+            //var overlayType = ["arrow","circle","ellipse","marker","polyline","polygon","rectangle"];
+            var overlayType = ["circle","ellipse","marker","polygon","rectangle"];
+            console.info(overlayType);
 
             // historyStackLength는 최초 1의 값을 (null 아무 오버레이도 없는 깨끗한 상태)를 가지짖만
             //stat_changed 발생시 읽어오는 값이 2이기때문에 인덱스 오류 걱정 없음 하지만 처리해주어야 속편함
@@ -657,44 +679,16 @@
                 if (historyStackLength == 2) {
                     //첫번째 히스토리의 마커 첫번째
                     console.info(history._stack[1]);
-                    //화살표
 
-                    if (history._stack[1].arrow.length > 0) {
-                        kakao.maps.event.addListener(arrows[0], 'click', onClick_marker);
-                        //console.info(history._stack[1].marker);
-                    }
-                    //원
-                    if (history._stack[1].circle.length > 0) {
-                        kakao.maps.event.addListener(circles[0], 'click', onClick_marker);
-                        //console.info(history._stack[1].marker);
-                    }
-                    //타원
-                    if (history._stack[1].ellipse.length > 0) {
-                        kakao.maps.event.addListener(ellipses[0], 'click', onClick_marker);
-                        //console.info(history._stack[1].marker);
-                    }
-                    //폴리라인
-                    if (history._stack[1].polyline.length > 0) {
-                        kakao.maps.event.addListener(polylines[0], 'click', onClick_marker);
-                        //console.info(history._stack[1].marker);
-                    }
+                    console.info(history._stack[1][marker]);
+                    overlayType.forEach(function (value, index, array) {
+                        console.info(history._stack[1][value].length)
+                        if (history._stack[1][value].length > 0) {
+                            kakao.maps.event.addListener(data[value][0], 'click', onClick_overlay);
+                            //console.info(history._stack[1].marker);
+                        }
+                    });
 
-                    //다각형
-                    if (history._stack[1].polygon.length > 0) {
-                        kakao.maps.event.addListener(polygons[0], 'click', onClick_marker);
-                        //console.info(history._stack[1].marker);
-                    }
-                    //사각형
-                    if (history._stack[1].rectangle.length > 0) {
-                        kakao.maps.event.addListener(rectangles[0], 'click', onClick_marker);
-                        //console.info(history._stack[1].marker);
-                    }
-
-                    //마커
-                    if (history._stack[1].marker.length > 0) {
-                        kakao.maps.event.addListener(markers[0], 'click', onClick_marker);
-                        //console.info(history._stack[1].marker);
-                    }
 
                 }
                 else if (historyStackLength >= 3) {
@@ -706,33 +700,36 @@
 
                     //지도에 생성된 marker가 1개이상일때 부터 동작
                     //undo시에 마커가 삭제될때도 인식하기 위해 datdaGet을 통해 가져오는 overlay의 길이도 확인
-                    if (curState.marker.length > 0 && markers.length > 0) {
-                        if (curState.marker.length == preState.marker.length) {
-                            //console.info("length is same");
-                            //현재 기록의 marker 배열의 목록을 조회
 
-                            curState.marker.forEach(function (value, index, array) {
-                                //현재 index의 marker x,y 좌표와 과거의 x,y 좌표가 일치하지 않을때,
-                                if (value.x != preState.marker[index].x && value.y != preState.marker[index].y) {
-                                    //console.info(index + "번째 마커 좌표 수정됨!");
+                    overlayType.forEach(function (ovValue, index, array) {
+                        if (curState[ovValue].length > 0 && data[ovValue].length > 0) {
+                            if (curState[ovValue].length == preState[ovValue].length) {
+                                //console.info("length is same");
+                                //현재 기록의 marker 배열의 목록을 조회
 
-                                    //이전 액션 리스너 삭제
-                                    //20190930 - removeLitener 작동 잘안함
-                                    //  공통함수로 처리하게 된다면 삭제 가능.
-                                    kakao.maps.event.removeListener(markers[index], 'click', onClick_marker);
-                                    //액션리스너 새로 추가
-                                    kakao.maps.event.addListener(markers[index], 'click', onClick_marker);
-                                }
-                            });
+                                curState[ovValue].forEach(function (value, index, array) {
+                                    //현재 index의 marker x,y 좌표와 과거의 x,y 좌표가 일치하지 않을때,
+                                    if (value.x != preState[ovValue][index].x && value.y != preState[ovValue][index].y) {
+                                        //console.info(index + "번째 마커 좌표 수정됨!");
+
+                                        //이전 액션 리스너 삭제
+                                        //20190930 - removeLitener 작동 잘안함
+                                        //  공통함수로 처리하게 된다면 삭제 가능.
+                                        kakao.maps.event.removeListener(data[ovValue][index], 'click', onClick_overlay);
+                                        //액션리스너 새로 추가
+                                        kakao.maps.event.addListener(data[ovValue][index], 'click', onClick_overlay);
+                                    }
+                                });
+                            }
+                            else if (curState[ovValue].length > preState[ovValue].length) {
+                                //console.info("length is not same");
+
+                                //가장 최근에 추가된 노드에 액션 추가
+                                kakao.maps.event.addListener(data[ovValue][curState[ovValue].length - 1], 'click', onClick_overlay);
+                            }
                         }
-                        else if (curState.marker.length > preState.marker.length) {
-                            //console.info("length is not same");
 
-                            //가장 최근에 추가된 노드에 액션 추가
-                            kakao.maps.event.addListener(markers[curState.marker.length - 1], 'click', onClick_marker);
-                        }
-
-                    }
+                    });
 
                 }
 
@@ -753,18 +750,21 @@
                     console.info(markers);
                     console.info(markers[0]);
                     //가장 첫번째 마커에 액션 추가
-                    kakao.maps.event.addListener(markers[0], 'click', onClick_marker);
+                    overlayType.forEach(function (value, index, array) {
+                        kakao.maps.event.addListener(data[value][0], 'click', onClick_overlay);
+                    });
+                    
                 }
                 //현재 커서의 값이 과거보다 크다면, redo 하는 중
                 else if ( history._cursor > 2 && history._cursor > preCursor) {
                     console.info("history._cursor > 0 && history._cursor > preCursor");
-                        console.info(history._stack[history._cursor - 1].marker);
-                    console.info("current marker");
-                    console.info(markers);
-                    console.info(markers[markers.length - 1]);
+
                     //가장 마지막 마커에 액션추가
                     //새로 생선된 마커는 가장 뒤의 마커
-                    kakao.maps.event.addListener(markers[markers.length-1], 'click', onClick_marker);
+                    overlayType.forEach(function (value, index, array) {
+                        kakao.maps.event.addListener(data[value][data[value].length - 1], 'click', onClick_overlay);
+                    });
+ 
                     
 
                 }
@@ -789,7 +789,7 @@
         var customOverlay = new kakao.maps.CustomOverlay({
             clickable: true,
             xAnchor: 0.5,
-            yAnchor: 1.25,
+            yAnchor: 1.25, 
             zIndex: 3
         });
 
@@ -797,16 +797,55 @@
             customOverlay.setMap(null);
         }
 
-        var onClick_marker = function () {
-            console.info(this);            
+        var onClick_overlay = function () {
+
+            var wtmX
+            var wtmY
+
+            console.info("onClick_overlay");
             //alert(this._index + "번째 마커" + "\nk : " + this.k + "\nGa : " + this.k.Ga + "\nHa : " + this.k.Ha + '\nMARKER click!');
+            console.info(this);
+            if (this.k == null) {
+                console.info("detect");
+                //ExtendedRectangle has za{ea,ja,ka,la} as coords
+                if (this.za != null) {
+                    console.info("convert coords.. fer rect");
+                    wtmY = (this.za.ka + this.za.la) / 2;
+                    wtmX = (this.za.ea + this.za.ja) / 2;
+
+                    console.info(wtmX + ":" + wtmY);
+                    //ExtendedPolygon has ig{0: {ga: ha:}, }
+                } else if (this.Ig != null) {
+                    var gaTotal = 0;
+                    var haTotal = 0;
+                    this.Ig.forEach(function (value, index, array) {
+                        gaTotal += value.Ga;
+                        haTotal += value.Ha;
+                    });
+                    wtmX = gaTotal / this.Ig.length;
+                    wtmY = haTotal / this.Ig.length;
+
+                }
 
 
-            wtmX = this.k.Ga;
-            wtmY = this.k.Ha;
+
+            }
+            else {
+                wtmX = this.k.Ga;
+                wtmY = this.k.Ha;
+            }
+
+
+
                     //-----------------------------------------------
         // 좌표를 주소로
         //----------------------------------------------
+
+
+
+            console.info(wtmX+":"+wtmY);
+
+
             searchDetailAddrFromCoords(wtmX, wtmY, function (result, status) {
 
                 if (status === kakao.maps.services.Status.OK) {
@@ -837,12 +876,9 @@
 
                             // 정상적으로 검색이 완료됐으면 
                             if (status === kakao.maps.services.Status.OK) {
-
                                 customOverlay.setContent(content);
                                 customOverlay.setPosition(new kakao.maps.LatLng(result[0].y, result[0].x));
                                 customOverlay.setMap(drawingMap);
-                                
-                                
                             }
                         }
                         , {
@@ -854,7 +890,7 @@
                     console.info(content);
 
 
-                    
+
 
                     //infowindow.setContent(content);
                     //infowindow.open(drawingMap, this);
