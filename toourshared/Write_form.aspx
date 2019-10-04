@@ -603,7 +603,7 @@
         manager.addListener('state_changed', function () {
             console.info("state_changed++++++++++++++++++++++++");
             closeCusOverlay();
-            console.info(this._historyStroage);
+            //console.info(this._historyStroage);
 
             addListenerFromDrawingMap(this._historyStroage);
 
@@ -621,7 +621,7 @@
 
 
 
-        var preCursor;
+        var preCursor = 0;
         function addListenerFromDrawingMap(history) {
             // Drawing Manager에서 그려진 데이터 정보를 가져옵니다 
             // getData를 통하여 얻은 값에는 Addlintener 안됨
@@ -632,7 +632,7 @@
             //console.info(history);
             //console.info(typeof (history._stack));
             //console.info(history._stack);
-            console.info(history._stack.length);
+            //console.info(history._stack.length);
             //_stack
             // 히스토리 객체
 
@@ -664,11 +664,11 @@
 
             //var overlayType = ["arrow","circle","ellipse","marker","polyline","polygon","rectangle"];
             var overlayType = ["circle", "ellipse", "marker", "polygon", "rectangle"];
-            console.info(overlayType);
+            //console.info(overlayType);
 
             // historyStackLength는 최초 1의 값을 (null 아무 오버레이도 없는 깨끗한 상태)를 가지짖만
             //stat_changed 발생시 읽어오는 값이 2이기때문에 인덱스 오류 걱정 없음 하지만 처리해주어야 속편함
-            console.info(history._stack);
+            //console.info(history._stack);
             //console.info("****************marker");
 
 
@@ -678,9 +678,9 @@
                 //첫번째 오버레이 처리
                 if (historyStackLength == 2) {
                     //첫번째 히스토리의 마커 첫번째
-                    console.info(history._stack[1]);
+                    //console.info(history._stack[1]);
 
-                    console.info(history._stack[1][marker]);
+
                     overlayType.forEach(function (value, index, array) {
                         console.info(history._stack[1][value].length)
                         if (history._stack[1][value].length > 0) {
@@ -737,22 +737,27 @@
 
             //cursor의 최솟값은 1이다
             else if (history._cursor < historyStackLength) {
+                console.info("!undo redo 시작--------------");
+                console.info("preCursor: " + preCursor);
+                console.info("current cursor: " + history._cursor);
+                
                 overlayType.forEach(function (ovValue, ovIndex, ovArray) {
-                    console.info("preCursor: " + preCursor);
-                    console.info("current cursor: " + history._cursor);
-
+                    
+                    
                     //
                     //cursor가 1을 가리킨다는것
                     // 최대 undo에서 redo 한번
                     // cursor 아무것도 없을때가 1
                     // 오버레이 하나라도 추가되면 2
-                    if (history._cursor == 2 && preCursor == 1 && history[ovValue] != null && history[ovValue].length != preCursor[ovValue].length && history[ovValue].length > 0) {
-                        console.info("history._cursor == 2 && preCursor == 1");
-                        console.info(markers);
-                        console.info(markers[0]);
-                        //가장 첫번째 오버레이에 액션 추가
-                        kakao.maps.event.addListener(data[ovValue][0], 'click', onClick_overlay);
+                    if (history._cursor == 2 && preCursor == 1) {
+                        //console.info("history._cursor == 2 && preCursor == 1");
 
+                        //가장 첫번째 오버레이에 액션 추가
+                        if (data[ovValue][0] != null) {
+                            console.info("첫번째 오버레이");
+                        //console.info(data[ovValue][0]);
+                        kakao.maps.event.addListener(data[ovValue][0], 'click', onClick_overlay);
+                            }
                         //overlayType.forEach(function (value, index, array) {
                         //    console.info("redo 첫번째 오버레이 추가");
                         //    if (data[value][0] != null) {
@@ -762,9 +767,22 @@
 
                     }
                     //현재 커서의 값이 과거보다 크다면, redo 하는 중
-                    else if (history._cursor.length > 2 && history._cursor > preCursor && history[ovValue] != null && history[ovValue].length != preCursor[ovValue].length && history[ovValue].length > 0) {
-                        console.info("history._cursor > 0 && history._cursor > preCursor");
-                        kakao.maps.event.addListener(data[ovValue][data[ovValue].length - 1], 'click', onClick_overlay);
+                    
+                   
+                    else if (history._cursor > 2 && history._cursor > preCursor) {
+                        //console.info("첫번째 이후 오버레이");
+                        //console.info("history._cursor > 0 && history._cursor > preCursor");
+                        
+                        preState = history._stack[historyStackLength - 2];//아무리 작아도 0
+                        curState = history._stack[historyStackLength - 1];//아무리 작아도 1
+                        console.info(curState[ovValue]);
+                        //console.info(data[ovValue][data[ovValue].length - 1]);
+                        //이전 오버레이의 길이와 지금 오버레이의 
+                        if (curState[ovValue] != null && preState[ovValue] != null && curState[ovValue].length > preState[ovValue].length) {
+                            console.info(preState);
+                            console.info(curState);
+                            kakao.maps.event.addListener(data[ovValue][data[ovValue].length - 1], 'click', onClick_overlay);
+                        }
                         //가장 마지막 마커에 액션추가
                         //새로 생선된 마커는 가장 뒤의 마커
                         //overlayType.forEach(function (value, index, array) {
