@@ -544,6 +544,9 @@
         // 위에 작성한 옵션으로 Drawing Manager를 생성합니다
         var manager = new daum.maps.drawing.DrawingManager(options);
 
+
+
+
         // undo, redo 버튼의 disabled 속성을 설정하기 위해 엘리먼트를 변수에 설정합니다
         var undoBtn = document.getElementById('undo');
         var redoBtn = document.getElementById('redo');
@@ -620,220 +623,56 @@
 
 
 
+  
+        var preHistory;
 
-        var preCursor = 0;
-        var preState = new Array();
         function addListenerFromDrawingMap(history) {
-            // Drawing Manager에서 그려진 데이터 정보를 가져옵니다 
-            // getData를 통하여 얻은 값에는 Addlintener 안됨
-            //var data = manager.getData();
 
-
-
-            //console.info(history);
-            //console.info(typeof (history._stack));
-            //console.info(history._stack);
-            //console.info(history._stack.length);
-            //_stack
-            // 히스토리 객체
-
-            var historyStackLength = history._stack.length;
-
-            
-            var curState = new Array();
-
-            // 오버레이 객체 실제로 액션을 추가할 대상
-            var data = manager.getOverlays();
-
-
-            var arrow = daum.maps.drawing.OverlayType.ARROW;
-            var circle = daum.maps.drawing.OverlayType.CIRCLE;
-            var ellipse = daum.maps.drawing.OverlayType.ELLIPSE;
-            var marker = daum.maps.drawing.OverlayType.MARKER;
-            var polyline = daum.maps.drawing.OverlayType.POLYLINE;
-            var polygon = daum.maps.drawing.OverlayType.POLYGON;
-            var rectangle = daum.maps.drawing.OverlayType.RECTANGLE;
-
-            var arrows = data[daum.maps.drawing.OverlayType.ARROW];
-            var circles = data[daum.maps.drawing.OverlayType.CIRCLE];
-            var ellipsese = data[daum.maps.drawing.OverlayType.ELLIPSE];
-
-            var markers = data[daum.maps.drawing.OverlayType.MARKER];
-            var polylines = data[daum.maps.drawing.OverlayType.POLYLINE];
-            var polygons = data[daum.maps.drawing.OverlayType.POLYGON];
-            var rectangles = data[daum.maps.drawing.OverlayType.RECTANGLE];
-
-            //var overlayType = ["arrow","circle","ellipse","marker","polyline","polygon","rectangle"];
+            var data = manager.getData();
             var overlayType = ["circle", "ellipse", "marker", "polygon", "rectangle"];
-            //console.info(overlayType);
 
-            // historyStackLength는 최초 1의 값을 (null 아무 오버레이도 없는 깨끗한 상태)를 가지짖만
-            //stat_changed 발생시 읽어오는 값이 2이기때문에 인덱스 오류 걱정 없음 하지만 처리해주어야 속편함
-            //console.info(history._stack);
-            //console.info("****************marker");
-
-            
-            curState = history._stack[historyStackLength - 1];//아무리 작아도 1
-            if (history._cursor == historyStackLength) {
-
-                //console.info("추가, 수정");
-                //첫번째 오버레이 처리
-                if (historyStackLength == 2) {
-                    //첫번째 히스토리의 마커 첫번째
-                    //console.info(history._stack[1]);
-
-
-                    overlayType.forEach(function (value, index, array) {
-                        console.info(history._stack[1][value].length)
-                        if (history._stack[1][value].length > 0) {
-                            kakao.maps.event.addListener(data[value][0], 'click', onClick_overlay);
-                            //console.info(history._stack[1].marker);
-                        }
-                    });
-
-
-                }
-                else if (historyStackLength >= 3) {
-
-                    //preState = history._stack[historyStackLength - 2];//아무리 작아도 0
-                    //curState = history._stack[historyStackLength - 1];//아무리 작아도 1
-
-                    //갯수가 변하지 않았다면 좌표값을 비교하여 액션 리스너 재생성
-
-                    //지도에 생성된 marker가 1개이상일때 부터 동작
-                    //undo시에 마커가 삭제될때도 인식하기 위해 datdaGet을 통해 가져오는 overlay의 길이도 확인
-
-                    overlayType.forEach(function (ovValue, index, array) {
-                        if (curState[ovValue].length > 0 && data[ovValue].length > 0) {
-                            if (curState[ovValue].length == preState[ovValue].length) {
-                                //console.info("length is same");
-                                //현재 기록의 marker 배열의 목록을 조회
-
-                                curState[ovValue].forEach(function (value, index, array) {
-                                    //현재 index의 marker x,y 좌표와 과거의 x,y 좌표가 일치하지 않을때,
-                                    if (value.x != preState[ovValue][index].x && value.y != preState[ovValue][index].y) {
-                                        //console.info(index + "번째 마커 좌표 수정됨!");
-
-                                        //이전 액션 리스너 삭제
-                                        //  공통함수로 처리하게 된다면 삭제 가능.
-                                        kakao.maps.event.removeListener(data[ovValue][index], 'click', onClick_overlay);
-                                        //액션리스너 새로 추가
-                                        kakao.maps.event.addListener(data[ovValue][index], 'click', onClick_overlay);
-                                    }
-                                });
-                            }
-                            else if (curState[ovValue].length > preState[ovValue].length) {
-                                //console.info("length is not same");
-
-                                //가장 최근에 추가된 노드에 액션 추가
-                                kakao.maps.event.addListener(data[ovValue][curState[ovValue].length - 1], 'click', onClick_overlay);
-                            }
-                        }
-
-                    });
-
-                }
-
-            }
-
-            //cursor의 최솟값은 1이다
-            else if (history._cursor < historyStackLength) {
-                //console.info("!undo redo 시작--------------");
-                //console.info("preCursor: " + preCursor);
-                //console.info("current cursor: " + history._cursor);
-
-                if (history._cursor > 2) {
-                    preState = history._stack[historyStackLength - 2];//아무리 작아도 0
-                    curState = history._stack[historyStackLength - 1];//아무리 작아도 1
-                    console.info("=================preState");
-                    console.info(preState);
-                    console.info("=================curstate");
-                    console.info(curState);
-                }
-
-
+            console.info(history._cursor);
+            console.info(history._stack.length);
+            if (history._cursor == history._stack.length) {
+                console.info("---- 추가 or 이동 생성");
                 overlayType.forEach(function (ovValue, ovIndex, ovArray) {
-                    
-                    
-                    //
-                    //cursor가 1을 가리킨다는것
-                    // 최대 undo에서 redo 한번
-                    // cursor 아무것도 없을때가 1
-                    // 오버레이 하나라도 추가되면 2
-                    if (history._cursor == 2 && preCursor == 1 ) {
-                        //console.info("history._cursor == 2 && preCursor == 1");
-
-                        //가장 첫번째 오버레이에 액션 추가
-                        if (data[ovValue][0] != null && preState[ovValue].length < curState[ovValue].length) {
-                            console.info("첫번째 오버레이");
-                            //console.info(data[ovValue][0]);
-                            kakao.maps.event.addListener(data[ovValue][0], 'click', onClick_overlay);
-                         }
-                        //overlayType.forEach(function (value, index, array) {
-                        //    console.info("redo 첫번째 오버레이 추가");
-                        //    if (data[value][0] != null) {
-                        //        kakao.maps.event.addListener(data[value][0], 'click', onClick_overlay);
-                        //    }
-                        //});
-
-                    }
-                    //현재 커서의 값이 과거보다 크다면, redo 하는 중           
-                   
-                    else if (history._cursor > 2 && history._cursor > preCursor) {
-                        //console.info("첫번째 이후 오버레이");
-                        //console.info("history._cursor > 0 && history._cursor > preCursor");
-
-                        //console.info(data[ovValue][data[ovValue].length - 1]);
-                        //이전 오버레이의 길이와 지금 오버레이의 
-                        if (curState[ovValue] == null) {
-                                                                                   
-                        } else if(curState[ovValue] != null) {
+                    if (history._cursor == 2) {
+                        if (data[ovValue] != null && data[ovValue].length > 0) {
+                            //첫번째 추가
                             kakao.maps.event.addListener(data[ovValue][data[ovValue].length - 1], 'click', onClick_overlay);
                         }
-                        //가장 마지막 마커에 액션추가
-                        //새로 생선된 마커는 가장 뒤의 마커
-                        //overlayType.forEach(function (value, index, array) {
-                        //    console.info(data[value].length - 1);
-
-                        //    console.info(data[value][data[value].length - 1]);
-                        //    console.info("redo 첫번째이후 오버레이 추가");
-                        //    console.info(data[value]);
-                        //    kakao.maps.event.addListener(data[value][data[value].length - 1], 'click', onClick_overlay);
-                        //});
+                    } else if (history._cursor > 2) {
+                        //현재 지도에 표시된 오버레이가 하나라도 존재할경우 null이 아니다.
+                        if (data[ovValue] != null && data[ovValue].length > 0) {
+                            console.info(preHistory._stack[preHistory._stack.length - 1][ovValue].length);
+                            console.info(data[ovValue].length);
+                            //이전 상태의 오버레이 수와 현재상태의 오버레이 수가 같다면 수정한것.
+                            if (history._stack[history._cursor - 1][ovValue].length == history._stack[history._cursor - 2][ovValue].length) {
+                                console.info("수정 감지");
+                                //액션리스너 최신화
+                                kakao.maps.event.removeListener(data[ovValue][data[ovValue].length - 1], 'click', onClick_overlay);
+                                kakao.maps.event.addListener(data[ovValue][data[ovValue].length - 1], 'click', onClick_overlay);
+                            } else {
+                                //액션리스너 추가
+                                console.info("추가 감지");
+                                kakao.maps.event.addListener(data[ovValue][data[ovValue].length - 1], 'click', onClick_overlay);
+                            }
+                        }
 
 
 
                     }
-                    //노드 삭제의 실행
-                    //undo
-                    // 현재 커서의 값이 과거보다 작다면 undo 하는중
-                    else if (history._cursor > 2 && history._cursor < preCursor) {
-                        console.info("history._cursor > 0 && history._cursor < preCursor");
-                    }
-
-
-
                 });
-                //console.info(curState);
-                //현재의 커서값을 과거의 커서 값으로 설정
-                
-                
-                console.info("++++++++++++++++++");
-
-
-
-
-                //------------
             }
-
-            //과거 기록 저장
-            preCursor = history._cursor;
-            preState = history._stack[historyStackLength - 1];
+            else if (history._cursor < history.length) {
+                console("---redo, undo");
+            }
+            preHistory = history;
         }
 
             //주소 - 좌표간 변환 서비스 객체를 생성한다.
             var geocoder = new kakao.maps.services.Geocoder();
-
+               // 지도위에 표시할 커스텀 오버레이 하나로 content 내용을 바꿔 가며 사용
             var customOverlay = new kakao.maps.CustomOverlay({
                 clickable: true,
                 xAnchor: 0.5,
@@ -844,57 +683,43 @@
             function closeCusOverlay() {
                 customOverlay.setMap(null);
             }
-
-            var onClick_overlay = function () {
-
-                var wtmX
-                var wtmY
-
-                console.info("onClick_overlay");
-                //alert(this._index + "번째 마커" + "\nk : " + this.k + "\nGa : " + this.k.Ga + "\nHa : " + this.k.Ha + '\nMARKER click!');
-                console.info(this);
-                if (this.k == null) {
-                    console.info("detect");
-                    //ExtendedRectangle has za{ea,ja,ka,la} as coords
-                    if (this.za != null) {
-                        console.info("convert coords.. fer rect");
-                        wtmY = (this.za.ka + this.za.la) / 2;
-                        wtmX = (this.za.ea + this.za.ja) / 2;
-
-                        console.info(wtmX + ":" + wtmY);
-                        //ExtendedPolygon has ig{0: {ga: ha:}, }
-                    } else if (this.Ig != null) {
-                        var gaTotal = 0;
-                        var haTotal = 0;
-                        this.Ig.forEach(function (value, index, array) {
-                            gaTotal += value.Ga;
-                            haTotal += value.Ha;
-                        });
-                        wtmX = gaTotal / this.Ig.length;
-                        wtmY = haTotal / this.Ig.length;
-
-                    }
-
-                    //-----------------------------------------------
+        //-----------------------------------------------
         // 좌표를 주소로
         //----------------------------------------------
 
-
-
-
+        var onClick_overlay = function () {
+            var wcongnamulX;
+            var wcongnamulY;
+            console.info("onClick_overlay");
+            //alert(this._index + "번째 마커" + "\nk : " + this.k + "\nGa : " + this.k.Ga + "\nHa : " + this.k.Ha + '\nMARKER click!');
+            console.info(this);
+            if (this.k == null) {
+                console.info("detect");
+                //ExtendedRectangle has za{ea,ja,ka,la} as coords
+                if (this.za != null) {
+                    console.info("convert coords.. fer rect");
+                    wcongnamulY = (this.za.ka + this.za.la) / 2;
+                    wcongnamulX = (this.za.ea + this.za.ja) / 2;
+                    console.info(wcongnamulX + ":" + wcongnamulY);
+                    //ExtendedPolygon has ig{0: {ga: ha:}, }
+                } else if (this.Ig != null) {
+                    var gaTotal = 0;
+                    var haTotal = 0;
+                    this.Ig.forEach(function (value, index, array) {
+                        gaTotal += value.Ga;
+                        haTotal += value.Ha;
+                    });
+                    wcongnamulX = gaTotal / this.Ig.length;
+                    wcongnamulY = haTotal / this.Ig.length;
                 }
-                else {
-                    wtmX = this.k.Ga;
-                    wtmY = this.k.Ha;
-                }
+            }
+            else {
+                wcongnamulX = this.k.Ga;
+                wcongnamulY = this.k.Ha;
+            }
+                console.info(wcongnamulX + ":" + wcongnamulY);
 
-
-
-
-
-                console.info(wtmX + ":" + wtmY);
-
-                searchDetailAddrFromCoords(wtmX, wtmY, function (result, status) {
+                searchDetailAddrFromCoords(wcongnamulX, wcongnamulY, function (result, status) {
 
                     if (status === kakao.maps.services.Status.OK) {
                         console.info(result);
@@ -918,7 +743,7 @@
                             '    </div>' +
                             '</div>';
 
-                        geocoder.transCoord(wtmX, wtmY,
+                        geocoder.transCoord(wcongnamulX, wcongnamulY,
                             function (result, status) {
 
                                 // 정상적으로 검색이 완료됐으면 
@@ -947,52 +772,18 @@
 
 
             }
-            //-----------------------------------------------
-            // 좌표를 주소로
-            //----------------------------------------------
-            // 현재 지도 중심좌표로 주소를 검색해서 지도 좌측 상단에 표시합니다
-            // 주소-좌표 변환 객체를 생성합니다
-            //var geocoder = new kakao.maps.services.Geocoder();
-            //// WTM 좌표를 WGS84 좌표계의 좌표로 변환합니다
-
-            //geocoder.transCoord(wtmX, wtmY, transCoordCB, {
-            //    input_coord: kakao.maps.services.Coords.WCONGNAMUL, // 변환을 위해 입력한 좌표계 입니다
-            //    output_coord: kakao.maps.services.Coords.WGS84 // 변환 결과로 받을 좌표계 입니다 
-            //});
-
-            //// 좌표 변환 결과를 받아서 처리할 콜백함수 입니다.
-            //function transCoordCB(result, status) {
-
-            //    // 정상적으로 검색이 완료됐으면 
-            //    if (status === kakao.maps.services.Status.OK) {
-
-            //        // 마커를 변환된 위치에 표시합니다
-            //        var marker = new kakao.maps.Marker({
-            //            position: new kakao.maps.LatLng(result[0].y, result[0].x), // 마커를 표시할 위치입니다
-            //            map: map // 마커를 표시할 지도객체입니다
-            //        })
-            //    }
-            //}
+           
 
 
-
-
-            function searchDetailAddrFromCoords(wtmX, wtmY, callback) {
+            function searchDetailAddrFromCoords(wcongnamulX, wcongnamulY, callback) {
                 // 좌표로 법정동 상세 주소 정보를 요청합니다
                 console.info("좌표로 법정동 상세 주소 정보를 요청합니다");
 
                 // extendedMarker로부터 오는 좌표값 k.ga k.ha 는 WCONGNAMUL 형식 좌표
-                geocoder.coord2Address(wtmX, wtmY, callback, { input_coord: kakao.maps.services.Coords.WCONGNAMUL });
+                geocoder.coord2Address(wcongnamulX, wcongnamulY, callback, { input_coord: kakao.maps.services.Coords.WCONGNAMUL });
 
 
             }
-
-
-
-
-            //---------------------------------------------
-
-
 
 
 
