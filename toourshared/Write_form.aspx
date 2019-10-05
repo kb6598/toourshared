@@ -296,8 +296,13 @@
         .info .desc {
             position: relative;
 <<<<<<< HEAD
+<<<<<<< HEAD
             margin: 13px 0 0 10px;
             height: 75px;
+=======
+            margin: 13px 0 0 0px;
+            height: 120px;
+>>>>>>> parent of 1c5c3fd... Update Write_form.aspx
 =======
             margin: 13px 0 0 0px;
             height: 120px;
@@ -638,6 +643,7 @@
             // 오버레이 객체 실제로 액션을 추가할 대상
             var data = manager.getOverlays();
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 
             var arrow = daum.maps.drawing.OverlayType.ARROW;
@@ -657,15 +663,26 @@
             var circles = data[daum.maps.drawing.OverlayType.CIRCLE];
             var ellipse = data[daum.maps.drawing.OverlayType.ELLIPSE];
 >>>>>>> parent of 1c5c3fd... Update Write_form.aspx
+=======
+            var arrows = data[daum.maps.drawing.OverlayType.ARROW];
+            var circles = data[daum.maps.drawing.OverlayType.CIRCLE];
+            var ellipse = data[daum.maps.drawing.OverlayType.ELLIPSE];
+>>>>>>> parent of 1c5c3fd... Update Write_form.aspx
             var markers = data[daum.maps.drawing.OverlayType.MARKER];
             var polylines = data[daum.maps.drawing.OverlayType.POLYLINE];
             var polygons = data[daum.maps.drawing.OverlayType.POLYGON];
             var rectangles = data[daum.maps.drawing.OverlayType.RECTANGLE];
 
 <<<<<<< HEAD
+<<<<<<< HEAD
             //var overlayType = ["arrow","circle","ellipse","marker","polyline","polygon","rectangle"];
             var overlayType = ["circle", "ellipse", "marker", "polygon", "rectangle"];
             //console.info(overlayType);
+=======
+           
+
+
+>>>>>>> parent of 1c5c3fd... Update Write_form.aspx
 =======
            
 
@@ -686,6 +703,7 @@
                 if (historyStackLength == 2) {
                     //첫번째 히스토리의 마커 첫번째
 <<<<<<< HEAD
+<<<<<<< HEAD
                     //console.info(history._stack[1]);
 
 
@@ -699,11 +717,16 @@
 
 
 =======
+=======
+>>>>>>> parent of 1c5c3fd... Update Write_form.aspx
                     console.info(history._stack[1]);
                     if (history._stack[1].marker.length > 0) {
                         kakao.maps.event.addListener(markers[0], 'click',onClick_marker);                        
                         //console.info(history._stack[1].marker);
                     }
+<<<<<<< HEAD
+>>>>>>> parent of 1c5c3fd... Update Write_form.aspx
+=======
 >>>>>>> parent of 1c5c3fd... Update Write_form.aspx
                 }
                 else if (historyStackLength >= 3) {
