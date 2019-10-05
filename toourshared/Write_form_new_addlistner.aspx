@@ -639,7 +639,8 @@
                     if (history._cursor == 2) {
                         if (data[ovValue] != null && data[ovValue].length > 0) {
                             //첫번째 추가
-                            kakao.maps.event.addListener(data[ovValue][data[ovValue].length - 1], 'click', onClick_overlay);
+                            console.info(data[ovValue][0]);
+                            kakao.maps.event.addListener(data[value][0], 'click', onClick_overlay);
                         }
                     } else if (history._cursor > 2) {
                         //현재 지도에 표시된 오버레이가 하나라도 존재할경우 null이 아니다.
