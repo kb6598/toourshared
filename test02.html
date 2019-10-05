@@ -8,7 +8,7 @@
     <title>TO OUR SHARED</title>
 
     <!-- Font -->
-    <link href="https://fonts.googleapis.com/css?family=Mansalva|Nanum+Gothic|Nanum+Myeongjo|Noto+Sans+KR|Jua&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Mansalva|Nanum+Gothic|Nanum+Myeongjo|Noto+Sans+KR|Lora|Jua&display=swap" rel="stylesheet">
 
     <!-- Css -->
     <!-- <link href="./css/css01.css" type="text/css" rel="stylesheet"> -->
@@ -23,10 +23,6 @@
 
     <style>
 		
-		*{
-			margin: 0;
-			padding: 0;
-		}
         body {
             margin: 0;
             padding: 0;
@@ -59,8 +55,6 @@
             font-size: 25px;
 
             transition-duration: 0.5s;
-            /* nav-background */
-
             position: fixed;
 
         }
@@ -143,31 +137,7 @@
             left: 0;
             width: 100%;
         }
-
-        #content {
-            top: 100%;
-            padding: 40px;
-
-            color: white;
-            text-align: center;
-            background-color: #000;
-        }
-
-        .section {
-            text-align: center;
-            padding-top: 21px;
-
-            color: white;
-        }
-
-        .section01 {
-            text-align: center;
-            display: inline-block;
-
-			/* 배경 높이 */
-            height: 600px;
-        }
-
+		
         .nav-logo {
             /* 웹 사이트 좌측 상단에 위치한 로고 div style */
         }
@@ -186,15 +156,71 @@
             /* 부트스트랩 적용 후 텍스트에 적용되는 효과 방지를 위해 */
             text-decoration: none;
         }
+		
+        .nav-log-area {
+            /* 로그인, 로그아웃 영역 */
+            width: 150px;
+            height: 40px;
+
+            padding-bottom: 5px;
+            border: 2px solid white;
+            border-radius: 15px;
+
+            transition: .5s;
+
+        }
+
+        .nav-log-item {
+            font-size: 20px;
+            border: none;
+            outline: none;
+            cursor: pointer;
+
+            margin-top: 8px;
+            color: white;
+            background-color: transparent;
+        }
+		
+        /* 창 크기 조절 시 nav display none 설정 */
+        @media only screen and (max-width: 1600px) {
+            .topnav {
+                display: none;
+            }
+
+            .topnav>ul>li>.nav-logo>.nav-logo-item {
+                float: left;
+                display: block;
+            }
+        }
+
+        .section {
+            text-align: center;
+            padding-top: 21px;
+
+            color: white;
+        }
+
+        .section01 {
+            text-align: center;
+            display: inline-block;
+
+			/* 배경 높이 */
+            height: 700px;
+        }
 
         .section01-title {
-            padding: 16px 0px 30px;
+            padding: 50px 0px 30px;			
+			transition-duration: .9s;
         }
+		
+		.section01-title:hover{
+			text-shadow: 1px 2px 15px rgb(255, 255, 255);
+			transition-duration: .9s;
+		}
 
         .section01-title1 {
             font-size: 45px;
             font-weight: bold;
-            font-family: 'Nanum Gothic', sans-serif;
 			font-family: 'Mansalva', cursive;
 
             cursor: default;
@@ -235,9 +261,9 @@
             outline: none;
             cursor: pointer;
             box-sizing: border-box;
-            transition: .5s;
-            color: white;
-            background-color: #343964;
+            transition-duration: .5s;
+            color: black;
+            background-color: #FFBC42;
             border-top-right-radius: 5px;
             border-bottom-right-radius: 5px;
         }
@@ -245,58 +271,14 @@
         .section01-inputButton1:hover {
             opacity: .5s;
             background-color: #505898;
+			transition-duration: .5s;
         }
 
         .section02 {
             height: 880px;
             color: black;
-
-            background-color: #f4f4f4;
-        }
-
-        .section03 {
-            height: 400px;
-            background-color: #ee2560;
-        }
-
-        .w3-container {
-            color: black;
-        }
-
-        .nav-log-area {
-            /* 로그인, 로그아웃 영역 */
-            width: 150px;
-            height: 40px;
-
-            padding-bottom: 5px;
-            border: 2px solid white;
-            border-radius: 15px;
-
-            transition: .5s;
-
-        }
-
-        .nav-log-item {
-            font-size: 20px;
-            border: none;
-            outline: none;
-            cursor: pointer;
-
-            margin-top: 8px;
-            color: white;
-            background-color: transparent;
-        }
-
-        /* 창 크기 조절 시 nav display none 설정 */
-        @media only screen and (max-width: 1600px) {
-            .topnav {
-                display: none;
-            }
-
-            .topnav>ul>li>.nav-logo>.nav-logo-item {
-                float: left;
-                display: block;
-            }
+			
+            background-color: #f4f5f9;
         }
 		
 		.area{
@@ -307,9 +289,8 @@
 		.areaImage{
 			max-width: 100%;
 			height: inherit;
-			background: url(./img/areaImage3.jpg) no-repeat center 0;
+			background: url(./img/areaImage.jpg) no-repeat center 0;
 			background-repeat: no-repeat;
-    
 		}
 		
 		.areaContent{
@@ -350,7 +331,7 @@
 		
 		.carousel-inner {
 			top: 10px;
-			width: 770px;
+			width: 700px;
 			padding: 0px 150px;
 		}
 		
@@ -363,9 +344,9 @@
 			text-decoration: none;
 		}
 		
-		.carousel-item a:hover .carousel-txt{
+		.carousel-item a:hover .carousel-img-sty{
 			transition-duration: .5s;
-			font-size: 17.5px;
+			
 		}
 		
 		.carousel-detail{
@@ -388,10 +369,10 @@
 			
 			text-align: center;
 			padding-top: 55px;
+			padding-left: 10px;
 			
 			color: white;
 			text-decoration: none;
-			transition-duration: .5s;
 		}
 		
 		sub{
@@ -399,6 +380,299 @@
     		line-height: 0;
     		position: relative;
     		vertical-align: baseline;
+		}
+		
+		/* mainSlide */
+		
+		.mainSlide{
+			width: 100%;
+			height: 800px;
+			display: inline-block;
+			text-align: center;
+			position: relative;
+		}
+		
+		.mainSlideContainer{
+			width: 100%;
+		}
+		
+		.mainSlide .mainSlideContainer .carousel-indicators {
+			position: absolute;
+			right: 0;
+			bottom: -30px;
+			left: 0;
+			z-index: 15;
+			display: -ms-flexbox;
+			display: flex;
+			-ms-flex-pack: center;
+			justify-content: center;
+			padding-left: 0;
+			margin-right: 15%;
+			margin-left: 15%;
+			list-style: none;
+		}
+		
+		.mainSlide .mainSlideContainer .carousel-indicators ol{
+			margin-top: 0px;
+			margin-bottom: 1rem;
+			border: 2px solid green;
+		}
+
+		.mainSlide .mainSlideContainer .carousel-indicators li {
+			box-sizing: content-box;
+			-ms-flex: 0 1 auto;
+			flex: 0 1 auto;
+			width: 30px;
+			height: 5px;
+			margin-right: 5px;
+			margin-left: 5px;
+			text-indent: -999px;
+			cursor: pointer;
+			background-color: #08182b;
+			background-clip: padding-box;
+			border-top: 10px solid transparent;
+			border-bottom: 10px solid transparent;
+			opacity: .5;
+			transition: opacity .6s ease;
+		}
+
+		.mainSlide .mainSlideContainer .carousel-indicators .active {
+    		opacity: 1;
+			background-color: #ee2560;
+		}
+		
+		.mainSlide .mainSlideContainer .carousel-inner{
+			display: inline-block;
+			text-align: center;
+			width: 1200px;
+			height: 670px;
+		}
+		
+		.mainSlide .mainSlideContainer .carousel-inner .carousel-item{
+			padding: 30px 0px;
+		}
+		
+		#mainSlide .carousel-control-prev {
+			z-index: 1;
+			display: -ms-flexbox;
+			display: flex;
+			-ms-flex-align: center;
+			align-items: center;
+			-ms-flex-pack: center;
+			justify-content: center;
+			width: 100px;
+			height: 80px;
+			color: #fff;
+			margin-top: 300px;
+			margin-left: 100px;
+			background-color: black;
+			transition: opacity .85s ease;
+		}
+		
+		#mainSlide .carousel-control-next {			
+			z-index: 1;
+			display: -ms-flexbox;
+			display: flex;
+			-ms-flex-align: center;
+			align-items: center;
+			-ms-flex-pack: center;
+			justify-content: center;
+			width: 100px;
+			height: 80px;
+			color: #fff;
+			margin-top: 300px;
+			margin-right: 100px;
+			background-color: black;
+			transition: opacity .85s ease;
+		}
+		
+		.SlideTitle{
+			padding: 0px 0px 20px;
+			width: 100%;
+		}
+		
+		.SlideTitle label{
+			font-size: 30px;
+			font-weight: 700;
+			width: 150px;
+			height: 50px;
+			
+			color: #272625;
+			line-height: 45px;
+		}
+		
+		.tableContainer {
+			position: relative;
+			width: 100%;
+			height: auto;
+		}	
+
+		.tableContainer img{
+			display: block;
+			width: 300px;
+			height: 250px;
+			
+			border: 0.5px solid #a3a1a1;
+		}
+
+		.tableOverlay {
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			background-color: rgba(0, 0, 0, 0.85);
+			overflow: hidden;
+			width: 100%;
+			height: 0;
+			transition: .3s ease;
+		}
+
+		.tableContainer:hover .tableOverlay {
+			height: 100%;
+		}
+
+		.tableText {
+			color: white;
+			font-size: 14px;
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			-webkit-transform: translate(-50%, -50%);
+			-ms-transform: translate(-50%, -50%);
+			transform: translate(-50%, -50%);
+			text-align: center;
+		}
+		
+		.tableInfo{
+			display: block;
+			height: 50px;
+			
+			/* 사진과 영역의 가로를 같게 */
+			width: 300px;
+		}
+		
+		.tableInfo .tableUserName{
+			width: 100%;
+			height: 25px;
+			text-align: left;
+			padding: 5px 0px 0px 10px;
+			
+			font-size: 17px;
+		}
+		
+		.tableInfo .tableTime{
+			width: 100%;
+			height: 10px;
+			text-align: left;
+			padding: 0px 0px 0px 10px;
+		}
+		
+		.tableData{
+			display: block;
+			height: 200px;
+			
+			/* 사진과 영역의 세로를 같게 */
+			width: 300px;
+			padding: 10px;
+			text-align: left;
+			overflow-x: hidden;
+			overflow-y: scroll;
+		}
+
+        .section03 {
+			height: 750px;
+			background-color: #dddfe6;
+        }
+		
+		.relAndTou{
+			display: flex;
+		}
+		
+		.relArea{
+			width: 50%;
+			padding-top: 260px;
+			padding-left: 100px;
+		}
+		
+		.relArea:hover .exStyle{
+			width: 450px;
+			margin-top: -40px;
+			transition-duration: .5s;
+		}
+		
+		.exStyle{	
+			width: 250px;
+			height: auto;
+			
+			border: 2px solid dimgray;
+			border-radius: 8px;
+			
+			transition-duration: .5s;
+		}
+		
+		.toupleArea{
+			width: 50%;
+			color: black;
+			font-weight: 700;
+			text-align: center;
+			padding: 230px 70px 110px 0px;
+			
+			cursor: default;
+			font-size: 50px;
+		}
+		
+		.TOUPLE{
+			padding: 20px;
+		}
+		
+		.TOUR{
+			padding-right: 35px;
+		}
+		
+		.PEOPLE{
+			padding-right: 20px;
+		}
+		
+		.toupleArea:hover .toupleSpan1{
+			font-size: 70px;
+			color: #fcbe32;
+			padding-right: 30px;
+			transition-duration: .5s;
+			height: 350px;
+		}
+		
+		.toupleSpan1{
+			width: 100%;
+			transition-duration: .5s;
+		}
+		
+		.toupleSpan2{
+			font-size: 50px;
+		}
+
+		.relTxt1{
+			color: black;
+			padding: 15px 0px;
+			font-size: 25px;
+			font-family: 'Nanum Gothic', sans-serif;
+			cursor: default;
+		}
+		
+		.relTxt2{
+			width: auto;
+			text-align: center;
+			color: black;
+			font-weight: 600;
+			font-size: 14px;
+			font-family: 'Nanum Gothic', sans-serif;
+			cursor: default;
+		}
+		
+		.footer
+		{
+			width: 100%;
+			height: 250px;
+			background-color: #272625;
 		}
 		
     </style>
@@ -419,6 +693,29 @@
                 document.getElementById("nav").style.background = "";
             }
         }
+		
+		
+		/* TOUPLE 텍스트 효과 (PLE) */
+		
+		$(function() {
+  			$('#tA').hover(function() {
+    			$('#ple').css('padding-left', '30px');
+  			}, function() {
+    			// on mouseout, reset the background colour
+    			$('#ple').css('padding-left', '');
+  			});
+		});
+		
+		
+		/* 버튼 VALUE 효과 */
+		$(function() {
+  			$('#inpBtn').hover(function() {
+    			$('#inpBtn').val("🌝");
+  			}, function() {
+    			// on mouseout, reset the background colour
+    			$('#inpBtn').val("🌞");
+  			});
+		});
     </script>
 
 </head>
@@ -497,7 +794,7 @@
                     <input type="text" placeholder="지역 명을 입력하세요.." class="section01-inputText1" />
                 </div>
                 <div>
-                    <input type="button" value="검 색" class="section01-inputButton1" />
+                    <input type="button" value="🌞" id="inpBtn" class="section01-inputButton1" />
                 </div>
             </div>
         </div>
@@ -514,7 +811,8 @@
 								<div class = "areaTxt">
 									<h2>
 										지역 검색<br/>
-										<sub>지역 명을 누르면 해당 지역의 리뷰를 확인하실 수 있습니다.</sub>
+										<sub>지역 명을 누르면 해당 지역의 리뷰를 확인하실 수 있습니다.</sub><br/>
+										<sub>전체/서울/경기/인천/충청/강원/전라/경상/제주</sub>
 									</h2>
 								</div>
 								<div class = "areaSlide">
@@ -534,7 +832,7 @@
 
   										<!-- The slideshow -->
   										<div class="carousel-inner">
-  											<div class="carousel-item active">
+	  										<div class="carousel-item active">
 												<a href = "#">
 													<div class = "carousel-detail">
 														<div class = "carousel-img">
@@ -547,7 +845,7 @@
 													</div>
 												</a>
   											</div>
-  											<div class="carousel-item">
+	  										<div class="carousel-item">
 												<a href = "#">
 													<div class = "carousel-detail">
 														<div class = "carousel-img">
@@ -560,7 +858,7 @@
 													</div>
 												</a>
   											</div>
-  											<div class="carousel-item">
+	  										<div class="carousel-item">
 												<a href = "#">
 													<div class = "carousel-detail">
 														<div class = "carousel-img">
@@ -573,7 +871,7 @@
 													</div>
 												</a>
   											</div>
-  											<div class="carousel-item">
+	  										<div class="carousel-item">
 												<a href = "#">
 													<div class = "carousel-detail">
 														<div class = "carousel-img">
@@ -586,7 +884,7 @@
 													</div>
 												</a>
   											</div>
-  											<div class="carousel-item">
+	  										<div class="carousel-item">
 												<a href = "#">
 													<div class = "carousel-detail">
 														<div class = "carousel-img">
@@ -599,7 +897,7 @@
 													</div>
 												</a>
   											</div>
-  											<div class="carousel-item">
+	  										<div class="carousel-item">
 												<a href = "#">
 													<div class = "carousel-detail">
 														<div class = "carousel-img">
@@ -612,7 +910,7 @@
 													</div>
 												</a>
   											</div>
-  											<div class="carousel-item">
+	  										<div class="carousel-item">
 												<a href = "#">
 													<div class = "carousel-detail">
 														<div class = "carousel-img">
@@ -625,7 +923,7 @@
 													</div>
 												</a>
   											</div>
-  											<div class="carousel-item">
+	  										<div class="carousel-item">
 												<a href = "#">
 													<div class = "carousel-detail">
 														<div class = "carousel-img">
@@ -638,7 +936,7 @@
 													</div>
 												</a>
   											</div>
-  											<div class="carousel-item">
+	  										<div class="carousel-item">
 												<a href = "#">
 													<div class = "carousel-detail">
 														<div class = "carousel-img">
@@ -667,16 +965,402 @@
 					</div>
 				</div>
 			</div>
+			
+			<!-- 메인 슬라이드 영역 -->
+			<div class = "mainSlide">
+				<div class = "mainSlideContainer">
+					<div id="mainSlide" class="carousel slide" data-ride="carousel">
+  						<ol class="carousel-indicators">
+    						<li data-target="#mainSlide" data-slide-to="0" class="active"></li>
+    						<li data-target="#mainSlide" data-slide-to="1"></li>
+    						<li data-target="#mainSlide" data-slide-to="2"></li>
+  						</ol>
+						
+						<div class = "carousel-prev">
+  							<a class="carousel-control-prev" href="#mainSlide" role="button" data-slide="prev">
+    							<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    							<span class="sr-only">Previous</span>
+  							</a>
+						</div>
+						
+						<div class = "carousel-next">
+  							<a class="carousel-control-next" href="#mainSlide" role="button" data-slide="next">
+    							<span class="carousel-control-next-icon" aria-hidden="true"></span>
+    							<span class="sr-only">Next</span>
+  							</a>
+						</div>
+						
+  						<div class="carousel-inner">
+    						<div class="carousel-item active">
+								<div class = "SlideTitle">
+									<label>최신 순</label>
+								</div>
+      							<div class = "SlideBody">
+									<table>
+										<tr>
+											<td>
+												<div class = "tableContainer">
+													<img src = "./img/background02.jpg" alt="milk9503">
+													<div class = "tableOverlay">
+														<div class = "tableText">
+															<div class = "tableInfo">
+																<div class = "tableUserName">milk9503</div>
+																<div class = "tableTime">3초 전</div>
+															</div>
+															<div class = "tableData">
+																<div class = "tableBody">ㅋㅋ</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</td>
+											<td>
+												<div class = "tableContainer">
+													<img src = "./img/background02.jpg" alt="milk9503">
+													<div class = "tableOverlay">
+														<div class = "tableText">
+															<div class = "tableInfo">
+																<div class = "tableUserName">milk9503</div>
+																<div class = "tableTime">3초 전</div>
+															</div>
+															<div class = "tableData">
+																<div class = "tableBody">가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</td>
+											<td>
+												<div class = "tableContainer">
+													<img src = "./img/background02.jpg" alt="milk9503">
+													<div class = "tableOverlay">
+														<div class = "tableText">
+															<div class = "tableInfo">
+																<div class = "tableUserName">milk9503</div>
+																<div class = "tableTime">3초 전</div>
+															</div>
+															<div class = "tableData">
+																<div class = "tableBody">ㅋㅋ</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<div class = "tableContainer">
+													<img src = "./img/background02.jpg" alt="milk9503">
+													<div class = "tableOverlay">
+														<div class = "tableText">
+															<div class = "tableInfo">
+																<div class = "tableUserName">milk9503</div>
+																<div class = "tableTime">3초 전</div>
+															</div>
+															<div class = "tableData">
+																<div class = "tableBody">ㅋㅋ</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</td>
+											<td>
+												<div class = "tableContainer">
+													<img src = "./img/background02.jpg" alt="milk9503">
+													<div class = "tableOverlay">
+														<div class = "tableText">
+															<div class = "tableInfo">
+																<div class = "tableUserName">milk9503</div>
+																<div class = "tableTime">3초 전</div>
+															</div>
+															<div class = "tableData">
+																<div class = "tableBody">ㅋㅋ</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</td>
+											<td>
+												<div class = "tableContainer">
+													<img src = "./img/background02.jpg" alt="milk9503">
+													<div class = "tableOverlay">
+														<div class = "tableText">
+															<div class = "tableInfo">
+																<div class = "tableUserName">milk9503</div>
+																<div class = "tableTime">3초 전</div>
+															</div>
+															<div class = "tableData">
+																<div class = "tableBody">ㅋㅋ</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</td>
+										</tr>
+									</table>
+								</div>
+    						</div>
+							<div class="carousel-item">
+								<div class = "SlideTitle">
+									<label>추천 순</label>
+								</div>
+      							<div class = "SlideBody">
+									<table>
+										<tr>
+											<td>
+												<div class = "tableContainer">
+													<img src = "./img/background02.jpg" alt="milk9503">
+													<div class = "tableOverlay">
+														<div class = "tableText">
+															<div class = "tableInfo">
+																<div class = "tableUserName">milk9503</div>
+																<div class = "tableTime">3초 전</div>
+															</div>
+															<div class = "tableData">
+																<div class = "tableBody">ㅋㅋ</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</td>
+											<td>
+												<div class = "tableContainer">
+													<img src = "./img/background02.jpg" alt="milk9503">
+													<div class = "tableOverlay">
+														<div class = "tableText">
+															<div class = "tableInfo">
+																<div class = "tableUserName">milk9503</div>
+																<div class = "tableTime">3초 전</div>
+															</div>
+															<div class = "tableData">
+																<div class = "tableBody">가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하<br/><br/><br/><br/><br/><a href = "#"><span style="color: deepskyblue;">#가나다라마바 #사아자차카 #타파하파</span></a></div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</td>
+											<td>
+												<div class = "tableContainer">
+													<img src = "./img/background02.jpg" alt="milk9503">
+													<div class = "tableOverlay">
+														<div class = "tableText">
+															<div class = "tableInfo">
+																<div class = "tableUserName">milk9503</div>
+																<div class = "tableTime">3초 전</div>
+															</div>
+															<div class = "tableData">
+																<div class = "tableBody">ㅋㅋ</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<div class = "tableContainer">
+													<img src = "./img/background02.jpg" alt="milk9503">
+													<div class = "tableOverlay">
+														<div class = "tableText">
+															<div class = "tableInfo">
+																<div class = "tableUserName">milk9503</div>
+																<div class = "tableTime">3초 전</div>
+															</div>
+															<div class = "tableData">
+																<div class = "tableBody">ㅋㅋ</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</td>
+											<td>
+												<div class = "tableContainer">
+													<img src = "./img/background02.jpg" alt="milk9503">
+													<div class = "tableOverlay">
+														<div class = "tableText">
+															<div class = "tableInfo">
+																<div class = "tableUserName">milk9503</div>
+																<div class = "tableTime">3초 전</div>
+															</div>
+															<div class = "tableData">
+																<div class = "tableBody">ㅋㅋ</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</td>
+											<td>
+												<div class = "tableContainer">
+													<img src = "./img/background02.jpg" alt="milk9503">
+													<div class = "tableOverlay">
+														<div class = "tableText">
+															<div class = "tableInfo">
+																<div class = "tableUserName">milk9503</div>
+																<div class = "tableTime">3초 전</div>
+															</div>
+															<div class = "tableData">
+																<div class = "tableBody">ㅋㅋ</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</td>
+										</tr>
+									</table>
+								</div>
+    						</div>
+							<div class="carousel-item">
+								<div class = "SlideTitle">
+									<label>구독자 순</label>
+								</div>
+      							<div class = "SlideBody">
+									<table>
+										<tr>
+											<td>
+												<div class = "tableContainer">
+													<img src = "./img/background02.jpg" alt="milk9503">
+													<div class = "tableOverlay">
+														<div class = "tableText">
+															<div class = "tableInfo">
+																<div class = "tableUserName">milk9503</div>
+																<div class = "tableTime">3초 전</div>
+															</div>
+															<div class = "tableData">
+																<div class = "tableBody">ㅋㅋ</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</td>
+											<td>
+												<div class = "tableContainer">
+													<img src = "./img/background02.jpg" alt="milk9503">
+													<div class = "tableOverlay">
+														<div class = "tableText">
+															<div class = "tableInfo">
+																<div class = "tableUserName">milk9503</div>
+																<div class = "tableTime">3초 전</div>
+															</div>
+															<div class = "tableData">
+																<div class = "tableBody">가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</td>
+											<td>
+												<div class = "tableContainer">
+													<img src = "./img/background02.jpg" alt="milk9503">
+													<div class = "tableOverlay">
+														<div class = "tableText">
+															<div class = "tableInfo">
+																<div class = "tableUserName">milk9503</div>
+																<div class = "tableTime">3초 전</div>
+															</div>
+															<div class = "tableData">
+																<div class = "tableBody">ㅋㅋ</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</td>
+										</tr>
+										<tr>
+											<td>
+												<div class = "tableContainer">
+													<img src = "./img/background02.jpg" alt="milk9503">
+													<div class = "tableOverlay">
+														<div class = "tableText">
+															<div class = "tableInfo">
+																<div class = "tableUserName">milk9503</div>
+																<div class = "tableTime">3초 전</div>
+															</div>
+															<div class = "tableData">
+																<div class = "tableBody">ㅋㅋ</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</td>
+											<td>
+												<div class = "tableContainer">
+													<img src = "./img/background02.jpg" alt="milk9503">
+													<div class = "tableOverlay">
+														<div class = "tableText">
+															<div class = "tableInfo">
+																<div class = "tableUserName">milk9503</div>
+																<div class = "tableTime">3초 전</div>
+															</div>
+															<div class = "tableData">
+																<div class = "tableBody">ㅋㅋ</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</td>
+											<td>
+												<div class = "tableContainer">
+													<img src = "./img/background02.jpg" alt="milk9503">
+													<div class = "tableOverlay">
+														<div class = "tableText">
+															<div class = "tableInfo">
+																<div class = "tableUserName">milk9503</div>
+																<div class = "tableTime">3초 전</div>
+															</div>
+															<div class = "tableData">
+																<div class = "tableBody">ㅋㅋ</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</td>
+										</tr>
+									</table>
+								</div>
+    						</div>
+  						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 		
+		<!-- 소개 영역 -->
 		<div class="section03">
-			sdasa
+			
+			<!-- 관계도 및 TOUPLE 영역 -->
+			<div class = "relAndTou">
+				
+				<!-- 관계도 영역 -->
+				<div class = "relArea">
+					<div>
+						<img src = "./img/relation.png" class = "exStyle" alt="관계">
+					</div>
+					<div>
+						<div class = "relTxt1">TO OUR SHARED 관계도</div>
+						<div class = "relTxt2">TRAVELER는 마음에 드는 경로를 골라서 여행만 다니면 됩니다.</div>
+					</div>
+				</div>
+				
+				<!-- TOUPLE 영역 -->
+				<div id = "tA" class = "toupleArea">
+					<div class = "TOUPLE">
+						<span class = "toupleSpan1">TOUPLE?</span>
+					</div>
+					<div class = "TOUR">
+						<span class = "toupleSpan1">TOU</span><span class = "toupleSpan2">R</span><span class = "toupleSpan1">+</span>
+					</div>
+					<div class = "PEOPLE">
+							<span class = "toupleSpan2">PEO</span><span id = "ple" class = "toupleSpan1">PLE</span>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 	
-	<!-- 바닥 영역 -->
+	<!-- 바닥글 영역 -->
 	<div class="footer">
-		<div>
+		<div class = "footerText" style="color: white; text-align: center; height: 100%; padding: 120px 0px;">
+			바 닥 글
 		</div>
 	</div>
 </body>
