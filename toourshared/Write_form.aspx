@@ -592,7 +592,7 @@
             console.info("state_changed++++++++++++++++++++++++");
             closeCusOverlay();
             console.info(this._historyStroage);
-           
+
             addListenerFromDrawingMap(this._historyStroage);
 
         });
@@ -609,17 +609,17 @@
 
 
 
- 
+
         function addListenerFromDrawingMap(history) {
-          refreshOverlayListener();
+            refreshOverlayListener();
 
         }
 
 
-        
-        
 
-       function refreshOverlayListener() {
+
+
+        function refreshOverlayListener() {
             var data = manager.getOverlays();
             var overlayType = ["circle", "ellipse", "marker", "polygon", "rectangle"];
             overlayType.forEach(function (overlay, overlayIndex, overlayArray) {
@@ -630,6 +630,7 @@
                     console.info(overlay + " : " + data[overlay]._index + "를 새로 고침");
                     data[overlay].forEach(function (value, index, array) {
                         try {
+                            //removeListener 시도
                             kakao.maps.event.removeListener(value, 'click', onClick_overlay);
                         }
                         catch (exception) {
@@ -638,9 +639,9 @@
                         finally {
                             kakao.maps.event.addListener(value, 'click', onClick_overlay);
                         }
-                        
+
                     });
-                    
+
                 }
             });
         }
@@ -660,19 +661,46 @@
             customOverlay.setMap(null);
         }
 
-        var onClick_marker = function () {
-            console.info(this);            
+
+        //-----------------------------------------------
+        // 클릭시 발생하는 이벤트
+        //----------------------------------------------
+        var onClick_overlay = function () {
+            var wcongnamulX;
+            var wcongnamulY;
+            console.info("onClick_overlay");
             //alert(this._index + "번째 마커" + "\nk : " + this.k + "\nGa : " + this.k.Ga + "\nHa : " + this.k.Ha + '\nMARKER click!');
+            console.info(this);
+            if (this.k == null) {
+                console.info("detect");
+                //ExtendedRectangle has za{ea,ja,ka,la} as coords
+                if (this.za != null) {
+                    console.info("convert coords.. fer rect");
+                    wcongnamulY = (this.za.ka + this.za.la) / 2;
+                    wcongnamulX = (this.za.ea + this.za.ja) / 2;
+                    console.info(wcongnamulX + ":" + wcongnamulY);
+                    //ExtendedPolygon has ig{0: {ga: ha:}, }
+                } else if (this.Ig != null) {
+                    var gaTotal = 0;
+                    var haTotal = 0;
+                    this.Ig.forEach(function (value, index, array) {
+                        gaTotal += value.Ga;
+                        haTotal += value.Ha;
+                    });
+                    wcongnamulX = gaTotal / this.Ig.length;
+                    wcongnamulY = haTotal / this.Ig.length;
+                }
+            }
+            else {
+                wcongnamulX = this.k.Ga;
+                wcongnamulY = this.k.Ha;
+            }
+            console.info(wcongnamulX + ":" + wcongnamulY);
 
-
-            wtmX = this.k.Ga;
-            wtmY = this.k.Ha;
-
-            searchDetailAddrFromCoords(wtmX, wtmY, function (result, status) {
+            searchDetailAddrFromCoords(wcongnamulX, wcongnamulY, function (result, status) {
 
                 if (status === kakao.maps.services.Status.OK) {
                     console.info(result);
-
 
                     var detailAddr = !!result[0].road_address ? '<div class="ellipsis">' + result[0].road_address.address_name + '</div>' : '';
                     detailAddr += '<div class="jibun ellipsis">' + result[0].address.address_name + '</div>';
@@ -693,17 +721,14 @@
                         '    </div>' +
                         '</div>';
 
-                    geocoder.transCoord(wtmX, wtmY,
+                    geocoder.transCoord(wcongnamulX, wcongnamulY,
                         function (result, status) {
 
                             // 정상적으로 검색이 완료됐으면 
                             if (status === kakao.maps.services.Status.OK) {
-
                                 customOverlay.setContent(content);
                                 customOverlay.setPosition(new kakao.maps.LatLng(result[0].y, result[0].x));
                                 customOverlay.setMap(drawingMap);
-                                
-                                
                             }
                         }
                         , {
@@ -715,7 +740,8 @@
                     console.info(content);
 
 
-                    
+
+
 
                     //infowindow.setContent(content);
                     //infowindow.open(drawingMap, this);
@@ -724,33 +750,6 @@
 
 
         }
-        //-----------------------------------------------
-        // 좌표를 주소로
-        //----------------------------------------------
-        // 현재 지도 중심좌표로 주소를 검색해서 지도 좌측 상단에 표시합니다
-        // 주소-좌표 변환 객체를 생성합니다
-        //var geocoder = new kakao.maps.services.Geocoder();
-        //// WTM 좌표를 WGS84 좌표계의 좌표로 변환합니다
-
-        //geocoder.transCoord(wtmX, wtmY, transCoordCB, {
-        //    input_coord: kakao.maps.services.Coords.WCONGNAMUL, // 변환을 위해 입력한 좌표계 입니다
-        //    output_coord: kakao.maps.services.Coords.WGS84 // 변환 결과로 받을 좌표계 입니다 
-        //});
-
-        //// 좌표 변환 결과를 받아서 처리할 콜백함수 입니다.
-        //function transCoordCB(result, status) {
-
-        //    // 정상적으로 검색이 완료됐으면 
-        //    if (status === kakao.maps.services.Status.OK) {
-
-        //        // 마커를 변환된 위치에 표시합니다
-        //        var marker = new kakao.maps.Marker({
-        //            position: new kakao.maps.LatLng(result[0].y, result[0].x), // 마커를 표시할 위치입니다
-        //            map: map // 마커를 표시할 지도객체입니다
-        //        })
-        //    }
-        //}
-
 
 
         function searchDetailAddrFromCoords(wtmX, wtmY, callback) {
@@ -758,9 +757,9 @@
             console.info("좌표로 법정동 상세 주소 정보를 요청합니다");
 
             // extendedMarker로부터 오는 좌표값 k.ga k.ha 는 WCONGNAMUL 형식 좌표
-            geocoder.coord2Address( wtmX, wtmY, callback, { input_coord: kakao.maps.services.Coords.WCONGNAMUL });
-            
-            
+            geocoder.coord2Address(wtmX, wtmY, callback, { input_coord: kakao.maps.services.Coords.WCONGNAMUL });
+
+
         }
 
 
