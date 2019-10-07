@@ -10,9 +10,6 @@
     <!-- Font -->
     <link href="https://fonts.googleapis.com/css?family=Mansalva|Nanum+Gothic|Nanum+Myeongjo|Noto+Sans+KR|Lora|Jua&display=swap" rel="stylesheet">
 
-    <!-- Css -->
-    <!-- <link href="./css/css01.css" type="text/css" rel="stylesheet"> -->
-
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
@@ -34,9 +31,9 @@
 			background-color: #00b9f1;
 			background-repeat: no-repeat;
         }
-
-        ul, li {
-            margin: 0;
+		
+		.topnavUl {
+			margin: 0;
             padding: 0;
 
             list-style: none;
@@ -44,7 +41,30 @@
 
             font-size: 20px;
             font-family: '맑은고딕';
-        }
+		}
+		
+		.topnavLi{
+			margin: 0;
+            padding: 0;
+
+            list-style: none;
+            text-decoration: none;
+
+            font-size: 20px;
+            font-family: '맑은고딕';
+		}
+		
+		.topnavLi ul, li{
+			list-style: none;
+			text-decoration: none;
+			padding: 0;
+			margin: 0;
+		}
+		
+		a {
+			color: white;
+			text-decoration: none;
+		}
 
         #nav {
             z-index: 99999;
@@ -57,11 +77,6 @@
             transition-duration: 0.5s;
             position: fixed;
 
-        }
-
-        a {
-            color: white;
-            text-decoration: none;
         }
 
         #nav:hover {
@@ -145,12 +160,12 @@
         .nav-logo-item {
             font-family: 'Mansalva', cursive;
             font-size: 25px;
-            transition: .5s;
+            transition-duration: .5s;
         }
 
         .nav-logo-item:hover {
-            transition: font .5s;
-            font-size: 27.5px;
+			transition-duration: .5s;
+            font-size: 28px;
             color: white;
 
             /* 부트스트랩 적용 후 텍스트에 적용되는 효과 방지를 위해 */
@@ -723,13 +738,13 @@
 <body>
     <!-- navbar 영역 -->
     <div id="nav" class="topnav">
-        <ul>
-            <li>
+        <ul class = "topnavUl">
+            <li class = "topnavLi">
                 <div class="nav-logo">
                     <a href="#" class="nav-logo-item">To Our Shared</a>
                 </div>
             </li>
-            <li>
+            <li class = "topnavLi">
                 <a href="#">소개</a>
                 <ul>
                     <li><a href="#">TOUPLE</a></li>
@@ -737,33 +752,37 @@
                     <li><a href="#">서브메뉴1-3</a></li>
                 </ul>
             </li>
-            <li><a href="#">메뉴 2</a>
+            <li class = "topnavLi">
+				<a href="#">메뉴 2</a>
                 <ul>
                     <li><a href="#">서브메뉴2-1</a></li>
                     <li><a href="#">서브메뉴2-2</a></li>
                     <li><a href="#">서브메뉴2-3</a></li>
                 </ul>
             </li>
-            <li><a href="#">메뉴 3</a>
+            <li class = "topnavLi">
+				<a href="#">메뉴 3</a>
                 <ul>
                     <li><a href="#">서브메뉴3-1</a></li>
                     <li><a href="#">서브메뉴3-2</a></li>
                     <li><a href="#">서브메뉴3-3</a></li>
                 </ul>
             </li>
-            <li><a href="#">커뮤니티</a>
+            <li class = "topnavLi">
+				<a href="#">커뮤니티</a>
                 <ul>
                     <li><a href="#">자유게시판</a></li>
                     <li><a href="#">리뷰게시판</a></li>
                 </ul>
             </li>
-            <li><a href="#">고객센터</a>
+            <li class = "topnavLi">
+				<a href="#">고객센터</a>
                 <ul>
                     <li><a href="#">도움말</a></li>
                     <li><a href="#">건의사항</a></li>
                 </ul>
             </li>
-            <li>
+            <li class = "topnavLi">
                 <div class="nav-log">
                     <a href="#">
                         <div class="nav-log-area">
