@@ -387,6 +387,10 @@
 			font-weight: 300;
 		}
 		
+		.profileTelTxt > span:focus .modal{
+			
+		}
+		
 		.profileTelEdit > input{
 			width: 400px;
 			height: 50px;
@@ -470,6 +474,7 @@
 			
 			outline: none;
 			border: 1px solid rgba(0, 0, 0, 0.25);
+			border-top: none;
 			border-bottom-left-radius: 2px;
 			border-bottom-right-radius: 2px;
 			transition-duration: .5s;
@@ -480,7 +485,6 @@
 			height: 15%;
 			padding-top: 77px;
 		}
-		
 		
 		.profileUpdate{
 			height: 100%;
@@ -529,6 +533,147 @@
 			position: absolute;
 		}
 		
+		/* modal Css */
+		
+		.modal-dialog{
+			width: 100%;
+			height: 100%;
+			display: flex;
+			flex-direction: row;
+			justify-content: center;
+			align-items: center;
+		}
+		
+		.modal-content{
+			display: flex;
+			flex-direction: column;
+			flex-wrap: nowrap;
+		}
+		
+		.modal-header{
+			display: flex;
+			flex-direction: row;
+			justify-content: center;
+			align-items: center;
+			
+			height: 70px;
+			border-bottom: 0.5px solid rgba(0, 0, 0, 0.25);
+		}
+		
+		.modal-header .modal-header-item1{
+			width: auto;
+			font-size: 20px;
+			font-weight: 400;
+		}
+		
+		.modal-body{
+			text-align: center;
+			height: 180px;
+			transition-duration: .5s;
+			border-bottom: 0.5px solid rgba(0, 0, 0, 0.45);
+		}
+		
+		.modal-footer{
+			border: none;
+			height: 70px;
+			
+			display: flex;
+			flex-direction: row;
+			justify-content: center;
+			align-items: center;
+		}
+		
+		.fileText{
+			padding: 30px 0px 15px;
+		}
+		
+		.fileText .fileTextSpan1{
+			color: firebrick;
+			font-size: 18px;
+		}
+		
+		.fileText .fileTextSpan2{
+			font-size: 16px;
+			font-weight: 400;
+		}
+		
+		.fileUpload input[type="file"] {
+			position: absolute;
+			width: 1px;
+			height: 1px;
+			padding: 0;
+			margin -1px;
+			overflow: hidden;
+			clip: rect(0,0,0,0);
+			border: 0;
+		}
+
+		.fileUpload label{
+			display: inline-block;
+			padding: 13px;
+			color: black;
+			font-size: 12px;
+			font-weight: 300;
+			line-height: normal;
+			vertical-align: middle;
+			background-color: rgba(246, 179, 82, 0.85);
+			cursor: pointer;
+			border: 1px solid #ebebeb;
+			border-bottom-color: #e2e2e2;
+			border-radius: .25em;
+			transition-duration: .5s;
+		}
+		
+		.fileUpload label:hover{
+			transition-duration: .5s;
+			background-color: rgba(246, 179, 82, 1);
+		}
+
+		.fileUpload .upload-name{
+			display: inline-block;
+			padding: 10px;
+			width: 250px;
+			height: 40px;
+			line-height: normal;
+			font-size: 12px;
+			font-weight: 300;
+			text-align: left;
+			background-color: #f5f5f5;
+			border: 1px solid #ebebeb;
+			border-bottom-color: #e2e2e2;
+			border-radius: .25em;
+			-webkit-appearance: none;
+			-moz-appearance: none;
+			appearance: none;
+		}
+		
+		.fileUploadButton{
+			transition-duration: .9s;
+			padding: 30px;
+			display: none;
+		}
+		
+		.fileUploadButton input{
+			width: 80px;
+			height: 30px;
+			font-size: 13px;
+			font-weight: 300;
+			
+			border: none;
+			outline: none;
+			
+			border: 1px solid #ebebeb;
+			border-radius: .25em;
+			color: black;
+			background-color: rgba(246, 179, 82, 0.85);
+			transition-duration: .5s;
+		}
+		
+		.fileUploadButton input:hover{
+			transition-duration: .5s;
+			background-color: rgba(246, 179, 82, 1);
+		}
+		
 	</style>
 	<script>
         /* scroll할 때 발생할 이벤트 */
@@ -546,6 +691,38 @@
                 document.getElementById("nav").style.background = "";
             }
         }
+		
+		/* Modal 열 시 창크기 및 button display 초기화 */
+		$(document).ready(function(){
+			document.getElementById("profileEdit").onclick=function(){
+				document.getElementById("modalBody").style.height = "180px";
+				document.getElementById("fileUploadBtn").style.display = "none";
+				$('#filePath').val("...");
+			};
+		});
+		
+		/* FileUpload (경로 없이 무조건 파일명만 뜨게) */
+		$(document).ready(function(){
+			var fileTarget = $('.fileUpload .upload-hidden');
+			
+			fileTarget.on('change', function(){ // 값이 변경되면
+				if(window.FileReader){ // modern browser
+					var filename = $(this)[0].files[0].name;
+				}
+				else
+				{ // old IE
+					var filename = $(this).val().split('/').pop().split('\\').pop(); // 파일명만 추출
+				}
+			
+				// 추출한 파일명 삽입
+				$(this).siblings('.upload-name').val(filename);
+				
+				// modalBody 부분 높이 조절 및 업로드 버튼 나타내기
+				document.getElementById("modalBody").style.height = "230px";
+				document.getElementById("fileUploadBtn").style.display = "block";
+			});
+		});
+		
 	</script>
 </head>
 
@@ -622,7 +799,7 @@
 							</div>
 							<div class = "imageEdit">
 								<div class = "editTxt">
-									<a href = "#">
+									<a href = "#" data-toggle="modal" data-target="#myModal" id="profileEdit">
 										<span>프로필 사진 편집</span>
 									</a>
 								</div>
@@ -692,5 +869,44 @@
 			ㅂㄷㄱ
 		</div>
 	</div>
+	
+	<!-- 프로필 사진 편집 Modal -->
+	<div class="modal fade" id="myModal">
+  		<div class="modal-dialog">
+    		<div class="modal-content">
+
+      			<!-- Modal Header -->
+      			<div class="modal-header">
+        			<div class = "modal-header-item1">
+						프로필 사진 편집
+					</div>
+      			</div>
+
+      			<!-- Modal body -->
+      			<div class="modal-body" id="modalBody">
+        			<div class = "fileText">
+						<span class = "fileTextSpan1">*</span>
+						<span class = "fileTextSpan2">프로필 사진 첨부는 2MB까지 가능합니다.</span>
+					</div>
+					<div class = "fileUpload">
+						<input class="upload-name" disabled="disabled" id="filePath">
+						<label for ="fileStyle">사진 첨부</label>
+						<input type = "file" id="fileStyle" class = "upload-hidden">
+					</div>
+					<div class = "fileUploadButton" id="fileUploadBtn">
+						<input type = "button" value = "적용" data-dismiss="modal">
+					</div>
+      			</div>
+
+      			<!-- Modal footer -->
+      			<div class="modal-footer">
+					<div class = "updateButton">
+        				<input type="button" style="width: 85px;" data-dismiss="modal" value="닫기">
+					</div>
+      			</div>
+    		</div>
+  		</div>
+	</div>
 </body>
+	
 </html>
