@@ -8,7 +8,7 @@ using MySql.Data.MySqlClient;
 /// TimeLib 요약 설명입니다.
 /// DB의 일시, 일 부분에 사용할 시간 라이브러리
 /// </summary>
-namespace tooushared.App_Code.connector
+namespace tooushared.App_Code.Lib
 {
     public class TimeLib
     {
