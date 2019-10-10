@@ -8,7 +8,7 @@ using MySql.Data.MySqlClient;
 /// TimeLib 요약 설명입니다.
 /// DB의 일시, 일 부분에 사용할 시간 라이브러리
 /// </summary>
-namespace tooushared.App_Code.Lib
+namespace tooushared.Lib
 {
     public class TimeLib
     {
@@ -29,6 +29,11 @@ namespace tooushared.App_Code.Lib
         {
             string now = DateTime.Now.ToString("yyyy-MM-dd");
             return now;
+        }
+        public static string CreateDate(int year,int month, int date)
+        {
+            string result = $"{year:d4}-{month:d2}-{date:d2}";
+            return result;
         }
     }
 }

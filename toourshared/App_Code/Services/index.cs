@@ -5,6 +5,7 @@ using System.Web;
 
 using tooushared.Lib;
 using tooushared.DAO;
+using tooushared.DTO;
 
 /// <summary>
 /// index의 요약 설명입니다.
@@ -15,9 +16,9 @@ public class index
 {
     public index()
     {
-        
-        //
-        // TODO: 여기에 생성자 논리를 추가합니다.
-        //
+
+        MemberDao memberDao = new MemberDao();
+        Member member = new Member('skvudrms54','0','010-2981-2222','1234','나평근','M','출신 초등학교는?','부천남초등학교',)
+        memberDao.InsertMember();
     }
 }
