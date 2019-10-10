@@ -17,7 +17,8 @@
 
             Request.Files[upload].SaveAs(Path.Combine(path, filename));
 
-            Response.Write("http://" + Request.Url.Host + ":" + Request.Url.Port + "/web/upload/" + filename);
+            Response.Write("http://" + Request.Url.Host + ":" + Request.Url.Port + "/upload/" + filename);
+
         }
     }
 

@@ -33,55 +33,56 @@
     $(document).ready(function () {
         $('#summernote').summernote({
             callbacks: {
-                function(files, editor, welEditable) {
-                    sendFile(files[0], editor, welEditable);
-                }
 
-                //onImageUpload: function (files) {
-                //    //for (let i = 0; i < files.length; i++) {
-                //    //    uploadImageToS3ForSummerNote(files[i]);
-                //    //}
-                //}
+
+                onImageUpload: function (files) {
+                    for (let i = 0; i < files.length; i++) {
+                        uploadImageToS3ForSummerNote(files[i]);
+                    }
+                }
             }
         })
     });
-    function sendFile(file,editor,welEditable) {
-    data = new FormData();
-    data.append("file", file);
-    $.ajax({
-        data: data,
-        type: "POST",
-        url: "GetFile.aspx",
-        cache: false,
-        contentType: false,
-        processData: false,
-        success: function(url) {
-                $('#summernote').insertImage(welEditable, url);
-        }
-    });
-}
-
-
-    //function uploadImageToS3ForSummerNote(file) {
-
-
-    //    formData = new FormData();
-    //    formData.append("file", file);
+    //function sendFile(file) {
+    //    data = new FormData();
+    //    data.append("File", file);
     //    $.ajax({
-    //        type: 'POST',
-    //        url: 'GetFile.aspx',
-    //        data: formData,
+    //        data: data,
+    //        type: "POST",
+    //        url: "GetFile.aspx",
     //        cache: false,
     //        contentType: false,
     //        processData: false,
     //        success: function (data) {
     //            $('#summernote').summernote('insertImage', data.fileUrl);
-    //        },
-    //        error: function (data) {
-    //            alert(data.responseText);
     //        }
     //    });
-    //}
+    function uploadImageToS3ForSummerNote(file) {
+
+
+        formData = new FormData();
+        formData.append("file", file);
+        $.ajax({
+            type: 'POST',
+            url: 'GetFile.aspx',
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                Console.info(data);
+                $('#summernote').summernote('insertImage', data.fileUrl);
+            },
+            error: function (data) {
+                alert(data.responseText);
+            }
+        });
+    }
+
+    
+
+
+    
 </script>
 
 </html>
