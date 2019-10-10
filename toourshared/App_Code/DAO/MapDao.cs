@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+
+//DB 사용시 필요한 객체들
 using System.Data;
 using MySql.Data.MySqlClient;
+using tooushared.App_Code.Lib;
 
 
 
@@ -20,19 +23,22 @@ public class MapDao
         //
     }
 
-    public Map SelectByTrv_day_no(string trv_day_no)
+    public Map SelectByTrv_day_no(string )
     {
 
-        string Sql = "";
+        string Sql = "insert into toourshared.member(toourshared.member.mem_id,toourshared.member.mem_pw,toourshared.member.mem_name) values(@mem_id, @mem_pw, @mem_name)";
         Map result;
         try
         {
-            //MySqlConnection con = 
+            MyDB myDB = new MyDB();
+            MySqlConnection con = myDB.GetCon();
 
 
 
             MySqlCommand cmd = new MySqlCommand(Sql, con);
-            cmd.Parameters.AddWithValue("@MEMID", memid);
+            cmd.Parameters.AddWithValue("@mem_id", );
+            cmd.Parameters.AddWithValue("@mem_pw", );
+            cmd.Parameters.AddWithValue("@mem_name", );
 
             con.Open();
             MySqlDataReader rd = cmd.ExecuteReader();
