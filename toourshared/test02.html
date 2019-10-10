@@ -345,9 +345,9 @@
 		}
 		
 		.carousel-inner {
-			top: 10px;
+			top: 5px;
 			width: 700px;
-			padding: 0px 150px;
+			padding: 0px 150px 0;
 		}
 		
 		.carousel-inner img{
@@ -411,16 +411,14 @@
 			width: 100%;
 		}
 		
-		.mainSlide .mainSlideContainer .carousel-indicators {
+		.carousel-indicators {
 			position: absolute;
-			right: 0;
-			bottom: -30px;
-			left: 0;
-			z-index: 15;
 			display: -ms-flexbox;
 			display: flex;
+			flex-direction: row;
 			-ms-flex-pack: center;
 			justify-content: center;
+			align-items: center;
 			padding-left: 0;
 			margin-right: 15%;
 			margin-left: 15%;
@@ -430,7 +428,6 @@
 		.mainSlide .mainSlideContainer .carousel-indicators ol{
 			margin-top: 0px;
 			margin-bottom: 1rem;
-			border: 2px solid green;
 		}
 
 		.mainSlide .mainSlideContainer .carousel-indicators li {

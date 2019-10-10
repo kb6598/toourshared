@@ -674,6 +674,16 @@
 			background-color: rgba(246, 179, 82, 1);
 		}
 		
+		.fileUploadArea{
+			padding: 25px 0;
+		}
+		
+		#fileUploadImage{
+			width: 130px;
+			height: 130px;
+			border-radius: 100%;
+		}
+		
 	</style>
 	<script>
         /* scroll할 때 발생할 이벤트 */
@@ -704,13 +714,17 @@
 		/* FileUpload (경로 없이 무조건 파일명만 뜨게) */
 		$(document).ready(function(){
 			var fileTarget = $('.fileUpload .upload-hidden');
-			
+			var originalFileName;
 			fileTarget.on('change', function(){ // 값이 변경되면
 				if(window.FileReader){ // modern browser
+					originalFileName = $(this)[0].files[0].name;
+					
+					var filename = $(this)[0].files;
 					var filename = $(this)[0].files[0].name;
 				}
 				else
 				{ // old IE
+					originalFileName = $(this).val();
 					var filename = $(this).val().split('/').pop().split('\\').pop(); // 파일명만 추출
 				}
 			
@@ -718,8 +732,12 @@
 				$(this).siblings('.upload-name').val(filename);
 				
 				// modalBody 부분 높이 조절 및 업로드 버튼 나타내기
-				document.getElementById("modalBody").style.height = "230px";
+				document.getElementById("modalBody").style.height = "400px";
 				document.getElementById("fileUploadBtn").style.display = "block";
+				
+				var image = document.getElementById("fileUploadImage");
+				image.alt = filename;
+				image.src = originalFileName;
 			});
 		});
 		
@@ -894,6 +912,9 @@
 						<input type = "file" id="fileStyle" class = "upload-hidden">
 					</div>
 					<div class = "fileUploadButton" id="fileUploadBtn">
+						<div class = "fileUploadArea">
+							<img id = "fileUploadImage" alt="">
+						</div>
 						<input type = "button" value = "적용" data-dismiss="modal">
 					</div>
       			</div>

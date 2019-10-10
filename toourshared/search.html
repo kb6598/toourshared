@@ -1,0 +1,236 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset = "utf-8">
+    <meta name = "viewport" content= "width=device-width, initial-scale=1">
+
+    <title>TO OUR SHARED : SEARCH</title>
+
+    <!-- Font -->
+    <link href = "https://fonts.googleapis.com/css?family=Mansalva|Nanum+Gothic|Nanum+Myeongjo|Noto+Sans+KR|Lora|Jua&display=swap" rel = "stylesheet" >
+
+    <!-- Bootstrap -->
+    <link rel = "stylesheet" href = "https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity= "sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin= "anonymous" >
+	
+	<!-- JS -->
+    <script src= "https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity= "sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin= "anonymous" ></script>
+    <script src= "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity= "sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin= "anonymous" ></script>
+    <script src= "https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity= "sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin= "anonymous" ></script>
+
+	<style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+			width: 100%;
+			height: 100%;
+			position: absolute;
+
+            /* 전체 배경색 */
+        }
+		
+		.main{
+			display: flex;
+			flex-direction: row;
+		}
+		
+		.sideBar{
+			z-index: 1;
+			width: 425px;
+			height: 100%;
+			box-shadow: 0px 2px 5px 2px rgba(0, 0, 0, 0.19);
+			background-color: snow;
+			position: absolute;
+			
+			dispaly: flex;
+			flex-direction: column;
+		}
+		
+		.sideBarSwitch{
+			width: auto;
+			height: 100%;
+			left: 425px;
+			
+			z-index: 1;
+			display: flex;
+			flex-direction: row;
+			justify-content: center;
+			align-items: center;
+			
+			background-color: transparent;
+			position: absolute;
+		}
+		
+		.sideBarSwitch input{
+			border: 0px;
+			outline: none;
+			padding-left: 5px;
+			margin-left: -1px;
+			
+			height: 70px;			
+			border-top-right-radius: 0.5rem;
+			border-bottom-right-radius: 0.5rem;
+			background-color: snow;
+			box-shadow: 6px 2px 5px 2px rgba(0, 0, 0, 0.19);
+			
+			color: #00b9f1;
+			font-size: 12px;
+		}
+		
+		.mapArea{
+			display: block;
+			
+			width: 100%;
+			height: 100%;
+			left: 425px;
+			
+			background: url(./img/map.jpg);
+			position: absolute;
+		}
+		
+		.sideBarHeader{
+			width: 100%;
+			height: 18%;
+			
+			display: flex;
+			flex-direction: column;
+			flex-wrap: nowrap;
+			
+			background-color: #00b9f1;
+		}
+		
+		.logoArea{
+			width: 100%;
+			height: 33.3%;
+			
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			padding-top: 20px;
+			padding-left: 15px;
+			
+			color: white;
+			font-family: 'Mansalva', cursive;
+            font-size: 28px;
+		}
+		
+		.searchArea{
+			width: 100%;
+			height: 33.3%;
+			
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			padding-left: 15px;
+		}
+		
+		.searchAreaItem{
+			width: 350px;
+			height: 50px;
+			
+			border: none;
+			outline: none;
+			padding: 10px 15px;
+			
+			font-size: 15px;
+			font-weight: 400;
+			color: dimgray;
+			
+			border-radius: 0.2rem;
+			box-shadow: 0.5px 4px 4px 2px rgba(0, 0, 0, 0.1);
+		}
+		
+		.categoryArea{
+			width: 100%;
+			height: 33.3%;
+			
+			display: flex;
+			flex-direction: row-reverse;
+			align-items: center;
+			
+			padding-right: 25px;
+		}
+		
+		.categorySelect {
+			width: 120px;
+			height: 30px;
+			
+			border-radius: 0.2rem;
+		}
+		
+	</style>
+	
+	<script>
+		
+		/* 사이드바 접었다 펴는 함수 */
+		function sidebarSwitch(){
+			var sideBar = $('#sideBar');
+			var sideBarSwitch = $('#sideBarSwitch');
+			var mapArea = $('#mapArea');
+			
+			if(sideBarSwitch.offset().left > 0) // 사이드바가 열려 있을 때
+			{
+				sideBar.css({width: 0});
+				sideBarSwitch.css({left: 0});
+				mapArea.css({left: 0});
+				document.getElementById("sideBar").style.display = "none";
+				
+				var item = $('#sideBarSwitchItem');
+				item.val("▶");
+			}
+			else // 사이드 바가 닫혀 있을 때
+			{
+				sideBar.css({width: 425});
+				sideBarSwitch.css({left: 425});
+				mapArea.css({left: 425});
+				document.getElementById("sideBar").style.display = "flex";
+				
+				var item = $('#sideBarSwitchItem');
+				item.val("◀");
+			}
+		}
+		
+	</script>
+</head>
+
+<body>
+	<div class = "main">
+		
+		<!-- 좌측 사이드 바 -->
+		<div class = "sideBar" id="sideBar">
+			<div class = "sideBarHeader">
+				<div class = "logoArea">
+					<span>To Our Shared</span>
+				</div>
+				<div class = "searchArea">
+					<input type = "text" class = "searchAreaItem" placeholder = "장소, 주소 검색" />
+				</div>
+				<div class = "categoryArea">
+					<div class = "categoryItem">
+						<select class = "categorySelect">
+							<option value = "1">최신 순</option>
+							<option value = "2">추천 순</option>
+							<option value = "3">팔로워 순</option>
+							<option value = "4">HOT 순</option>
+						</select>
+					</div>
+				</div>
+			</div>
+			<div class = "sideBarContents">b
+			</div>
+			<div class = "sideBarFooter">c
+			</div>
+		</div>
+		
+		<!-- 사이드 바 스위치(접었다 폈다) -->
+		<div class = "sideBarSwitch" id = "sideBarSwitch">
+			<input type = "button" id = "sideBarSwitchItem" value = "◀" onClick="sidebarSwitch()"/>
+		</div>
+		
+		<!-- 우측 맵 -->
+		<div class = "mapArea" id="mapArea">
+		</div>
+	</div>
+</body>
+</html>
