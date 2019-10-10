@@ -2,46 +2,29 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+
+//DB 사용시 필요한 객체들
 using System.Data;
 using MySql.Data.MySqlClient;
+using tooushared.Lib;
+using tooushared.DTO;
+
+
 
 /// <summary>
 /// MapDao의 요약 설명입니다.
 /// </summary>
-public class MapDao
+namespace tooushared.DAO
 {
-
-    public MapDao()
+    public class MapDao
     {
-        //
-        // TODO: 여기에 생성자 논리를 추가합니다.
-        //
-    }
 
-    //public Map Select(Map map)
-    //{
-    //    Map result;
-    //    string Sql = "select map.map_no, map.trv_no from map";
-    //    try
-    //    {
+        public MapDao()
+        {
+            //
+            // TODO: 여기에 생성자 논리를 추가합니다.
+            //
+        }
 
-
-
-
-
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        Console.WriteLine(ex.StackTrace);
-    //        //-1 이면 오류
-   
-    //    }
-
-
-
-
-
-
-    //    return result;
-    //}
+       
 }
