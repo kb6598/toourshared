@@ -10,6 +10,9 @@
     <!-- Font -->
     <link href = "https://fonts.googleapis.com/css?family=Mansalva|Nanum+Gothic|Nanum+Myeongjo|Noto+Sans+KR|Lora|Jua&display=swap" rel = "stylesheet" >
 
+	<!-- ICON -->
+	<script src="https://kit.fontawesome.com/a076d05399.js"></script>
+	
     <!-- Bootstrap -->
     <link rel = "stylesheet" href = "https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity= "sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin= "anonymous" >
 	
@@ -22,141 +25,270 @@
         html, body {
             margin: 0;
             padding: 0;
-            list-style: none;
 			width: 100%;
 			height: 100%;
-			position: absolute;
-
-            /* 전체 배경색 */
         }
 		
 		.main{
+			width: 100%;
+			height: 100%;
+			
+			overflow: hidden;
+			position: absolute;
+		}
+		
+		.searchBar{
+			width: 100%;
+			height: 100%;
 			display: flex;
 			flex-direction: row;
+			
+			z-index: 1;
+			position: absolute;
+		}
+		
+		#mapArea{
+			width: 100%;
+			height: 100%;
+			
+			/* 임시적 */
+			background: url(./img/map.jpg);
+			background-size: cover;
+			background-repeat: no-repeat;
+			z-index: 0;
 		}
 		
 		.sideBar{
-			z-index: 1;
-			width: 425px;
-			height: 100%;
-			box-shadow: 0px 2px 5px 2px rgba(0, 0, 0, 0.19);
-			background-color: snow;
-			position: absolute;
+			width: 360px;
+			height: 900px;
+			margin: 15px 0 15px 15px;
 			
-			dispaly: flex;
+			display: flex;
 			flex-direction: column;
+			
+			border: 1px solid rgba(0, 0, 0, 0.1);
+			border-top-left-radius: 4px;
+			border-bottom-left-radius: 4px;
+			border-bottom-right-radius: 4px;
+			background-color: #fff;
+			background-clip: padding-box;
+			box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+			transition-duration: .5s;
 		}
 		
-		.sideBarSwitch{
+		.sideBarBtn{
 			width: auto;
 			height: 100%;
-			left: 425px;
-			
-			z-index: 1;
-			display: flex;
-			flex-direction: row;
-			justify-content: center;
-			align-items: center;
-			
-			background-color: transparent;
-			position: absolute;
-		}
-		
-		.sideBarSwitch input{
-			border: 0px;
-			outline: none;
-			padding-left: 5px;
+			margin-top: 15px;
 			margin-left: -1px;
 			
-			height: 70px;			
-			border-top-right-radius: 0.5rem;
-			border-bottom-right-radius: 0.5rem;
-			background-color: snow;
-			box-shadow: 6px 2px 5px 2px rgba(0, 0, 0, 0.19);
-			
-			color: #00b9f1;
-			font-size: 12px;
+			display: flex;
 		}
 		
-		.mapArea{
-			display: block;
+		.sideBarBtn input[type="button"]{
+			width: 50px;
+			height: 50px;
 			
+			color: white;
+			font-size: 15px;
+			font-weight: bold;
+			
+			outline: none;
+			border: 1px solid rgba(0, 0, 0, 0.1);
+			border-top-right-radius: 4px;
+			border-bottom-right-radius: 4px;
+			background-color: rgba(0, 185, 241, 0.8);
+			transition-duration: .5s;
+		}
+		
+		.sideBarBtn input[type="button"]:hover{
+			transition-duration: .5s;
+			background-color: rgba(0, 185, 241, 1);
+		}
+		
+		.sideBarHome{
+			width: auto;
+			height: 100%;
+			margin-top: 15px;
+			margin-left: 15px;
+			
+			display: flex;
+		}
+		
+		.sideBarHome button{
+			width: auto;
+			height: 50px;
+			
+			font-size: 18px;
+			padding: 0 10px;
+			font-family: 'Mansalva', cursive;
+			
+			outline: none;
+			border-radius: 4px;
+			border: 1px solid rgba(0, 0, 0, 0.1);
+			color: white;
+			background-color: rgba(0, 185, 241, 0.8);
+			transition-duration: .5s;
+		}
+		
+		.sideBarHome button:hover{
+			transition-duration: .5s;
+			background-color: rgba(0, 185, 241, 1);
+		}
+		
+		.header{
+			width: 100%;
+			height: 50px;
+			
+			border-top-left-radius: 4px;
+			border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+			
+			display: flex;
+			flex-direction: row;
+			flex-wrap: nowrap;
+			transition-duration: .5s;
+		}
+		
+		.iconBtnArea{
+			width: 15%;
+		}
+		
+		.iconBtnArea button{
 			width: 100%;
 			height: 100%;
-			left: 425px;
-			
-			background: url(./img/map.jpg);
-			position: absolute;
+			font-size: 13px;
+			color: rgba(0, 0, 0, 0.7);
+			border: none;
+			outline: none;
+			cursor: pointer;
+			background-color: transparent;
 		}
 		
-		.sideBarHeader{
+		.inputArea{
+			width: 85%;
+			border-top-right-radius: 4px;
+		}
+		
+		.inputArea input{
 			width: 100%;
-			height: 18%;
+			height: 100%;
+			padding: 10px;
+			color: rgba(0, 0, 0, 0.7);
+			border: none;
+			outline: none;
+		}
+		
+		.contents{
+			width: 100%;
+			height: 100%;
+			display: flex;
+			flex-direction: column;
+			transition-duration: .5s;
+		}
+		
+		.contentsArea{
+			width: 100%;
+			height: 95%;
 			
 			display: flex;
 			flex-direction: column;
-			flex-wrap: nowrap;
-			
-			background-color: #00b9f1;
 		}
 		
-		.logoArea{
+		.orderArea{
 			width: 100%;
-			height: 33.3%;
-			
-			display: flex;
-			flex-direction: row;
-			align-items: center;
-			padding-top: 20px;
-			padding-left: 15px;
-			
-			color: white;
-			font-family: 'Mansalva', cursive;
-            font-size: 28px;
+			height: auto;
+			padding: 15px 10px;
 		}
 		
-		.searchArea{
+		.orderRadio{
 			width: 100%;
-			height: 33.3%;
-			
-			display: flex;
-			flex-direction: row;
-			align-items: center;
-			padding-left: 15px;
+			padding-bottom: 25px;
+			border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 		}
 		
-		.searchAreaItem{
-			width: 350px;
-			height: 50px;
-			
-			border: none;
-			outline: none;
-			padding: 10px 15px;
+		.orderRadioItem{
+			width: auto;
+			height: auto;
+			padding: 0 10px;
 			
 			font-size: 15px;
-			font-weight: 400;
-			color: dimgray;
-			
-			border-radius: 0.2rem;
-			box-shadow: 0.5px 4px 4px 2px rgba(0, 0, 0, 0.1);
+			font-weight: 300;
 		}
 		
-		.categoryArea{
+		.orderRadioItem input[type="radio"]{
+			position: absolute;
+			width: 1px;
+			height: 1px;
+			padding: 0;
+			margin: -1px;
+			overflow: hidden;
+			clip:rect(0, 0, 0, 0);
+			border: 0;
+		}
+		
+		.orderRadioItem input[type="radio"] + label{
+			display: inline-block;
+			position: relative;
+			padding-left: 23px;
+			cursor: pointer;
+			-webkit-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+		}
+		
+		/* 체크 안된 radio */
+		.orderRadioItem input[type="radio"] + label:before{
+			content: '';
+			position: absolute;
+			left: 0;
+			top: 2px;
+			width: 17px;
+			height: 17px;
+			text-align: center;
+			background: #fff;
+			border: 1px solid #cacece;
+			border-radius: 100%;
+		}
+		
+		/* 체크 된 radio */
+		.orderRadioItem input[type="radio"]:checked + label:before{
+			background: #fff;
+			border-color: #adb8c0;
+		}
+		
+		/* 체크 된 radio 내 동그라미 */
+		.orderRadioItem input[type="radio"]:checked + label:after{
+			content: '';
+			position: absolute;
+			top: 2px;
+			left: 0px;
+			width: 17px;
+			height: 17px;
+			border: 5px solid deepskyblue;
+			background-color: transparent;
+			border-radius: 100%;
+		}
+		
+		.orTxt{
+			font-size: 15px;
+			font-weight: bold;
+			padding: 8px 10px;
+			color: rgba(0, 0, 0, 0.7);
+		}
+		
+		.footer{
+			transition-duration: .5s;
+		}
+		
+		.boardArea{
 			width: 100%;
-			height: 33.3%;
+			height: 705px;
+			
+			margin: 10px 0;
+			border: 1px solid blue;
 			
 			display: flex;
-			flex-direction: row-reverse;
-			align-items: center;
-			
-			padding-right: 25px;
-		}
-		
-		.categorySelect {
-			width: 120px;
-			height: 30px;
-			
-			border-radius: 0.2rem;
+			flex-direction: column;
 		}
 		
 	</style>
@@ -165,29 +297,19 @@
 		
 		/* 사이드바 접었다 펴는 함수 */
 		function sidebarSwitch(){
-			var sideBar = $('#sideBar');
-			var sideBarSwitch = $('#sideBarSwitch');
-			var mapArea = $('#mapArea');
+			var chk = document.getElementById("contents");
 			
-			if(sideBarSwitch.offset().left > 0) // 사이드바가 열려 있을 때
-			{
-				sideBar.css({width: 0});
-				sideBarSwitch.css({left: 0});
-				mapArea.css({left: 0});
-				document.getElementById("sideBar").style.display = "none";
-				
-				var item = $('#sideBarSwitchItem');
-				item.val("▶");
+			if(chk.style.display != 'none'){
+				document.getElementById("contents").style.display = "none";
+				document.getElementById("footer").style.display = "none";
+				$('#sideBar').height("48px");
+				$('#sideBarBtnItem').val("▼");
 			}
-			else // 사이드 바가 닫혀 있을 때
-			{
-				sideBar.css({width: 425});
-				sideBarSwitch.css({left: 425});
-				mapArea.css({left: 425});
-				document.getElementById("sideBar").style.display = "flex";
-				
-				var item = $('#sideBarSwitchItem');
-				item.val("◀");
+			else{
+				document.getElementById("contents").style.display = "flex";
+				document.getElementById("footer").style.display = "flex";
+				$('#sideBar').height("900px");
+				$('#sideBarBtnItem').val("▲");
 			}
 		}
 		
@@ -196,41 +318,54 @@
 
 <body>
 	<div class = "main">
-		
-		<!-- 좌측 사이드 바 -->
-		<div class = "sideBar" id="sideBar">
-			<div class = "sideBarHeader">
-				<div class = "logoArea">
-					<span>To Our Shared</span>
-				</div>
-				<div class = "searchArea">
-					<input type = "text" class = "searchAreaItem" placeholder = "장소, 주소 검색" />
-				</div>
-				<div class = "categoryArea">
-					<div class = "categoryItem">
-						<select class = "categorySelect">
-							<option value = "1">최신 순</option>
-							<option value = "2">추천 순</option>
-							<option value = "3">팔로워 순</option>
-							<option value = "4">HOT 순</option>
-						</select>
+		<div class = "searchBar">
+			
+			<div class = "sideBar" id = "sideBar">
+				<div class = "header" id = "header">
+					<div class = "iconBtnArea">
+						<button><i class = "fas fa-search"></i></button>
+					</div>
+					<div class = "inputArea">
+						<input type = "text" placeholder = "리뷰를 보고 싶은 지역을 입력하세요."/>
 					</div>
 				</div>
+				<div class = "contents" id = "contents">
+					<div class = "contentsArea">
+						<div class = "orderArea">
+							<div class = "orderRadio">
+								<p class="orTxt"><i class="far fa-window-restore"></i> 검색 기준</p>
+								<table>
+									<tr>
+										<td><div class = "orderRadioItem"><input type = "radio" id = "1st" name = "orderStd" checked/><label for = "1st">최신</label></div></td>
+										<td><div class = "orderRadioItem"><input type = "radio" id = "2st" name = "orderStd"/><label for = "2st">추천</label></div></td>
+										<td><div class = "orderRadioItem"><input type = "radio" id = "3st" name = "orderStd"/><label for = "3st">평점</label></div></td>
+										<td><div class = "orderRadioItem"><input type = "radio" id = "4st" name = "orderStd"/><label for = "4st">팔로워</label></div></td>
+									</tr>
+								</table>
+							</div>
+							<div class = "boardArea">
+								
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class = "footer" id = "footer">
+				</div>
 			</div>
-			<div class = "sideBarContents">b
+			
+			<!-- sideBar 접었다 폈다 하기 위한 버튼 -->
+			<div class = "sideBarBtn" id = "sideBarBtn">
+				<input type = "button" id = "sideBarBtnItem" onClick="sidebarSwitch()" value = "▲" />
 			</div>
-			<div class = "sideBarFooter">c
+			
+			<!-- Home으로 되돌아가기 위한 버튼 -->
+			<div class = "sideBarHome" id = "sideBarhome">
+				<div class = "btnArea">
+					<button>To Our Shared</button>
+				</div>
 			</div>
 		</div>
-		
-		<!-- 사이드 바 스위치(접었다 폈다) -->
-		<div class = "sideBarSwitch" id = "sideBarSwitch">
-			<input type = "button" id = "sideBarSwitchItem" value = "◀" onClick="sidebarSwitch()"/>
-		</div>
-		
-		<!-- 우측 맵 -->
-		<div class = "mapArea" id="mapArea">
-		</div>
+		<div class = "map" id = "mapArea"></div>
 	</div>
 </body>
 </html>
