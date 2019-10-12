@@ -91,7 +91,7 @@ namespace tooushared.DAO
 
         }
 
-        public List<Member> selectFile(Member member)
+        public List<Member> selectMember()
         {
 
             MyDB mydb = new MyDB();

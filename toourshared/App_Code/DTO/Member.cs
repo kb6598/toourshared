@@ -25,7 +25,10 @@ namespace tooushared.DTO
         private string mem_timestmap;
         private string mem_img_url;
 
+        public Member()
+        {
 
+        }
 
 
         public Member(string mem_id, string mem_state, string mem_phone, string mem_pw, string mem_name, string mem_sex, string mem_ques, string mem_answer, string mem_birth, string mem_email, string mem_reg_datetime, string mem_timestmap, string mem_img_url)
@@ -215,6 +218,44 @@ namespace tooushared.DTO
             {
                 mem_img_url = value;
             }
+        }
+
+        public override bool Equals(object obj)
+        {
+            var member = obj as Member;
+            return member != null &&
+                   mem_id == member.mem_id &&
+                   mem_state == member.mem_state &&
+                   mem_phone == member.mem_phone &&
+                   mem_pw == member.mem_pw &&
+                   mem_name == member.mem_name &&
+                   mem_sex == member.mem_sex &&
+                   mem_ques == member.mem_ques &&
+                   mem_answer == member.mem_answer &&
+                   mem_birth == member.mem_birth &&
+                   mem_email == member.mem_email &&
+                   mem_reg_datetime == member.mem_reg_datetime &&
+                   mem_timestmap == member.mem_timestmap &&
+                   mem_img_url == member.mem_img_url;
+        }
+
+        public override int GetHashCode()
+        {
+            var hashCode = -704531517;
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(mem_id);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(mem_state);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(mem_phone);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(mem_pw);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(mem_name);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(mem_sex);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(mem_ques);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(mem_answer);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(mem_birth);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(mem_email);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(mem_reg_datetime);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(mem_timestmap);
+            hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(mem_img_url);
+            return hashCode;
         }
     }
 }
