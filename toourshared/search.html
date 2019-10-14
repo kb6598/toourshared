@@ -179,11 +179,11 @@
 		}
 		
 		.contents{
+			transition-duration: .5s;
 			width: 100%;
 			height: 100%;
 			display: flex;
 			flex-direction: column;
-			transition-duration: .5s;
 		}
 		
 		.contentsArea{
@@ -195,6 +195,7 @@
 		}
 		
 		.orderArea{
+			transition-duration: .5s;
 			width: 100%;
 			height: auto;
 			padding: 15px 10px;
@@ -281,10 +282,11 @@
 		}
 		
 		.boardArea{
+			transition-duration: .5s;
 			width: 100%;
 			height: 705px;
 			
-			margin: 10px 0;
+			
 			border: 1px solid blue;
 			
 			display: flex;
@@ -302,12 +304,16 @@
 			if(chk.style.display != 'none'){
 				document.getElementById("contents").style.display = "none";
 				document.getElementById("footer").style.display = "none";
+				$('.orderArea').height("0px");
+				$('.boardArea').height("0px");
 				$('#sideBar').height("48px");
 				$('#sideBarBtnItem').val("▼");
 			}
 			else{
 				document.getElementById("contents").style.display = "flex";
 				document.getElementById("footer").style.display = "flex";
+				$('.orderArea').height("auto");
+				$('.boardArea').height("705px");
 				$('#sideBar').height("900px");
 				$('#sideBarBtnItem').val("▲");
 			}
@@ -343,8 +349,21 @@
 									</tr>
 								</table>
 							</div>
-							<div class = "boardArea">
-								
+						</div>
+						<div class = "boardArea">d
+							<div class = "boardItem">
+								<div class = "boardImage">
+								</div>
+								<div class = "boardContent">
+									<div class = "boardTitle">
+									</div>
+									<div class = "boardBody">
+									</div>
+									<div class = "boardTime">
+									</div>
+									<div class = "boardScore">
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>
