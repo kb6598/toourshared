@@ -6,10 +6,10 @@ using System.Web;
 /// <summary>
 /// cost의 요약 설명입니다.
 /// </summary>
-public class cost
+public class Cost
 {
     private String cos_no;
-    public cost(string cos_no = null)
+    public Cost(string cos_no = null)
     {
         this.Cos_no = cos_no;
 
@@ -22,7 +22,7 @@ public class cost
 
     public override bool Equals(object obj)
     {
-        return obj is cost cost &&
+        return obj is Cost cost &&
                Cos_no == cost.Cos_no;
     }
 
