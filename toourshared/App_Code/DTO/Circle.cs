@@ -15,6 +15,7 @@ public class Circle
     private string cos_no;
     private string map_no;
 
+
     public Circle(string cir_no = null, string cir_crd = null, string cir_name = null, string cir_content = null, string cos_no = null, string map_no = null)
     {
         this.Cir_no = cir_no;

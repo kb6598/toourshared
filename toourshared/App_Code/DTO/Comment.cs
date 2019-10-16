@@ -12,13 +12,15 @@ public class Comment
     private string cmt_rate;
     private string cmt_timestamp;
     private string trv_no;
+    private string cmt_content;
 
-    public Comment(string cmt_no = null, string cmt_rate = null, string cmt_timestamp = null, string trv_no = null)
+    public Comment(string cmt_no = null, string cmt_rate = null, string cmt_timestamp = null, string trv_no = null, string cmt_content = null)
     {
-        this.cmt_no = cmt_no;
-        this.cmt_rate = cmt_rate;
-        this.cmt_timestamp = cmt_timestamp;
-        this.trv_no = trv_no;
+        this.Cmt_no = cmt_no;
+        this.Cmt_rate = cmt_rate;
+        this.Cmt_timestamp = cmt_timestamp;
+        this.Trv_no = trv_no;
+        this.Cmt_content = cmt_content;
         //
         // TODO: 여기에 생성자 논리를 추가합니다.
         //
@@ -28,23 +30,26 @@ public class Comment
     public string Cmt_rate { get => cmt_rate; set => cmt_rate = value; }
     public string Cmt_timestamp { get => cmt_timestamp; set => cmt_timestamp = value; }
     public string Trv_no { get => trv_no; set => trv_no = value; }
+    public string Cmt_content { get => cmt_content; set => cmt_content = value; }
 
     public override bool Equals(object obj)
     {
         return obj is Comment comment &&
-               cmt_no == comment.cmt_no &&
-               cmt_rate == comment.cmt_rate &&
-               cmt_timestamp == comment.cmt_timestamp &&
-               trv_no == comment.trv_no;
+               Cmt_no == comment.Cmt_no &&
+               Cmt_rate == comment.Cmt_rate &&
+               Cmt_timestamp == comment.Cmt_timestamp &&
+               Trv_no == comment.Trv_no &&
+               Cmt_content == comment.Cmt_content;
     }
 
     public override int GetHashCode()
     {
-        var hashCode = 1538121900;
-        hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(cmt_no);
-        hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(cmt_rate);
-        hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(cmt_timestamp);
-        hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(trv_no);
+        var hashCode = 2133542341;
+        hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Cmt_no);
+        hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Cmt_rate);
+        hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Cmt_timestamp);
+        hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Trv_no);
+        hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Cmt_content);
         return hashCode;
     }
 }
