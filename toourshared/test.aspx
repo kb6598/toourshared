@@ -1,8 +1,5 @@
 ﻿<%@ Page Language="C#" %>
-<%@ Import Namespace ="toourshared.Lib" %>
-<%@ Import Namespace ="toourshared.Dao" %>
-<%@ Import Namespace ="toourshared.Dto" %>
-<%@ Import Namespace ="MySql.Data.MySqlClient" %>
+<%@ Import Namespace="MySql.Data.MySqlClient" %>
 
 
 <!DOCTYPE html>
@@ -11,6 +8,7 @@
 
     protected void Button1_Click(object sender, EventArgs e)
     {
+
         string date = DateTime.Now.ToString("yyyy-MM-dd");
 
         //CommentDao com = new CommentDao();
@@ -27,17 +25,16 @@
         MyDB myDB = new MyDB();
             MySqlConnection con = myDB.GetCon();
 
-            string Sql = "INSERT INTO toourshared.travel (trv_secret, trv_views, trv_tot_rate, trv_main_img, trv_title, trv_tag, trv_timestamp, trv_create_time, loc_name, mem_id)" +
-                "VALUES (@trv_secret, @trv_views, @trv_tot_rate, @trv_main_img, @trv_title, @trv_tag, @trv_timestamp, @trv_create_time, @loc_name,@mem_id)";
 
+
+            string Sql = "INSERT INTO toourshared.comment (trv_no, cmt_content, cmt_rate, cmt_timestamp) VALUES(@trv_no, @cmt_content, @cmt_rate, @cmt_timestamp)";
             MySqlCommand cmd = new MySqlCommand(Sql, con);
 
-            cmd.Parameters.AddWithValue("@trv_secret", travel.Trv_secret);
-            cmd.Parameters.AddWithValue("@trv_views", travel.Trv_views);
-            cmd.Parameters.AddWithValue("@trv_tot_rate", travel.Trv_tot_rate);
-            cmd.Parameters.AddWithValue("@trv_main_img", travel.Trv_main_img);
-            cmd.Parameters.AddWithValue("@trv_title", travel.Trv_title);
-            cmd.Parameters.AddWithValue("@trv_tag", travel.Trv_tag);
+
+            cmd.Parameters.AddWithValue("@trv_no", comment.Trv_no);
+            cmd.Parameters.AddWithValue("@cmt_content", comment.Cmt_content);
+            cmd.Parameters.AddWithValue("@cmt_rate", comment.Cmt_rate);
+            cmd.Parameters.AddWithValue("@cmt_timestamp", comment.Cmt_timestamp);
 
 
 
