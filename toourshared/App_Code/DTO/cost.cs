@@ -8,6 +8,7 @@ using System.Web;
 /// </summary>
 public class Cost
 {
+    public string cost_no;
     private String cos_no;
     public Cost(string cos_no = null)
     {
