@@ -348,6 +348,9 @@
                         <div id="travelRoute_wrap" class="collapse">
                             <ul id="travelRoute" class="travelRoute"></ul>
                         </div>
+                        <div id="travelCost_wrap" class="collapse">
+                            <ul id="travelCost" class="travelCost"></ul>
+                        </div>
 
                         <div id="drawingMap"></div>
 
@@ -368,6 +371,9 @@
                         </button>
                         <button type="button" class="btn btn-secondary" data-toggle="collapse" data-target="#travelRoute_wrap">
                             여행경로
+                        </button>
+                        <button type="button" class="btn btn-secondary" data-toggle="collapse" data-target="#travelCost_wrap">
+                            여행 경비
                         </button>
 
                     </div>
@@ -582,6 +588,120 @@
             manager.redo();
         }
 
+        //class overlayInfo {
+        //    constructor() {
+        //        this.stack = [];
+        //    }
+        //    get length() {
+        //        return this.stack.length;
+        //    }
+        //    append(element) {
+        //        this.
+        //    }
+        //}
+        //https://jeong-pro.tistory.com/123
+        class List {
+            constructor() {
+                this.listSize = 0;
+                this.pos = 0;
+                this.dataStore = [];
+            }
+            //get 키워드 활용 -> 사용은 .length로 변수처럼 사용
+            get length() {
+                return this.listSize;
+            }
+            //뒤에 요소 삽입
+            append(element) {
+                this.dataStore[this.listSize] = element;
+                this.listSize++;
+            }
+            //요소 스왑
+            swap(i, j) {
+            }
+            //요소 검색 후 인덱스 리턴
+            find(element) {
+                for (let i = 0; i < this.listSize; i++) {
+                    if (element === this.dataStore[i]) {
+                        return i;
+                    }
+                }
+                return -1;
+                /*
+                //for~in문을 사용하니까 결과값이 'String' 타입...
+                for(val in this.dataStore){
+                  if(element === this.dataStore[val]){
+                    return val;
+                  }
+                }
+                */
+            }
+            //요소 제거
+            remove(element) {
+                let foundAt = this.find(element);
+                if (foundAt > -1) {
+                    this.dataStore.splice(foundAt, 1);//해당 배열 요소 삭제
+                    --this.listSize;//크기 1개 축소
+                    return true;
+                }
+                return false;
+            }
+            //리스트 요소 출력
+            toString() {
+                return this.dataStore;
+            }
+            //특정 위치 다음에 요소 삽입
+            insert(element, after) {
+                let insertPos = this.find(after);
+                if (insertPos > -1) {
+                    this.dataStore.splice(insertPos + 1, 0, element);
+                    this.listSize++;
+                    return true;
+                }
+                return false;
+            }
+            //리스트 전체 삭제
+            clear() {
+                this.dataStore = []; //delete 즉시 배열을 삭제하고 빈 배열 재생성
+                this.listSize = this.pos = 0;
+            }
+            //리스트에 특정값이 있는지 판단
+            contains(element) {
+                for (let i = 0; i < this.listSize; i++) {
+                    if (this.dataStore[i] === element) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            front() {
+                this.pos = 0;
+            }
+            end() {
+                this.pos = this.listSize - 1;
+            }
+            prev() {
+                if (this.pos > 0) {
+                    this.pos--;
+                }
+            }
+            next() {
+                if (this.post < this.listSize - 1) {
+                    this.pos++;
+                }
+            }
+            currPost() {
+                return this.pos;
+            }
+            moveTo(position) {
+                this.pos = position;
+            }
+            getElement() {
+                return this.dataStore[this.pos];
+            }
+        }
+
+
+
 
 
 
@@ -716,6 +836,7 @@
                         detailAddr +
                         '   <div class="jibun ellipsis">' + "place.phone" + '</div>' +
                         '                <div><a href="' + "place.place_url" + '" target="_blank" class="link">상세페이지</a></div>' +
+                        '<button type="button" class="btn btn-secondary" data-toggle="collapse" data-target="#travelCost_wrap">여행 경비</button>'+
                         '            </div>' +
                         '        </div>' +
                         '    </div>' +
@@ -801,131 +922,6 @@
 
 
 
-
-
-        //// Drawing Manager에서 가져온 데이터 중 마커를 아래 지도에 표시하는 함수입니다
-        //function drawMarker(markers) {
-        //    var len = markers.length, i = 0;
-
-        //    for (; i < len; i++) {
-        //        var marker = new daum.maps.Marker({
-        //            map: map,
-        //            position: new daum.maps.LatLng(markers[i].y, markers[i].x),
-        //            zIndex: markers[i].zIndex
-        //        });
-
-        //        overlays.push(marker);
-
-
-        //        //alert (new daum.maps.LatLng(markers[0].y, markers[0].x)) ;
-
-        //    }
-        //}
-
-        //// Drawing Manager에서 가져온 데이터 중 선을 아래 지도에 표시하는 함수입니다
-        //function drawPolyline(lines) {
-        //    var len = lines.length, i = 0;
-
-        //    for (; i < len; i++) {
-        //        var path = pointsToPath(lines[i].points);
-        //        var style = lines[i].options;
-        //        var polyline = new daum.maps.Polyline({
-        //            map: map,
-        //            path: path,
-        //            strokeColor: style.strokeColor,
-        //            strokeOpacity: style.strokeOpacity,
-        //            strokeStyle: style.strokeStyle,
-        //            strokeWeight: style.strokeWeight
-        //        });
-
-        //        overlays.push(polyline);
-        //    }
-        //}
-
-        //// Drawing Manager에서 가져온 데이터 중 사각형을 아래 지도에 표시하는 함수입니다
-        //function drawRectangle(rects) {
-        //    var len = rects.length, i = 0;
-
-        //    for (; i < len; i++) {
-        //        var style = rects[i].options;
-        //        var rect = new daum.maps.Rectangle({
-        //            map: map,
-        //            bounds: new daum.maps.LatLngBounds(
-        //                new daum.maps.LatLng(rects[i].sPoint.y, rects[i].sPoint.x),
-        //                new daum.maps.LatLng(rects[i].ePoint.y, rects[i].ePoint.x)
-        //            ),
-        //            strokeColor: style.strokeColor,
-        //            strokeOpacity: style.strokeOpacity,
-        //            strokeStyle: style.strokeStyle,
-        //            strokeWeight: style.strokeWeight,
-        //            fillColor: style.fillColor,
-        //            fillOpacity: style.fillOpacity
-        //        });
-
-        //        overlays.push(rect);
-        //    }
-        //}
-
-        //// Drawing Manager에서 가져온 데이터 중 원을 아래 지도에 표시하는 함수입니다
-        //function drawCircle(circles) {
-        //    var len = circles.length, i = 0;
-
-        //    for (; i < len; i++) {
-        //        var style = circles[i].options;
-        //        var circle = new daum.maps.Circle({
-        //            map: map,
-        //            center: new daum.maps.LatLng(circles[i].center.y, circles[i].center.x),
-        //            radius: circles[i].radius,
-        //            strokeColor: style.strokeColor,
-        //            strokeOpacity: style.strokeOpacity,
-        //            strokeStyle: style.strokeStyle,
-        //            strokeWeight: style.strokeWeight,
-        //            fillColor: style.fillColor,
-        //            fillOpacity: style.fillOpacity
-        //        });
-
-        //        overlays.push(circle);
-        //    }
-        //}
-
-        //// Drawing Manager에서 가져온 데이터 중 다각형을 아래 지도에 표시하는 함수입니다
-        //function drawPolygon(polygons) {
-        //    var len = polygons.length, i = 0;
-
-        //    for (; i < len; i++) {
-        //        var path = pointsToPath(polygons[i].points);
-        //        var style = polygons[i].options;
-        //        var polygon = new daum.maps.Polygon({
-        //            map: map,
-        //            path: path,
-        //            strokeColor: style.strokeColor,
-        //            strokeOpacity: style.strokeOpacity,
-        //            strokeStyle: style.strokeStyle,
-        //            strokeWeight: style.strokeWeight,
-        //            fillColor: style.fillColor,
-        //            fillOpacity: style.fillOpacity
-        //        });
-
-        //        overlays.push(polygon);
-        //    }
-        //}
-
-        //// Drawing Manager에서 가져온 데이터 중 
-        //// 선과 다각형의 꼭지점 정보를 daum.maps.LatLng객체로 생성하고 배열로 반환하는 함수입니다 
-        //function pointsToPath(points) {
-        //    var len = points.length,
-        //        path = [],
-        //        i = 0;
-
-        //    for (; i < len; i++) {
-        //        var latlng = new daum.maps.LatLng(points[i].y, points[i].x);
-        //        //path.push(i+":");
-        //        path.push(latlng);
-        //    }
-
-        //    return path;
-
-        //}
 
 
         // 다음페이지로 markers, polyline, rect, circle, polygon 보내는 기능
@@ -1366,6 +1362,67 @@
             //드래그 앤드롭 액션 실행
             dragAndDropAction();
         }
+
+        //----------------------------------------------------------------
+        //travelCost
+        //----------------------------------------------------------------
+        var travelCostCnt = 0;
+         function addTravelCost(place_name, road_address_name, address_name, phone, place_url, x, y) {
+
+            var listEl = document.getElementById('travelCost'),
+                menuEl = document.getElementById('travelCOst_wrap'),
+                fragment = document.createDocumentFragment(),
+                listStr = '';
+
+
+
+            // 지도에 표시되고 있는 마커를 제거합니다
+            removeMarker();
+            //지도에 표시되고 있는 인포윈도우 제거
+            closeOverlay();
+            $('#travelCost_wrap').collapse('show');
+
+            //travelRouteCnt 증가
+            ++travelCostCnt;
+
+            var el = document.createElement('li'),
+                itemStr = '<div  class="card" style="width:12rem">' +
+                    '    <div class="card-body" >' +
+                    '        <h4 class="card-title">' + place_name + '</h4>' +
+                    ' <p class="card-text">' + road_address_name + '</p>' +
+                    ' <p class="card-text">' + address_name + '</p>' +
+                    ' <p class="card-text">' + phone + '</p>' +
+                    ' <a class="card-link" href="' + place_url + '" target="_blank" class="link">상세페이지</a>' +
+
+                    '    </div>' +
+                    '<input id=x type=hidden value=' + x + '/>' +
+                    '<input id=y type=hidden value=' + y + '/>' +
+                    '</div>';
+            el.innerHTML = itemStr;
+            el.setAttribute("draggable", 'true');
+            el.setAttribute("id", "travelPoint");
+
+
+            var itemEl = el; // 검색 결과 항목 Element를 생성합니다
+
+
+            fragment.appendChild(itemEl);
+
+            // drawing 메니저에 마커 추가
+            var position = new kakao.maps.LatLng(y, x);
+            manager.put(kakao.maps.drawing.OverlayType.MARKER, position, 1);
+
+
+            // 검색결과 항목들을 검색결과 목록 Elemnet에 추가합니다
+            listEl.appendChild(fragment);
+            menuEl.scrollTop = 0;
+
+            //드래그 앤드롭 액션 실행
+            dragAndDropAction();
+        }
+
+
+
         //여행경로 드래그 앤 드롭
         var DragManager;
         function dragAndDropAction() {
