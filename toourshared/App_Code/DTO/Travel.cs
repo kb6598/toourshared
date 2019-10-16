@@ -4,9 +4,9 @@ using System.Linq;
 using System.Web;
 
 /// <summary>
-/// Travle의 요약 설명입니다.
+/// Travel의 요약 설명입니다.
 /// </summary>
-public class Travle
+public class Travel
 {
     private string trv_no;
     private string trv_secret;
@@ -19,7 +19,7 @@ public class Travle
     private string trv_create_time;
     private string loc_name;
     private string mem_id;
-    public Travle(string trv_no = null, string trv_secret = null, string trv_views = null, string trv_tot_rate = null, string trv_main_img = null, string trv_title = null, string trv_tag = null, string trv_timestamp = null, string trv_create_time = null, string loc_name = null, string mem_id = null)
+    public Travel(string trv_no = null, string trv_secret = null, string trv_views = null, string trv_tot_rate = null, string trv_main_img = null, string trv_title = null, string trv_tag = null, string trv_timestamp = null, string trv_create_time = null, string loc_name = null, string mem_id = null)
     {
         this.trv_no = trv_no;
         this.trv_secret = trv_secret;
@@ -51,18 +51,18 @@ public class Travle
 
     public override bool Equals(object obj)
     {
-        return obj is Travle travle &&
-               trv_no == travle.trv_no &&
-               trv_secret == travle.trv_secret &&
-               trv_views == travle.trv_views &&
-               trv_tot_rate == travle.trv_tot_rate &&
-               trv_main_img == travle.trv_main_img &&
-               trv_title == travle.trv_title &&
-               trv_tag == travle.trv_tag &&
-               trv_timestamp == travle.trv_timestamp &&
-               trv_create_time == travle.trv_create_time &&
-               loc_name == travle.loc_name &&
-               mem_id == travle.mem_id;
+        return obj is Travel travel &&
+               trv_no == travel.trv_no &&
+               trv_secret == travel.trv_secret &&
+               trv_views == travel.trv_views &&
+               trv_tot_rate == travel.trv_tot_rate &&
+               trv_main_img == travel.trv_main_img &&
+               trv_title == travel.trv_title &&
+               trv_tag == travel.trv_tag &&
+               trv_timestamp == travel.trv_timestamp &&
+               trv_create_time == travel.trv_create_time &&
+               loc_name == travel.loc_name &&
+               mem_id == travel.mem_id;
     }
 
     public override int GetHashCode()

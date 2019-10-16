@@ -120,6 +120,7 @@ namespace tooushared.DAO
                     {
                         tmpMemberPointer = new Member();
 
+
                         tmpMemberPointer.Mem_id = rd["mem_id"].ToString();
                         tmpMemberPointer.Mem_state = rd["mem_state"].ToString();
                         tmpMemberPointer.Mem_phone = rd["mem_phone"].ToString();
