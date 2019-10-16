@@ -22,11 +22,8 @@ public class CommentDao
     }
 
 
-    public int InsertComment(Comment comment)
+    public void InsertComment(Comment comment)
     {
-        int result;
-        try
-        {
             MyDB myDB = new MyDB();
             MySqlConnection con = myDB.GetCon();
 
@@ -40,18 +37,9 @@ public class CommentDao
 
             con.Open();
 
+            cmd.ExecuteNonQuery();
 
             con.Close();
 
-            result = cmd.ExecuteNonQuery();
-
-        }
-        catch(Exception e)
-        {
-            Console.WriteLine(e.StackTrace);
-            result = -1;
-        }
-
-        return result;
     }
 }

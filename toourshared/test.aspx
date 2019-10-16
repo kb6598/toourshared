@@ -11,7 +11,7 @@
 
         string date = DateTime.Now.ToString("yyyy-MM-dd");
 
-        //CommentDao com = new CommentDao();
+        CommentDao com = new CommentDao();
 
         Comment comment = new Comment();
 
@@ -20,28 +20,11 @@
         comment.Cmt_rate = TextBox2.Text;
         comment.Cmt_timestamp = date;
 
-        //com.InsertComment(comment);
-
-        MyDB myDB = new MyDB();
-            MySqlConnection con = myDB.GetCon();
+        com.InsertComment(comment);
 
 
 
-            string Sql = "INSERT INTO toourshared.comment (trv_no, cmt_content, cmt_rate, cmt_timestamp) VALUES(@trv_no, @cmt_content, @cmt_rate, @cmt_timestamp)";
-            MySqlCommand cmd = new MySqlCommand(Sql, con);
 
-
-            cmd.Parameters.AddWithValue("@trv_no", comment.Trv_no);
-            cmd.Parameters.AddWithValue("@cmt_content", comment.Cmt_content);
-            cmd.Parameters.AddWithValue("@cmt_rate", comment.Cmt_rate);
-            cmd.Parameters.AddWithValue("@cmt_timestamp", comment.Cmt_timestamp);
-
-
-
-            con.Open();
-
-
-            con.Close();
 
     }
 </script>
