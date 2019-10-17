@@ -54,4 +54,5 @@ public class CommentDao
 
         return result;
     }
+    //public void DeleteCommentBy(mem_id)
 }
