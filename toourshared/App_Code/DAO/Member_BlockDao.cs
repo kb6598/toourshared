@@ -16,10 +16,10 @@ public class Member_BlockDao
         // TODO: 여기에 생성자 논리를 추가합니다.
         //
     }
-    public int InsertMember_Block(Member_Block member_Block)
+    public string InsertMember_Block(Member_Block member_Block)
     {
 
-        int result;
+        string result = "";
         MyDB myDB = new MyDB();
         MySqlConnection con = myDB.GetCon();
 
@@ -33,7 +33,9 @@ public class Member_BlockDao
 
         con.Open();
 
-        result = cmd.ExecuteNonQuery();
+        cmd.ExecuteNonQuery();
+
+         result = cmd.LastInsertedId.ToString();
 
         con.Close();
 

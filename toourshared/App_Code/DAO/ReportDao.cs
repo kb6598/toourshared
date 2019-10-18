@@ -16,10 +16,10 @@ public class ReportDao
         // TODO: 여기에 생성자 논리를 추가합니다.
         //
     }
-    public int InsertReport(Report report)
+    public string InsertReport(Report report)
     {
 
-        int result;
+        string result = "";
         MyDB myDB = new MyDB();
         MySqlConnection con = myDB.GetCon();
 
@@ -33,7 +33,9 @@ public class ReportDao
 
         con.Open();
 
-        result = cmd.ExecuteNonQuery();
+        cmd.ExecuteNonQuery();
+
+         result = cmd.LastInsertedId.ToString();
 
         con.Close();
 

@@ -17,10 +17,10 @@ public class CircleDao
         //
     }
 
-    public int InsertCircle(Circle circle)
+    public string InsertCircle(Circle circle)
     {
 
-        int result;
+  
         MyDB myDB = new MyDB();
         MySqlConnection con = myDB.GetCon();
 
@@ -35,7 +35,9 @@ public class CircleDao
 
         con.Open();
 
-        result = cmd.ExecuteNonQuery();
+     
+
+        string result = cmd.LastInsertedId.ToString();
 
         con.Close();
 

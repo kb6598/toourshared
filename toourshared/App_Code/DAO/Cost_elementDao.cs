@@ -16,9 +16,9 @@ public class Cost_elementDao
         // TODO: 여기에 생성자 논리를 추가합니다.
         //
     }
-    public int InsertCost_element(Cost_Element cost_Element)
+    public string InsertCost_element(Cost_Element cost_Element)
     {
-        int result;
+        string result = "";
         try
         {
             MyDB myDB = new MyDB();
@@ -38,17 +38,19 @@ public class Cost_elementDao
 
 
             con.Open();
+            cmd.ExecuteNonQuery();
 
+             result = cmd.LastInsertedId.ToString();
 
             con.Close();
 
-            result = cmd.ExecuteNonQuery();
+           
 
         }
         catch (Exception e)
         {
             Console.WriteLine(e.StackTrace);
-            result = -1;
+           
         }
 
         return result;

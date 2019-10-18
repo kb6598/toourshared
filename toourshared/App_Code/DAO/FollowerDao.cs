@@ -16,10 +16,10 @@ public class FollowerDao
         // TODO: 여기에 생성자 논리를 추가합니다.
         //
     }
-    public int InsertFollower(Follower follower)
+    public string InsertFollower(Follower follower)
     {
 
-        int result;
+        
         MyDB myDB = new MyDB();
         MySqlConnection con = myDB.GetCon();
 
@@ -33,7 +33,9 @@ public class FollowerDao
 
         con.Open();
 
-        result = cmd.ExecuteNonQuery();
+        cmd.ExecuteNonQuery();
+
+        string result = cmd.LastInsertedId.ToString();
 
         con.Close();
 
