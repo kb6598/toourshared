@@ -9,7 +9,7 @@
     protected void Button1_Click(object sender, EventArgs e)
     {
 
-        string date = DateTime.Now.ToString("yyyy-MM-dd");
+        string date = DateTime.Now.ToString("yyyy-MM-dd-HH-MM");
 
         CommentDao com = new CommentDao();
 
@@ -20,22 +20,26 @@
         comment.Cmt_rate = TextBox2.Text;
         comment.Cmt_timestamp = date;
 
-        int i = com.InsertComment(comment);
+        string d = com.InsertComment(comment);
 
-        if(i == 1)
-        {
-            Label1.Text = i.ToString();
+        Label1.Text = d;
 
-            string j = com.select_last(comment);
-            Label2.Text = j;
-           
+        //if(i == 1)
+        //{
+        //    Label1.Text = i.ToString();
+
+        //    string j = com.Select_last(comment);
 
 
-        }
-        else
-        {
-            Label1.Text = "값이 제대로 안넘어갔으니 알아서 확인하셈";
-        }
+        //    Label2.Text = j;
+
+
+
+        //}
+        //else
+        //{
+        //    Label1.Text = "값이 제대로 안넘어갔으니 알아서 확인하셈";
+        //}
 
 
 
