@@ -20,9 +20,9 @@ public class TravelDao
         //
     }
 
-    public int InsertTravel (Travel travel)
+    public string InsertTravel (Travel travel)
     {
-        int result;
+        string result = "";
         try
         {
             MyDB myDB = new MyDB();
@@ -43,17 +43,19 @@ public class TravelDao
 
 
             con.Open();
+            cmd.ExecuteNonQuery();
 
+             result = cmd.LastInsertedId.ToString();
 
             con.Close();
 
-            result = cmd.ExecuteNonQuery();
+           
 
         }
         catch (Exception e)
         {
             Console.WriteLine(e.StackTrace);
-            result = -1;
+            
         }
 
         return result;
