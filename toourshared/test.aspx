@@ -20,7 +20,22 @@
         comment.Cmt_rate = TextBox2.Text;
         comment.Cmt_timestamp = date;
 
-        com.InsertComment(comment);
+        int i = com.InsertComment(comment);
+
+        if(i == 1)
+        {
+            Label1.Text = i.ToString();
+
+            string j = com.select_last(comment);
+            Label2.Text = j;
+           
+
+
+        }
+        else
+        {
+            Label1.Text = "값이 제대로 안넘어갔으니 알아서 확인하셈";
+        }
 
 
 
@@ -40,7 +55,8 @@
             <asp:TextBox ID="TextBox1" runat="server"></asp:TextBox>
             <asp:TextBox ID="TextBox2" runat="server"></asp:TextBox>
 
-
+            <asp:Label ID="Label1" runat="server" Text="Label"></asp:Label>
+            <asp:Label ID="Label2" runat="server" Text="Label"></asp:Label>
 
             <asp:Button ID="Button1" runat="server" Text="Button" OnClick="Button1_Click" />
         </div>

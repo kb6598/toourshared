@@ -24,13 +24,12 @@ public class CommentDao
 
     public int InsertComment(Comment comment)
     {
+
         int result;
-        try
-        {
             MyDB myDB = new MyDB();
             MySqlConnection con = myDB.GetCon();
 
-            string Sql = "INSERT INTO toourshared.comment (trv_no, cmt_content, cmt_rate, cmt_timestamp) VALUES(@trv_no, @cmt_content, @cmt_rate, @cmt_timestamp)";
+            string Sql = "INSERT INTO toourshared.comment (trv_no, cmt_content, cmt_rate, cmt_timestamp) VALUES(@trv_no, @cmt_content, @cmt_rate, @cmt_timestamp); select last_insert_id()";
             MySqlCommand cmd = new MySqlCommand(Sql, con);
 
             cmd.Parameters.AddWithValue("@trv_no", comment.Trv_no);
@@ -40,19 +39,46 @@ public class CommentDao
 
             con.Open();
 
+            result = cmd.ExecuteNonQuery();
 
             con.Close();
 
-            result = cmd.ExecuteNonQuery();
-
-        }
-        catch(Exception e)
-        {
-            Console.WriteLine(e.StackTrace);
-            result = -1;
-        }
 
         return result;
-    }
+    }   
     //public void DeleteCommentBy(mem_id)
+
+    public string select_last(Comment com)
+    {
+        string cmt_no = "";
+
+        MyDB myDB = new MyDB();
+        MySqlConnection con = myDB.GetCon();
+
+
+        string Sql = "select last_insert_id() as last_pk";
+        MySqlCommand cmd = new MySqlCommand(Sql, con);
+        con.Open();
+        MySqlDataReader reader = cmd.ExecuteReader();
+        if (reader.Read())
+        {
+            cmt_no = reader["last_pk"].ToString();
+
+            reader.Close();
+            con.Close();
+
+            return cmt_no;
+        }
+        else
+        {
+            cmt_no = null;
+
+            return cmt_no;
+
+        }
+
+        return cmt_no;
+        
+
+    }
 }
