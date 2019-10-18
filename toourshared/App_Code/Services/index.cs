@@ -30,12 +30,12 @@ public class index
         memberDao.InsertMember(member);
 
 
-        List<Member> lstMembers = memberDao.selectMember();
+        //List<Member> lstMembers = memberDao.selectMember();
 
 
-        foreach(var i in lstMembers)
-        {
-            Console.WriteLine(i.Mem_id +":"+i.Mem_name);
-        }
+        //foreach(var i in lstMembers)
+        //{
+        //    Console.WriteLine(i.Mem_id +":"+i.Mem_name);
+        //}
     }
 }
