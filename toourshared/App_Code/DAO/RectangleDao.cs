@@ -16,10 +16,10 @@ public class RectangleDao
         // TODO: 여기에 생성자 논리를 추가합니다.
         //
     }
-    public int InsertRectangle(Rectangle rectangle)
+    public string InsertRectangle(Rectangle rectangle)
     {
 
-        int result;
+        string result = "";
         MyDB myDB = new MyDB();
         MySqlConnection con = myDB.GetCon();
 
@@ -34,7 +34,9 @@ public class RectangleDao
 
         con.Open();
 
-        result = cmd.ExecuteNonQuery();
+        cmd.ExecuteNonQuery();
+
+         result = cmd.LastInsertedId.ToString();
 
         con.Close();
 

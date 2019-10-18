@@ -29,16 +29,16 @@ namespace tooushared.DAO
 
 
 
-        public int InsertMember(Member member)
+        public string InsertMember(Member member)
         {
 
 
 
-            int result;
+            string result = "";
             if (member.Mem_id == "" && member.Mem_pw == "" && member.Mem_name == "")
             {
                 Console.WriteLine("error parameter value is empty");
-                result = -2;
+              
             }
             DataSet ds = new DataSet();
             try
@@ -72,17 +72,19 @@ namespace tooushared.DAO
 
 
                 con.Open();
+                cmd.ExecuteNonQuery();
 
+                 result = cmd.LastInsertedId.ToString();
 
                 con.Close();
-                result = cmd.ExecuteNonQuery();
+              
 
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.StackTrace);
                 //-1 이면 오류
-                result = -1;
+              
 
             }
 

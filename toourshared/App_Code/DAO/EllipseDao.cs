@@ -17,10 +17,10 @@ public class EllipseDao
         //
     }
 
-    public int InsertEllopse(Ellipse ellipse)
+    public string InsertEllopse(Ellipse ellipse)
     {
 
-        int result;
+        
         MyDB myDB = new MyDB();
         MySqlConnection con = myDB.GetCon();
 
@@ -35,7 +35,9 @@ public class EllipseDao
 
         con.Open();
 
-        result = cmd.ExecuteNonQuery();
+        cmd.ExecuteNonQuery();
+
+        string result = cmd.LastInsertedId.ToString();
 
         con.Close();
 

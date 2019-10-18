@@ -25,6 +25,34 @@ namespace tooushared.DAO
             // TODO: 여기에 생성자 논리를 추가합니다.
             //
         }
+        public string InsertMap(Map map)
+        {
+
+            MyDB myDB = new MyDB();
+            MySqlConnection con = myDB.GetCon();
+
+            string Sql = "INSERT INTO toourshared.map (map_no,trv_day_no) VALUES(@map_no,@trv_day_no); select last_insert_id()";
+            MySqlCommand cmd = new MySqlCommand(Sql, con);
+
+            cmd.Parameters.AddWithValue("@map_no", map.Map_no);
+            cmd.Parameters.AddWithValue("@trv_day_no", map.Trv_day_no);
+
+
+
+
+            con.Open();
+
+            cmd.ExecuteNonQuery();
+
+            string result = cmd.LastInsertedId.ToString();
+
+            con.Close();
+
+
+            return result;
+        }
+        //public void DeleteCommentBy(mem_id)
+
 
     }
 }

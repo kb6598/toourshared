@@ -17,16 +17,17 @@ public class CostDao
         // TODO: 여기에 생성자 논리를 추가합니다.
         //
     }
-    public int InsertCost(Cost cost)
+    public string InsertCost(Cost cost)
     {
 
+        string result="";
 
 
-        int result;
+
         if (cost.Cos_no == "" )
         {
             Console.WriteLine("error parameter value is empty");
-            result = -2;
+            
         }
         DataSet ds = new DataSet();
         try
@@ -49,17 +50,19 @@ public class CostDao
 
 
             con.Open();
+            cmd.ExecuteNonQuery();
 
+             result = cmd.LastInsertedId.ToString();
 
             con.Close();
-            result = cmd.ExecuteNonQuery();
+           
 
         }
         catch (Exception ex)
         {
             Console.WriteLine(ex.StackTrace);
             //-1 이면 오류
-            result = -1;
+            
 
         }
 

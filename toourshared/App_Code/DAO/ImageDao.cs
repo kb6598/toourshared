@@ -16,7 +16,7 @@ public class ImageDao
         // TODO: 여기에 생성자 논리를 추가합니다.
         //
     }
-    public int InsertImage(Image image)
+    public string InsertImage(Image image)
     {
         int result;
         try

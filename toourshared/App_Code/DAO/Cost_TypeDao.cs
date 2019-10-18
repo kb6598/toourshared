@@ -6,17 +6,17 @@ using System.Web;
 using tooushared.Lib;
 
 /// <summary>
-/// VideoDao의 요약 설명입니다.
+/// Cost_TypeDao의 요약 설명입니다.
 /// </summary>
-public class VideoDao
+public class Cost_TypeDao
 {
-    public VideoDao()
+    public Cost_TypeDao()
     {
         //
         // TODO: 여기에 생성자 논리를 추가합니다.
         //
     }
-    public string InsertVideo(Video video)
+    public string InsertCost_type(Cost_Type cost_Type)
     {
         string result = "";
         try
@@ -24,32 +24,31 @@ public class VideoDao
             MyDB myDB = new MyDB();
             MySqlConnection con = myDB.GetCon();
 
-            string Sql = "INSERT INTO toourshared.video (mem_id,vid_name,vid_caption)" +
-                "VALUES (@mem_id, @vid_name, @vid_caption)";
+            string Sql = "INSERT INTO toourshared.cost_type (cos_no,cos_ele_type,cos_ele_cost,cos_ele_info)" +
+                "VALUES (@cos_no,@cos_ele_type,@cos_ele_cost,@cos_ele_info)";
 
             MySqlCommand cmd = new MySqlCommand(Sql, con);
 
-            cmd.Parameters.AddWithValue("@mem_id", video.Mem_id);
-            cmd.Parameters.AddWithValue("@vid_name", video.Vid_name);
-            cmd.Parameters.AddWithValue("@vid_caption", video.Vid_caption);
-            
+            cmd.Parameters.AddWithValue("@cos_ele_no", cost_Type.Cos_ele_type);
+           
+
 
 
 
             con.Open();
-
             cmd.ExecuteNonQuery();
 
-             result = cmd.LastInsertedId.ToString();
+            result = cmd.LastInsertedId.ToString();
+
             con.Close();
 
-            
+
 
         }
         catch (Exception e)
         {
             Console.WriteLine(e.StackTrace);
-           
+
         }
 
         return result;
