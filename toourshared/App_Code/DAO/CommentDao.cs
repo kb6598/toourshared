@@ -22,10 +22,9 @@ public class CommentDao
     }
 
 
-    public int InsertComment(Comment comment)
+    public string InsertComment(Comment comment)
     {
 
-        int result;
             MyDB myDB = new MyDB();
             MySqlConnection con = myDB.GetCon();
 
@@ -37,9 +36,13 @@ public class CommentDao
             cmd.Parameters.AddWithValue("@cmt_rate", comment.Cmt_rate);
             cmd.Parameters.AddWithValue("@cmt_timestamp", comment.Cmt_timestamp);
 
+            
+
             con.Open();
 
-            result = cmd.ExecuteNonQuery();
+            cmd.ExecuteNonQuery();
+
+            string result = cmd.LastInsertedId.ToString();
 
             con.Close();
 
@@ -48,37 +51,54 @@ public class CommentDao
     }   
     //public void DeleteCommentBy(mem_id)
 
-    public string select_last(Comment com)
+    
+
+
+    public int UpdateComment(Comment comment)
     {
-        string cmt_no = "";
+        int result;
 
         MyDB myDB = new MyDB();
         MySqlConnection con = myDB.GetCon();
 
-
-        string Sql = "select last_insert_id() as last_pk";
+        string Sql = "UPDATE toourshared.comment SET cmt_content=@cmt_content, cmt_rate=@cmt_rate, cmt_timestamp=@cmt_timestamp where cmt_no=@cmt_no";
         MySqlCommand cmd = new MySqlCommand(Sql, con);
+
+        cmd.Parameters.AddWithValue("@cmt_content", comment.Cmt_content);
+        cmd.Parameters.AddWithValue("@cmt_rate", comment.Cmt_rate);
+        cmd.Parameters.AddWithValue("@cmt_timestamp", comment.Cmt_timestamp);
+        cmd.Parameters.AddWithValue("@cmt_no", comment.Cmt_no);
+
         con.Open();
-        MySqlDataReader reader = cmd.ExecuteReader();
-        if (reader.Read())
-        {
-            cmt_no = reader["last_pk"].ToString();
 
-            reader.Close();
-            con.Close();
+        result = cmd.ExecuteNonQuery();
 
-            return cmt_no;
-        }
-        else
-        {
-            cmt_no = null;
+        con.Close();
 
-            return cmt_no;
 
-        }
+        return result;
+    }
 
-        return cmt_no;
-        
+    public int DeleteComment(Comment comment)
+    {
+        int result;
+
+        MyDB myDB = new MyDB();
+        MySqlConnection con = myDB.GetCon();
+
+        string Sql = "DELETE FROM toourshared.comment WHERE cmt_no=@cmt_no";
+        MySqlCommand cmd = new MySqlCommand(Sql, con);
+
+        cmd.Parameters.AddWithValue("@cmt_no", comment.Cmt_no);
+
+        con.Open();
+
+        result = cmd.ExecuteNonQuery();
+
+        con.Close();
+
+        return result;
 
     }
+
 }
