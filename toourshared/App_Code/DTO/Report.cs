@@ -8,42 +8,46 @@ using System.Web;
 /// </summary>
 public class Report
 {
-private string rep_no;
+    private string rep_no;
     private string trv_no;
     private string rep_timestap;
     private string rep_mem_id;
-    public Report()
+    private string rep_reason;
+
+    public Report(string rep_no = null, string trv_no = null, string rep_timestap = null, string rep_mem_id = null, string rep_reason = null)
     {
-        //
-        // TODO: 여기에 생성자 논리를 추가합니다.
-        //
+        this.rep_no = rep_no;
+        this.trv_no = trv_no;
+        this.rep_timestap = rep_timestap;
+        this.rep_mem_id = rep_mem_id;
+        this.rep_reason = rep_reason;
     }
 
-    public Report(string trv_no, string rep_timestap, string rep_mem_id)
-    {
-        this.Trv_no = trv_no;
-        this.Rep_timestap = rep_timestap;
-        this.Rep_mem_id = rep_mem_id;
-    }
-
+    public string Rep_no { get => rep_no; set => rep_no = value; }
     public string Trv_no { get => trv_no; set => trv_no = value; }
     public string Rep_timestap { get => rep_timestap; set => rep_timestap = value; }
     public string Rep_mem_id { get => rep_mem_id; set => rep_mem_id = value; }
+    public string Rep_reason { get => rep_reason; set => rep_reason = value; }
 
     public override bool Equals(object obj)
     {
-        return obj is Report report &&
-               Trv_no == report.Trv_no &&
-               Rep_timestap == report.Rep_timestap &&
-               Rep_mem_id == report.Rep_mem_id;
+        var report = obj as Report;
+        return report != null &&
+               rep_no == report.rep_no &&
+               trv_no == report.trv_no &&
+               rep_timestap == report.rep_timestap &&
+               rep_mem_id == report.rep_mem_id &&
+               rep_reason == report.rep_reason;
     }
 
     public override int GetHashCode()
     {
-        var hashCode = -697820913;
-        hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Trv_no);
-        hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Rep_timestap);
-        hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(Rep_mem_id);
+        var hashCode = -1341125686;
+        hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(rep_no);
+        hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(trv_no);
+        hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(rep_timestap);
+        hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(rep_mem_id);
+        hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(rep_reason);
         return hashCode;
     }
 }

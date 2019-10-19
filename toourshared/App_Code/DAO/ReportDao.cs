@@ -23,12 +23,13 @@ public class ReportDao
         MyDB myDB = new MyDB();
         MySqlConnection con = myDB.GetCon();
 
-        string Sql = "INSERT INTO toourshared.report (trv_no,rep_timestap,rep_mem_id) VALUES(@trv_no,@rep_timestap,@rep_mem_id); select last_insert_id()";
+        string Sql = "INSERT INTO toourshared.report (trv_no,rep_timestap,rep_mem_id, rep_reason) VALUES(@trv_no,@rep_timestap,@rep_mem_id, @rep_reason); select last_insert_id()";
         MySqlCommand cmd = new MySqlCommand(Sql, con);
 
         cmd.Parameters.AddWithValue("@trv_no", report.Trv_no);
         cmd.Parameters.AddWithValue("@rep_timestap",report.Rep_timestap);
         cmd.Parameters.AddWithValue("@rep_mem_id", report.Rep_mem_id);
+        cmd.Parameters.AddWithValue("@rep_reason", report.Rep_reason);
 
 
         con.Open();
