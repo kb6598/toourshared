@@ -1448,17 +1448,28 @@
 
 
         class TravelRouteItem {
-            constructor() {
-                this.travelRoute = Array();
+            constructor(place_name, road_address_name, address_name, phone, place_url, x, y) {
+                this.place_name = place_name;
+                this.road_address_name = road_address_name;
+                this.address_name = address_name;
+                this.phone = phone;
+                this.place_url = place_url;
+                this.x = x;
+                this.y = y;
+
             }
-            pushItem(place_name, road_address_name, address_name, phone, place_url, x, y) {
-                this.travelRoute.push({
-                    place_name, road_address_name, address_name, phone, place_url, x, y
-                });
+            setRoute(place_name, road_address_name, address_name, phone, place_url, x, y) {
+ 
+                this.place_name = place_name;
+                this.road_address_name = road_address_name;
+                this.address_name = address_name;
+                this.phone = phone;
+                this.place_url = place_url;
+                this.x = x;
+                this.y = y;
+
             }
-            popItem() {
-                this.itemList.pop();
-            }
+
         }
 
         var travelRouteList = Array();
@@ -1471,14 +1482,14 @@
                 itemStr = '';
 
             while (listEl.hasChildNodes()) {
-                listEl.removeChild(costBody.firstChild);
+                listEl.removeChild(listEl.firstChild);
             }
 
 
 
-       
+
             travelRouteList.forEach(function (currentValue, index) {
-                            var el = document.createElement('li'),
+                var el = document.createElement('li'),
                 itemStr = '<div  class="card" style="width:12rem">' +
                     '    <div class="card-body" >' +
                     '        <h4 class="card-title">' + currentValue.place_name + '</h4>' +
@@ -1497,8 +1508,6 @@
 
 
             var itemEl = el; // 검색 결과 항목 Element를 생성합니다
-
-
                 fragment.appendChild(itemEl);
                 listEl.appendChild(fragment);
             });
@@ -1509,10 +1518,15 @@
 
         // 검색결과에서 선택된 마커의 인포윈도우에서 travelRoute로 요소 추가
         function addTravelRoute(place_name, road_address_name, address_name, phone, place_url, x, y) {
+            var menuEl = document.getElementById('travelRoute_wrap'),
+                searchBox = document.getElementById('keyword'),
+                paginationEl = document.getElementById('pagination');
 
 
-            travelRouteList.push(new TravelRouteItem());
-            travelRouteList[travelRouteList.length - 1].pushItem(place_name, road_address_name, address_name, phone, place_url, x, y);
+            travelRouteList.push(new TravelRouteItem(place_name, road_address_name, address_name, phone, place_url, x, y));
+            console.info("----------travelRouteList----------");
+            console.info(travelRouteList);
+            //travelRouteList[travelRouteList.length - 1].pushItem(place_name, road_address_name, address_name, phone, place_url, x, y);
              //검색 키워드 삭제
             searchBox.value = '';
 
@@ -1528,7 +1542,7 @@
             //지도에 표시되고 있는 인포윈도우 제거
             closeOverlay();
             $('#travelRoute_wrap').collapse('show');
-
+            // refreshTravelRoute
             refreshTravelRoute();
             //// drawing 매니저에 마커 추가
             var position = new kakao.maps.LatLng(y, x);
