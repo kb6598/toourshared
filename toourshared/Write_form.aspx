@@ -325,6 +325,78 @@
         .info .link {
             color: #5085BB;
         }
+
+
+
+        <!-- modal-cost-- >
+        .modal-cost {
+            top: 0;
+            margin-top: 28px;
+            padding-right: 127px;
+            display: flex;
+            flex-direction: row-reverse;
+            width: 100%;
+            position: absolute;
+        }
+
+        .modal-cost-area {
+            width: 300px;
+            height: 700px;
+            border: 1px solid rgba(0, 0, 0, 0.6);
+            background-color: #eee;
+            border-radius: 4px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cost-header {
+            cursor: default;
+            width: 100%;
+            height: 80px;
+            padding: 10px;
+            background-color: #e2e2e2;
+            border-top-left-radius: 4px;
+            border-top-right-radius: 4px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+
+            .cost-header .chTitle {
+                font-size: 23px;
+                font-weight: 700;
+            }
+
+            .cost-header .chBody {
+                font-size: 15px;
+            }
+
+        .cost-body {
+            width: 100%;
+            height: 100%px;
+            padding: 0px 10px 10px;
+            overflow: auto;
+        }
+
+        .costItem {
+            cursor: default;
+            padding: 10px 0 5px;
+            border-bottom: 1px dashed rgba(0, 0, 0, 0.2);
+        }
+
+        .costItem-header span {
+            font-size: 40px;
+            font-family: 'East Sea Dokdo', cursive;
+        }
+
+        .costItem-body ul {
+            padding: 0 5px 0 20px;
+            list-style-type: circle;
+        }
+
+        .costItem-body li {
+            font-size: 12px;
+        }
     </style>
 </head>
 <body>
@@ -349,9 +421,83 @@
                             <ul id="travelRoute" class="travelRoute"></ul>
                         </div>
                         <div id="travelCost_wrap" class="collapse">
-                            <ul id="travelCost" class="travelCost"></ul>
+                            <div class="modal-cost">
+                                <div class="modal-cost-area">
+                                    <div class="cost-header" id="costHeader">
+                                        <span class="chTitle">전체 경비</span>
+                                        <span class="chBody">💰 290,000</span>
+                                    </div>
+                                    <div class="cost-body" id="costBody">
+                                        <div class="costItem">
+                                            <div class="costItem-header">
+                                                <span># 1일 째</span>
+                                            </div>
+                                            <div class="costItem-body">
+                                                <ul>
+                                                    <li>식비 18,000</li>
+                                                    <li>쇼핑 40,000</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="costItem">
+                                            <div class="costItem-header">
+                                                <span># 2일 째</span>
+                                            </div>
+                                            <div class="costItem-body">
+                                                <ul>
+                                                    <li>식비 18,000</li>
+                                                    <li>쇼핑 40,000</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="costItem">
+                                            <div class="costItem-header">
+                                                <span># 3일 째</span>
+                                            </div>
+                                            <div class="costItem-body">
+                                                <ul>
+                                                    <li>식비 18,000</li>
+                                                    <li>쇼핑 40,000</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="costItem">
+                                            <div class="costItem-header">
+                                                <span># 4일 째</span>
+                                            </div>
+                                            <div class="costItem-body">
+                                                <ul>
+                                                    <li>식비 18,000</li>
+                                                    <li>쇼핑 40,000</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="costItem">
+                                            <div class="costItem-header">
+                                                <span># 5일 째</span>
+                                            </div>
+                                            <div class="costItem-body">
+                                                <ul>
+                                                    <li>식비 18,000</li>
+                                                    <li>쇼핑 40,000</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="costItem">
+                                            <div class="costItem-header">
+                                                <span># 6일 째</span>
+                                            </div>
+                                            <div class="costItem-body">
+                                                <ul>
+                                                    <li>식비 18,000</li>
+                                                    <li>쇼핑 40,000</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-
                         <div id="drawingMap"></div>
 
 
@@ -836,7 +982,7 @@
                         detailAddr +
                         '   <div class="jibun ellipsis">' + "place.phone" + '</div>' +
                         '                <div><a href="' + "place.place_url" + '" target="_blank" class="link">상세페이지</a></div>' +
-                        '<button type="button" class="btn btn-secondary" data-toggle="collapse" data-target="#travelCost_wrap">여행 경비</button>'+
+                        '<button type="button" class="btn btn-secondary" data-toggle="collapse" data-target="#travelCost_wrap">여행 경비</button>' +
                         '            </div>' +
                         '        </div>' +
                         '    </div>' +
@@ -1296,20 +1442,79 @@
             }
         }
 
-        var travelRouteCnt = 0;
+        //----------------------------------------------------------------
+        //travelRoute
+        //----------------------------------------------------------------
+
+
+        class TravelRouteItem {
+            constructor() {
+                this.travelRoute = Array();
+            }
+            pushItem(place_name, road_address_name, address_name, phone, place_url, x, y) {
+                this.travelRoute.push({
+                    place_name, road_address_name, address_name, phone, place_url, x, y
+                });
+            }
+            popItem() {
+                this.itemList.pop();
+            }
+        }
+
+        var travelRouteList = Array();
+
+
+
+        function refreshTravelRoute() {
+            var listEl = document.getElementById('travelRoute'),
+                fragment = document.createDocumentFragment(),
+                itemStr = '';
+
+            while (listEl.hasChildNodes()) {
+                listEl.removeChild(costBody.firstChild);
+            }
+
+
+
+       
+            travelRouteList.forEach(function (currentValue, index) {
+                            var el = document.createElement('li'),
+                itemStr = '<div  class="card" style="width:12rem">' +
+                    '    <div class="card-body" >' +
+                    '        <h4 class="card-title">' + currentValue.place_name + '</h4>' +
+                    ' <p class="card-text">' + currentValue.road_address_name + '</p>' +
+                    ' <p class="card-text">' + currentValue.address_name + '</p>' +
+                    ' <p class="card-text">' + currentValue.phone + '</p>' +
+                    ' <a class="card-link" href="' + currentValue.place_url + '" target="_blank" class="link">상세페이지</a>' +
+
+                    '    </div>' +
+                    '<input id=x type=hidden value=' + currentValue.x + '/>' +
+                    '<input id=y type=hidden value=' + currentValue.y + '/>' +
+                    '</div>';
+            el.innerHTML = itemStr;
+            el.setAttribute("draggable", 'true');
+            el.setAttribute("id", "travelPoint");
+
+
+            var itemEl = el; // 검색 결과 항목 Element를 생성합니다
+
+
+                fragment.appendChild(itemEl);
+                listEl.appendChild(fragment);
+            });
+                       
+        }
+
+
 
         // 검색결과에서 선택된 마커의 인포윈도우에서 travelRoute로 요소 추가
         function addTravelRoute(place_name, road_address_name, address_name, phone, place_url, x, y) {
 
-            var listEl = document.getElementById('travelRoute'),
-                menuEl = document.getElementById('travelRoute_wrap'),
-                fragment = document.createDocumentFragment(),
-                searchBox = document.getElementById('keyword'),
-                paginationEl = document.getElementById('pagination'),
-                listStr = '';
 
-            //검색 키워드 삭제
-            //searchBox.value = '';
+            travelRouteList.push(new TravelRouteItem());
+            travelRouteList[travelRouteList.length - 1].pushItem(place_name, road_address_name, address_name, phone, place_url, x, y);
+             //검색 키워드 삭제
+            searchBox.value = '';
 
             // 검색 결과 목록에 추가된 항목들을 제거합니다
             removeAllChildNods(document.getElementById('placesList'));
@@ -1324,101 +1529,129 @@
             closeOverlay();
             $('#travelRoute_wrap').collapse('show');
 
-            //travelRouteCnt 증가
-            ++travelRouteCnt;
-
-            var el = document.createElement('li'),
-                itemStr = '<div  class="card" style="width:12rem">' +
-                    '    <div class="card-body" >' +
-                    '        <h4 class="card-title">' + place_name + '</h4>' +
-                    ' <p class="card-text">' + road_address_name + '</p>' +
-                    ' <p class="card-text">' + address_name + '</p>' +
-                    ' <p class="card-text">' + phone + '</p>' +
-                    ' <a class="card-link" href="' + place_url + '" target="_blank" class="link">상세페이지</a>' +
-
-                    '    </div>' +
-                    '<input id=x type=hidden value=' + x + '/>' +
-                    '<input id=y type=hidden value=' + y + '/>' +
-                    '</div>';
-            el.innerHTML = itemStr;
-            el.setAttribute("draggable", 'true');
-            el.setAttribute("id", "travelPoint");
-
-
-            var itemEl = el; // 검색 결과 항목 Element를 생성합니다
-
-
-            fragment.appendChild(itemEl);
-
-            // drawing 메니저에 마커 추가
+            refreshTravelRoute();
+            //// drawing 매니저에 마커 추가
             var position = new kakao.maps.LatLng(y, x);
             manager.put(kakao.maps.drawing.OverlayType.MARKER, position, 1);
 
 
-            // 검색결과 항목들을 검색결과 목록 Elemnet에 추가합니다
-            listEl.appendChild(fragment);
+            //// 검색결과 항목들을 검색결과 목록 Elemnet에 추가합니다
             menuEl.scrollTop = 0;
 
-            //드래그 앤드롭 액션 실행
+            ////드래그 앤드롭 액션 실행
             dragAndDropAction();
+
         }
 
         //----------------------------------------------------------------
         //travelCost
         //----------------------------------------------------------------
-        var travelCostCnt = 0;
-         function addTravelCost(place_name, road_address_name, address_name, phone, place_url, x, y) {
+        class CostItem {
+            constructor() {
+                this.itemList = Array();
+            }
+            pushItem(costType, cost) {
+                this.itemList.push({
+                    costType,
+                    cost
+                });
+            }
+            popItem() {
+                this.itemList.pop();
+            }
+        }
 
-            var listEl = document.getElementById('travelCost'),
-                menuEl = document.getElementById('travelCOst_wrap'),
+        var CostList = Array();
+        CostList.push(new CostItem());
+        //CostItemList.push(new CostItem());
+        CostList[0].pushItem("식비", 15000);
+        CostList[0].pushItem("교통비", 1500);
+        CostList[0].pushItem("쇼핑비", 10000);
+
+        console.info(CostList);
+        console.info(CostList);
+        //CostItemList[0].popItem();
+        //CostItemList[0].popItem();
+
+        console.info(CostList);
+
+
+        function refreashCostItem() {
+
+            var costBody = document.getElementById('costBody'),
+                costHeader = document.getElementById('costHeader'),
                 fragment = document.createDocumentFragment(),
-                listStr = '';
+                headerFragment = document.createDocumentFragment(),
+                itemList = '',
+                el, headerEl, totalCost = 0;
+
+            // costBody 모든 자식 노드 삭제
+            while (costBody.hasChildNodes()) {
+                costBody.removeChild(costBody.firstChild);
+            }
+
+
+            CostList.forEach(function (currentValue, index) {
+                console.info(index);
+                console.info(currentValue);
+                el = document.createElement('div'),
+                    itemStr =
+
+                    '     <div class="costItem-header">' +
+                    '         <span># ' + (index + 1) + '일 째</span>' +
+                    '     </div>' +
+                    '     <div class="costItem-body">' +
+                    '         <ul>';
+
+                currentValue.itemList.forEach(function (currentValue, index) {
+                    itemStr += '<li>' + currentValue.costType + ' ' + setComa(currentValue.cost) + '</li>';
+                    totalCost += currentValue.cost;
+                });
+
+                itemStr +=
+                    '         </ul>' +
+                    '     </div>';
+                el.innerHTML = itemStr;
+                //            el.setAttribute("draggable", 'true');
+                //            el.setAttribute("id", "travelPoint");
+                el.setAttribute("class", "costItem");
+
+
+                var itemEl = el;
+
+                fragment.appendChild(itemEl);
+
+                costBody.appendChild(fragment);
 
 
 
-            // 지도에 표시되고 있는 마커를 제거합니다
-            removeMarker();
-            //지도에 표시되고 있는 인포윈도우 제거
-            closeOverlay();
-            $('#travelCost_wrap').collapse('show');
+            });
 
-            //travelRouteCnt 증가
-            ++travelCostCnt;
-
-            var el = document.createElement('li'),
-                itemStr = '<div  class="card" style="width:12rem">' +
-                    '    <div class="card-body" >' +
-                    '        <h4 class="card-title">' + place_name + '</h4>' +
-                    ' <p class="card-text">' + road_address_name + '</p>' +
-                    ' <p class="card-text">' + address_name + '</p>' +
-                    ' <p class="card-text">' + phone + '</p>' +
-                    ' <a class="card-link" href="' + place_url + '" target="_blank" class="link">상세페이지</a>' +
-
-                    '    </div>' +
-                    '<input id=x type=hidden value=' + x + '/>' +
-                    '<input id=y type=hidden value=' + y + '/>' +
-                    '</div>';
-            el.innerHTML = itemStr;
-            el.setAttribute("draggable", 'true');
-            el.setAttribute("id", "travelPoint");
+            var headerStr =
+                '<span class="chTitle">전체 경비</span>' +
+                '<span class="chBody">💰 ' + setComa(totalCost) + '</span>';
+            costHeader.innerHTML = headerStr;
 
 
-            var itemEl = el; // 검색 결과 항목 Element를 생성합니다
 
 
-            fragment.appendChild(itemEl);
+        }
+        //돈에 컴마 찍어주는 함수
+        function setComa(number) {
+            var resultStr = "";
+            var strNumber = String(number);
+            console.info(strNumber);
+            console.info(strNumber.length);
+            for (var i = strNumber.length - 1; i >= 0; i--) {
+                console.info(i);
 
-            // drawing 메니저에 마커 추가
-            var position = new kakao.maps.LatLng(y, x);
-            manager.put(kakao.maps.drawing.OverlayType.MARKER, position, 1);
+                if ((strNumber.length - i - 1) % 3 == 0 && i != strNumber.length - 1) {
+                    resultStr = ',' + resultStr;
+                }
+                resultStr = strNumber[i] + resultStr;
+            }
+            return resultStr;
 
-
-            // 검색결과 항목들을 검색결과 목록 Elemnet에 추가합니다
-            listEl.appendChild(fragment);
-            menuEl.scrollTop = 0;
-
-            //드래그 앤드롭 액션 실행
-            dragAndDropAction();
         }
 
 
