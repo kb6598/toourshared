@@ -1,0 +1,277 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>TO OUR SHARED : SEARCH</title>
+
+    <!-- Font -->
+    <link href="https://fonts.googleapis.com/css?family=Mansalva|Nanum+Gothic|Nanum+Myeongjo|Noto+Sans+KR|Lora|East+Sea+Dokdo|Jua&display=swap" rel="stylesheet">
+
+    <!-- ICON -->
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <!-- JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+
+        .modal-cost {
+            top: 0;
+            margin-top: 28px;
+            padding-right: 127px;
+            display: flex;
+            flex-direction: row-reverse;
+            width: 100%;
+            position: absolute;
+        }
+
+        .modal-cost-area {
+            width: 300px;
+            height: 700px;
+            border: 1px solid rgba(0, 0, 0, 0.6);
+            background-color: #eee;
+            border-radius: 4px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cost-header {
+            cursor: default;
+            width: 100%;
+            height: 80px;
+            padding: 10px;
+            background-color: #e2e2e2;
+            border-top-left-radius: 4px;
+            border-top-right-radius: 4px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+
+        }
+
+        .cost-header .chTitle {
+            font-size: 23px;
+            font-weight: 700;
+        }
+
+        .cost-header .chBody {
+            font-size: 15px;
+        }
+
+        .cost-body {
+            width: 100%;
+            height: 100%px;
+            padding: 0px 10px 10px;
+            overflow: auto;
+        }
+
+        .costItem {
+            cursor: default;
+            padding: 10px 0 5px;
+            border-bottom: 1px dashed rgba(0, 0, 0, 0.2);
+        }
+
+        .costItem-header span {
+            font-size: 40px;
+            font-family: 'East Sea Dokdo', cursive;
+        }
+
+        .costItem-body ul {
+            padding: 0 5px 0 20px;
+            list-style-type: circle;
+        }
+
+        .costItem-body li {
+            font-size: 12px;
+        }
+
+      
+    </style>
+
+</head>
+
+<body>
+
+
+    <!-- costModal -->
+    <div class="modal-cost">
+        <div class="modal-cost-area">
+            <div class="cost-header">
+                <span class="chTitle">전체 경비</span>
+                <span class="chBody">💰 290,000</span>
+            </div>
+            <div class="cost-body" id="costBody">
+                <div class="costItem">
+                    <div class="costItem-header">
+                        <span># 1일 째</span>
+                    </div>
+                    <div class="costItem-body">
+                        <ul>
+                            <li>식비 18,000</li>
+                            <li>쇼핑 40,000</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="costItem">
+                    <div class="costItem-header">
+                        <span># 2일 째</span>
+                    </div>
+                    <div class="costItem-body">
+                        <ul>
+                            <li>식비 18,000</li>
+                            <li>쇼핑 40,000</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="costItem">
+                    <div class="costItem-header">
+                        <span># 3일 째</span>
+                    </div>
+                    <div class="costItem-body">
+                        <ul>
+                            <li>식비 18,000</li>
+                            <li>쇼핑 40,000</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="costItem">
+                    <div class="costItem-header">
+                        <span># 4일 째</span>
+                    </div>
+                    <div class="costItem-body">
+                        <ul>
+                            <li>식비 18,000</li>
+                            <li>쇼핑 40,000</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="costItem">
+                    <div class="costItem-header">
+                        <span># 5일 째</span>
+                    </div>
+                    <div class="costItem-body">
+                        <ul>
+                            <li>식비 18,000</li>
+                            <li>쇼핑 40,000</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="costItem">
+                    <div class="costItem-header">
+                        <span># 6일 째</span>
+                    </div>
+                    <div class="costItem-body">
+                        <ul>
+                            <li>식비 18,000</li>
+                            <li>쇼핑 40,000</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<div >
+    <textarea rows="1" resizable="false"></textarea><div class="btn btn-secondary" onclick="addCostItem()">추가</div>
+
+    </div>
+
+
+<script>
+    class CostItem{
+        constructor(){
+            this.itemList = Array();
+        }
+        pushItem(costType, cost){
+            this.itemList.push({costType,cost});
+        }
+        popItem(){
+            this.itemList.pop();
+        }
+    }
+    
+    var CostItemList = Array();
+    CostItemList.push(new CostItem());
+    CostItemList.push(new CostItem());
+    CostItemList[0].pushItem("식비",15000);
+    CostItemList[0].pushItem("교통비",1500);
+    
+    console.info(CostItemList);
+    console.info(CostItemList);
+    CostItemList[0].popItem();
+    CostItemList[0].popItem();
+    
+    console.info(CostItemList);
+    function button(){
+        
+    }
+
+    function addCostItem() {
+
+            var costArea = document.getElementById('costBody'),
+
+                fragment = document.createDocumentFragment(),
+
+                itemList = '';
+
+//                <div class="costItem">
+//                    <div class="costItem-header">
+//                        <span># 5일 째</span>
+//                    </div>
+//                    <div class="costItem-body">
+//                        <ul>
+//                            <li>식비 18,000</li>
+//                            <li>쇼핑 40,000</li>
+//                        </ul>
+//                    </div>
+//                </div>
+
+
+
+
+            var el = document.createElement('div'),
+                itemStr =
+
+               '     <div class="costItem-header">'+
+               '         <span># 5일 째</span>'+
+               '     </div>'+
+               '     <div class="costItem-body">'+
+               '         <ul>'+
+               '             <li>식비 18,000</li>'+
+               '             <li>쇼핑 40,000</li>'+
+               '         </ul>'+
+               '     </div>';
+            el.innerHTML = itemStr;
+//            el.setAttribute("draggable", 'true');
+//            el.setAttribute("id", "travelPoint");
+            el.setAttribute("class", "costItem");
+
+
+            var itemEl = el; // 검색 결과 항목 Element를 생성합니다
+
+            fragment.appendChild(itemEl);
+
+            costArea.appendChild(fragment);
+
+
+        }
+    </script>
+</body>
+
+</html>
