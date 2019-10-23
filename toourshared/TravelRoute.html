@@ -32,7 +32,7 @@
         }
 
 
-        .modal-cost, .travelRoute {
+        .modal-cost, #travelRoute_wrap {
             top: 0;
             margin-top: 28px;
             padding-right: 127px;
@@ -106,135 +106,48 @@
 </head>
 
 <body>
+                        <div id="travelRoute_wrap">
+                            <ul id="travelRoute" class="travelRoute"></ul>
+                        </div>
 
 
-    <!-- costModal -->
-    <div class="modal-cost">
-        <div class="modal-cost-area">
-            <div class="cost-header" id="costHeader">
-                <span class="chTitle">전체 경비</span>
-                <span class="chBody">💰 290,000</span>
-            </div>
-            <div class="cost-body" id="costBody">
-                <div class="costItem">
-                    <div class="costItem-header">
-                        <span># 1일 째</span>
-                    </div>
-                    <div class="costItem-body">
-                        <ul>
-                            <li>식비 18,000</li>
-                            <li>쇼핑 40,000</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="costItem">
-                    <div class="costItem-header">
-                        <span># 2일 째</span>
-                    </div>
-                    <div class="costItem-body">
-                        <ul>
-                            <li>식비 18,000</li>
-                            <li>쇼핑 40,000</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="costItem">
-                    <div class="costItem-header">
-                        <span># 3일 째</span>
-                    </div>
-                    <div class="costItem-body">
-                        <ul>
-                            <li>식비 18,000</li>
-                            <li>쇼핑 40,000</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="costItem">
-                    <div class="costItem-header">
-                        <span># 4일 째</span>
-                    </div>
-                    <div class="costItem-body">
-                        <ul>
-                            <li>식비 18,000</li>
-                            <li>쇼핑 40,000</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="costItem">
-                    <div class="costItem-header">
-                        <span># 5일 째</span>
-                    </div>
-                    <div class="costItem-body">
-                        <ul>
-                            <li>식비 18,000</li>
-                            <li>쇼핑 40,000</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="costItem">
-                    <div class="costItem-header">
-                        <span># 6일 째</span>
-                    </div>
-                    <div class="costItem-body">
-                        <ul>
-                            <li>식비 18,000</li>
-                            <li>쇼핑 40,000</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div style="padding-top: 800px">
-        <textarea rows="1" resizable="false"></textarea>
-        <div class="btn btn-secondary" onclick="refreashCostItem()">추가</div>
-
-    </div>
+<div class="btn btn-secondary" onclick="pushTravelRouteItem(&quot;이태원거리&quot;,&quot;&quot;,&quot;undefined&quot;,&quot;02-710-3321&quot;,&quot;http://place.map.kakao.com/10753713&quot;,&quot;126.99580922812&quot;,&quot;37.5345613066561&quot;)">여행경로에 추가</div>
 
     
 
     <script>
         
         
-        //------------------------------------
-        //----------CostItems and CostItemList Start
-        //------------------------------------
-        class CostItem {
-            constructor(place_name) {
-                this.itemList = Array();
+  class TravelRouteItem {
+            constructor(place_name, road_address_name, address_name, phone, place_url, x, y) {
                 this.place_name = place_name;
+                this.road_address_name = road_address_name;
+                this.address_name = address_name;
+                this.phone = phone;
+                this.place_url = place_url;
+                this.x = x;
+                this.y = y;
+
             }
-            setPlace_name(place_name) {
+            setRoute(place_name, road_address_name, address_name, phone, place_url, x, y) {
+
                 this.place_name = place_name;
+                this.road_address_name = road_address_name;
+                this.address_name = address_name;
+                this.phone = phone;
+                this.place_url = place_url;
+                this.x = x;
+                this.y = y;
+
             }
-            pushItem(costType, cost, info) {
-                this.itemList.push({
-                    costType,
-                    cost,
-                    info
-                });
-            }
-            popItem() {
-                this.itemList.pop();
-            }
-        }
-
-        var CostItemList = Array();
-
-        console.info(CostItemList);
-        console.info(CostItemList);
-
-        console.info(CostItemList);
-
-        function button() {
 
         }
 
+        var TravelRouteList = Array();
 
-        function refreashCostItem() {
+        function refreashTravelRoute() {
 
-            var costBody = document.getElementById('costBody'),
-                costHeader = document.getElementById('costHeader'),
+            var travelRouteUl = document.getElementById('travelRoute'),
                 fragment = document.createDocumentFragment(),
                 headerFragment = document.createDocumentFragment(),
                 itemList = '',
@@ -244,14 +157,14 @@
              ;
 
             // costBody 모든 자식 노드 삭제
-            while (costBody.hasChildNodes()) {
-                costBody.removeChild(costBody.firstChild);
+            while (travelRouteUl.hasChildNodes()) {
+                travelRouteUl.removeChild(travelRouteUl.firstChild);
             }
-            CostItemList.forEach(function(currentValue, pindex) {
+            TravelRouteList.forEach(function(currentValue, pindex) {
                 pindexTmp = pindex;
                 console.info(pindex);
                 console.info(currentValue);
-                el = document.createElement('div'),
+                el = document.createElement('li'),
                     itemStr =
 
                     '<div class="costItem-header">' +
@@ -273,10 +186,7 @@
                     '   <div class="costItem-body">' +
                     '       <ul>';
 
-                currentValue.itemList.forEach(function(currentValue, index) {
-                    itemStr += '<li>' + currentValue.costType + '<br/>' + setComa(currentValue.cost) + ' (' + currentValue.info + ')' + '</li>';
-                    totalCost += parseInt(currentValue.cost);
-                });
+
 
                 itemStr +=
                     '           <li>' +
@@ -294,16 +204,16 @@
                     '   </ul>' +
                     '</div>';
                 el.innerHTML = itemStr;
-                //            el.setAttribute("draggable", 'true');
-                //            el.setAttribute("id", "travelPoint");
-                el.setAttribute("class", "costItem");
+                el.setAttribute("draggable", 'true');
+                el.setAttribute("class", "travelPoint");
+                
 
 
                 var itemEl = el;
 
                 fragment.appendChild(itemEl);
 
-                costBody.appendChild(fragment);
+                travelRouteUl.appendChild(fragment);
 
 
 
@@ -325,104 +235,204 @@
 
             fragment.appendChild(itemEl);
 
-            costBody.appendChild(fragment);
+            travelRouteUl.appendChild(fragment);
 
             //--------------------
 
 
 
-            var headerStr =
-                '<span class="chTitle">전체 경비</span>' +
-                '<span class="chBody">💰 ' + setComa(totalCost) + '</span>';
-            costHeader.innerHTML = headerStr;
-
-
 
 
         }
 
-        function pushCostItemChild(index) {
+        function pushTravelRouteItem(place_name, road_address_name, address_name, phone, place_url, x, y) {
+ 
+           TravelRouteList.push(new TravelRouteItem(place_name, road_address_name, address_name, phone, place_url, x, y));
 
-            var costTypeId = "addCost_costType_" + index,
-                costId = "addCost_cost_" + index,
-                infoId = "addCost_info_" + index;
-
-            var costType = document.getElementById(costTypeId);
-            cost = document.getElementById(costId),
-                info = document.getElementById(infoId);
-
-            CostItemList[index].pushItem(costType.options[costType.selectedIndex].value, cost.value, info.value);
-
-            refreashCostItem();
+            refreashTravelRoute();
 
         }
 
 
-        function popCostItemChild(index) {
+        function removeTravelRouteItem(index) {
 
-            var costTypeId = "addCost_costType_" + index,
-                costId = "addCost_cost_" + index,
-                infoId = "addCost_info_" + index;
 
-            var costType = document.getElementById(costTypeId);
-            cost = document.getElementById(costId),
-                info = document.getElementById(infoId);
 
-            CostItemList[index].popItem();
-            refreashCostItem();
+            TravelRouteItem.slice(index,1);
+            refreashTravelRoute();
 
         }
 
 
 
-        // 나중에 인포윈도우에 추가하기
-        function addCostItemParent(place_name) {
-            CostItemList.push(new CostItem("야호"));
-            refreashCostItem();
 
-        }
-
-        function setCostItemParentName(pindex) {
-
-            var addCost_place_nameId = "addCost_place_name_" + pindex;
-            var addCost_place_name = document.getElementById(addCost_place_nameId);
+        function setTravelRouteItem(index,place_name, road_address_name, address_name, phone, place_url, x, y) {
 
 
-            CostItemList[pindex].setPlace_name(addCost_place_name.value);
-            refreashCostItem();
+            TravelRouteList[index].setRoute(place_name, road_address_name, address_name, phone, place_url, x, y);
+            refreashTravelRoute();
         }
 
 
-        function removeCostItemParent(pindex) {
+        function removeTravelRouteItemParent(pindex) {
             CostItemList.splice(pindex, 1);
-            refreashCostItem();
+            refreashTravelRoute();
         }
 
 
-        function setComa(number) {
-            var resultStr = "";
-            var strNumber = String(number);
-            console.info(strNumber);
-            console.info(strNumber.length);
-            for (var i = strNumber.length - 1; i >= 0; i--) {
-                console.info(i);
 
-                if ((strNumber.length - i - 1) % 3 == 0 && i != strNumber.length - 1) {
-                    resultStr = ',' + resultStr;
+        
+         var DragManager;
+        function dragAndDropAction() {
+            //DragManger에 요소 추가 (추후 드래그 앤드롭 액션 실행)
+            DragManager = {
+                travelRoutes: [],
+                currentContainer: null,
+
+                add: function (travelRoute) {
+                    this.travelRoutes.push(travelRoute);
+                },
+
+                handleEvent: function (event) {
+                    //console.info(event.target);
+                    if (event.type == 'dragstart') {
+                        console.info("dragstart");
+                        var containers = this.travelRoutes.filter(function (container) {
+
+                            return container.contains(event.target);
+                        });
+
+                        if (containers.length > 0) {
+                            this.currentContainer = containers[0];
+                            this.currentContainer.activate();
+                        }
+                    }
+
+                    if (this.currentContainer !== null) {
+                        this.currentContainer.handleEvent(event);
+                        if (event.type == 'dragend') {
+                            this.currentContainer.deactivate();
+                            this.currentContainer = null;
+                        }
+                    }
                 }
-                resultStr = strNumber[i] + resultStr;
-            }
-            
 
-            return resultStr;
+            };
+
+            window.addEventListener('dragstart', DragManager);
+            window.addEventListener('dragend', DragManager);
+
+            function travelRoute(container, type) {
+                this.element = container;
+                this.type = type || 'swap';
+                this.items = $('> li', this.element);
+                this.draggingItem = null;
+
+                DragManager.add(this);
+            }
+
+            travelRoute.prototype.contains = function (target) {
+                //console.info(target);
+                return $(this.element).find(target).length;
+            }
+
+            travelRoute.prototype.handleEvent = function (event) {
+                // NOTE: We've bound `this` to the travelRoute object, not
+                // the element the event was fired on.
+                var $t = $(event.target);
+
+                if (event.type == 'dragstart') {
+                    this.draggingItem = event.target;
+                    console.info(event.target);
+                    //setdata에 최상위 LIdml HTML을 데이터로 보낸다
+                    console.info("this.draggingItem");
+                    console.info(this.draggingItem);
+                    var tgtItem = this.draggingItem;
+                    while (1) {
+                        //if(data.id == "travelPoint")
+                        console.info("tgtItem.tagName");
+                        console.info(tgtItem.tagName);
+                        if (tgtItem.tagName == "LI")
+                            break;
+                        tgtItem = tgtItem.parentNode;
+                    }
+                    console.info("전송할 태그" + tgtItem);
+
+                    event.dataTransfer.setData('text/html', tgtItem.innerHTML);
+                }
+
+                if (event.type == 'dragover' && this.draggingItem != event.target) {
+
+                    $t.addClass('js-active');
+                    // Preventing the default action _enables_ drop. Because JS APIs.
+                    if (event.preventDefault) {
+                        event.preventDefault();
+                    }
+                    event.dataTransfer.dropEffect = 'move';
+                }
+
+                if (event.type == 'dragleave') {
+                    $t.removeClass('js-active');
+                }
+
+                if (event.type == 'drop' && this.draggingItem != null) {
+                    if (this.type == 'swap') {
+
+
+                        // 최상단 LI태그를 탐색
+                        var tgtItem = event.target;
+                        while (1) {
+                            //if(data.id == "travelPoint")
+                            if (tgtItem.tagName == "LI")
+                                break;
+                            tgtItem = tgtItem.parentNode;
+                        }
+
+                        //최상단  LI로만 옮김.
+                        this.draggingItem.innerHTML = tgtItem.innerHTML;
+                        tgtItem.innerHTML = event.dataTransfer.getData('text/html');
+                    } else if (this.type == 'reorder') {
+                        console.info('reorder');
+                        console.info(this.items.index(event.target));
+                    }
+                }
+
+                if (event.type == 'dragend' || event.type == 'drop') {
+                    this.items.removeClass('js-active');
+                    this.draggingItem = null;
+                }
+            }
+
+            travelRoute.prototype.activate = function () {
+                for (var i = 0, j = this.items.length; i < j; i++) {
+                    // Make sure `this` is always a travelRoute instead of the element the
+                    // event was activated on.
+                    this.items[i].addEventListener('dragenter', this.handleEvent.bind(this));
+                    this.items[i].addEventListener('dragover', this.handleEvent.bind(this));
+                    this.items[i].addEventListener('dragleave', this.handleEvent.bind(this));
+                    this.items[i].addEventListener('drop', this.handleEvent.bind(this));
+                }
+            }
+
+            travelRoute.prototype.deactivate = function () {
+                this.draggingItem = null;
+                for (var i = 0, j = this.items.length; i < j; i++) {
+                    //this.items[i].removeEventListener('dragenter', this.handleEvent);
+                    //this.items[i].removeEventListener('dragover', this.handleEvent);
+                    //this.items[i].removeEventListener('dragleave', this.handleEvent);
+                    //this.items[i].removeEventListener('drop', this.handleEvent);
+                }
+            }
+
+            var travelRoutes = document.getElementsByClassName('travelRoute');
+
+            for (var i = 0, j = travelRoutes.length; i < j; i++) {
+                new travelRoute(travelRoutes[i], (i % 2 == 0) ? 'swap' : 'reorder');
+            }
 
         }
         
-        //------------------------------------
-        //----------CostItems and CostItemList End
-        //------------------------------------
         
-        
-        console.info(setComa(100000000000000000));
+
     </script>
 </body></html>

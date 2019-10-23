@@ -1502,8 +1502,7 @@
                         '<div class="travelRouteItem">' +
                         '    <div class="travelRouteItem-area">' +
                         '        <div class="travelRouteItem-header" id="travelRouteItemHeader">' +
-                        '            <span class="travelRouteItem_Title">전체 경비</span>' +
-                        '            <span class="travelRouteItem_Body">💰 290,000</span>' +
+                        '            <span class="travelRouteItem_Title">' + currentValue.place_name + '</span>' +
                         '        </div>' +
                         '        <div class="travelRouteItem-body" id="travelRouteItemBody">' +
                         '            <div class="travelRouteItem">' +
@@ -1511,10 +1510,6 @@
                         '                    <span># 1일 째</span>' +
                         '                </div>' +
                         '                <div class="travelRouteItem-body">' +
-                        '                    <ul>' +
-                        '                        <li>식비 18,000</li>' +
-                        '                        <li>쇼핑 40,000</li>' +
-                        '                    </ul>' +
                         '                </div>' +
                         '            </div>' +
                         '        </div>' +
@@ -1577,7 +1572,7 @@
         }
 
         //------------------------------------
-        //----------TravelRouteItem and travelRouteList Start
+        //----------TravelRouteItem and travelRouteList END
         //------------------------------------
 
         //------------------------------------
