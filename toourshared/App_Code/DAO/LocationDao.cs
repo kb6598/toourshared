@@ -1,6 +1,7 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Web;
 using tooushared.Lib;
@@ -41,4 +42,68 @@ public class LocationDao
 
         return result;
     }
+    //public void DeleteCommentBy(mem_id)
+    public DataSet SelectLocation()
+    {
+        MyDB myDB = new MyDB();
+        MySqlConnection con = myDB.GetCon();
+
+        string sql = "Select loc_name  From toourshared.location";
+        MySqlCommand cmd = new MySqlCommand(sql, con); // 커맨드(sql문을 con에서 수행하기 위한 명령문) 생성 DB에서 수행시킬 명령 생성   
+
+        MySqlDataAdapter ad = new MySqlDataAdapter();
+        ad.SelectCommand = cmd;
+        DataSet ds = new DataSet();
+        ad.Fill(ds);
+
+
+        return ds;
+    }
+
+    public Location selectLocationByloc_name(Location location)
+    {
+
+        MyDB mydb = new MyDB();
+
+        Location result = new Location();
+        MySqlConnection con;
+
+        try
+        {
+            con = mydb.GetCon();
+
+            string Sql = "SELECT * FROM toourshared.location where loc_name =@loc_name";
+
+
+            MySqlCommand cmd = new MySqlCommand(Sql, con);
+
+            cmd.Parameters.AddWithValue("@loc_name",location.Loc_name);
+
+            con.Open();
+            MySqlDataReader rd = cmd.ExecuteReader();
+
+            if (rd.HasRows)
+            {
+                rd.Read();
+
+                result.Loc_name = rd["loc_name"].ToString();
+                
+
+
+                //lstMember.Add(tmpMemberPointer);
+
+                return result;
+
+            }
+
+            con.Close();
+
+        }
+        catch (Exception ex)
+        {
+            Console.Write(ex.ToString());
+        }
+        return result;
+    }
+
 }

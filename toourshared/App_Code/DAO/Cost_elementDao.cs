@@ -1,6 +1,7 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Web;
 using tooushared.Lib;
@@ -55,4 +56,72 @@ public class Cost_elementDao
 
         return result;
     }
+    public DataSet SelectCost_element()
+    {
+        MyDB myDB = new MyDB();
+        MySqlConnection con = myDB.GetCon();
+
+        string sql = "Select cos_ele_no, cos_no, cos_ele_type, cos_ele_cost, cos_ele_info  From toourshared.cos_element";
+        MySqlCommand cmd = new MySqlCommand(sql, con); // 커맨드(sql문을 con에서 수행하기 위한 명령문) 생성 DB에서 수행시킬 명령 생성   
+
+        MySqlDataAdapter ad = new MySqlDataAdapter();
+        ad.SelectCommand = cmd;
+        DataSet ds = new DataSet();
+        ad.Fill(ds);
+
+
+        return ds;
+    }
+
+    public Cost_Element selectCost_ElementByCos_ele_no(Cost_Element cost_Element)
+    {
+
+        MyDB mydb = new MyDB();
+
+        Cost_Element result = new Cost_Element();
+        MySqlConnection con;
+
+        try
+        {
+            con = mydb.GetCon();
+
+            string Sql = "SELECT * FROM toourshared.cost_Element where cos_ele_no=@cos_ele_no";
+
+
+            MySqlCommand cmd = new MySqlCommand(Sql, con);
+
+            cmd.Parameters.AddWithValue("@cos_ele_no", cost_Element.Cos_ele_no);
+
+            con.Open();
+            MySqlDataReader rd = cmd.ExecuteReader();
+
+            if (rd.HasRows)
+            {
+                rd.Read();
+
+                result.Cos_ele_no = rd["cos_ele_no"].ToString();
+                result.Cos_no = rd["cos_no"].ToString();
+                result.Cos_ele_type = rd["cos_ele_type"].ToString();
+                result.Cos_ele_cost = rd["cos_ele_cost"].ToString();
+                result.Cos_ele_info = rd["cos_ele_info"].ToString();
+
+
+
+
+                //lstMember.Add(tmpMemberPointer);
+
+                return result;
+
+            }
+
+            con.Close();
+
+        }
+        catch (Exception ex)
+        {
+            Console.Write(ex.ToString());
+        }
+        return result;
+    }
+
 }

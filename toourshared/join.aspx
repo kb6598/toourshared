@@ -309,10 +309,10 @@
             border-radius: 4px;
         }
 
-        .GENDERitem2 .radio {
-            padding: 3px 25px 0;
-            font-size: 15px;
-        }
+            .GENDERitem2 .radio {
+                http: //localhost:6118/draganddropEx.html padding: 3px 25px 0;
+                font-size: 15px;
+            }
 
 
         .radio input[type="radio"] {
