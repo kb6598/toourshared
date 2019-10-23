@@ -1,10 +1,9 @@
 <!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1" />
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <title>TO OUR SHARED : 로그인</title>
+    <title>TO OUR SHARED : 여행일수 작성</title>
 
     <!-- Font -->
     <link href="https://fonts.googleapis.com/css?family=Mansalva|Nanum+Gothic|Nanum+Myeongjo|Noto+Sans+KR|Lora|Jua&display=swap" rel="stylesheet">
@@ -16,6 +15,9 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <!-- 아이콘 유니코드 설정-->
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
 
     <style>
         body {
@@ -228,131 +230,119 @@
 
         .body {
             width: 100%;
-            height: 800px;
-            display: flex;
-            flex-direction: row;
-            justify-content: center;
-            align-items: center;
-        }
+            height: 600px;
 
-        .find {
-            width: 700px;
-            height: 650px;
-            margin: 0px 10px;
-            border: 2px solid #fff;
-            transition-duration: .9s;
-        }
-        
-        .find.fid:hover{
-            background-color: #fff;
-            transition-duration9: .5s;
-        }
-        
-        .find.fpw:hover{
-            background-color: #fff;
-            transition-duration: .9s;
-        }
-        
-        .fid{
-            border-top-left-radius: 20px;
-        }
-        
-        .fpw{
-            border-bottom-right-radius: 20px;
-        }
-
-        .findTitle {
             display: flex;
             justify-content: center;
-            align-items: center;
         }
 
-        .findTitle h4 {
-            color: #353866;
-            font-size: 23px;
-            font-weight: 700;
-            padding: 20px 0 40px;
-        }
-
-        .findContents {
-            width: 100%;
+        .contents {
+            width: 1100px;
+            height: 500px;
+            margin-top: 100px;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            align-items: center;
+            padding: 15px;
+            border-top-left-radius: 15px;
+            border-bottom-right-radius: 15px;
+            background-color: #eee;
+        }
+
+        .contentTitle {
+            padding: 10px 0;
+        }
+
+        .contentTitle h3 {
+            font-size: 25px;
+            font-weight: 700;
+            border-bottom: 5px solid orange;
+        }
+
+        .contentResult1 {
+            width: auto;
+            height: 100px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
             align-items: center;
         }
-
-        .findContent {
-            padding: 15px 0;
+        
+        .result1Item{
+            display: flex;
+            flex-direction: row;
         }
 
-        .findContentTitle {
-            padding-bottom: 5px;
-            padding-left: 1px;
+        .user {
+            font-size: 15px;
+            font-weight: 700;
         }
 
-        .findContentTitle span {
-            color: black;
+        .normal {
             font-size: 13px;
+            padding-right: 5px;
         }
 
-        .findContentItem > input{
-            width: 300px;
-            height: 45px;
+        .type {
+            font-size: 15px;
+            font-weight: 700;
+            padding-right: 1px;
+        }
+        
+        .control input{
+            width: 400px;
+            height: 60px;
             padding: 10px;
-            font-size: 13px;
-            color: rgba(0, 0, 0, 0.7);
-            border: none;
             outline: none;
+            font-size: 15px;
+            font-weight: 400;
+            text-align-last: center;
+            color: rgba(0, 0, 0, 0.7);
             border-radius: 4px;
-            background-color: #eee;
+            border: 1px solid rgba(0, 0, 0, .1);
+            background-color: rgb(25, 25, 25);
+            transition-duration: .5s;
+            cursor: default;
         }
         
-        .Question select{
-            width: 300px;
-            height: 45px;
-            padding: 10px;
-            font-size: 13px;
-            color: rgba(0, 0, 0, 0.7);
-            border: none;
-            outline: none;
-            border-top-left-radius: 4px;
-            border-top-right-radius: 4px;
-            border-bottom: 0.5px solid rgba(0, 0, 0, 0.1);
+        .control input:hover{
+            transition-duration: .5s;
+            background-image: none;
             background-color: #eee;
+            font-size: 15px;
         }
         
-        .Answer input{
-            width: 300px;
-            height: 45px;
-            padding: 10px;
-            font-size: 13px;
-            color: rgba(0, 0, 0, 0.7);
-            border: none;
-            outline: none;
-            border-bottom-left-radius: 4px;
-            border-bottom-right-radius: 4px;
-            background-color: #eee;
+        .contentBtn{
+            padding: 70px 50px 50px;
         }
         
-        .findContentBtn{
-            margin: 20px 0;
-            width: 150px;
+        .contentBtn .go{
+            margin-bottom: 30px;
+        }
+        
+        .go input{
+            width: 250px;
             height: 40px;
-            outline: none;
             border: none;
+            outline: none;
+            font-size: 12px;
             border-radius: 4px;
-            font-size: 13px;
-            color: #eee;
-            background-color: #e97f02;
             transition-duration: .5s;
         }
         
-        .findContentBtn:hover{
-            background-color: #bd1550;
-            transition-duration: .5s;
+        .go.Back input{
+            background-color: orange;
         }
-
+        
+        .go.Home input{
+            background-color: orange;
+        }
+        
+        .go input:hover{
+            transition-duration: .5s;
+            background-color: darkorange;
+        }
+        
         .footer {
             width: 100%;
             height: 250px;
@@ -364,7 +354,7 @@
         }
         
     </style>
-    
+
     <script>
         /* scroll할 때 발생할 이벤트 */
         window.onscroll = function() {
@@ -382,7 +372,7 @@
             }
         }
     </script>
-    
+
 </head>
 
 <body>
@@ -443,7 +433,7 @@
             </li>
         </ul>
     </div>
-
+    
     <!-- main 영역 -->
     <div class="main">
 
@@ -456,122 +446,39 @@
 
         <!-- body -->
         <div class="body">
-            <div class="find fid">
-                <div class="findTitle">
-                    <h4>아이디 찾기</h4>
+            <div class="contents">
+                <div class="contentTitle">
+                    <h3>조회결과</h3>
                 </div>
-                <div class="findContents">
-                    <div class="findContent">
-                        <div class="findContentTitle">
-                            <span>이름</span>
-                        </div>
-                        <div class="findContentItem">
-                            <input type="text" placeholder="이름" maxlength="10"/>
-                        </div>
+                <div class="contentResult1">
+                   <div class = "result1Item">
+                    <div class="user">milk9503(이민혁)</div>
+                    <div class="normal">님의</div>
+                    <div class="type">비밀번호(아이디)</div>
+                    <div class="normal">조회 결과입니다.</div>
                     </div>
-                    <div class="findContent">
-                        <div class="findContentTitle">
-                            <span>생년월일</span>
-                        </div>
-                        <div class="findContentItem">
-                            <input type="text" placeholder="생년월일 (yy/mm/dd)" maxlength="20" onKeypress="if(event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;" style="IME-MODE:disabled;"/>
-                        </div>
-                    </div>
-                    <div class="findContent">
-                        <div class="findContentTitle">
-                            <span>연락처</span>
-                        </div>
-                        <div class="findContentItem">
-                            <input type="text" placeholder="연락처 (- 제외)" maxlength="13" onKeypress="if(event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;" style="IME-MODE:disabled;"/>
-                        </div>
-                    </div>
-                    <div class="findContent">
-                        <div class="findContentTitle">
-                            <span>본인확인질문</span>
-                        </div>
-                        <div class="findContentItem">
-                            <div class="Question">
-                                <select>
-                                    <option value="1">질문1</option>
-                                    <option value="2">질문2</option>
-                                    <option value="3">질문3</option>
-                                    <option value="4">질문4</option>
-                                    <option value="5">질문5</option>
-                                </select>
-                            </div>
-                            <div class="Answer">
-                                <input type="text" placeholder="질문에 대한 답변" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="findContent">
-                        <a href = "#">
-                            <input type = "button" class = "findContentBtn" value="아이디찾기"/>
-                        </a>
+                    <div class = "result1Item">
+                       <div class="normal" style="padding-top: 10px;">아래 영역에 마우스를 대면 조회 결과를 확인할 수 있습니다.</div>
                     </div>
                 </div>
-            </div>
-            <div class="find fpw">
-                <div class="findTitle">
-                    <h4>비밀번호 찾기</h4>
+                <div class="contentResult2">
+                    <div class="control">
+                    <input type="text" value="123123" readonly />
+                    </div>
                 </div>
-                <div class="findContents">
-                    <div class="findContent">
-                        <div class="findContentTitle">
-                            <span>아이디</span>
-                        </div>
-                        <div class="findContentItem">
-                            <input type="text" placeholder="아이디" maxlength="15" />
-                        </div>
+                <div class = "contentBtn">
+                    <div class = "go Back">
+                        <input type="button" value="이전으로" />
                     </div>
-                    <div class="findContent">
-                        <div class="findContentTitle">
-                            <span>생년월일</span>
-                        </div>
-                        <div class="findContentItem">
-                            <input type="text" placeholder="생년월일 (yy/mm/dd)" maxlength="20" onKeypress="if(event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;" style="IME-MODE:disabled;"/>
-                        </div>
-                    </div>
-                    <div class="findContent">
-                        <div class="findContentTitle">
-                            <span>연락처</span>
-                        </div>
-                        <div class="findContentItem">
-                            <input type="text" placeholder="연락처 (- 제외)" maxlength="13" onKeypress="if(event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;" style="IME-MODE:disabled;"/>
-                        </div>
-                    </div>
-                    <div class="findContent">
-                        <div class="findContentTitle">
-                            <span>본인확인질문</span>
-                        </div>
-                        <div class="findContentItem">
-                            <div class="Question">
-                                <select>
-                                    <option value="1">질문1</option>
-                                    <option value="2">질문2</option>
-                                    <option value="3">질문3</option>
-                                    <option value="4">질문4</option>
-                                    <option value="5">질문5</option>
-                                </select>
-                            </div>
-                            <div class="Answer">
-                                <input type="text" placeholder="질문에 대한 답변" />
-                            </div>
-                        </div>
-                    </div>
-                    <div class="findContent">
-                        <a href = "#">
-                            <input type = "button" class = "findContentBtn" value="비밀번호찾기"/>
-                        </a>
+                    <div class = "go Home">
+                        <input type="button" value="메인으로" />
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    
+
     <div class="footer">
         바닥글
     </div>
-</body>
-
-</html>
+</body></html>
