@@ -137,6 +137,8 @@
                     Page.ClientScript.RegisterStartupScript(this.GetType(), "displayalertmessage", "alert('아이디와, 비밀번호를 다시한번 확인해주세요.');", true);
                     TextBox1.Text = "";
                     TextBox2.Text = "";
+
+                    
                 }
             }
         }
