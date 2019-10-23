@@ -2,7 +2,61 @@
 
 <!DOCTYPE html>
 
-<script runat="server"></script>
+<script runat="server">
+    protected void btnJoin_Click(object sender, EventArgs e)
+    {
+        MemberDao member = new MemberDao();
+        Member mem = new Member();
+        mem.Mem_id = getID.Text;
+        mem.Mem_pw = mem_pw.Text;
+        mem.Mem_name = mem_name.Text;
+        mem.Mem_birth = mem_birth.Text;
+        mem.Mem_phone = mem_phone.Text;
+        mem.Mem_email = mem_email.Text;
+        if(mem_sex_m.Checked == true)
+        {
+            mem.Mem_sex = man.Text;
+        }
+        else if(mem_sex_f.Checked == true)
+        {
+            mem.Mem_sex = girl.Text;
+        }
+        mem.Mem_ques = QnAList.SelectedItem.Text;
+        mem.Mem_answer = mem_answer.Text;
+
+        mem.Mem_reg_datetime = TimeLib.GetToday();
+        mem.Mem_timestmap = TimeLib.GetTimeStamp();
+
+        int check = member.SelectMem_ID(mem);
+
+        if (getID.Text.Equals("") || mem_pw.Text.Equals("") || mem_name.Text.Equals("") || mem_birth.Text.Equals("") || mem_answer.Text.Equals("") ||
+        mem_email.Text.Equals("") || mem_phone.Text.Equals(""))
+        {
+            Page.ClientScript.RegisterStartupScript(this.GetType(), "displayalertmessage", "alert('입력되지 않은 항목이 있습니다.');", true);
+        }
+        else if (mem_pw.Text.Length < 6)
+        {
+            Page.ClientScript.RegisterStartupScript(this.GetType(), "displayalertmessage", "alert('비밀번호는 6자 이상으로 입력해주세요.');", true);
+        }
+        else
+        {
+            if (check == 1)
+            {
+                Page.ClientScript.RegisterStartupScript(this.GetType(), "displayalertmessage", "alert('이미 존재하는 아이디입니다.');", true);
+            }
+            else
+            {
+                member.InsertMember(mem);
+            }
+
+        }
+    }
+
+    protected void idCheckBtn_Click(object sender, EventArgs e)
+    {
+
+    }
+</script>
 <head runat="server">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -278,7 +332,7 @@
             width: 350px;
         }
 
-        .IDItem2 button {
+        .IDCheck {
             width: 105px;
             padding-top: 20px;
             padding-bottom: 18px;
@@ -309,13 +363,20 @@
             border-radius: 4px;
         }
 
+
+        .GENDERitem2 .radio_a {
+            padding: 3px 25px 0;
+            font-size: 15px;
+        }
+
             .GENDERitem2 .radio {
                 http: //localhost:6118/draganddropEx.html padding: 3px 25px 0;
                 font-size: 15px;
             }
 
 
-        .radio input[type="radio"] {
+
+        .radio_a input[type="radio_a"] {
             position: absolute;
             width: 1px;
             height: 1px;
@@ -326,7 +387,7 @@
             border: 0;
         }
 
-        .radio input[type="radio"]+label {
+        .radio_a input[type="radio_a"]+label {
             display: inline-block;
             position: relative;
             padding-left: 20px;
@@ -337,7 +398,7 @@
             -ms-user-select: none;
         }
 
-        .radio input[type="radio"]+label:before {
+        .radio_a input[type="radio_a"]+label:before {
             content: '';
             position: absolute;
             left: 0;
@@ -350,12 +411,12 @@
             border-radius: 100%;
         }
 
-        .radio input[type="radio"]:checked+label:before {
+        .radio_a input[type="radio_a"]:checked+label:before {
             background: #fff;
             border-color: #adb8c0;
         }
 
-        .radio input[type="radio"]:checked+label:after {
+        .radio_a input[type="radio_a"]:checked+label:after {
             content: '';
             position: absolute;
             top: 2px;
@@ -547,6 +608,7 @@
 </head>
 
 <body>
+    <form id="form1" runat="server">
     <!-- navbar 영역 -->
     <div id="nav" class="topnav">
         <ul class="topnavUl">
@@ -618,8 +680,8 @@
                     <span class="inforStar">*</span><span class="inforText">아이디</span>
                 </div>
                 <div class="IDItem2">
-                    <input type="text" id="getID" placeholder="아이디" class="inputArea sht" maxlength="15" id="idArea" />
-                    <button id="idCheckBtn" data-toggle="modal" data-target="#checkID">중복확인</button>
+                    <asp:TextBox ID="getID" placeholder="아이디" class="inputArea sht" maxlength="15" runat="server"></asp:TextBox>
+                    <asp:Button ID="idCheckBtn" runat="server" Text="중복확인" data-toggle="modal" data-target="#checkID" CssClass="IDCheck" OnClick="idCheckBtn_Click" />
                 </div>
             </div>
             <div class="Item" id="PW">
@@ -627,7 +689,7 @@
                     <span class="inforStar">*</span><span class="inforText">비밀번호</span>
                 </div>
                 <div class="PWitem2">
-                    <input type="password" placeholder="비밀번호" class="inputArea lng" maxlength="20" />
+                    <asp:TextBox ID="mem_pw" runat="server" TextMode="Password" placeholder="비밀번호" class="inputArea lng" maxlength="20"></asp:TextBox>
                 </div>
             </div>
             <div class="Item" id="NAME">
@@ -635,7 +697,7 @@
                     <span class="inforStar">*</span><span class="inforText">이름</span>
                 </div>
                 <div class="NAMEitem2">
-                    <input type="text" placeholder="이름" class="inputArea lng" maxlength="10" />
+                    <asp:TextBox ID="mem_name" placeholder="이름" class="inputArea lng" maxlength="10" runat="server"></asp:TextBox>
                 </div>
             </div>
             <div class="Item" id="GENDER">
@@ -643,13 +705,13 @@
                     <span class="inforStar">*</span><span class="inforText">성별</span>
                 </div>
                 <div class="GENDERitem2">
-                    <div class="radio">
-                        <input type="radio" name="gender" id="man" checked>
-                        <label for="man">남자</label>
+                    <div class="radio_a">
+                        <asp:RadioButton ID="mem_sex_m" runat="server" GroupName="mem_sex" Checked="true" />
+                        <asp:Label ID="man" runat="server" Text="남자"></asp:Label>
                     </div>
-                    <div class="radio">
-                        <input type="radio" name="gender" id="girl">
-                        <label for="girl">여자</label>
+                    <div class="radio_a">
+                        <asp:RadioButton ID="mem_sex_f" runat="server" GroupName="mem_sex" />
+                        <asp:Label ID="girl" runat="server" Text="여자"></asp:Label>
                     </div>
                 </div>
             </div>
@@ -658,7 +720,7 @@
                     <span class="inforStar">*</span><span class="inforText">생년월일</span>
                 </div>
                 <div class="BIRTHitem2">
-                    <input type="text" placeholder="생년월일 (yy/mm/dd)" class="inputArea lng" maxlength="20" onKeypress="if(event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;" style="IME-MODE:disabled;">
+                    <asp:TextBox ID="mem_birth" runat="server" placeholder="생년월일 (yy/mm/dd)" class="inputArea lng" maxlength="20" onKeypress="if(event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;" style="IME-MODE:disabled;"></asp:TextBox>
                 </div>
             </div>
             <div class="Item" id="TEL">
@@ -666,7 +728,7 @@
                     <span class="inforStar">*</span><span class="inforText">연락처</span>
                 </div>
                 <div class="TELitem2">
-                    <input type="text" placeholder="연락처 (- 제외)" class="inputArea lng" maxlength="13" onKeypress="if(event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;" style="IME-MODE:disabled;" />
+                    <asp:TextBox ID="mem_phone" runat="server" placeholder="연락처 (- 제외)" class="inputArea lng" maxlength="13" onKeypress="if(event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;" style="IME-MODE:disabled;" ></asp:TextBox>
                 </div>
             </div>
             <div class="Item" id="EMAIL">
@@ -674,7 +736,7 @@
                     <span class="inforStar">*</span><span class="inforText">이메일</span>
                 </div>
                 <div class="EMAILitem2">
-                    <input type="text" placeholder="이메일 (@포함)" class="inputArea lng" />
+                    <asp:TextBox ID="mem_email" runat="server" placeholder="이메일 (@포함)" class="inputArea lng"></asp:TextBox>
                 </div>
             </div>
             <div class="Item" id="QNA">
@@ -682,22 +744,21 @@
                     <span class="inforStar">*</span><span class="inforText">본인확인질문</span>
                 </div>
                 <div class="QNAitem2">
-                    <select>
-                        <option value="1">질문1</option>
-                        <option value="2">질문2</option>
-                        <option value="3">질문3</option>
-                        <option value="4">질문4</option>
-                        <option value="5">질문5</option>
-                    </select>
+                    <asp:DropDownList ID="QnAList" runat="server">
+                        <asp:ListItem>1</asp:ListItem>
+                        <asp:ListItem>2</asp:ListItem>
+                        <asp:ListItem>3</asp:ListItem>
+                        <asp:ListItem>4</asp:ListItem>
+                    </asp:DropDownList>
                 </div>
                 <div class="QNAitem3">
-                    <input type="text" placeholder="질문에 대한 답변" class="inputArea lng" />
+                    <asp:TextBox ID="mem_answer" runat="server" placeholder="질문에 대한 답변" class="inputArea lng"></asp:TextBox>
                 </div>
             </div>
             <div class="Item" id="REG">
                 <div class="REGitem1">
                     <a href="#">
-                        <button class="REGbtn">회원가입</button>
+                        <asp:Button ID="btnJoin" runat="server" Text="회원가입" class="REGbtn" OnClick="btnJoin_Click" />
                     </a>
                 </div>
             </div>
@@ -744,7 +805,7 @@
             </div>
         </div>
     </div>
-
+    </form>
 </body>
 
 </html>
