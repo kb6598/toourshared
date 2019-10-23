@@ -1,415 +1,540 @@
+﻿<%@ Page Language="C#" %>
+
 <!DOCTYPE html>
+
+<script runat="server">
+
+</script>
+
 <html xmlns="http://www.w3.org/1999/xhtml">
-<meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1"/>
-	
-<head>
-	<title>TO OUR SHARED - FIND</title>
-	
-	<!-- FONT 적용 -->
-	<link href="https://fonts.googleapis.com/css?family=Libre+Baskerville|Merriweather|Noto+Sans+KR|Nanum+Gothic+Coding|Noto+Serif+KR|Playfair+Display" rel="stylesheet"/>
-	
-	<!-- 배경 맞추기 위한 설정 -->
-	<link rel="stylesheet" type="text/css" href="./backgroundTransition.css" />
-	
-	<style>
-		.nav{
-			height: 40px;
-			background-color: whitesmoke;
-			border-bottom: 0.5px solid gainsboro;
-			display: flex;
-			align-items: center;
-		}
-		
-		.nav-align-left{
-			display:flex;
-			margin-right: auto;
-		}
-		
-		.nav-align-right{
-			display:flex;
-			margin-left: auto;
-			font-weight: bold;
-		}
-		
-		.nav-item{
-			display: flex;
-			margin: 20px;
-		}
-		
-		.nav-item-href{
-			text-decoration: none;
-			color: black;
-		}
-		
-		.nav-item-logo{
-			font-size: 20px;
-			font-family: 'Libre Baskerville', serif;
-		}
-		
-		.main{
-			width: 100%;
-			height: 100%;
-			background-color: rgb(250, 250, 250);
-		}
-		
-		.title {
-			padding: 100px 0px;
-			text-align: center;
-	
+<head runat="server">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>TO OUR SHARED : 로그인</title>
+
+    <!-- Font -->
+    <link href="https://fonts.googleapis.com/css?family=Mansalva|Nanum+Gothic|Nanum+Myeongjo|Noto+Sans+KR|Lora|Jua&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <!-- JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            line-height: 1;
+            /* 전체 배경색 */
+            background-color: #00b9f1;
+            background-repeat: no-repeat;
+        }
+
+        .topnavUl {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            text-decoration: none;
+            font-size: 20px;
+            font-family: '맑은고딕';
+        }
+
+        .topnavLi {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            text-decoration: none;
+            font-size: 20px;
+            font-family: '맑은고딕';
+        }
+
+            .topnavLi ul,
+            li {
+                list-style: none;
+                text-decoration: none;
+                padding: 0;
+                margin: 0;
+            }
+
+        a {
+            color: white;
+            text-decoration: none;
+        }
+
+        #nav {
+            z-index: 99999;
+            position: absolute;
+            width: 100%;
+            /* absolute는 부피를 못잡으니까 width 100% */
+            overflow: hidden;
+            font-size: 25px;
+            transition-duration: 0.5s;
+            position: fixed;
+        }
+
+            #nav:hover {
+                height: 250px;
+                transition: background .5s;
+                background-color: rgba(249, 192, 12, 0.95);
+            }
+
+            #nav > ul {
+                text-align: center;
+                font-family: 'Mansalva', cursive;
+                font-size: 25px;
+            }
+
+                #nav > ul > li {
+                    display: inline-block;
+                    position: relative;
+                    padding: 0px 50px;
+                }
+
+                    #nav > ul > li > a {
+                        display: block;
+                        padding: 30px 15px 20px;
+                        line-height: 30px;
+                        transition: color 0.9s;
+                        transition: background 0.4s;
+                        /* 부트스트랩 적용 후 nav 효과 적용이 되는걸 방지하기 위해 */
+                        text-decoration: none;
+                        /* 상단 메뉴 글씨 색 */
+                        color: white;
+                    }
+
+                    #nav > ul > li:hover > a {
+                        /* 메뉴에 마우스 올렸을 때 발생할 스타일(1Depth) */
+                        transition: border .5s;
+                        border-bottom: 3px solid #ff7473;
+                    }
+
+            #nav ul ul {
+                /*display: none;*/
+                position: absolute;
+                width: 100%;
+                /* absolute는 부피를 가질 수 없다 */
+                margin: 0px -50px;
+            }
+
+                #nav ul ul a {
+                    /* 2Depth li Style */
+                    display: block;
+                    line-height: 40px;
+                    font-size: 14px;
+                    color: white;
+                }
+
+                    #nav ul ul a:hover {
+                        /* SubMenu 마우스 올렸을 때 발생할 스타일 */
+                        font-weight: bold;
+                        /* 부트스트랩 적용 후 nav 효과 적용이 되는걸 방지하기 위해 */
+                        text-decoration: none;
+                    }
+
+            #nav li:hover ul {
+                display: block;
+            }
+
+            #nav li:nth-child(1) ul {
+                left: 0;
+                width: 100%;
+            }
+
+        .nav-logo {
+            /* 웹 사이트 좌측 상단에 위치한 로고 div style */
+        }
+
+        .nav-logo-item {
+            font-family: 'Mansalva', cursive;
+            font-size: 25px;
+            transition-duration: .5s;
+        }
+
+            .nav-logo-item:hover {
+                transition-duration: .5s;
+                font-size: 28px;
+                color: white;
+                /* 부트스트랩 적용 후 텍스트에 적용되는 효과 방지를 위해 */
+                text-decoration: none;
+            }
+
+        .nav-log-area {
+            /* 로그인, 로그아웃 영역 */
+            width: 150px;
+            height: 40px;
+            padding-bottom: 5px;
+            border: 2px solid white;
+            border-radius: 15px;
+            transition: .5s;
+        }
+
+        .nav-log-item {
+            font-size: 20px;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            margin-top: 8px;
+            color: white;
+            background-color: transparent;
+        }
+
+        /* 창 크기 조절 시 nav display none 설정 */
+        @media only screen and (max-width: 1600px) {
+            .topnav {
+                display: none;
+            }
+
+                .topnav > ul > li > .nav-logo > .nav-logo-item {
+                    float: left;
+                    display: block;
+                }
+        }
+
+        .main {
+            width: 100%;
+            height: 100%;
+            background-color: rgb(250, 250, 250);
+        }
+
+        .title {
+            padding: 100px 0px;
+            text-align: center;
             font-size: 60px;
             font-family: 'Libre Baskerville', serif;
-		}
-		
-		.article{
-			width: 100%;
-			height: 100%;
-			text-align: center;
-		}
-		
-		.article-findid-title{
-			padding-right: 340px;
-			padding-bottom: 50px;
-		}
-		
-		.article-findid-title span{
-			font-size: 30px;
-			font-weight: bold;
-			padding-right: 15px;
-		}
-		
-		.article-findid-name-lbl span{
-			padding-right: 435px;
-		}
-		
-		.article-findid-name-item input{
-			width: 450px;
-			height: 60px;
-			
-			font-size: 17px;
-			font-family: 'Merriweather';
-			border: 0.5px solid gainsboro;
-			
-			padding-left: 10px;
-			padding-right: 10px;
-		}
-		
-		.article-findid-tel-lbl span{
-			padding-right: 425px;
-		}
-		
-		.article-findid-tel-item input{
-			width: 450px;
-			height: 60px;
-			
-			font-size: 17px;
-			font-family: 'Merriweather';
-			border: 0.5px solid gainsboro;
-			
-			padding-left: 10px;
-			padding-right: 10px;
-		}
-		
-		.article-findid-qna-lbl{
-			padding-right: 335px;
-		}
-		
-		.article-findid-qna-question select{
-			width: 475px;
-			height: 60px;
-			
-			font-size: 17px;
-			font-family: 'Merriweather';
-			border: 0.5px solid gainsboro;
-			
-			padding-left: 10px;
-			padding-right: 10px;
-		}
-		
-		.article-findid-qna-answer input{
-			width: 454px;
-			height: 60px;
-			
-			font-size: 17px;
-			font-family: 'Merriweather';
-			border: 0.5px solid gainsboro;
-			border-top: none;
-			
-			padding-left: 10px;
-			padding-right: 10px;
-		}
-		
-		.article-findid-btn{
-			padding: 70px 0px;
-		}
-		
-		.article-findid-btn-item input{
-			width: 470px;
-			height: 60px;
-			
-			font-family: 'Merriweather';
+        }
 
-			outline: none;
-			cursor: pointer;
-			border: none;
-			
-			color: white;
-			background-color: #333;
-		}
-		
-		.article-hr{
-			text-align: center;
-			display: inline-block;
-			
-			width: 800px;
-			margin-bottom: 50px;
-		}
-		
-		.article-findpw-title{
-			padding-right: 300px;
-			padding-bottom: 50px;
-		}
-		
-		.article-findpw-title span{
-			font-size: 30px;
-			font-weight: bold;
-			padding-right: 15px;
-		}
-		
-		.article-findpw-id-lbl span{
-			padding-right: 420px;
-		}
-		
-		.article-findpw-id-item input{
-			width: 450px;
-			height: 60px;
-			
-			font-size: 17px;
-			font-family: 'Merriweather';
-			border: 0.5px solid gainsboro;
-			
-			padding-left: 10px;
-			padding-right: 10px;
-		}
-		
-		
-		.article-findpw-tel-lbl span{
-			padding-right: 420px;
-		}
-		
-		.article-findpw-tel-item input{
-			width: 450px;
-			height: 60px;
-			
-			font-size: 17px;
-			font-family: 'Merriweather';
-			border: 0.5px solid gainsboro;
-			
-			padding-left: 10px;
-			padding-right: 10px;
-		}
-		
-		.article-findpw-qna-lbl{
-			padding-right: 335px;
-		}
-		
-		.article-findpw-qna-question select{
-			width: 475px;
-			height: 60px;
-			
-			font-size: 17px;
-			font-family: 'Merriweather';
-			border: 0.5px solid gainsboro;
-			
-			padding-left: 10px;
-			padding-right: 10px;
-		}
-		
-		.article-findpw-qna-answer input{
-			width: 454px;
-			height: 60px;
-			
-			font-size: 17px;
-			font-family: 'Merriweather';
-			border: 0.5px solid gainsboro;
-			border-top: none;
-			
-			padding-left: 10px;
-			padding-right: 10px;
-		}
-		
-		.article-findpw-btn{
-			padding: 70px 0px 150px 0px;
-		}
-		
-		.article-findpw-btn-item input{
-			width: 470px;
-			height: 60px;
-			
-			font-family: 'Merriweather';
+        .article {
+            width: 100%;
+            height: 100%;
+            text-align: center;
+        }
 
-			outline: none;
-			cursor: pointer;
-			border: none;
-			
-			color: white;
-			background-color: #333;
-		}
-	</style>
+        .article-findid-title {
+            padding-right: 340px;
+            padding-bottom: 50px;
+        }
+
+            .article-findid-title span {
+                font-size: 30px;
+                font-weight: bold;
+                padding-right: 15px;
+            }
+
+        .article-findid-name-lbl span {
+            padding-right: 435px;
+        }
+
+        .article-findid-name-item input {
+            width: 450px;
+            height: 60px;
+            font-size: 17px;
+            font-family: 'Merriweather';
+            border: 0.5px solid gainsboro;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+
+        .article-findid-tel-lbl span {
+            padding-right: 425px;
+        }
+
+        .article-findid-tel-item input {
+            width: 450px;
+            height: 60px;
+            font-size: 17px;
+            font-family: 'Merriweather';
+            border: 0.5px solid gainsboro;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+
+        .article-findid-qna-lbl {
+            padding-right: 335px;
+        }
+
+        .article-findid-qna-question select {
+            width: 475px;
+            height: 60px;
+            font-size: 17px;
+            font-family: 'Merriweather';
+            border: 0.5px solid gainsboro;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+
+        .article-findid-qna-answer input {
+            width: 454px;
+            height: 60px;
+            font-size: 17px;
+            font-family: 'Merriweather';
+            border: 0.5px solid gainsboro;
+            border-top: none;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+
+        .article-findid-btn {
+            padding: 70px 0px;
+        }
+
+        .article-findid-btn-item input {
+            width: 470px;
+            height: 60px;
+            font-family: 'Merriweather';
+            outline: none;
+            cursor: pointer;
+            border: none;
+            color: white;
+            background-color: #333;
+        }
+
+        .article-hr {
+            text-align: center;
+            display: inline-block;
+            width: 800px;
+            margin-bottom: 50px;
+        }
+
+        .article-findpw-title {
+            padding-right: 300px;
+            padding-bottom: 50px;
+        }
+
+            .article-findpw-title span {
+                font-size: 30px;
+                font-weight: bold;
+                padding-right: 15px;
+            }
+
+        .article-findpw-id-lbl span {
+            padding-right: 420px;
+        }
+
+        .article-findpw-id-item input {
+            width: 450px;
+            height: 60px;
+            font-size: 17px;
+            font-family: 'Merriweather';
+            border: 0.5px solid gainsboro;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+
+
+        .article-findpw-tel-lbl span {
+            padding-right: 420px;
+        }
+
+        .article-findpw-tel-item input {
+            width: 450px;
+            height: 60px;
+            font-size: 17px;
+            font-family: 'Merriweather';
+            border: 0.5px solid gainsboro;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+
+        .article-findpw-qna-lbl {
+            padding-right: 335px;
+        }
+
+        .article-findpw-qna-question select {
+            width: 475px;
+            height: 60px;
+            font-size: 17px;
+            font-family: 'Merriweather';
+            border: 0.5px solid gainsboro;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+
+        .article-findpw-qna-answer input {
+            width: 454px;
+            height: 60px;
+            font-size: 17px;
+            font-family: 'Merriweather';
+            border: 0.5px solid gainsboro;
+            border-top: none;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+
+        .article-findpw-btn {
+            padding: 70px 0px 150px 0px;
+        }
+
+        .article-findpw-btn-item input {
+            width: 470px;
+            height: 60px;
+            font-family: 'Merriweather';
+            outline: none;
+            cursor: pointer;
+            border: none;
+            color: white;
+            background-color: #333;
+        }
+    </style>
 </head>
 
 <body>
-	<form>
-		<div class="nav">
-			<!-- 좌측 상단 로고 -->
-			<div class="nav-align-left">
-				<div class = "nav-item">
-					<div class = "nav-item-logo">
-						<a href ="#" class="nav-item-href">To Our Shared</a>
-					</div>
-				</div>
-			</div>
-			<!-- 우측 상단 메뉴 -->
-			<div class = "nav-align-right">
-				<div class = "nav-item"><a href ="#" class="nav-item-href">글 작성</a></div>
-				<div class = "nav-item"><a href ="#" class="nav-item-href">검색 페이지</a></div>
-				<div class = "nav-item"><a href ="#" class="nav-item-href">마이 페이지</a></div>
-				<div class = "nav-item"><a href ="#" class="nav-item-href">로그인</a></div>
-				<div class = "nav-item"><a href ="#" class="nav-item-href">회원가입</a></div>
-			</div>	
-		</div>
-		<div class = "main">
-			<div class = "title">
-				<div class = "title-label">
-					To Our Shared
-				</div>
-			</div>
-			
-			<div class = "article">
-				<div class = "article-findid">
-					<p>
-						<div class = "article-findid-title">
-							<span>아이디 찾기</span>
-						</div>
-					</p>
-					<p>
-						<div class = "article-findid-name">
-							<div class = "article-findid-name-lbl">
-								<span>이름</span>
-							</div>
-						</div>
-						<div class = "article-findid-name-align">
-							<div class = "article-findid-name-item">
-								<input type = "text" placeholder = "이름"/>
-							</div>
-						</div>
-					</p>
-					<p>
-						<div class = "article-findid-tel">
-							<div class = "article-findid-tel-lbl">
-								<span>연락처</span>
-							</div>
-							<div class = "article-findid-tel-item">
-								<input type = "text" placeholder="연락처 (-제외)"/>
-							</div>
-						</div>
-					</p>
-					<p>
-						<div class = "article-findid-qna">
-							<div class = "article-findid-qna-align">
-								<div class = "article-findid-qna-lbl">
-									<span>본인확인 질문답변</span>
-								</div>
-								<div class = "article-findid-qna-question">
-									<select>
-										<option value = "1">본인이 태어난 곳은?</option>
-										<option value = "2">처음 키운 반려견은?</option>
-										<option value = "3">본인의 출신 초등학교는?</option>
-										<option value = "4">내 부모님의 고향은?</option>
-										<option value = "5">학창시절 나의 별명은?</option>
-									</select>
-								</div>
-								<div class = "article-findid-qna-answer">
-									<input type = "text" placeholder="질문에 대한 답변"/>
-								</div>
-							</div>
-						</div>
-					</p>
-					<p>
-						<div class = "article-findid-btn">
-							<div class = "article-findid-btn-align">
-								<div class = "article-findid-btn-item">
-									<input type = "button" value = "아이디 찾기"/>
-								</div>
-							</div>
-						</div>
-					</p>
-				</div>
+    <form>
+        <div class="nav">
+            <!-- 좌측 상단 로고 -->
+            <div class="nav-align-left">
+                <div class="nav-item">
+                    <div class="nav-item-logo">
+                        <a href="#" class="nav-item-href">To Our Shared</a>
+                    </div>
+                </div>
+            </div>
+            <!-- 우측 상단 메뉴 -->
+            <div class="nav-align-right">
+                <div class="nav-item"><a href="#" class="nav-item-href">글 작성</a></div>
+                <div class="nav-item"><a href="#" class="nav-item-href">검색 페이지</a></div>
+                <div class="nav-item"><a href="#" class="nav-item-href">마이 페이지</a></div>
+                <div class="nav-item"><a href="#" class="nav-item-href">로그인</a></div>
+                <div class="nav-item"><a href="#" class="nav-item-href">회원가입</a></div>
+            </div>
+        </div>
+        <div class="main">
+            <div class="title">
+                <div class="title-label">
+                    To Our Shared
+                </div>
+            </div>
 
-				<div class = "article-hr">
-					<hr/>
-				</div>
+            <div class="article">
+                <div class="article-findid">
+                    <p>
+                        <div class="article-findid-title">
+                            <span>아이디 찾기</span>
+                        </div>
+                    </p>
+                    <p>
+                        <div class="article-findid-name">
+                            <div class="article-findid-name-lbl">
+                                <span>이름</span>
+                            </div>
+                        </div>
+                        <div class="article-findid-name-align">
+                            <div class="article-findid-name-item">
+                                <input type="text" placeholder="이름" />
+                            </div>
+                        </div>
+                    </p>
+                    <p>
+                        <div class="article-findid-tel">
+                            <div class="article-findid-tel-lbl">
+                                <span>연락처</span>
+                            </div>
+                            <div class="article-findid-tel-item">
+                                <input type="text" placeholder="연락처 (-제외)" />
+                            </div>
+                        </div>
+                    </p>
+                    <p>
+                        <div class="article-findid-qna">
+                            <div class="article-findid-qna-align">
+                                <div class="article-findid-qna-lbl">
+                                    <span>본인확인 질문답변</span>
+                                </div>
+                                <div class="article-findid-qna-question">
+                                    <select>
+                                        <option value="1">본인이 태어난 곳은?</option>
+                                        <option value="2">처음 키운 반려견은?</option>
+                                        <option value="3">본인의 출신 초등학교는?</option>
+                                        <option value="4">내 부모님의 고향은?</option>
+                                        <option value="5">학창시절 나의 별명은?</option>
+                                    </select>
+                                </div>
+                                <div class="article-findid-qna-answer">
+                                    <input type="text" placeholder="질문에 대한 답변" />
+                                </div>
+                            </div>
+                        </div>
+                    </p>
+                    <p>
+                        <div class="article-findid-btn">
+                            <div class="article-findid-btn-align">
+                                <div class="article-findid-btn-item">
+                                    <input type="button" value="아이디 찾기" />
+                                </div>
+                            </div>
+                        </div>
+                    </p>
+                </div>
 
-				<div class = "article-findpw">
-					<p>
-						<div class = "article-findpw-title">
-							<span>비밀번호 찾기</span>
-						</div>
-					</p>
-					<p>
-						<div class = "article-findpw-id">
-							<div class = "article-findpw-id-lbl">
-								<span>아이디</span>
-							</div>
-							<div class = " article-findpw-id-align">
-								<div class = "article-findpw-id-item">
-									<input type = "text" placeholder = "아이디" />
-								</div>
-							</div>
-						</div>
-					</p>
-					<p>
-						<div class = "article-findpw-tel">
-							<div class = "article-findpw-tel-lbl">
-								<span>연락처</span>
-							</div>
-							<div class = "article-findpw-tel-item">
-								<input type = "text" placeholder="연락처 (-제외)"/>
-							</div>
-						</div>
-					</p>
-					<p>
-						<div class = "article-findpw-qna">
-							<div class = "article-findpw-qna-align">
-								<div class = "article-findpw-qna-lbl">
-									<span>본인확인 질문답변</span>
-								</div>
-								<div class = "article-findpw-qna-question">
-									<select>
-										<option value = "1">본인이 태어난 곳은?</option>
-										<option value = "2">처음 키운 반려견은?</option>
-										<option value = "3">본인의 출신 초등학교는?</option>
-										<option value = "4">내 부모님의 고향은?</option>
-										<option value = "5">학창시절 나의 별명은?</option>
-									</select>
-								</div>
-								<div class = "article-findpw-qna-answer">
-									<input type = "text" placeholder="질문에 대한 답변"/>
-								</div>
-							</div>
-						</div>
-					</p>
-					<p>
-						<div class = "article-findpw-btn">
-							<div class = "article-findpw-btn-align">
-								<div class = "article-findpw-btn-item">
-									<input type = "button" value = "비밀번호 찾기"/>
-								</div>
-							</div>
-						</div>
-					</p>
-				</div>
-			</div>
-		</div>
-	</form>
+                <div class="article-hr">
+                    <hr />
+                </div>
+
+                <div class="article-findpw">
+                    <p>
+                        <div class="article-findpw-title">
+                            <span>비밀번호 찾기</span>
+                        </div>
+                    </p>
+                    <p>
+                        <div class="article-findpw-id">
+                            <div class="article-findpw-id-lbl">
+                                <span>아이디</span>
+                            </div>
+                            <div class=" article-findpw-id-align">
+                                <div class="article-findpw-id-item">
+                                    <input type="text" placeholder="아이디" />
+                                </div>
+                            </div>
+                        </div>
+                    </p>
+                    <p>
+                        <div class="article-findpw-tel">
+                            <div class="article-findpw-tel-lbl">
+                                <span>연락처</span>
+                            </div>
+                            <div class="article-findpw-tel-item">
+                                <input type="text" placeholder="연락처 (-제외)" />
+                            </div>
+                        </div>
+                    </p>
+                    <p>
+                        <div class="article-findpw-qna">
+                            <div class="article-findpw-qna-align">
+                                <div class="article-findpw-qna-lbl">
+                                    <span>본인확인 질문답변</span>
+                                </div>
+                                <div class="article-findpw-qna-question">
+                                    <select>
+                                        <option value="1">본인이 태어난 곳은?</option>
+                                        <option value="2">처음 키운 반려견은?</option>
+                                        <option value="3">본인의 출신 초등학교는?</option>
+                                        <option value="4">내 부모님의 고향은?</option>
+                                        <option value="5">학창시절 나의 별명은?</option>
+                                    </select>
+                                </div>
+                                <div class="article-findpw-qna-answer">
+                                    <input type="text" placeholder="질문에 대한 답변" />
+                                </div>
+                            </div>
+                        </div>
+                    </p>
+                    <p>
+                        <div class="article-findpw-btn">
+                            <div class="article-findpw-btn-align">
+                                <div class="article-findpw-btn-item">
+                                    <input type="button" value="비밀번호 찾기" />
+                                </div>
+                            </div>
+                        </div>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </form>
 </body>
 </html>

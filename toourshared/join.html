@@ -409,6 +409,84 @@
             background-color: #272625;
         }
 
+        .modal-dialog {
+            margin-top: 15%;
+        }
+
+        .modal-content {
+            border-radius: 0;
+            border: none;
+            width: 500px;
+            height: 300px;
+            transition-duration: .5s;
+        }
+
+        .modal-header {
+            border: none;
+        }
+
+        .bodyItem1 {
+            width: 100%;
+            height: auto;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .bodyItem1 .inputArea input {
+            width: 300px;
+            height: 40px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            outline: none;
+        }
+
+        .bodyItem1 .checkBtn button {
+            width: 100px;
+            height: 40px;
+            margin-top: 9.5px;
+            margin-left: -9.8px;
+            font-size: 13px;
+            border: .5px solid rgba(0, 0, 0, 0.1);
+            outline: none;
+            color: white;
+            background-color: rgba(0, 191, 255, .7);
+            transition-duration: .5s;
+        }
+
+        .bodyItem1 .checkBtn button:hover {
+            transition-duration: .5s;
+            background-color: deepskyblue;
+        }
+
+        .bodyItem2 {
+            padding-top: 40px;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #result {
+            font-size: 13px;
+        }
+
+        .modal-footer {
+            width: 100%;
+            height: 70px;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            transition-duration: .9s;
+        }
+
+        .modal-footer a {
+            width: 150px;
+            font-size: 13px;
+        }
+
     </style>
 
     <script>
@@ -427,6 +505,40 @@
                 document.getElementById("nav").style.background = "";
             }
         }
+
+        /* 중복확인 버튼 누를경우 Modal에 데이터 넘기기 */
+        $(document).ready(function() {
+            document.getElementById("idCheckBtn").onclick = function() {
+                $('#setID').val($('#getID').val());
+            };
+        });
+
+        /* Modal 내 사용하기 버튼 누를경우 페이지 내 아이디 입력란에 데이터 넘기기 */
+        $(document).ready(function() {
+            document.getElementById("useID").onclick = function() {
+                $('#getID').val($('#setID').val());
+                $('#result').html("😢 사용할 수 없는 아이디 입니다.");
+            };
+        });
+
+        /* Modal 내 사용하기 버튼 누를경우 페이지 내 아이디 입력란에 데이터 넘기기 */
+        $(document).ready(function() {
+            document.getElementById("chkBtn").onclick = function() {
+                var footer = document.getElementById("modalFooter");
+
+                if (footer.style.display != 'none') {
+                    $('.modal-content').height("230px");
+                    $('modalFooter').height("0px");
+                    $('#result').html("😢 사용할 수 없는 아이디 입니다.");
+                    document.getElementById("modalFooter").style.display = "none";
+                } else {
+                    $('.modal-content').height("300px");
+                    $('modalFooter').height("70px");
+                    $('#result').html("😊 사용할 수 있는 아이디 입니다.");
+                    document.getElementById("modalFooter").style.display = "flex";
+                }
+            };
+        });
 
     </script>
 </head>
@@ -503,8 +615,8 @@
                     <span class="inforStar">*</span><span class="inforText">아이디</span>
                 </div>
                 <div class="IDItem2">
-                    <input type="text" placeholder="아이디" class="inputArea sht" maxlength="15" id="idArea" />
-                    <button>중복확인</button>
+                    <input type="text" id="getID" placeholder="아이디" class="inputArea sht" maxlength="15" id="idArea" />
+                    <button id="idCheckBtn" data-toggle="modal" data-target="#checkID">중복확인</button>
                 </div>
             </div>
             <div class="Item" id="PW">
@@ -591,8 +703,45 @@
 
     <!-- footer 영역 -->
     <div class="footer">
-        a
+        바닥글
     </div>
+
+    <!-- The Modal -->
+    <div class="modal fade" id="checkID">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div class="bodyItem1">
+                        <div class="inputArea">
+                            <input type="text" id="setID" />
+                        </div>
+                        <div class="checkBtn">
+                            <button id="chkBtn">중복확인</button>
+                        </div>
+                    </div>
+                    <div class="bodyItem2">
+                        <div class="result">
+                            <span id="result">😊 사용할 수 있는 아이디 입니다.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer" id="modalFooter">
+                    <a href="#" id="useID" class="btn btn-danger" data-dismiss="modal">사용하기</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
 </body>
 
 </html>
