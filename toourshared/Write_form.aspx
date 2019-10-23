@@ -572,7 +572,7 @@
                                 <button onclick="searchPlaces();">검색하기</button>
                             </div>
                         </div>
-                        <hr/>
+                        <hr />
                         <ul id="placesList"></ul>
                         <div id="pagination"></div>
                     </div>
@@ -1451,10 +1451,9 @@
             }
         }
 
-        //----------------------------------------------------------------
-        //travelRoute
-        //----------------------------------------------------------------
-
+        //------------------------------------
+        //----------TravelRouteItem and travelRouteList Start
+        //------------------------------------
 
         class TravelRouteItem {
             constructor(place_name, road_address_name, address_name, phone, place_url, x, y) {
@@ -1491,21 +1490,37 @@
             while (listEl.hasChildNodes()) {
                 listEl.removeChild(listEl.firstChild);
             }
+            //
+            //
+            //
+            //
+            //
 
             travelRouteList.forEach(function (currentValue, index) {
                 var el = document.createElement('li'),
-                    itemStr = '<div  class="card" style="width:12rem">' +
-                        '    <div class="card-body" >' +
-                        '        <h4 class="card-title">' + currentValue.place_name + '</h4>' +
-                        ' <p class="card-text">' + currentValue.road_address_name + '</p>' +
-                        ' <p class="card-text">' + currentValue.address_name + '</p>' +
-                        ' <p class="card-text">' + currentValue.phone + '</p>' +
-                        ' <a class="card-link" href="' + currentValue.place_url + '" target="_blank" class="link">상세페이지</a>' +
-                        '<div class="btn btn-secondary" onclick=\'addCostItem("' + currentValue.place_name + '")\'>경비추가</div>' +
+                    itemStr =
+                        '<div class="travelRouteItem">' +
+                        '    <div class="travelRouteItem-area">' +
+                        '        <div class="travelRouteItem-header" id="travelRouteItemHeader">' +
+                        '            <span class="travelRouteItem_Title">전체 경비</span>' +
+                        '            <span class="travelRouteItem_Body">💰 290,000</span>' +
+                        '        </div>' +
+                        '        <div class="travelRouteItem-body" id="travelRouteItemBody">' +
+                        '            <div class="travelRouteItem">' +
+                        '                <div class="travelRouteItem-header">' +
+                        '                    <span># 1일 째</span>' +
+                        '                </div>' +
+                        '                <div class="travelRouteItem-body">' +
+                        '                    <ul>' +
+                        '                        <li>식비 18,000</li>' +
+                        '                        <li>쇼핑 40,000</li>' +
+                        '                    </ul>' +
+                        '                </div>' +
+                        '            </div>' +
+                        '        </div>' +
                         '    </div>' +
-                        '<input id=x type=hidden value=' + currentValue.x + '/>' +
-                        '<input id=y type=hidden value=' + currentValue.y + '/>' +
                         '</div>';
+
                 el.innerHTML = itemStr;
                 el.setAttribute("draggable", 'true');
                 el.setAttribute("id", "travelPoint");
@@ -1561,12 +1576,19 @@
 
         }
 
-        //----------------------------------------------------------------
-        //travelCost
-        //----------------------------------------------------------------
+        //------------------------------------
+        //----------TravelRouteItem and travelRouteList Start
+        //------------------------------------
+
+        //------------------------------------
+        //----------CostItems and CostItemList Start
+        //------------------------------------
         class CostItem {
             constructor(place_name) {
                 this.itemList = Array();
+                this.place_name = place_name;
+            }
+            setPlace_name(place_name) {
                 this.place_name = place_name;
             }
             pushItem(costType, cost, info) {
@@ -1582,19 +1604,15 @@
         }
 
         var CostItemList = Array();
-        //CostItemList.push(new CostItem());
-        ////CostItemList.push(new CostItem());
-        //CostItemList[0].pushItem("주성치 반점", "식비", 15000, "자장면 3000 * 5");
-        //CostItemList[0].pushItem("버스 정류장", "교통비", 1500, "버스 1인");
-        //CostItemList[0].pushItem("마트", "쇼핑비", 10000, "마이구미 10");
 
-        //console.info(CostItemList);
-        //console.info(CostItemList);
-        ////CostItemList[0].popItem();
-        ////CostItemList[0].popItem();
+        console.info(CostItemList);
+        console.info(CostItemList);
 
         console.info(CostItemList);
 
+        function button() {
+
+        }
 
 
         function refreashCostItem() {
@@ -1604,34 +1622,61 @@
                 fragment = document.createDocumentFragment(),
                 headerFragment = document.createDocumentFragment(),
                 itemList = '',
-                el, headerEl, totalCost = 0;
+                el, headerEl, totalCost = 0,
+                pindexTmp;
+
+            ;
 
             // costBody 모든 자식 노드 삭제
             while (costBody.hasChildNodes()) {
                 costBody.removeChild(costBody.firstChild);
             }
-                                                  
-
-            CostItemList.forEach(function (currentValue, index) {
-                console.info(index);
+            CostItemList.forEach(function (currentValue, pindex) {
+                pindexTmp = pindex;
+                console.info(pindex);
                 console.info(currentValue);
                 el = document.createElement('div'),
                     itemStr =
 
-                    '     <div class="costItem-header">' +
-                    '         <span># ' + (index + 1) + '일 째</span>' +
-                    '     </div>' +
-                    '     <div class="costItem-body">' +
-                    '         <ul>';
+                    '<div class="costItem-header">' +
+                    '   <div class="form-group">' +
+                    '       <table><tr>' +
+                    '           <td>' +
+                    '               <input id="addCost_place_name_' + pindex + '" class="form-control form-control-sm" type="text" placeholder="장소 이름" value="' + currentValue.place_name + '"  style="width:140px;" />' +
+                    '           </td>' +
+                    '           <td>' +
+                    '               <div class="btn btn-secondary btn-sm" onclick="setCostItemParentName(' + pindex + ')" >이름변경</div>' +
+                    '           </td>' +
+                    '           <td>' +
+                    '               <div class="btn btn-danger btn-sm" onclick="removeCostItemParent(' + pindex + ')"> x </div>' +
+                    '           </td>' +
+                    '       </tr></table>' +
+                    '   </div>' +
+                    //'         <span># ' + (index + 1) + '일 째</span>' +
+                    '</div>' +
+                    '   <div class="costItem-body">' +
+                    '       <ul>';
 
                 currentValue.itemList.forEach(function (currentValue, index) {
-                    itemStr += '<li>' + currentValue.costType + ' (' + currentValue.place_name + ')' + '<br/>' + setComa(currentValue.cost) + ' (' + currentValue.info + ')' + '</li>';
-                    totalCost += currentValue.cost;
+                    itemStr += '<li>' + currentValue.costType + '<br/>' + setComa(currentValue.cost) + ' (' + currentValue.info + ')' + '</li>';
+                    totalCost += parseInt(currentValue.cost);
                 });
 
                 itemStr +=
-                    '         </ul>' +
-                    '     </div>';
+                    '           <li>' +
+                    '               <select id="addCost_costType_' + pindex + '" class="form-control form-control-sm">' +
+                    '                   <option value="식비">식비</option>' +
+                    '                   <option value="교통비">교통비</option>' +
+                    '                   <option value="숙박비">숙박비</option>' +
+                    '                   <option value="기타">기타</option>' +
+                    '               </select>' +
+                    '               <input id="addCost_cost_' + pindex + '" class="form-control form-control-sm" type="number" placeholder="비용">' +
+                    '               <input id="addCost_info_' + pindex + '" class="form-control form-control-sm" type="text" placeholder="비용 설명">' +
+                    '               <div class="btn btn-secondary btn-sm" onclick="pushCostItemChild(' + pindex + ')">+</div>' +
+                    '               <div class="btn btn-secondary btn-sm" onclick="popCostItemChild(' + pindex + ')">-</div>' +
+                    '           </li>' +
+                    '   </ul>' +
+                    '</div>';
                 el.innerHTML = itemStr;
                 //            el.setAttribute("draggable", 'true');
                 //            el.setAttribute("id", "travelPoint");
@@ -1648,6 +1693,28 @@
 
             });
 
+            // 나중에 지도의 travelroute에서 추가할 버튼
+            el = document.createElement('div'),
+                itemStr =
+
+                '<div class="btn btn-secondary btn-sm" onclick="addCostItemParent(' + pindexTmp + ')">+</div>';
+
+            el.innerHTML = itemStr;
+            //            el.setAttribute("draggable", 'true');
+            //            el.setAttribute("id", "travelPoint");
+            el.setAttribute("class", "costItem");
+
+
+            var itemEl = el;
+
+            fragment.appendChild(itemEl);
+
+            costBody.appendChild(fragment);
+
+            //--------------------
+
+
+
             var headerStr =
                 '<span class="chTitle">전체 경비</span>' +
                 '<span class="chBody">💰 ' + setComa(totalCost) + '</span>';
@@ -1658,17 +1725,64 @@
 
         }
 
-        function addCostItem(place_name) {
-            CostItemList.push(new CostItem());
-            //CostItemList.push(new CostItem());
+        function pushCostItemChild(index) {
 
-            CostItemList[CostItemList.length - 1].pushItem(place_name, "식비", 15000, "자장면 3000 * 5");
-            CostItemList[CostItemList.length-1].pushItem("버스 정류장", "교통비", 1500, "버스 1인");
-            CostItemList[CostItemList.length-1].pushItem("마트", "쇼핑비", 10000, "마이구미 10");
+            var costTypeId = "addCost_costType_" + index,
+                costId = "addCost_cost_" + index,
+                infoId = "addCost_info_" + index;
+
+            var costType = document.getElementById(costTypeId);
+            cost = document.getElementById(costId),
+                info = document.getElementById(infoId);
+
+            CostItemList[index].pushItem(costType.options[costType.selectedIndex].value, cost.value, info.value);
+
             refreashCostItem();
 
         }
-        //돈에 컴마 찍어주는 함수
+
+
+        function popCostItemChild(index) {
+
+            var costTypeId = "addCost_costType_" + index,
+                costId = "addCost_cost_" + index,
+                infoId = "addCost_info_" + index;
+
+            var costType = document.getElementById(costTypeId);
+            cost = document.getElementById(costId),
+                info = document.getElementById(infoId);
+
+            CostItemList[index].popItem();
+            refreashCostItem();
+
+        }
+
+
+
+        // 나중에 인포윈도우에 추가하기
+        function addCostItemParent(place_name) {
+            CostItemList.push(new CostItem("야호"));
+            refreashCostItem();
+
+        }
+
+        function setCostItemParentName(pindex) {
+
+            var addCost_place_nameId = "addCost_place_name_" + pindex;
+            var addCost_place_name = document.getElementById(addCost_place_nameId);
+
+
+            CostItemList[pindex].setPlace_name(addCost_place_name.value);
+            refreashCostItem();
+        }
+
+
+        function removeCostItemParent(pindex) {
+            CostItemList.splice(pindex, 1);
+            refreashCostItem();
+        }
+
+
         function setComa(number) {
             var resultStr = "";
             var strNumber = String(number);
@@ -1682,9 +1796,16 @@
                 }
                 resultStr = strNumber[i] + resultStr;
             }
+
+
             return resultStr;
 
         }
+
+        //------------------------------------
+        //----------CostItems and CostItemList End
+        //------------------------------------
+
 
 
 

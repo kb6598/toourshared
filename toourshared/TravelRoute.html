@@ -32,7 +32,7 @@
         }
 
 
-        .modal-cost {
+        .modal-cost, .travelRoute {
             top: 0;
             margin-top: 28px;
             padding-right: 127px;
@@ -101,7 +101,6 @@
         .costItem-body li {
             font-size: 12px;
         }
-
     </style>
 
 </head>
@@ -128,6 +127,61 @@
                         </ul>
                     </div>
                 </div>
+                <div class="costItem">
+                    <div class="costItem-header">
+                        <span># 2일 째</span>
+                    </div>
+                    <div class="costItem-body">
+                        <ul>
+                            <li>식비 18,000</li>
+                            <li>쇼핑 40,000</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="costItem">
+                    <div class="costItem-header">
+                        <span># 3일 째</span>
+                    </div>
+                    <div class="costItem-body">
+                        <ul>
+                            <li>식비 18,000</li>
+                            <li>쇼핑 40,000</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="costItem">
+                    <div class="costItem-header">
+                        <span># 4일 째</span>
+                    </div>
+                    <div class="costItem-body">
+                        <ul>
+                            <li>식비 18,000</li>
+                            <li>쇼핑 40,000</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="costItem">
+                    <div class="costItem-header">
+                        <span># 5일 째</span>
+                    </div>
+                    <div class="costItem-body">
+                        <ul>
+                            <li>식비 18,000</li>
+                            <li>쇼핑 40,000</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="costItem">
+                    <div class="costItem-header">
+                        <span># 6일 째</span>
+                    </div>
+                    <div class="costItem-body">
+                        <ul>
+                            <li>식비 18,000</li>
+                            <li>쇼핑 40,000</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -137,13 +191,11 @@
 
     </div>
 
-
-
-
-
-
+    
 
     <script>
+        
+        
         //------------------------------------
         //----------CostItems and CostItemList Start
         //------------------------------------
@@ -186,10 +238,10 @@
                 fragment = document.createDocumentFragment(),
                 headerFragment = document.createDocumentFragment(),
                 itemList = '',
-                el, headerEl, totalCost = 0,
+                el, headerEl,totalCost = 0,
                 pindexTmp;
-
-            ;
+            
+             ;
 
             // costBody 모든 자식 노드 삭제
             while (costBody.hasChildNodes()) {
@@ -360,20 +412,17 @@
                 }
                 resultStr = strNumber[i] + resultStr;
             }
-
+            
 
             return resultStr;
 
         }
-
+        
         //------------------------------------
         //----------CostItems and CostItemList End
         //------------------------------------
-
-
+        
+        
         console.info(setComa(100000000000000000));
-
     </script>
-</body>
-
-</html>
+</body></html>

@@ -443,12 +443,14 @@
             background-color: rgba(0, 0, 0, 0.08);
         }
 
+        .modal {
+            border: 2px solid red;
+        }
+
         .modal-dialog {
             width: 100%;
             display: flex;
             flex-direction: row;
-            justify-content: center;
-            align-items: center;
             z-index: 9999;
         }
 
@@ -725,12 +727,12 @@
             height: 100%;
         }
 
-        .inputArea {
+        .footerInputArea {
             padding: 5px 5px 0;
         }
 
-        .inputArea>textarea {
-            width: 767px;
+        .footerInputArea>textarea {
+            width: 100%;
             height: 130px;
             outline: none;
             resize: none;
@@ -793,10 +795,9 @@
             margin-top: 28px;
             padding-right: 127px;
             display: flex;
-            float: right;
-            flex-direction: row-reverse;
+            justify-content: flex-end;
             width: 100%;
-            position: relative;
+            position: fixed;
         }
 
         .modal-cost-area {
@@ -1450,7 +1451,7 @@
                         </div>
                         <div class="footerWriteReply">
                             <div class="footerWriteArea">
-                                <div class="inputArea">
+                                <div class="footerInputArea">
                                     <textarea placeholder="댓글을 입력하세요. (최대 200자)" id="inputAreaItem"></textarea>
                                 </div>
                                 <div class="inputScore">
@@ -1478,7 +1479,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- costModal -->
         <div class="modal-cost">
             <div class="modal-cost-area">
