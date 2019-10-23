@@ -8,6 +8,7 @@ using System.Web;
 /// </summary>
 public class Follower
 {
+    public object fol_no;
     private string mem_id;
     private string fol_id;
     public Follower(string mem_id = null, string fol_id = null)

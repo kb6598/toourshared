@@ -53,6 +53,71 @@ namespace tooushared.DAO
         }
         //public void DeleteCommentBy(mem_id)
 
+        //public void DeleteCommentBy(mem_id)
+        public DataSet SelectMap()
+        {
+            MyDB myDB = new MyDB();
+            MySqlConnection con = myDB.GetCon();
+
+            string sql = "Select map_no,trv_day_no  From toourshared.map";
+            MySqlCommand cmd = new MySqlCommand(sql, con); // 커맨드(sql문을 con에서 수행하기 위한 명령문) 생성 DB에서 수행시킬 명령 생성   
+
+            MySqlDataAdapter ad = new MySqlDataAdapter();
+            ad.SelectCommand = cmd;
+            DataSet ds = new DataSet();
+            ad.Fill(ds);
+
+
+            return ds;
+        }
+
+        public Map selectMapBymap_no(Map map)
+        {
+
+            MyDB mydb = new MyDB();
+
+            Map result = new Map();
+            MySqlConnection con;
+
+            try
+            {
+                con = mydb.GetCon();
+
+                string Sql = "SELECT * FROM toourshared.map where map=@map_no";
+
+
+                MySqlCommand cmd = new MySqlCommand(Sql, con);
+
+                cmd.Parameters.AddWithValue("@map_no", map.Map_no);
+
+                con.Open();
+                MySqlDataReader rd = cmd.ExecuteReader();
+
+                if (rd.HasRows)
+                {
+                    rd.Read();
+
+                    result.Map_no = rd["map_no"].ToString();
+                    result.Trv_day_no = rd["trv_day_no"].ToString();
+                   
+
+
+                    //lstMember.Add(tmpMemberPointer);
+
+                    return result;
+
+                }
+
+                con.Close();
+
+            }
+            catch (Exception ex)
+            {
+                Console.Write(ex.ToString());
+            }
+            return result;
+        }
 
     }
+
 }
