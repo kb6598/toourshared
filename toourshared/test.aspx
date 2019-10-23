@@ -119,7 +119,7 @@
             <asp:Label ID="Label1" runat="server" Text="Label"></asp:Label>
             <asp:Label ID="Label2" runat="server" Text="Label"></asp:Label>
 
-            <asp:Button ID="Button1" runat="server" Text="Button" OnClick="insert" />
+            <asp:Button ID="Button1" runat="server" Text="Button" OnClick="Button1_Click" />
 
 
             <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="false"> 
@@ -139,11 +139,11 @@
             <asp:TextBox ID="TextBox6" runat="server"></asp:TextBox><br />
             <asp:TextBox ID="TextBox7" runat="server"></asp:TextBox><br />
 
-            <asp:Button ID="Button2" runat="server" Text="Button" OnClick="불러오기" />
+            <asp:Button ID="Button2" runat="server" Text="불러오기" OnClick="Button2_Click" />
 
-            <asp:Button ID="Button3" runat="server" Text="Button" OnClick="삭제" />
+            <asp:Button ID="Button3" runat="server" Text="삭제" OnClick="Button3_Click" />
 
-            <asp:Button ID="Button4" runat="server" Text="Button" OnClick="수정" />
+            <asp:Button ID="Button4" runat="server" Text="수정" OnClick="Button4_Click" />
 
         </div>
 

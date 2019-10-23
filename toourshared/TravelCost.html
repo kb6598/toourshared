@@ -101,8 +101,6 @@
         .costItem-body li {
             font-size: 12px;
         }
-
-      
     </style>
 
 </head>
@@ -113,7 +111,7 @@
     <!-- costModal -->
     <div class="modal-cost">
         <div class="modal-cost-area">
-            <div class="cost-header">
+            <div class="cost-header" id="costHeader">
                 <span class="chTitle">전체 경비</span>
                 <span class="chBody">💰 290,000</span>
             </div>
@@ -187,90 +185,150 @@
             </div>
         </div>
     </div>
-<div >
-    <textarea rows="1" resizable="false"></textarea><div class="btn btn-secondary" onclick="addCostItem()">추가</div>
+    <div style="padding-top: 800px">
+        <textarea rows="1" resizable="false"></textarea>
+        <div class="btn btn-secondary" onclick="refreashCostItem()">추가</div>
 
     </div>
 
 
-<script>
-    class CostItem{
-        constructor(){
-            this.itemList = Array();
+    <script>
+        class CostItem {
+            constructor() {
+                this.itemList = Array();
+            }
+            pushItem(place_name, costType, cost, info) {
+                this.itemList.push({
+                    place_name,
+                    costType,
+                    cost,
+                    info
+                });
+            }
+            popItem() {
+                this.itemList.pop();
+            }
         }
-        pushItem(costType, cost){
-            this.itemList.push({costType,cost});
-        }
-        popItem(){
-            this.itemList.pop();
-        }
-    }
-    
-    var CostItemList = Array();
-    CostItemList.push(new CostItem());
-    CostItemList.push(new CostItem());
-    CostItemList[0].pushItem("식비",15000);
-    CostItemList[0].pushItem("교통비",1500);
-    
-    console.info(CostItemList);
-    console.info(CostItemList);
-    CostItemList[0].popItem();
-    CostItemList[0].popItem();
-    
-    console.info(CostItemList);
-    function button(){
+
+        var CostItemList = Array();
+        CostItemList.push(new CostItem());
+        CostItemList.push(new CostItem());
+        CostItemList[0].pushItem("주성치 반점","식비", 15000,"자장면 3000 * 5");
+        CostItemList[0].pushItem("버스 정류장","교통비", 1500,"버스 1인");
+        CostItemList[0].pushItem("마트","쇼핑비", 10000,"마이구미 10");
+        CostItemList[0].pushItem("마트","쇼핑비", 10000,"마이구미 10");
+
+        CostItemList[1].pushItem("주성치 반점","식비", 15000,"자장면 3000 * 5");
+        CostItemList[1].pushItem("버스 정류장","교통비", 1500,"버스 1인");
+        CostItemList[1].pushItem("마트","쇼핑비", 10000,"마이구미 10");
+        CostItemList[1].pushItem("마트","쇼핑비", 10000,"마이구미 10");
+
         
-    }
+        console.info(CostItemList);
+        console.info(CostItemList);
+        //CostItemList[0].popItem();
+        //CostItemList[0].popItem();
 
-    function addCostItem() {
+        console.info(CostItemList);
 
-            var costArea = document.getElementById('costBody'),
+        function button() {
 
+        }
+
+
+        function refreashCostItem() {
+
+            var costBody = document.getElementById('costBody'),
+                costHeader = document.getElementById('costHeader'),
                 fragment = document.createDocumentFragment(),
+                headerFragment = document.createDocumentFragment(),
+                itemList = '',
+                el, headerEl, totalCost =0;
 
-                itemList = '';
-
-//                <div class="costItem">
-//                    <div class="costItem-header">
-//                        <span># 5일 째</span>
-//                    </div>
-//                    <div class="costItem-body">
-//                        <ul>
-//                            <li>식비 18,000</li>
-//                            <li>쇼핑 40,000</li>
-//                        </ul>
-//                    </div>
-//                </div>
+            // costBody 모든 자식 노드 삭제
+            while (costBody.hasChildNodes()) {
+                costBody.removeChild(costBody.firstChild);
+            }
 
 
 
 
-            var el = document.createElement('div'),
-                itemStr =
-
-               '     <div class="costItem-header">'+
-               '         <span># 5일 째</span>'+
-               '     </div>'+
-               '     <div class="costItem-body">'+
-               '         <ul>'+
-               '             <li>식비 18,000</li>'+
-               '             <li>쇼핑 40,000</li>'+
-               '         </ul>'+
-               '     </div>';
-            el.innerHTML = itemStr;
-//            el.setAttribute("draggable", 'true');
-//            el.setAttribute("id", "travelPoint");
-            el.setAttribute("class", "costItem");
 
 
-            var itemEl = el; // 검색 결과 항목 Element를 생성합니다
 
-            fragment.appendChild(itemEl);
+            CostItemList.forEach(function(currentValue, index ) {
+                console.info(index);
+                console.info(currentValue);
+                el = document.createElement('div'),
+                    itemStr =
 
-            costArea.appendChild(fragment);
+                    '     <div class="costItem-header">' +
+                    '         <span># ' + (index + 1) + '일 째</span>' +
+                    '     </div>' +
+                    '     <div class="costItem-body">' +
+                    '         <ul>';
+                
+                currentValue.itemList.forEach(function(currentValue, index ) {
+                    itemStr += '<li>'+ currentValue.costType +' ('+ currentValue.place_name +')' + '<br/>'+  setComa(currentValue.cost)+' ('  + currentValue.info +')'+'</li>';
+                    totalCost +=currentValue.cost;
+                });
+
+                itemStr +=
+                    '         </ul>' +
+                    '     </div>';
+                el.innerHTML = itemStr;
+                //            el.setAttribute("draggable", 'true');
+                //            el.setAttribute("id", "travelPoint");
+                el.setAttribute("class", "costItem");
+
+
+                var itemEl = el; 
+
+                fragment.appendChild(itemEl);
+
+                costBody.appendChild(fragment);
+
+                
+
+            });
+            
+            var headerStr =
+                '<span class="chTitle">전체 경비</span>'+
+                '<span class="chBody">💰 '+setComa(totalCost)+'</span>';
+            costHeader.innerHTML = headerStr;
+
+            
 
 
         }
+        function addCostItem(place_name) {
+            CostItemList.push(new CostItem());
+            //CostItemList.push(new CostItem());
+
+            CostItemList[CostItemList.length - 1].pushItem(place_name, "식비", 15000, "자장면 3000 * 5");
+            CostItemList[CostItemList.length-1].pushItem("버스 정류장", "교통비", 1500, "버스 1인");
+            CostItemList[CostItemList.length-1].pushItem("마트", "쇼핑비", 10000, "마이구미 10");
+            refreashCostItem();
+
+        }
+        
+        function setComa(number){
+            var resultStr ="";
+            var strNumber = String(number);
+            console.info(strNumber);
+            console.info(strNumber.length);
+            for(var i = strNumber.length-1; i >= 0 ; i--){
+                console.info(i);
+                
+                if((strNumber.length - i-1)%3 == 0 && i != strNumber.length-1){
+                    resultStr = ','+resultStr;
+                }                
+                resultStr = strNumber[i]+resultStr;    
+            }
+            return resultStr;
+            
+        }
+        console.info(setComa(100000000000000000));
     </script>
 </body>
 
