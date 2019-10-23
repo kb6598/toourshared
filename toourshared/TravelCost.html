@@ -187,7 +187,7 @@
     </div>
     <div style="padding-top: 800px">
         <textarea rows="1" resizable="false"></textarea>
-        <div class="btn btn-secondary" onclick="addCostItem()">추가</div>
+        <div class="btn btn-secondary" onclick="refreashCostItem()">추가</div>
 
     </div>
 
@@ -197,10 +197,12 @@
             constructor() {
                 this.itemList = Array();
             }
-            pushItem(costType, cost) {
+            pushItem(place_name, costType, cost, info) {
                 this.itemList.push({
+                    place_name,
                     costType,
-                    cost
+                    cost,
+                    info
                 });
             }
             popItem() {
@@ -210,11 +212,18 @@
 
         var CostItemList = Array();
         CostItemList.push(new CostItem());
-        //CostItemList.push(new CostItem());
-        CostItemList[0].pushItem("식비", 15000);
-        CostItemList[0].pushItem("교통비", 1500);
-        CostItemList[0].pushItem("쇼핑비", 10000);
+        CostItemList.push(new CostItem());
+        CostItemList[0].pushItem("주성치 반점","식비", 15000,"자장면 3000 * 5");
+        CostItemList[0].pushItem("버스 정류장","교통비", 1500,"버스 1인");
+        CostItemList[0].pushItem("마트","쇼핑비", 10000,"마이구미 10");
+        CostItemList[0].pushItem("마트","쇼핑비", 10000,"마이구미 10");
 
+        CostItemList[1].pushItem("주성치 반점","식비", 15000,"자장면 3000 * 5");
+        CostItemList[1].pushItem("버스 정류장","교통비", 1500,"버스 1인");
+        CostItemList[1].pushItem("마트","쇼핑비", 10000,"마이구미 10");
+        CostItemList[1].pushItem("마트","쇼핑비", 10000,"마이구미 10");
+
+        
         console.info(CostItemList);
         console.info(CostItemList);
         //CostItemList[0].popItem();
@@ -245,18 +254,6 @@
 
 
 
-            //                <div class="costItem">
-            //                    <div class="costItem-header">
-            //                        <span># 5일 째</span>
-            //                    </div>
-            //                    <div class="costItem-body">
-            //                        <ul>
-            //                            <li>식비 18,000</li>
-            //                            <li>쇼핑 40,000</li>
-            //                        </ul>
-            //                    </div>
-            //                </div>
-
 
 
             CostItemList.forEach(function(currentValue, index ) {
@@ -272,7 +269,7 @@
                     '         <ul>';
                 
                 currentValue.itemList.forEach(function(currentValue, index ) {
-                    itemStr += '<li>' + currentValue.costType + ' ' + setComa(currentValue.cost) + '</li>';
+                    itemStr += '<li>'+ currentValue.costType +' ('+ currentValue.place_name +')' + '<br/>'+  setComa(currentValue.cost)+' ('  + currentValue.info +')'+'</li>';
                     totalCost +=currentValue.cost;
                 });
 
@@ -302,6 +299,16 @@
 
             
 
+
+        }
+        function addCostItem(place_name) {
+            CostItemList.push(new CostItem());
+            //CostItemList.push(new CostItem());
+
+            CostItemList[CostItemList.length - 1].pushItem(place_name, "식비", 15000, "자장면 3000 * 5");
+            CostItemList[CostItemList.length-1].pushItem("버스 정류장", "교통비", 1500, "버스 1인");
+            CostItemList[CostItemList.length-1].pushItem("마트", "쇼핑비", 10000, "마이구미 10");
+            refreashCostItem();
 
         }
         

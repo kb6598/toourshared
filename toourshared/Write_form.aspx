@@ -41,17 +41,17 @@
         }
 
         #travelRoute_wrap {
-            max-height: 500px;
+            //max-height: 500px;
             overflow-x: hidden;
             overflow-y: scroll;
-            position: absolute;
-            text-align: center;
+            //position: absolute;
+            //text-align: center;
             z-index: 3;
             background-color: whitesmoke;
         }
 
         .map_wrap, .map_wrap * {
-            margin: 10;
+            //margin: 10;
             padding: 0;
             font-family: 'Malgun Gothic',dotum,'돋움',sans-serif;
             font-size: 12px;
@@ -232,12 +232,12 @@
 
         <!-- 커스텀 오버레이 스타일-- >
         .wrap {
-            position: absolute;
-            left: 0;
-            bottom: 40px;
-            width: 250px;
-            height: 132px;
-            margin-left: -144px;
+            //position: absolute;
+            //left: 0;
+            //bottom: 40px;
+            //width: 250px;
+            //height: 132px;
+            //margin-left: -144px;
             text-align: left;
             overflow: hidden;
             font-size: 12px;
@@ -330,9 +330,9 @@
 
         <!-- modal-cost-- >
         .modal-cost {
-            top: 0;
-            margin-top: 28px;
-            padding-right: 127px;
+            //top: 0;
+            //margin-top: 28px;
+            //padding-right: 127px;
             display: flex;
             flex-direction: row-reverse;
             width: 100%;
@@ -340,8 +340,8 @@
         }
 
         .modal-cost-area {
-            width: 300px;
-            height: 700px;
+            //width: 300px;
+            height: 500px;
             border: 1px solid rgba(0, 0, 0, 0.6);
             background-color: #eee;
             border-radius: 4px;
@@ -407,20 +407,30 @@
 
 
     <div class="container">
-        <div class="col-sm-12">
-            <div id="emailMsg"></div>
-            <div id="edit_right">
-                <form id="form1" runat="server" action="Write_get.aspx">
-                    <input type="hidden" name="sendEmail" value="ok" />
-                    <div class="form-group">
-                        <asp:TextBox ID="title" runat="server" CssClass="form-control form-control-lg" placeholder="제목을 입력해주세요"></asp:TextBox>
+        <div id="edit_right">
+            <form id="form1" runat="server" action="Write_get.aspx">
+                <input type="hidden" name="sendEmail" value="ok" />
+                <div class="row">
+                    <div class="col-sm">
+                        <div class="form-group">
+                            <asp:TextBox ID="title" runat="server" CssClass="form-control form-control-lg" placeholder="제목을 입력해주세요"></asp:TextBox>
+                        </div>
                     </div>
-
-                    <div class="map_wrap">
-                        <div id="travelRoute_wrap" class="collapse">
+                </div>
+                <div class="row">
+                    <div class="col-sm">
+                        <div id="travelRoute_wrap">
                             <ul id="travelRoute" class="travelRoute"></ul>
                         </div>
-                        <div id="travelCost_wrap" class="collapse">
+                    </div>
+
+                    <div class="col-sm-7">
+                        <div class="map_wrap">
+                            <div id="drawingMap"></div>
+                        </div>
+                    </div>
+                    <div class="col-sm">
+                        <div id="travelCost_wrap">
                             <div class="modal-cost">
                                 <div class="modal-cost-area">
                                     <div class="cost-header" id="costHeader">
@@ -498,9 +508,11 @@
                                 </div>
                             </div>
                         </div>
-                        <div id="drawingMap"></div>
 
-
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-">
                         <!--폼 내부에서 버튼객체를 쓰려면 type=button을 써주면 된다.-->
                         <button type="button" class="btn btn-secondary" onclick="selectOverlay('MARKER')">마커</button>
                         <button type="button" class="btn btn-secondary" onclick="selectOverlay('POLYLINE')">선</button>
@@ -515,35 +527,33 @@
                         <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#searchPlaceModal">
                             검색
                         </button>
-                        <button type="button" class="btn btn-secondary" data-toggle="collapse" data-target="#travelRoute_wrap">
-                            여행경로
-                        </button>
-                        <button type="button" class="btn btn-secondary" data-toggle="collapse" data-target="#travelCost_wrap">
-                            여행 경비
-                        </button>
-
                     </div>
-                    <div class="form-group">
-                        <asp:TextBox ID="article" runat="server" TextMode="MultiLine" />
+                </div>
+                <div class="row">
+                    <div class="col-sm">
+                        <div class="form-group">
+                            <asp:TextBox ID="article" runat="server" TextMode="MultiLine" />
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <asp:TextBox ID="hashtag" runat="server" CssClass="form-control form-control-lg" placeholder="#해시태그를 입력해주세요"></asp:TextBox>
+                </div>
+                <div class="row">
+                    <div class="col-sm">
+                        <div class="form-group">
+                            <asp:TextBox ID="hashtag" runat="server" CssClass="form-control form-control-lg" placeholder="#해시태그를 입력해주세요"></asp:TextBox>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <input type="button" onclick="postToNext()" value="넘기기" />
+                </div>
+                <div class="row">
+                    <div class="col-sm">
+                        <div class="form-group">
+                            <input type="button" onclick="postToNext()" value="넘기기" />
+                        </div>
                     </div>
-
-                </form>
-            </div>
-
+                </div>
+            </form>
         </div>
-
-
-
-
-
-
     </div>
+
     <!-- Modal -->
     <div class="modal fade" id="searchPlaceModal" tabindex="-1" role="dialog" aria-labelledby="searchPlaceModalTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable" role="document">
@@ -563,7 +573,7 @@
                                 <button onclick="searchPlaces();">검색하기</button>
                             </div>
                         </div>
-                        <hr>
+                        <hr/>
                         <ul id="placesList"></ul>
                         <div id="pagination"></div>
                     </div>
@@ -1459,7 +1469,7 @@
 
             }
             setRoute(place_name, road_address_name, address_name, phone, place_url, x, y) {
- 
+
                 this.place_name = place_name;
                 this.road_address_name = road_address_name;
                 this.address_name = address_name;
@@ -1485,33 +1495,30 @@
                 listEl.removeChild(listEl.firstChild);
             }
 
-
-
-
             travelRouteList.forEach(function (currentValue, index) {
                 var el = document.createElement('li'),
-                itemStr = '<div  class="card" style="width:12rem">' +
-                    '    <div class="card-body" >' +
-                    '        <h4 class="card-title">' + currentValue.place_name + '</h4>' +
-                    ' <p class="card-text">' + currentValue.road_address_name + '</p>' +
-                    ' <p class="card-text">' + currentValue.address_name + '</p>' +
-                    ' <p class="card-text">' + currentValue.phone + '</p>' +
-                    ' <a class="card-link" href="' + currentValue.place_url + '" target="_blank" class="link">상세페이지</a>' +
+                    itemStr = '<div  class="card" style="width:12rem">' +
+                        '    <div class="card-body" >' +
+                        '        <h4 class="card-title">' + currentValue.place_name + '</h4>' +
+                        ' <p class="card-text">' + currentValue.road_address_name + '</p>' +
+                        ' <p class="card-text">' + currentValue.address_name + '</p>' +
+                        ' <p class="card-text">' + currentValue.phone + '</p>' +
+                        ' <a class="card-link" href="' + currentValue.place_url + '" target="_blank" class="link">상세페이지</a>' +
+                        '<div class="btn btn-secondary" onclick=\'addCostItem("' + currentValue.place_name + '")\'>경비추가</div>' +
+                        '    </div>' +
+                        '<input id=x type=hidden value=' + currentValue.x + '/>' +
+                        '<input id=y type=hidden value=' + currentValue.y + '/>' +
+                        '</div>';
+                el.innerHTML = itemStr;
+                el.setAttribute("draggable", 'true');
+                el.setAttribute("id", "travelPoint");
 
-                    '    </div>' +
-                    '<input id=x type=hidden value=' + currentValue.x + '/>' +
-                    '<input id=y type=hidden value=' + currentValue.y + '/>' +
-                    '</div>';
-            el.innerHTML = itemStr;
-            el.setAttribute("draggable", 'true');
-            el.setAttribute("id", "travelPoint");
 
-
-            var itemEl = el; // 검색 결과 항목 Element를 생성합니다
+                var itemEl = el; // 검색 결과 항목 Element를 생성합니다
                 fragment.appendChild(itemEl);
                 listEl.appendChild(fragment);
             });
-                       
+
         }
 
 
@@ -1527,7 +1534,7 @@
             console.info("----------travelRouteList----------");
             console.info(travelRouteList);
             //travelRouteList[travelRouteList.length - 1].pushItem(place_name, road_address_name, address_name, phone, place_url, x, y);
-             //검색 키워드 삭제
+            //검색 키워드 삭제
             searchBox.value = '';
 
             // 검색 결과 목록에 추가된 항목들을 제거합니다
@@ -1564,10 +1571,12 @@
             constructor() {
                 this.itemList = Array();
             }
-            pushItem(costType, cost) {
+            pushItem(place_name, costType, cost, info) {
                 this.itemList.push({
+                    place_name,
                     costType,
-                    cost
+                    cost,
+                    info
                 });
             }
             popItem() {
@@ -1575,19 +1584,20 @@
             }
         }
 
-        var CostList = Array();
-        CostList.push(new CostItem());
+        var CostItemList = Array();
         //CostItemList.push(new CostItem());
-        CostList[0].pushItem("식비", 15000);
-        CostList[0].pushItem("교통비", 1500);
-        CostList[0].pushItem("쇼핑비", 10000);
+        ////CostItemList.push(new CostItem());
+        //CostItemList[0].pushItem("주성치 반점", "식비", 15000, "자장면 3000 * 5");
+        //CostItemList[0].pushItem("버스 정류장", "교통비", 1500, "버스 1인");
+        //CostItemList[0].pushItem("마트", "쇼핑비", 10000, "마이구미 10");
 
-        console.info(CostList);
-        console.info(CostList);
-        //CostItemList[0].popItem();
-        //CostItemList[0].popItem();
+        //console.info(CostItemList);
+        //console.info(CostItemList);
+        ////CostItemList[0].popItem();
+        ////CostItemList[0].popItem();
 
-        console.info(CostList);
+        console.info(CostItemList);
+
 
 
         function refreashCostItem() {
@@ -1603,9 +1613,9 @@
             while (costBody.hasChildNodes()) {
                 costBody.removeChild(costBody.firstChild);
             }
+                                                  
 
-
-            CostList.forEach(function (currentValue, index) {
+            CostItemList.forEach(function (currentValue, index) {
                 console.info(index);
                 console.info(currentValue);
                 el = document.createElement('div'),
@@ -1618,7 +1628,7 @@
                     '         <ul>';
 
                 currentValue.itemList.forEach(function (currentValue, index) {
-                    itemStr += '<li>' + currentValue.costType + ' ' + setComa(currentValue.cost) + '</li>';
+                    itemStr += '<li>' + currentValue.costType + ' (' + currentValue.place_name + ')' + '<br/>' + setComa(currentValue.cost) + ' (' + currentValue.info + ')' + '</li>';
                     totalCost += currentValue.cost;
                 });
 
@@ -1648,6 +1658,17 @@
 
 
 
+
+        }
+
+        function addCostItem(place_name) {
+            CostItemList.push(new CostItem());
+            //CostItemList.push(new CostItem());
+
+            CostItemList[CostItemList.length - 1].pushItem(place_name, "식비", 15000, "자장면 3000 * 5");
+            CostItemList[CostItemList.length-1].pushItem("버스 정류장", "교통비", 1500, "버스 1인");
+            CostItemList[CostItemList.length-1].pushItem("마트", "쇼핑비", 10000, "마이구미 10");
+            refreashCostItem();
 
         }
         //돈에 컴마 찍어주는 함수
