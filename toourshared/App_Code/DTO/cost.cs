@@ -8,27 +8,32 @@ using System.Web;
 /// </summary>
 public class Cost
 {
-    public string cost_no;
-    private String cos_no;
-    public Cost(string cos_no = null)
-    {
-        this.Cos_no = cos_no;
 
-        //
-        // TODO: 여기에 생성자 논리를 추가합니다.
-        //
+    private String cos_no;
+    private String cos_place_name;
+
+    public Cost(string cos_no = null, string cos_place_name = null)
+    {
+        this.cos_no = cos_no;
+        this.cos_place_name = cos_place_name;
     }
 
     public string Cos_no { get => cos_no; set => cos_no = value; }
+    public string Cos_place_name { get => cos_place_name; set => cos_place_name = value; }
 
     public override bool Equals(object obj)
     {
-        return obj is Cost cost &&
-               Cos_no == cost.Cos_no;
+        var cost = obj as Cost;
+        return cost != null &&
+               cos_no == cost.cos_no &&
+               cos_place_name == cost.cos_place_name;
     }
 
     public override int GetHashCode()
     {
-        return -1221565602 + EqualityComparer<string>.Default.GetHashCode(Cos_no);
+        var hashCode = 1435059540;
+        hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(cos_no);
+        hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(cos_place_name);
+        return hashCode;
     }
 }   
