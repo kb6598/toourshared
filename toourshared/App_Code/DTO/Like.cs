@@ -8,6 +8,7 @@ using System.Web;
 /// </summary>
 public class Like
 {
+    public object lik_no;
     private string mem_id;
     private string like_type;
     private string trv_no;
