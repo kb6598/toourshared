@@ -2,7 +2,14 @@
 
 <!DOCTYPE html>
 
-< <meta charset="utf-8">
+<script runat="server">
+
+    protected void BtnLogin_Click(object sender, EventArgs e)
+    {
+
+    }
+</script>
+ <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>TO OUR SHARED : 로그인</title>
@@ -289,33 +296,30 @@
             align-items: center;
         }
 
-        .findID {
-            height: 13px;
-            padding-right: 10px;
+        #FindID
+        {
+            background-color: #00b9f1;
+            color: white;
+            font-size: 14px;
+            text-decoration: none;
+            outline : none;
         }
 
-        .findID a {
+        #FindPW
+        {
+            background-color: #00b9f1;
             color: white;
-            font-size: 13px;
+            font-size: 14px;
             text-decoration: none;
+            outline : none;
+
         }
 
         .findLine {
             width: 0.5px;
             height: 13px;
-            border-right: 0.5px solid black;
+            border-right: 1px solid black;
             margin-top: 6px;
-        }
-
-        .findPW {
-            height: 13px;
-            padding-left: 10px;
-        }
-
-        .findPW a {
-            color: white;
-            font-size: 13px;
-            text-decoration: none;
         }
 
         .area3 {
@@ -454,32 +458,25 @@
             <!-- 아이디 및 패스워드 입력, 로그인 버튼-->
             <div class="area1">
                 <div class="ID">
-                    <input type="text" placeholder="아이디" maxlength="15" />
+                    <asp:TextBox ID="mem_id" runat="server" placeholder="아이디" maxlength="15"></asp:TextBox>
                 </div>
                 <div class="PW">
-                    <input type="password" placeholder="비밀번호" maxlength="20" />
+                    <asp:TextBox ID="mem_pw" runat="server" placeholder="비밀번호" maxlength="20" ></asp:TextBox>
                 </div>
                 <div class="LOGINBTN">
-                    <a href="#">
-
-                        <button class="LOGINBTNitem">로그인</button>
-                    </a>
+                    <asp:Button ID="BtnLogin" runat="server" Text="로그인"  CssClass="LOGINBTNitem" OnClick="BtnLogin_Click" />
                 </div>
             </div>
 
             <!-- 아이디 비밀번호 찾기 -->
             <div class="area2">
                 <div class="findID">
-                    <a href="#">
-                        아이디찾기
-                    </a>
+                    <asp:Button ID="FindID" runat="server" Text="아이디찾기" BorderStyle="None" />
                 </div>
                 <!-- 구분선 -->
                 <div class="findLine"></div>
                 <div class="findPW">
-                    <a href="#">
-                        비밀번호찾기
-                    </a>
+                    <asp:Button ID="FindPW" runat="server" Text="비밀번호찾기" BorderStyle="None"/>
                 </div>
             </div>
 
@@ -490,7 +487,7 @@
                 </div>
                 <div class="joinBtn">
                     <a href="#">
-                        <button class="joinBtnItem">회원가입</button>
+                        <asp:Button ID="JoinBtn" runat="server" Text="회원가입" class="joinBtnItem" />
                     </a>
                 </div>
             </div>
