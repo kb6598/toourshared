@@ -193,12 +193,12 @@
 
 
     <script>
-        class CostItem {
+          class CostItem {
             constructor(place_name) {
                 this.itemList = Array();
                 this.place_name = place_name;
             }
-            pushItem(place_name, costType, cost, info) {
+            pushItem(costType, cost, info) {
                 this.itemList.push({
                     costType,
                     cost,
@@ -211,23 +211,10 @@
         }
 
         var CostItemList = Array();
-        CostItemList.push(new CostItem());
-        CostItemList.push(new CostItem());
-        CostItemList[0].pushItem("주성치 반점","식비", 15000,"자장면 3000 * 5");
-        CostItemList[0].pushItem("버스 정류장","교통비", 1500,"버스 1인");
-        CostItemList[0].pushItem("마트","쇼핑비", 10000,"마이구미 10");
-        CostItemList[0].pushItem("마트","쇼핑비", 10000,"마이구미 10");
 
-        CostItemList[1].pushItem("주성치 반점","식비", 15000,"자장면 3000 * 5");
-        CostItemList[1].pushItem("버스 정류장","교통비", 1500,"버스 1인");
-        CostItemList[1].pushItem("마트","쇼핑비", 10000,"마이구미 10");
-        CostItemList[1].pushItem("마트","쇼핑비", 10000,"마이구미 10");
 
-        
         console.info(CostItemList);
         console.info(CostItemList);
-        //CostItemList[0].popItem();
-        //CostItemList[0].popItem();
 
         console.info(CostItemList);
 
@@ -243,89 +230,149 @@
                 fragment = document.createDocumentFragment(),
                 headerFragment = document.createDocumentFragment(),
                 itemList = '',
-                el, headerEl, totalCost =0;
+                el, headerEl, totalCost = 0, pindexTmp;
 
             // costBody 모든 자식 노드 삭제
             while (costBody.hasChildNodes()) {
                 costBody.removeChild(costBody.firstChild);
             }
-            CostItemList.forEach(function(currentValue, index ) {
-                console.info(index);
+            CostItemList.forEach(function(currentValue, pindex) {
+                pindexTmp = pindex;
+                console.info(pindex);
                 console.info(currentValue);
                 el = document.createElement('div'),
                     itemStr =
 
                     '     <div class="costItem-header">' +
-                    '<div class="form-group">'+
-                    '    <input id=" place_name_'+ index+'" class="form-control form-control-sm" type="text" placeholder="장소 이름">'+
-                    '</div>'+                    
+                    '<div class="form-group">' +
+                    '    <input id="addCost_place_name_' + pindex + '" class="form-control form-control-sm" type="text" placeholder="장소 이름" value="'+currentValue.place_name+'"/>'+
+                    '</div>' +
                     //'         <span># ' + (index + 1) + '일 째</span>' +
                     '     </div>' +
                     '     <div class="costItem-body">' +
                     '         <ul>';
-                
-                currentValue.itemList.forEach(function(currentValue, index ) {
-                    itemStr += '<li>'+ currentValue.costType +' ('+ currentValue.place_name +')' + '<br/>'+  setComa(currentValue.cost)+' ('  + currentValue.info +')'+'</li>';
-                    totalCost +=currentValue.cost;
+
+                currentValue.itemList.forEach(function(currentValue, index) {
+                    itemStr += '<li>' + currentValue.costType + '<br/>' + setComa(currentValue.cost) + ' (' + currentValue.info + ')' + '</li>';
+                    totalCost += currentValue.cost;
                 });
 
                 itemStr +=
-                    '         </ul>' +
-                    '     </div>';
+                    '<li>' +
+                    '    <select id="addCost_costType_' +pindex+'" class="form-control form-control-sm">' +
+                    '<option value="식비">식비</option>' +
+                    '<option value="교통비">교통비</option>' +
+                    '<option value="숙박비">숙박비</option>' +
+                    '<option value="기타">기타</option>' +
+                    '</select>' +
+                    '    <input id="addCost_cost_' + pindex + '" class="form-control form-control-sm" type="number" placeholder="비용">' +
+                    '    <input id="addCost_info_' + pindex + '" class="form-control form-control-sm" type="text" placeholder="비용 설명">' +
+                    '<div class="btn btn-secondary btn-sm" onclick="pushCostItemChild('+pindex+')">+</div>'+
+                     '<div class="btn btn-secondary btn-sm" onclick="popCostItemChild('+pindex+')">-</div>'+
+                    '</li>' +
+                    '</ul>' +
+                    '</div>';
                 el.innerHTML = itemStr;
                 //            el.setAttribute("draggable", 'true');
                 //            el.setAttribute("id", "travelPoint");
                 el.setAttribute("class", "costItem");
 
 
-                var itemEl = el; 
+                var itemEl = el;
 
                 fragment.appendChild(itemEl);
 
                 costBody.appendChild(fragment);
 
-                
+
 
             });
             
+            
+             el = document.createElement('div'),
+                    itemStr =
+
+                     '<div class="btn btn-secondary btn-sm" onclick="addCostItemParent('+pindexTmp+')">+</div>';
+
+                el.innerHTML = itemStr;
+                //            el.setAttribute("draggable", 'true');
+                //            el.setAttribute("id", "travelPoint");
+                el.setAttribute("class", "costItem");
+
+
+                var itemEl = el;
+
+                fragment.appendChild(itemEl);
+
+                costBody.appendChild(fragment);  
+            
+            
+            
+            
+
             var headerStr =
-                '<span class="chTitle">전체 경비</span>'+
-                '<span class="chBody">💰 '+setComa(totalCost)+'</span>';
+                '<span class="chTitle">전체 경비</span>' +
+                '<span class="chBody">💰 ' + setComa(totalCost) + '</span>';
             costHeader.innerHTML = headerStr;
 
-            
+
 
 
         }
-        function addCostItem(place_name) {
-            CostItemList.push(new CostItem());
-            //CostItemList.push(new CostItem());
+         function pushCostItemChild(index) {
+             
+            var costTypeId="addCost_costType_"+index,
+            costId = "addCost_cost_"+index,
+            infoId = "addCost_info_"+index;
+             
+            var costType = document.getElementById(costTypeId);
+            cost = document.getElementById(costId),
+            info= document.getElementById(infoId);
 
-            CostItemList[CostItemList.length - 1].pushItem(place_name, "식비", 15000, "자장면 3000 * 5");
-            CostItemList[CostItemList.length-1].pushItem("버스 정류장", "교통비", 1500, "버스 1인");
-            CostItemList[CostItemList.length-1].pushItem("마트", "쇼핑비", 10000, "마이구미 10");
+            CostItemList[index].pushItem(costType.options[costType.selectedIndex].value, cost.value, info.value);
+
+            refreashCostItem();
+
+        }
+        function popCostItemChild(index) {
+             
+            var costTypeId="addCost_costType_"+index,
+            costId = "addCost_cost_"+index,
+            infoId = "addCost_info_"+index;
+             
+            var costType = document.getElementById(costTypeId);
+            cost = document.getElementById(costId),
+            info= document.getElementById(infoId);
+
+            CostItemList[index].popItem();
             refreashCostItem();
 
         }
         
-        function setComa(number){
-            var resultStr ="";
+        
+
+        function addCostItemParent(place_name) {
+            CostItemList.push(new CostItem("야호"));
+refreashCostItem();
+
+        }
+
+        function setComa(number) {
+            var resultStr = "";
             var strNumber = String(number);
             console.info(strNumber);
             console.info(strNumber.length);
-            for(var i = strNumber.length-1; i >= 0 ; i--){
+            for (var i = strNumber.length - 1; i >= 0; i--) {
                 console.info(i);
-                
-                if((strNumber.length - i-1)%3 == 0 && i != strNumber.length-1){
-                    resultStr = ','+resultStr;
-                }                
-                resultStr = strNumber[i]+resultStr;    
+
+                if ((strNumber.length - i - 1) % 3 == 0 && i != strNumber.length - 1) {
+                    resultStr = ',' + resultStr;
+                }
+                resultStr = strNumber[i] + resultStr;
             }
             return resultStr;
-            
+
         }
         console.info(setComa(100000000000000000));
     </script>
-</body>
-
-</html>
+</body></html>
