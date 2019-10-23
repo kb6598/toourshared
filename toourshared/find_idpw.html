@@ -1,7 +1,9 @@
-<!DOCTYPE html>
+﻿<%@ Page Language="C#" %>
 
-<head>
-    <meta charset="utf-8">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head runat="server">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>TO OUR SHARED : 로그인</title>
@@ -22,9 +24,7 @@
             margin: 0;
             padding: 0;
             list-style: none;
-
             line-height: 1;
-
             /* 전체 배경색 */
             background-color: #00b9f1;
             background-repeat: no-repeat;
@@ -33,10 +33,8 @@
         .topnavUl {
             margin: 0;
             padding: 0;
-
             list-style: none;
             text-decoration: none;
-
             font-size: 20px;
             font-family: '맑은고딕';
         }
@@ -44,21 +42,19 @@
         .topnavLi {
             margin: 0;
             padding: 0;
-
             list-style: none;
             text-decoration: none;
-
             font-size: 20px;
             font-family: '맑은고딕';
         }
 
-        .topnavLi ul,
-        li {
-            list-style: none;
-            text-decoration: none;
-            padding: 0;
-            margin: 0;
-        }
+            .topnavLi ul,
+            li {
+                list-style: none;
+                text-decoration: none;
+                padding: 0;
+                margin: 0;
+            }
 
         a {
             color: white;
@@ -72,85 +68,77 @@
             /* absolute는 부피를 못잡으니까 width 100% */
             overflow: hidden;
             font-size: 25px;
-
             transition-duration: 0.5s;
             position: fixed;
-
         }
 
-        #nav:hover {
-            height: 250px;
-            transition: background .5s;
-            background-color: rgba(249, 192, 12, 0.95);
-        }
+            #nav:hover {
+                height: 250px;
+                transition: background .5s;
+                background-color: rgba(249, 192, 12, 0.95);
+            }
 
-        #nav>ul {
-            text-align: center;
-            font-family: 'Mansalva', cursive;
-            font-size: 25px;
-        }
+            #nav > ul {
+                text-align: center;
+                font-family: 'Mansalva', cursive;
+                font-size: 25px;
+            }
 
-        #nav>ul>li {
-            display: inline-block;
-            position: relative;
+                #nav > ul > li {
+                    display: inline-block;
+                    position: relative;
+                    padding: 0px 50px;
+                }
 
-            padding: 0px 50px;
-        }
+                    #nav > ul > li > a {
+                        display: block;
+                        padding: 30px 15px 20px;
+                        line-height: 30px;
+                        transition: color 0.9s;
+                        transition: background 0.4s;
+                        /* 부트스트랩 적용 후 nav 효과 적용이 되는걸 방지하기 위해 */
+                        text-decoration: none;
+                        /* 상단 메뉴 글씨 색 */
+                        color: white;
+                    }
 
-        #nav>ul>li>a {
-            display: block;
-            padding: 30px 15px 20px;
-            line-height: 30px;
-            transition: color 0.9s;
-            transition: background 0.4s;
+                    #nav > ul > li:hover > a {
+                        /* 메뉴에 마우스 올렸을 때 발생할 스타일(1Depth) */
+                        transition: border .5s;
+                        border-bottom: 3px solid #ff7473;
+                    }
 
-            /* 부트스트랩 적용 후 nav 효과 적용이 되는걸 방지하기 위해 */
-            text-decoration: none;
+            #nav ul ul {
+                /*display: none;*/
+                position: absolute;
+                width: 100%;
+                /* absolute는 부피를 가질 수 없다 */
+                margin: 0px -50px;
+            }
 
+                #nav ul ul a {
+                    /* 2Depth li Style */
+                    display: block;
+                    line-height: 40px;
+                    font-size: 14px;
+                    color: white;
+                }
 
-            /* 상단 메뉴 글씨 색 */
-            color: white;
-        }
+                    #nav ul ul a:hover {
+                        /* SubMenu 마우스 올렸을 때 발생할 스타일 */
+                        font-weight: bold;
+                        /* 부트스트랩 적용 후 nav 효과 적용이 되는걸 방지하기 위해 */
+                        text-decoration: none;
+                    }
 
-        #nav>ul>li:hover>a {
-            /* 메뉴에 마우스 올렸을 때 발생할 스타일(1Depth) */
-            transition: border .5s;
-            border-bottom: 3px solid #ff7473;
+            #nav li:hover ul {
+                display: block;
+            }
 
-        }
-
-        #nav ul ul {
-            /*display: none;*/
-            position: absolute;
-            width: 100%;
-            /* absolute는 부피를 가질 수 없다 */
-            margin: 0px -50px;
-        }
-
-        #nav ul ul a {
-            /* 2Depth li Style */
-            display: block;
-            line-height: 40px;
-            font-size: 14px;
-            color: white;
-        }
-
-        #nav ul ul a:hover {
-            /* SubMenu 마우스 올렸을 때 발생할 스타일 */
-            font-weight: bold;
-
-            /* 부트스트랩 적용 후 nav 효과 적용이 되는걸 방지하기 위해 */
-            text-decoration: none;
-        }
-
-        #nav li:hover ul {
-            display: block;
-        }
-
-        #nav li:nth-child(1) ul {
-            left: 0;
-            width: 100%;
-        }
+            #nav li:nth-child(1) ul {
+                left: 0;
+                width: 100%;
+            }
 
         .nav-logo {
             /* 웹 사이트 좌측 상단에 위치한 로고 div style */
@@ -162,26 +150,22 @@
             transition-duration: .5s;
         }
 
-        .nav-logo-item:hover {
-            transition-duration: .5s;
-            font-size: 28px;
-            color: white;
-
-            /* 부트스트랩 적용 후 텍스트에 적용되는 효과 방지를 위해 */
-            text-decoration: none;
-        }
+            .nav-logo-item:hover {
+                transition-duration: .5s;
+                font-size: 28px;
+                color: white;
+                /* 부트스트랩 적용 후 텍스트에 적용되는 효과 방지를 위해 */
+                text-decoration: none;
+            }
 
         .nav-log-area {
             /* 로그인, 로그아웃 영역 */
             width: 150px;
             height: 40px;
-
             padding-bottom: 5px;
             border: 2px solid white;
             border-radius: 15px;
-
             transition: .5s;
-
         }
 
         .nav-log-item {
@@ -189,7 +173,6 @@
             border: none;
             outline: none;
             cursor: pointer;
-
             margin-top: 8px;
             color: white;
             background-color: transparent;
@@ -201,10 +184,10 @@
                 display: none;
             }
 
-            .topnav>ul>li>.nav-logo>.nav-logo-item {
-                float: left;
-                display: block;
-            }
+                .topnav > ul > li > .nav-logo > .nav-logo-item {
+                    float: left;
+                    display: block;
+                }
         }
 
         .main {

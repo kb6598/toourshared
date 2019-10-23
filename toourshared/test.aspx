@@ -98,10 +98,50 @@
         comment.Cmt_rate = TextBox5.Text;
         comment.Cmt_timestamp = TimeLib.GetTimeStamp();
         comment.Mem_id = TextBox7.Text;
-        
-       
+
+
 
         int i =  com.UpdateComment(comment);
+    }
+
+    protected void Button5_Click(object sender, EventArgs e)
+    {
+        MemberDao member = new MemberDao();
+
+        Member mem = new Member();
+
+        mem.Mem_id = TextBox8.Text;
+        mem.Mem_pw = TextBox9.Text;
+
+        int check = member.Login(mem);
+
+
+
+        if (Request.Cookies["mem_id"] == null)
+        {
+            if (TextBox8.Text.Equals("") || TextBox9.Text.Equals(""))
+            {
+                Page.ClientScript.RegisterStartupScript(this.GetType(), "displayalertmessage", "alert('아이디와 비밀번호를 입력해주세요.');", true);
+            }
+            else
+            {
+
+                if (check == 1)
+                {
+                    Response.Cookies["mem_id"].Value = mem.Mem_id;
+                    //Response.Cookies["mem_id"].Expires = DateTime.Now.AddHours(0);
+                    Response.Redirect("/test02.aspx");
+                }
+                else
+                {
+                    Page.ClientScript.RegisterStartupScript(this.GetType(), "displayalertmessage", "alert('아이디와, 비밀번호를 다시한번 확인해주세요.');", true);
+                    TextBox1.Text = "";
+                    TextBox2.Text = "";
+
+                    
+                }
+            }
+        }
     }
 </script>
 
@@ -143,7 +183,12 @@
 
             <asp:Button ID="Button3" runat="server" Text="삭제" OnClick="Button3_Click" />
 
-            <asp:Button ID="Button4" runat="server" Text="수정" OnClick="Button4_Click" />
+            <asp:Button ID="Button4" runat="server" Text="수정" OnClick="Button4_Click" /><br />
+            로그인 테스트<br />
+
+            <asp:TextBox ID="TextBox8" runat="server"></asp:TextBox><br />
+            <asp:TextBox ID="TextBox9" runat="server"></asp:TextBox>
+            <asp:Button ID="Button5" runat="server" Text="로그인" OnClick="Button5_Click" />
 
         </div>
 

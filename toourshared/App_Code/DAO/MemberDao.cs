@@ -39,7 +39,7 @@ namespace tooushared.DAO
             {
                 Console.WriteLine("error parameter value is empty");
               
-            }
+            }http://localhost:6118/App_Code/DAO/LocationDao.cs
             DataSet ds = new DataSet();
             try
             {
@@ -153,6 +153,62 @@ namespace tooushared.DAO
 
 
             return resultMember;
+        }
+
+        public int Login(Member member)
+        {
+            MyDB myDB = new MyDB();
+            MySqlConnection con = myDB.GetCon();
+
+            string Sql = "Select * From toourshared.member Where mem_id = @mem_id and mem_pw=@mem_pw";
+
+            MySqlCommand cmd = new MySqlCommand(Sql, con);
+            cmd.Parameters.AddWithValue("@mem_id", member.Mem_id);
+            cmd.Parameters.AddWithValue("@mem_pw", member.Mem_pw);
+
+            con.Open();
+
+            int count = 0;
+            MySqlDataReader reader = cmd.ExecuteReader();
+            if (reader.Read())
+            {
+                reader.Close();
+                con.Close();
+                count = 1;
+            }
+            else
+            {
+                count = 0;
+            }
+            return count;
+        }
+
+        public int SelectMem_ID(Member member)
+        {
+            MyDB myDB = new MyDB();
+            MySqlConnection con = myDB.GetCon();
+
+            string Sql = "Select * From toourshared.member Where mem_id = @mem_id";
+
+            MySqlCommand cmd = new MySqlCommand(Sql, con);
+            cmd.Parameters.AddWithValue("@mem_id", member.Mem_id);
+
+            con.Open();
+
+            int count = 0;
+            MySqlDataReader reader = cmd.ExecuteReader();
+            if (reader.Read())
+            {
+                reader.Close();
+                con.Close();
+                count = 1;
+            }
+            else
+            {
+                count = 0;
+            }
+            return count;
+
         }
     }
 }

@@ -423,7 +423,6 @@
                             <ul id="travelRoute" class="travelRoute"></ul>
                         </div>
                     </div>
-
                     <div class="col-sm-7">
                         <div class="map_wrap">
                             <div id="drawingMap"></div>
@@ -1484,8 +1483,6 @@
 
         var travelRouteList = Array();
 
-
-
         function refreshTravelRoute() {
             var listEl = document.getElementById('travelRoute'),
                 fragment = document.createDocumentFragment(),
@@ -1568,12 +1565,12 @@
         //travelCost
         //----------------------------------------------------------------
         class CostItem {
-            constructor() {
+            constructor(place_name) {
                 this.itemList = Array();
+                this.place_name = place_name;
             }
-            pushItem(place_name, costType, cost, info) {
+            pushItem(costType, cost, info) {
                 this.itemList.push({
-                    place_name,
                     costType,
                     cost,
                     info

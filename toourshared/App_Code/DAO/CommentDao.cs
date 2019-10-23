@@ -122,7 +122,7 @@ public class CommentDao
 
         MyDB mydb = new MyDB();
 
-        Comment resultComment = new Comment();
+        Comment result = new Comment();
         MySqlConnection con;
 
         try
@@ -143,15 +143,17 @@ public class CommentDao
             {
                 rd.Read();
 
-                resultComment.Cmt_content = rd["cmt_content"].ToString();
-                resultComment.Cmt_rate = rd["cmt_rate"].ToString();
-                resultComment.Cmt_timestamp = rd["cmt_timestamp"].ToString();
-                resultComment.Mem_id = rd["mem_id"].ToString();
+                result.Cmt_no = rd["cmt_no"].ToString();
+                result.Trv_no = rd["trv_no"].ToString();
+                result.Cmt_content = rd["cmt_content"].ToString();
+                result.Cmt_rate = rd["cmt_rate"].ToString();
+                result.Cmt_timestamp = rd["cmt_timestamp"].ToString();
+                result.Mem_id = rd["mem_id"].ToString();
 
 
                 //lstMember.Add(tmpMemberPointer);
 
-                return resultComment;
+                return result;
 
             }
 
@@ -162,7 +164,7 @@ public class CommentDao
         {
             Console.Write(ex.ToString());
         }
-        return resultComment;
+        return result;
     }
 
 }
