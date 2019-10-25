@@ -47,6 +47,7 @@
             else
             {
                 member.InsertMember(mem);
+                Response.Redirect("/index_old.aspx");
             }
         }
     }

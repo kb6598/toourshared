@@ -47,7 +47,7 @@
     {
         if(Session["mem_id"]!= null)
         {
-            Page.ClientScript.RegisterStartupScript(this.GetType(), "displayalertmessage", "alert('이미 로그인 되어있습니다.');", true);
+            Response.Redirect("/index_old.aspx");
         }
     }
 </script>
