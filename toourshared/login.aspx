@@ -43,6 +43,13 @@
         }
     }
 
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        if(Session["mem_id"]!= null)
+        {
+            Page.ClientScript.RegisterStartupScript(this.GetType(), "displayalertmessage", "alert('이미 로그인 되어있습니다.');", true);
+        }
+    }
 </script>
  <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">

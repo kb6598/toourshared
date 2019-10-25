@@ -54,17 +54,21 @@
         GridView1.DataSource = ds;
         GridView1.DataBind();
 
+        Label3.Text = Session["userPW"].ToString();
+        Label4.Text = Request.QueryString["id"].ToString();
+
+
+
+
+
     }
 
     protected void Button2_Click(object sender, EventArgs e)
     {
+        Comment comment = new Comment();
         CommentDao com = new CommentDao();
 
-        Comment comment = new Comment();
-
         comment.Cmt_no = TextBox3.Text;
-
-
 
         Comment resultComment =  com.selectCommentByCmt_no(comment);
 
@@ -138,7 +142,7 @@
                     TextBox1.Text = "";
                     TextBox2.Text = "";
 
-                    
+
                 }
             }
         }
@@ -190,6 +194,11 @@
             <asp:TextBox ID="TextBox9" runat="server"></asp:TextBox>
             <asp:Button ID="Button5" runat="server" Text="로그인" OnClick="Button5_Click" />
 
+            <br />
+
+            <asp:Label ID="Label4" runat="server" Text="Label"></asp:Label>님이
+            찾은 아이디는 : 
+            <asp:Label ID="Label3" runat="server" Text="Label"></asp:Label>
         </div>
 
     </form>

@@ -48,7 +48,6 @@
             {
                 member.InsertMember(mem);
             }
-
         }
     }
 
@@ -720,7 +719,7 @@
                     <span class="inforStar">*</span><span class="inforText">생년월일</span>
                 </div>
                 <div class="BIRTHitem2">
-                    <asp:TextBox ID="mem_birth" runat="server" placeholder="생년월일 (yy/mm/dd)" class="inputArea lng" maxlength="20" onKeypress="if(event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;" style="IME-MODE:disabled;"></asp:TextBox>
+                    <asp:TextBox ID="mem_birth" runat="server" placeholder="생년월일 (yy/mm/dd)" class="inputArea lng" maxlength="6" onKeypress="if(event.keyCode < 45 || event.keyCode > 57) event.returnValue = false;" style="IME-MODE:disabled;"></asp:TextBox>
                 </div>
             </div>
             <div class="Item" id="TEL">
@@ -745,10 +744,11 @@
                 </div>
                 <div class="QNAitem2">
                     <asp:DropDownList ID="QnAList" runat="server">
-                        <asp:ListItem>1</asp:ListItem>
-                        <asp:ListItem>2</asp:ListItem>
-                        <asp:ListItem>3</asp:ListItem>
-                        <asp:ListItem>4</asp:ListItem>
+                        <asp:ListItem Value="question1">본인이 태어난 출생지는?</asp:ListItem>
+                        <asp:ListItem Value="question2">본인의 출신 초등학교 이름은?</asp:ListItem>
+                        <asp:ListItem Value="question3">본인의 반려견 이름은?</asp:ListItem>
+                        <asp:ListItem Value="question4">본인의 어머니 성함은?</asp:ListItem>
+                        <asp:ListItem Value="question5">본인의 소중한 보물 1호는?</asp:ListItem>
                     </asp:DropDownList>
                 </div>
                 <div class="QNAitem3">
