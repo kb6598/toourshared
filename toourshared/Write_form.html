@@ -220,8 +220,7 @@
         }
 
 
-        < !-- 커스텀 오버레이 스타일-->
-               .card {
+        < !-- 커스텀 오버레이 스타일-->.card {
             border: 1px outset black;
             border-radius: 12px;
             //font: bold 1rem sans-serif;
@@ -253,6 +252,7 @@
 
 
         }
+
         < !-- modal-cost and TravelRoute-->< !-- modal-cost and TravelRoute-->.modal-cost {
 
             display: flex;
@@ -655,8 +655,8 @@
             //console.info("state_changed++++++++++++++++++++++++");
             closeCusOverlay();
             //console.info(this._historyStroage);
+            refreshOverlayListener();
 
-            addListenerFromDrawingMap(this._historyStroage);
 
         });
         // e 는 삭제되는 대상 오버레이가 삭제될때 listener 삭제
@@ -667,12 +667,6 @@
 
         });
 
-
-
-        function addListenerFromDrawingMap(history) {
-            refreshOverlayListener();
-
-        }
 
 
         function refreshOverlayListener() {
@@ -687,11 +681,12 @@
                     data[overlay].forEach(function(value, index, array) {
                         try {
                             //removeListener 시도
-                            kakao.maps.event.removeListener(value, 'click', onClick_overlay);
+                            // 리스너를 만드는중에 오버레이를 전달
+                            kakao.maps.event.removeListener(value, 'click', onClick_overlay(value));
                         } catch (exception) {
                             //console.info(exception);
                         } finally {
-                            kakao.maps.event.addListener(value, 'click', onClick_overlay);
+                            kakao.maps.event.addListener(value, 'click', onClick_overlay(value));
                         }
 
                     });
@@ -719,134 +714,122 @@
         //-----------------------------------------------
         // 클릭시 발생하는 이벤트
         //----------------------------------------------
-        var onClick_overlay = function() {
+        var onClick_overlay = function(overlay) {
+            console.info(overlay.constructor.name + '_' + overlay._index);
             var wcongnamulX;
             var wcongnamulY;
             //console.info("onClick_overlay");
             //alert(this._index + "번째 마커" + "\nk : " + this.k + "\nGa : " + this.k.Ga + "\nHa : " + this.k.Ha + '\nMARKER click!');
             //console.info(this);
-            if (this.k == null) {
-                //console.info("detect");
-                //ExtendedRectangle has za{ea,ja,ka,la} as coords
-                if (this.za != null) {
-                    //console.info("convert coords.. fer rect");
-                    wcongnamulY = (this.za.ka + this.za.la) / 2;
-                    wcongnamulX = (this.za.ea + this.za.ja) / 2;
-                    //console.info(wcongnamulX + ":" + wcongnamulY);
-                    //ExtendedPolygon has ig{0: {ga: ha:}, }
-                } else if (this.Ig != null) {
-                    var gaTotal = 0;
-                    var haTotal = 0;
-                    this.Ig.forEach(function(value, index, array) {
-                        gaTotal += value.Ga;
-                        haTotal += value.Ha;
-                    });
-                    wcongnamulX = gaTotal / this.Ig.length;
-                    wcongnamulY = haTotal / this.Ig.length;
-                }
-            } else {
-                wcongnamulX = this.k.Ga;
-                wcongnamulY = this.k.Ha;
+            console.info(overlay);
+            if (overlay.constructor.name == "ExtendsMarker") {
+                wcongnamulX = overlay.k.Ga;
+                wcongnamulY = overlay.k.Ha;
+            } else if (overlay.constructor.name == "ExtendsCircle") {
+                wcongnamulX = overlay.k.Ga;
+                wcongnamulY = overlay.k.Ha;
+            } else if (overlay.constructor.name == "ExtendsRectangle") {
+                wcongnamulY = (overlay.za.ka + overlay.za.la) / 2;
+                wcongnamulX = (overlay.za.ea + overlay.za.ja) / 2;
+            } else if (overlay.constructor.name == "ExtendsPolygon") {
+                var gaTotal = 0;
+                var haTotal = 0;
+                overlay.Ig.forEach(function(value, index, array) {
+                    gaTotal += value.Ga;
+                    haTotal += value.Ha;
+                });
+                wcongnamulX = gaTotal / overlay.Ig.length;
+                wcongnamulY = haTotal / overlay.Ig.length;
+            } else if (overlay.constructor.name == "ExtendsEllipse") {
+                wcongnamulX = overlay.k.Ga;
+                wcongnamulY = overlay.k.Ha;
             }
+            
+
+
+            //            if (this.k == null) {
+            //                //console.info("detect");
+            //                //ExtendedRectangle has za{ea,ja,ka,la} as coords
+            //                if (this.za != null) {
+            //                    //console.info("convert coords.. fer rect");
+            //                    wcongnamulY = (this.za.ka + this.za.la) / 2;
+            //                    wcongnamulX = (this.za.ea + this.za.ja) / 2;
+            //                    //console.info(wcongnamulX + ":" + wcongnamulY);
+            //                    //ExtendedPolygon has ig{0: {ga: ha:}, }
+            //                } else if (this.Ig != null) {
+            //                    var gaTotal = 0;
+            //                    var haTotal = 0;
+            //                    this.Ig.forEach(function(value, index, array) {
+            //                        gaTotal += value.Ga;
+            //                        haTotal += value.Ha;
+            //                    });
+            //                    wcongnamulX = gaTotal / this.Ig.length;
+            //                    wcongnamulY = haTotal / this.Ig.length;
+            //                }
+            //            } else {
+            //                wcongnamulX = this.k.Ga;
+            //                wcongnamulY = this.k.Ha;
+            //            }
             ////console.info(wcongnamulX + ":" + wcongnamulY);
 
-            searchDetailAddrFromCoords(wcongnamulX, wcongnamulY, function(result, status) {
 
-            
+
+            geocoder.coord2Address(wcongnamulX, wcongnamulY, function(result, status) {
+
+
                 if (status === kakao.maps.services.Status.OK) {
                     console.info(result);
-                    var content;
-                                content += '<div class="card">'+
-                                    '<div class="card-header">';
-                                        if(result[0].road_address != null){
-                                        if(result[0].road_address.building_name !=""){
-                                        content += ' <input class="form-control form-control-sm" type="text" placeholder="장소 이름" value="'+result[0].road_address.building_name+'" style="width:130px;" />';
-                                        }else{
-                                        content +=' <input class="form-control form-control-sm" type="text" placeholder="장소 이름" value="" style="width:130px;" />';
-                                        }
-                                        }else{
-                                        content +=' <input class="form-control form-control-sm" type="text" placeholder="장소 이름" value="" style="width:130px;" />';
-                                        }
-                                    
-content += 
-            '<div class="btn btn-link" style="float: right" onclick="closeCusOverlay()">X</div>'+
-        '</div>'+
-        '<div class="card-body">'+
-            '<blockquote class="blockquote mb-0">';
-                    
-                    if(result[0].address != null){
-                        content += 
-                        '<li class="card-body-li">'+result[0].address.address_name+
-                            '</li>';
+
+                    var content = "<div>ok</div>";
+                    var keyword = document.getElementById('keyword');
+
+
+
+                    //주소 가 존재한다면 추가
+                    if (result[0].address != null) {
+                        if (result[0].address.address_name != null) {
+                            keyword.value = result[0].address.address_name;
+                            searchPlaces();
+                        }
                     }
-                    if(result[0].road_address != null){
-                                                '<li class="card-body-li">'+result[0].road_address.address_name+
-                            '</li>';
-                    }
-                    content += 
-                '<li class="card-body-li">tel : 070-7796-8991</li>'+
-                '<li class="card-body-li"><a href="#" target="_blank">상세페이지</a></li>'+
-                '<div class="btn btn-warning btn-sm">추가</div>'+
-            '</blockquote>'+
-        '</div>'+
-    '</div>';
-  
-
-//                    address:
-//                        address_name: "서울 용산구 한남동 726-111"
-//                    main_address_no: "726"
-//                    mountain_yn: "N"
-//                    region_1depth_name: "서울"
-//                    region_2depth_name: "용산구"
-//                    region_3depth_name: "한남동"
-//                    sub_address_no: "111"
-//                    zip_code: ""
-//                    __proto__: Object
-//                    road_address:
-//                        address_name: "서울특별시 용산구 한남대로36길 54"
-//                    building_name: "한남힐사이드 아파트 D동"
-//                    main_building_no: "54"
-//                    region_1depth_name: "서울"
-//                    region_2depth_name: "용산구"
-//                    region_3depth_name: ""
-//                    road_name: "한남대로36길"
-//                    sub_building_no: ""
-//                    underground_yn: "N"
-//                    zone_no: "04417
+                    //                    if (result[0].road_address != null) {
+                    //                        if (result[0].road_address.address_name != null) {
+                    //                            content += '<li class="card-body-li">' + result[0].road_address.address_name + '</li>';
+                    //                        }
+                    //                    }
 
 
-                            //                    var detailAddr = !!result[0].road_address ? '<div class="ellipsis">' + result[0].road_address.address_name + '</div>' : '';
-                            //                    detailAddr += '<div class="jibun ellipsis">' + result[0].address.address_name + '</div>';
-                            //
-                            //                    var content = '<div class="wrap">' +
-                            //                        '    <div class="info">' +
-                            //                        '        <div class="title">' +
-                            //                        result[0].place_name +
-                            //                        '            <div class="close" onclick="closeCusOverlay()" title="닫기"></div>' +
-                            //                        '        </div>' +
-                            //                        '        <div class="body">' +
-                            //                        '            <div class="desc">' +
-                            //                        detailAddr +
-                            //                        '   <div class="jibun ellipsis">' + result[0].phone + '</div>' +
-                            //                        '                <div><a href="' + result[0]..place_url + '" target="_blank" class="link">상세페이지</a></div>' +
-                            //                        '            </div>' +
-                            //                        '        </div>' +
-                            //                        '    </div>' +
-                            //                        '</div>';
 
-                            geocoder.transCoord(wcongnamulX, wcongnamulY,
-                                function(result, status) {
+                    content = '<div class="card">' +
+                        '<div class="card-header">' +
+                        '<input class="form-control" type="text" placeholder="장소 이름" value="" style="width: 230px;margin-left: 15px; margin-right: 10px; float: left" />' +
+                        '<div class="btn btn-link" style="float: right">X</div>' +
+                        '</div>' +
+                        '<div class="card-body">' +
+                        '<blockquote class="blockquote mb-0">' +
+                        '<li class="card-body-li">서울 용산구 녹사평대로40나길 37</li>' +
+                        '<li class="card-body-li">서울 용산구 이태원동 403-3</li>' +
+                        '<li class="card-body-li">tel : 070-7796-8991</li>' +
+                        '<li class="card-body-li"><a href="#" target="_blank">상세페이지</a></li>' +
+                        '<div class="btn btn-warning btn-sm">추가</div>' +
+                        '</blockquote>' +
+                        '</div>' +
+                        '</div>';
 
-                                    // 정상적으로 검색이 완료됐으면 
-                                    if (status === kakao.maps.services.Status.OK) {
-                                        customOverlay.setContent(content);
-                                        customOverlay.setPosition(new kakao.maps.LatLng(result[0].y, result[0].x));
-                                        customOverlay.setMap(drawingMap);
-                                    }
-                                }, {
-                                    input_coord: kakao.maps.services.Coords.WCONGNAMUL, // 변환을 위해 입력한 좌표계 입니다
-                                    output_coord: kakao.maps.services.Coords.WGS84 // 변환 결과로 받을 좌표계 입니다 
-                                });
+
+                    geocoder.transCoord(wcongnamulX, wcongnamulY,
+                        function(result, status) {
+
+                            // 정상적으로 검색이 완료됐으면 
+                            if (status === kakao.maps.services.Status.OK) {
+                                customOverlay.setPosition(new kakao.maps.LatLng(result[0].y, result[0].x));
+                                customOverlay.setContent(content);
+                                customOverlay.setMap(drawingMap);
+                            }
+                        }, {
+                            input_coord: kakao.maps.services.Coords.WCONGNAMUL, // 변환을 위해 입력한 좌표계 입니다
+                            output_coord: kakao.maps.services.Coords.WGS84 // 변환 결과로 받을 좌표계 입니다 
+                        });
 
 
                     //console.info(content);
@@ -858,23 +841,15 @@ content +=
                     //infowindow.setContent(content);
                     //infowindow.open(drawingMap, this);
                 }
-            });
-
-
-        }
-
-
-        function searchDetailAddrFromCoords(wtmX, wtmY, callback) {
-            // 좌표로 법정동 상세 주소 정보를 요청합니다
-            //console.info("좌표로 법정동 상세 주소 정보를 요청합니다");
-
-            // extendedMarker로부터 오는 좌표값 k.ga k.ha 는 WCONGNAMUL 형식 좌표
-            geocoder.coord2Address(wtmX, wtmY, callback, {
+            }, {
                 input_coord: kakao.maps.services.Coords.WCONGNAMUL
             });
 
 
         }
+
+
+
 
 
 
@@ -1262,22 +1237,22 @@ content +=
         // 인포윈도우에 장소명을 표시합니다
         function displayInfowindow(marker, place) {
             //var content = '<div style="padding:5px;z-index:1;">' + title + ' <button >추가</button></div>';
-//            <div class="card">
-//        <div class="card-header">
-//            씨스루
-//            <div class="btn btn-link" style="float: right">X</div>
-//        </div>
-//        <div class="card-body">
-//            <blockquote class="blockquote mb-0">
-//                <li class="card-body-li">서울 용산구 녹사평대로40나길 37</li>
-//                <li class="card-body-li">서울 용산구 이태원동 403-3</li>
-//                <li class="card-body-li">tel : 070-7796-8991</li>
-//                <li class="card-body-li"><a href="#" target="_blank">상세페이지</a></li>
-//                <div class="btn btn-warning btn-sm">추가</div>
-//            </blockquote>
-//        </div>
-//    </div>
-            
+            //            <div class="card">
+            //        <div class="card-header">
+            //            씨스루
+            //            <div class="btn btn-link" style="float: right">X</div>
+            //        </div>
+            //        <div class="card-body">
+            //            <blockquote class="blockquote mb-0">
+            //                <li class="card-body-li">서울 용산구 녹사평대로40나길 37</li>
+            //                <li class="card-body-li">서울 용산구 이태원동 403-3</li>
+            //                <li class="card-body-li">tel : 070-7796-8991</li>
+            //                <li class="card-body-li"><a href="#" target="_blank">상세페이지</a></li>
+            //                <div class="btn btn-warning btn-sm">추가</div>
+            //            </blockquote>
+            //        </div>
+            //    </div>
+
             var content = '<div class="wrap">' +
                 '    <div class="info">' +
                 '        <div class="title">' +
