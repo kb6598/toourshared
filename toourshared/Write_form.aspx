@@ -320,6 +320,7 @@
 
 
         <!-- modal-cost and TravelRoute-- >
+         < !-- modal-cost and TravelRoute-->
         .modal-cost {
 
             display: flex;
@@ -343,7 +344,8 @@
             flex-direction: column;
         }
 
-        .cost-header, .travelRoute-header {
+        .cost-header,
+        .travelRoute-header {
             cursor: default;
             width: 100%;
             height: 80px;
@@ -358,13 +360,13 @@
         }
 
         .cost-header .chTitle,
-        .travelRoute-header .trTitle{
+        .travelRoute-header .trTitle {
             font-size: 23px;
             font-weight: 700;
         }
 
         .cost-header .chBody,
-        .travelRoute-header .trBody{
+        .travelRoute-header .trBody {
             font-size: 15px;
         }
 
@@ -384,7 +386,7 @@
         }
 
         .costItem-header span {
-            font-size: 40px;
+            font-size: 30px;
             font-family: 'East Sea Dokdo', cursive;
         }
 
@@ -397,17 +399,32 @@
             font-size: 12px;
         }
 
-        <!--bootstrap customize-->
-            .row{
-                width:100%;
-            }
+        < !--bootstrap customize-->.row {
+            width: 100%;
+        }
 
-            .btn-group-sm>.btn, .btn-sm{
-                font-size: 8px;
-            }
-            .form-control-sm{
-                font-size: 10px;
-            }
+        .btn-group-sm>.btn,
+        .btn-sm {
+            font-size: 8px;
+        }
+
+        .form-control-sm {
+            font-size: 10px;
+        }
+
+        
+
+        .btn-warning{
+            box-sizing: content-box;
+            font-size: 2px;
+            padding-top: 0px;
+            padding-bottom: 0px;
+            padding-left: 0px;
+            padding-right: 0px;
+            width: 10px;
+            height: 10px;
+        }
+
     </style>
 </head>
 <body>
@@ -1402,11 +1419,11 @@
             }
         }
 
-        //------------------------------------
+                //------------------------------------
         //----------TravelRouteItem and travelRouteList Start
         //------------------------------------
 
-         class TravelRouteItem {
+        class TravelRouteItem {
             constructor(place_name, road_address_name, address_name, phone, place_url, x, y) {
                 this.place_name = place_name;
                 this.road_address_name = road_address_name;
@@ -1432,7 +1449,7 @@
             setName(place_name) {
                 this.place_name = place_name;
             }
-            setInfo(info){
+            setInfo(info) {
                 this.info = info;
             }
 
@@ -1478,7 +1495,18 @@
                     '</table>' +
                     ' </div>' +
                     '</div>' +
-                    ' <div>'
+                    ' <div>' +
+                    '<table>' +
+                    '<tr>' +
+                    '<td>' +
+                    ' <textarea id="addTravelRoute_info_' + index + '" class="form-control form-control-sm" type="text" placeholder="설명" rows="3" >' + currentValue.info + '</textarea>' +
+                    '</td>' +
+                    '<td style="vertical-align:top">' +
+                    ' <div class="btn btn-secondary btn-sm" onclick="setTravelRouteItemInfo(' + index + ')" >설명저장</div>' +
+                    '</td>' +
+                    '</tr>' +
+                    '</table>';
+                    
                 if (currentValue.address_name != "" && currentValue.address_name != "undefined") {
                     itemStr += currentValue.address_name + '<br/>';
 
@@ -1491,7 +1519,7 @@
                     itemStr += currentValue.phone + '<br/>';
 
                 }
-                itemStr += '<a class="btn btn-primary btn-sm" href="' + currentValue.place_url + '">상세페이지</a>';
+                itemStr += '<a class="btn btn-primary btn-sm" href="' + currentValue.place_url + '" target="_blank">상세페이지</a>';
 
 
 
@@ -1514,8 +1542,8 @@
 
             });
 
-            var trBodyStr='방문 : '+TravelRouteList.length;
-            console.info(trBody);
+            var trBodyStr = '방문 : ' + TravelRouteList.length;
+            //console.info(trBody);
             trBody.innerHTML = trBodyStr;
 
 
@@ -1533,8 +1561,11 @@
 
 
         function removeTravelRouteItem(index) {
-            TravelRouteItem.slice(index, 1);
+            TravelRouteList.splice(index, 1);
+            removeCostItemParent(index);
             refreashTravelRoute();
+
+
 
         }
 
@@ -1554,13 +1585,22 @@
             var place_name = document.getElementById(addTravelRoute_place_nameId).value;
             TravelRouteList[index].setName(place_name);
             refreashTravelRoute();
+
+            setCostItemParentName(index);
         }
 
+        function setTravelRouteItemInfo(index) {
 
-        function removeTravelRouteItem(index) {
-            TravelRouteList.splice(index, 1);
+            var addTravelRoute_infoId = "addTravelRoute_info_" + index;
+            var info = document.getElementById(addTravelRoute_infoId).value;
+            TravelRouteList[index].setInfo(info);
             refreashTravelRoute();
+
+            setCostItemParentName(index);
         }
+
+
+
 
         function swapTravelRouteItem(fIndex, sIndex) {
             var tmp = TravelRouteList[fIndex];
@@ -1600,10 +1640,7 @@
 
         var CostItemList = Array();
 
-        console.info(CostItemList);
-        console.info(CostItemList);
 
-        console.info(CostItemList);
 
         function button() {
 
@@ -1626,51 +1663,46 @@
             while (costBody.hasChildNodes()) {
                 costBody.removeChild(costBody.firstChild);
             }
-            CostItemList.forEach(function (currentValue, pindex) {
+            CostItemList.forEach(function(currentValue, pindex) {
                 pindexTmp = pindex;
-                console.info(pindex);
-                console.info(currentValue);
+                //console.info(pindex);
+                //console.info(currentValue);
                 el = document.createElement('div'),
                     itemStr =
 
                     '<div class="costItem-header">' +
-                    '   <div class="form-group">' +
-                    '       <table><tr>' +
-                    '           <td>' +
-                    '               <input id="addCost_place_name_' + pindex + '" class="form-control form-control-sm" type="text" placeholder="장소 이름" value="' + currentValue.place_name + '"  style="width:130px;" />' +
-                    '           </td>' +
-                    '           <td>' +
-                    '               <div class="btn btn-secondary btn-sm" onclick="setCostItemParentName(' + pindex + ')" >이름변경</div>' +
-                    '           </td>' +
-                    '           <td>' +
-                    '               <div class="btn btn-danger btn-sm" onclick="removeCostItemParent(' + pindex + ')"> x </div>' +
-                    '           </td>' +
-                    '       </tr></table>' +
-                    '   </div>' +
-                    //'         <span># ' + (index + 1) + '일 째</span>' +
+                    '         <span># ' + currentValue.place_name + '</span>' +
                     '</div>' +
                     '   <div class="costItem-body">' +
                     '       <ul>';
 
-                currentValue.itemList.forEach(function (currentValue, index) {
-                    itemStr += '<li>' + currentValue.costType + '<br/>' + setComa(currentValue.cost) + ' (' + currentValue.info + ')' + '</li>';
+                currentValue.itemList.forEach(function(currentValue, index) {
+                    itemStr += '<li>' + currentValue.costType +
+                        '               <div class="btn btn-sm btn-warning" onclick="removeCostItemChild(' + pindex + ',' + index + ')">x</div>' +
+                        '<br/>' +
+                        setComa(currentValue.cost) + ' (' + currentValue.info + ')' + '</li>';
                     totalCost += parseInt(currentValue.cost);
                 });
 
                 itemStr +=
-                    '           <li>' +
-                    '               <select id="addCost_costType_' + pindex + '" class="form-control form-control-sm">' +
-                    '                   <option value="식비">식비</option>' +
-                    '                   <option value="교통비">교통비</option>' +
-                    '                   <option value="숙박비">숙박비</option>' +
-                    '                   <option value="기타">기타</option>' +
-                    '               </select>' +
-                    '               <input id="addCost_cost_' + pindex + '" class="form-control form-control-sm" type="number" placeholder="비용">' +
-                    '               <input id="addCost_info_' + pindex + '" class="form-control form-control-sm" type="text" placeholder="비용 설명">' +
-                    '               <div class="btn btn-secondary btn-sm" onclick="pushCostItemChild(' + pindex + ')">+</div>' +
-                    '               <div class="btn btn-secondary btn-sm" onclick="popCostItemChild(' + pindex + ')">-</div>' +
-                    '           </li>' +
+                    '<li>' +
+                    '   <div class="btn btn-secondary btn-sm" data-toggle="collapse" data-target="#collapseAddCost_' + pindex + '" aria-expanded="false" aria-controls="collapseAddCost_' + pindex + '">추가</div>' +
+                    '   <div class="collapse" id="collapseAddCost_' + pindex + '">'+
+                    '       <select id="addCost_costType_' + pindex + '" class="form-control form-control-sm">' +
+                    '           <option value="식비">식비</option>' +
+                    '           <option value="교통비">교통비</option>' +
+                    '           <option value="숙박비">숙박비</option>' +
+                    '           <option value="기타">기타</option>' +
+                    '       </select>' +
+                    '       <input id="addCost_cost_' + pindex + '" class="form-control form-control-sm" type="number" placeholder="비용">' +
+                    '       <input id="addCost_info_' + pindex + '" class="form-control form-control-sm" type="text" placeholder="비용 설명">' +
+                    '       <div class="btn btn-secondary btn-sm" onclick="pushCostItemChild(' + pindex + ')">+</div>' +
+                    '       <div class="btn btn-secondary btn-sm" onclick="popCostItemChild(' + pindex + ')">-</div>' +
+                    
+                    '</div>' +
+                    '</li>' +
                     '   </ul>' +
+                    '</div>' +
                     '</div>';
                 el.innerHTML = itemStr;
                 //            el.setAttribute("draggable", 'true');
@@ -1730,9 +1762,17 @@
             cost = document.getElementById(costId),
                 info = document.getElementById(infoId);
 
-            CostItemList[index].pushItem(costType.options[costType.selectedIndex].value, cost.value, info.value);
-
+           if(cost.value == "") {
+               
+               alert("비용을 입력하세요");
+           }            
+            else{
+               
+               CostItemList[index].pushItem(costType.options[costType.selectedIndex].value, cost.value, info.value);
             refreashCostItem();
+           }
+            
+            
 
         }
 
@@ -1754,7 +1794,7 @@
 
 
 
-        // 나중에 인포윈도우에 추가하기
+
         function addCostItemParent(place_name) {
             CostItemList.push(new CostItem(place_name));
             refreashCostItem();
@@ -1763,11 +1803,17 @@
 
         function setCostItemParentName(pindex) {
 
-            var addCost_place_nameId = "addCost_place_name_" + pindex;
-            var addCost_place_name = document.getElementById(addCost_place_nameId);
+            //var addCost_place_nameId = "addCost_place_name_" + pindex;
+            //var addCost_place_name = document.getElementById(addCost_place_nameId);
+            var addTravelRoute_place_nameId = "addTravelRoute_place_name_" + pindex;
+            var place_name = document.getElementById(addTravelRoute_place_nameId).value;
 
+            CostItemList[pindex].setPlace_name(place_name);
+            refreashCostItem();
+        }
 
-            CostItemList[pindex].setPlace_name(addCost_place_name.value);
+        function removeCostItemChild(pindex, index) {
+            CostItemList[pindex].itemList.splice(index, 1);
             refreashCostItem();
         }
 
@@ -1787,10 +1833,10 @@
         function setComa(number) {
             var resultStr = "";
             var strNumber = String(number);
-            console.info(strNumber);
-            console.info(strNumber.length);
+            //console.info(strNumber);
+            //console.info(strNumber.length);
             for (var i = strNumber.length - 1; i >= 0; i--) {
-                console.info(i);
+                //console.info(i);
 
                 if ((strNumber.length - i - 1) % 3 == 0 && i != strNumber.length - 1) {
                     resultStr = ',' + resultStr;
@@ -1807,6 +1853,8 @@
         //----------CostItems and CostItemList End
         //------------------------------------
 
+
+        
         
         //------------------------------------
         //----------DragManager Start
@@ -1980,6 +2028,7 @@
         //------------------------------------
         //----------DragManager END
         //------------------------------------
+
 
 
 
