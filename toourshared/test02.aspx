@@ -6,7 +6,8 @@
 
     protected void Button1_Click(object sender, EventArgs e)
     {
-        Response.Cookies["mem_id"].Expires = DateTime.Now.AddHours(-99);
+        Session["mem_id"] = "";
+        Session.Abandon();
         Response.Redirect("test.aspx");
     }
 </script>
@@ -20,7 +21,7 @@
     <form id="form1" runat="server">
         <div>
         <% 
-            if (Request.Cookies["mem_id"] == null)
+            if (Session["mem_id"] == null)
             {
         %>
                로그인 안됨
@@ -29,7 +30,7 @@
             else
             {
         %>
-                <div class = 'statebar1'> <% string id = Request.Cookies["mem_id"].Value.ToString(); Response.Write($"{id}님 반갑습니다."); %></div><br />
+                <div class = 'statebar1'> <% string id = Session["mem_id"].ToString(); Response.Write($"{id}님 반갑습니다."); %></div><br />
                 <asp:Button ID="Button1" runat="server" Text="로그아웃" OnClick="Button1_Click" />
                
         <% 
