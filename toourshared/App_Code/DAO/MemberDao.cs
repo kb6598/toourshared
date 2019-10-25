@@ -92,6 +92,23 @@ namespace tooushared.DAO
             return result;
 
         }
+        public DataSet SelectMember()
+        {
+            MyDB myDB = new MyDB();
+            MySqlConnection con = myDB.GetCon();
+
+            string sql = "Select mem_id,mem_state, mem_phone, mem_pw, mem_name, mem_sex, mem_ques, mem_answer, mem_birth, mem_email, " +
+                "mem_reg_date, mem_timestmap, mem_img_url From toourshared.member";
+            MySqlCommand cmd = new MySqlCommand(sql, con); // 커맨드(sql문을 con에서 수행하기 위한 명령문) 생성 DB에서 수행시킬 명령 생성   
+
+            MySqlDataAdapter ad = new MySqlDataAdapter();
+            ad.SelectCommand = cmd;
+            DataSet ds = new DataSet();
+            ad.Fill(ds);
+
+
+            return ds;
+        }
 
         //public List<Member> selectMember()
         public Member selectMemberByMem_id(Member member)

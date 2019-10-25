@@ -1,6 +1,7 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Web;
 using tooushared.Lib;
@@ -40,6 +41,71 @@ public class Member_BlockDao
         con.Close();
 
 
+        return result;
+    }
+    public DataSet SelectMember_Block()
+    {
+        MyDB myDB = new MyDB();
+        MySqlConnection con = myDB.GetCon();
+
+        string sql = "Select mem_blo_no, mem_blo_date, mem_blo_length, mem_id  From toourshared.member_block";
+        MySqlCommand cmd = new MySqlCommand(sql, con); // 커맨드(sql문을 con에서 수행하기 위한 명령문) 생성 DB에서 수행시킬 명령 생성   
+
+        MySqlDataAdapter ad = new MySqlDataAdapter();
+        ad.SelectCommand = cmd;
+        DataSet ds = new DataSet();
+        ad.Fill(ds);
+
+
+        return ds;
+    }
+
+    public Member_Block selectMember_BlockBymem_blo_no(Member_Block member_Block)
+    {
+
+        MyDB mydb = new MyDB();
+
+        Member_Block result = new Member_Block();
+        MySqlConnection con;
+
+        try
+        {
+            con = mydb.GetCon();
+
+            string Sql = "SELECT * FROM toourshared.member_block where member_block=@mem_blo_no";
+
+
+            MySqlCommand cmd = new MySqlCommand(Sql, con);
+
+            cmd.Parameters.AddWithValue("@mem_bol_no", member_Block.Mem_blo_no);
+
+            con.Open();
+            MySqlDataReader rd = cmd.ExecuteReader();
+
+            if (rd.HasRows)
+            {
+                rd.Read();
+
+                result.Mem_blo_no = rd["mem_blo_no"].ToString();
+                result.Mem_blo_date = rd["mem_blo_date"].ToString();
+                result.Mem_blo_length = rd["mem_blo_length"].ToString();
+                result.Mem_id = rd["mem_content"].ToString();
+             
+
+
+                //lstMember.Add(tmpMemberPointer);
+
+                return result;
+
+            }
+
+            con.Close();
+
+        }
+        catch (Exception ex)
+        {
+            Console.Write(ex.ToString());
+        }
         return result;
     }
 }
