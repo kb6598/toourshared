@@ -210,5 +210,96 @@ namespace tooushared.DAO
             return count;
 
         }
+
+        public Member FindMemberID(Member member)
+        {
+
+            MyDB mydb = new MyDB();
+
+            Member FindID = new Member();
+            MySqlConnection con;
+
+            try
+            {
+
+                con = mydb.GetCon();
+
+                string Sql = "SELECT member.mem_id FROM toourshared.member where mem_name=@mem_name and mem_birth=@mem_birth and mem_phone=@mem_phone and mem_ques=@mem_ques and mem_answer=@mem_answer";
+
+
+                MySqlCommand cmd = new MySqlCommand(Sql, con);
+
+                cmd.Parameters.AddWithValue("@mem_name", member.Mem_name);
+                cmd.Parameters.AddWithValue("@mem_birth", member.Mem_birth);
+                cmd.Parameters.AddWithValue("@mem_phone", member.Mem_phone);
+                cmd.Parameters.AddWithValue("@mem_ques", member.Mem_ques);
+                cmd.Parameters.AddWithValue("@mem_answer", member.Mem_answer);
+
+                con.Open();
+                MySqlDataReader rd = cmd.ExecuteReader();
+
+                if (rd.HasRows)
+                {
+                    rd.Read();
+
+                    FindID.Mem_id = rd["mem_id"].ToString();
+
+                    return FindID;
+
+                }
+                con.Close();
+            }
+            catch (Exception ex)
+            {
+                Console.Write(ex.ToString());
+            }
+            return FindID;
+        }
+
+        public Member FindMemberPW(Member member)
+        {
+
+            MyDB mydb = new MyDB();
+
+            Member FindPW = new Member();
+            MySqlConnection con;
+
+            try
+            {
+
+                con = mydb.GetCon();
+
+                string Sql = "SELECT member.mem_pw FROM toourshared.member where mem_id=@mem_id and mem_birth=@mem_birth and mem_phone=@mem_phone and mem_ques=@mem_ques and mem_answer=@mem_answer";
+
+
+                MySqlCommand cmd = new MySqlCommand(Sql, con);
+
+                cmd.Parameters.AddWithValue("@mem_id", member.Mem_id);
+                cmd.Parameters.AddWithValue("@mem_birth", member.Mem_birth);
+                cmd.Parameters.AddWithValue("@mem_phone", member.Mem_phone);
+                cmd.Parameters.AddWithValue("@mem_ques", member.Mem_ques);
+                cmd.Parameters.AddWithValue("@mem_answer", member.Mem_answer);
+
+                con.Open();
+                MySqlDataReader rd = cmd.ExecuteReader();
+
+                if (rd.HasRows)
+                {
+                    rd.Read();
+
+                    FindPW.Mem_pw = rd["mem_pw"].ToString();
+
+                    return FindPW;
+
+                }
+                con.Close();
+            }
+            catch (Exception ex)
+            {
+                Console.Write(ex.ToString());
+            }
+            return FindPW;
+
+        }
     }
 }

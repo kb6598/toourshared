@@ -1,7 +1,25 @@
-﻿<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-<meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1" />
+﻿<%@ Page Language="C#" %>
 
+<!DOCTYPE html>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<script runat="server">
+
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        if(Request.QueryString["name"] != null)
+        {
+            string result = Session["userID"].ToString();
+            txtResult.Text = result;
+        }
+        if(Request.QueryString["id"] != null)
+        {
+            string result = Session["userPW"].ToString();
+            txtResult.Text = result;
+        }
+    }
+</script>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>TO OUR SHARED : 여행일수 작성</title>
 
@@ -376,6 +394,7 @@
 </head>
 
 <body>
+    <form name="form1" runat="server">
     <!-- navbar 영역 -->
     <div id="nav" class="topnav">
         <ul class="topnavUl">
@@ -452,26 +471,48 @@
                 </div>
                 <div class="contentResult1">
                    <div class = "result1Item">
-                    <div class="user">milk9503(이민혁)</div>
+                    <div class="user">
+                        <% 
+                            if (Request.QueryString["name"] != null)
+                            {
+                                Response.Write(Request.QueryString["name"]);
+                        %>
+                    </div>
                     <div class="normal">님의</div>
-                    <div class="type">비밀번호(아이디)</div>
+                    <div class="type">아이디</div>
                     <div class="normal">조회 결과입니다.</div>
                     </div>
+                        <%
+                            }
+                        %>
+                        <%
+                            if(Request.QueryString["id"] != null)
+                            {
+                                Response.Write(Request.QueryString["id"]);
+                        %>
+                    </div>
+                    <div class="normal">님의</div>
+                    <div class="type">비밀번호</div>
+                    <div class="normal">조회 결과입니다.</div>
+                    </div>
+                        <%
+                            }
+                        %>
                     <div class = "result1Item">
                        <div class="normal" style="padding-top: 10px;">아래 영역에 마우스를 대면 조회 결과를 확인할 수 있습니다.</div>
                     </div>
                 </div>
                 <div class="contentResult2">
                     <div class="control">
-                    <input type="text" value="123123" readonly />
+                        <asp:TextBox ID="txtResult" runat="server" ReadOnly="true"></asp:TextBox>
                     </div>
                 </div>
                 <div class = "contentBtn">
                     <div class = "go Back">
-                        <input type="button" value="이전으로" />
+                        <asp:Button ID="btnBack" runat="server" Text="이전으로" PostBackUrl="~/find_idpw.aspx"/>
                     </div>
                     <div class = "go Home">
-                        <input type="button" value="메인으로" />
+                        <asp:Button ID="btnHome" runat="server" Text="메인으로" PostBackUrl="~/index_old.aspx"/>
                     </div>
                 </div>
             </div>
@@ -481,4 +522,6 @@
     <div class="footer">
         바닥글
     </div>
-</body></html>
+</form>
+</body>
+</html>
