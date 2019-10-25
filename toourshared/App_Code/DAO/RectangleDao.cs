@@ -1,6 +1,7 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Web;
 using tooushared.Lib;
@@ -44,4 +45,71 @@ public class RectangleDao
         return result;
     }
     //public void DeleteCommentBy(mem_id)
+    public DataSet SelectRectamgle()
+    {
+        MyDB myDB = new MyDB();
+        MySqlConnection con = myDB.GetCon();
+
+        string sql = "Select rec_no, rec_crd, rec_title, rec_content, cos_no, map_no  From toourshared.rectangle";
+        MySqlCommand cmd = new MySqlCommand(sql, con); // 커맨드(sql문을 con에서 수행하기 위한 명령문) 생성 DB에서 수행시킬 명령 생성   
+
+        MySqlDataAdapter ad = new MySqlDataAdapter();
+        ad.SelectCommand = cmd;
+        DataSet ds = new DataSet();
+        ad.Fill(ds);
+
+
+        return ds;
+    }
+
+    public Rectangle selectRectangleByrec_no(Rectangle rectangle)
+    {
+
+        MyDB mydb = new MyDB();
+
+        Rectangle result = new Rectangle();
+        MySqlConnection con;
+
+        try
+        {
+            con = mydb.GetCon();
+
+            string Sql = "SELECT * FROM toourshared.rectangle where rectamgle=@rec_no";
+
+
+            MySqlCommand cmd = new MySqlCommand(Sql, con);
+
+            cmd.Parameters.AddWithValue("@rec_no", rectangle.Rec_no);
+
+            con.Open();
+            MySqlDataReader rd = cmd.ExecuteReader();
+
+            if (rd.HasRows)
+            {
+                rd.Read();
+
+                result.Rec_no = rd["rec_no"].ToString();
+                result.Rec_crd = rd["rec_crd"].ToString();
+                result.Rec_title = rd["rec_title"].ToString();
+                result.Rec_content = rd["rec_content"].ToString();
+                result.Cos_no = rd["cos_no"].ToString();
+                result.Map_no = rd["map_no"].ToString();
+
+
+
+                //lstMember.Add(tmpMemberPointer);
+
+                return result;
+
+            }
+
+            con.Close();
+
+        }
+        catch (Exception ex)
+        {
+            Console.Write(ex.ToString());
+        }
+        return result;
+    }
 }

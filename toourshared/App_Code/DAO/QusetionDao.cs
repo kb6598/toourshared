@@ -1,6 +1,7 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Web;
 using tooushared.Lib;
@@ -43,4 +44,70 @@ public class QusetionDao
         return result;
     }
     //public void DeleteCommentBy(mem_id)
+    public DataSet SelectQusetion()
+    {
+        MyDB myDB = new MyDB();
+        MySqlConnection con = myDB.GetCon();
+
+        string sql = "Select qus_no, qus_title, qus_content, qus_ask  From toourshared.qusetion";
+        MySqlCommand cmd = new MySqlCommand(sql, con); // 커맨드(sql문을 con에서 수행하기 위한 명령문) 생성 DB에서 수행시킬 명령 생성   
+
+        MySqlDataAdapter ad = new MySqlDataAdapter();
+        ad.SelectCommand = cmd;
+        DataSet ds = new DataSet();
+        ad.Fill(ds);
+
+
+        return ds;
+    }
+
+    public Question selectQuestionByqus_no(Question question)
+    {
+
+        MyDB mydb = new MyDB();
+
+        Question result = new Question();
+        MySqlConnection con;
+
+        try
+        {
+            con = mydb.GetCon();
+
+            string Sql = "SELECT * FROM toourshared.question where question=@qus_no";
+
+
+            MySqlCommand cmd = new MySqlCommand(Sql, con);
+
+            cmd.Parameters.AddWithValue("@qus_no", question.Qus_no);
+
+            con.Open();
+            MySqlDataReader rd = cmd.ExecuteReader();
+
+            if (rd.HasRows)
+            {
+                rd.Read();
+
+                result.Qus_no = rd["qus_no"].ToString();
+                result.Qus__title = rd["qus_title"].ToString();
+                result.Qus_content = rd["qus_content"].ToString();
+                result.Qus_ask = rd["qus_ask"].ToString();
+          
+
+
+
+                //lstMember.Add(tmpMemberPointer);
+
+                return result;
+
+            }
+
+            con.Close();
+
+        }
+        catch (Exception ex)
+        {
+            Console.Write(ex.ToString());
+        }
+        return result;
+    }
 }
