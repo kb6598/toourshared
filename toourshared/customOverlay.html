@@ -50,8 +50,8 @@
             color: #000;
         }
 
-        .form-control {
-            width: 100%;
+        .card-input {
+            width: 95%;
             height: 80%;
             padding: 10px;
             outline: none;
@@ -62,11 +62,13 @@
             height: 100%;
             display: flex;
             justify-content: center;
+            padding-top: 3px;
+            margin-right: 8px;
         }
 
         .card-close .closeBtn {
             color: #000;
-            font-size: 18px;
+            font-size: 25px;
         }
 
         .closeBtn span {
@@ -111,9 +113,6 @@
             background-color: darkorange;
         }
 
-        .btn-cus {
-            background-color: #00b9f1;
-        }
 
     </style>
 
@@ -149,7 +148,7 @@
     <div class="card">
         <div class="card-header">
             <div class="card-title">
-                <input class="form-control" type="text" placeholder="장소 이름" value="" />
+                <input class="form-control card-input" type="text" placeholder="장소 이름" value="" />
             </div>
             <div class="card-close">
                 <div class="closeBtn">
@@ -165,8 +164,58 @@
                 <li class="card-body-li" style="padding: 15px 0;"><a href="#" target="_blank">상세페이지</a></li>
             </blockquote>
 
-            <div class="btn btn-warning btn-sm">추가</div>
+            <div class="card-addBtn">추가</div>
         </div>
     </div>
+    
+    
+    <script>
+        '<div class="card">'+
+        '<div class="card-header">'+
+            '<div class="card-title">'+
+                '씨스루'+
+            '</div>'+
+            '<div class="card-close">'+
+                '<div class="closeBtn">'+
+                    '<span>×</span>'+
+                '</div>'+
+            '</div>'+
+        '</div>'+
+        '<div class="card-body">'+
+            '<blockquote class="blockquote mb-0">'+
+                '<li class="card-body-li">서울 용산구 녹사평대로40나길 37</li>'+
+                '<li class="card-body-li">서울 용산구 이태원동 403-3</li>'+
+                '<li class="card-body-li">tel : 070-7796-8991</li>'+
+                '<li class="card-body-li" style="padding: 15px 0;"><a href="#" target="_blank" style="text-decoration: none;">상세페이지</a></li>'+
+            '</blockquote>'+
+            '<div class="card-addBtn">추가</div>'+
+        '</div>'+
+    '</div>'+
+
+    '<div class="card">'+
+        '<div class="card-header">'+
+            '<div class="card-title">'+
+                '<input class="form-control card-input" type="text" placeholder="장소 이름" value="" />'+
+            '</div>'+
+            '<div class="card-close">'+
+                '<div class="closeBtn">'+
+                    '<span>×</span>'+
+                '</div>'+
+            '</div>'+
+        '</div>'+
+        '<div class="card-body">'+
+            '<blockquote class="blockquote mb-0">'+
+                '<li class="card-body-li">서울 용산구 녹사평대로40나길 37</li>'+
+                '<li class="card-body-li">서울 용산구 이태원동 403-3</li>'+
+                '<li class="card-body-li">tel : 070-7796-8991</li>'+
+                '<li class="card-body-li" style="padding: 15px 0;"><a href="#" target="_blank">상세페이지</a></li>'+
+            '</blockquote>'+
+            '<div class="card-addBtn">추가</div>'+
+        '</div>'+
+    '</div>'+
+    
+    
+    
+    </script>
 </body>
 </html>

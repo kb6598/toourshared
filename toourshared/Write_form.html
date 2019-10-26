@@ -18,7 +18,7 @@
     <style>
         .map_wrap {
             width: 100%;
-            vertical-align: middle;
+            //vertical-align: middle;
             margin-bottom: 30px;
         }
 
@@ -36,8 +36,7 @@
         }
 
 
-        .map_wrap,
-        .map_wrap * {
+        .map_wrap{
             //margin: 10;
             padding: 0;
             font-family: 'Malgun Gothic', dotum, '돋움', sans-serif;
@@ -221,36 +220,93 @@
 
 
         < !-- 커스텀 오버레이 스타일-->.card {
-            border: 1px outset black;
-            border-radius: 12px;
-            //font: bold 1rem sans-serif;
+            border: 1px outset rgba(0, 0, 0, .19);
             width: 300px;
+            word-spacing: -1px;
         }
 
         .card-header {
-            background-color: rgb(255, 212, 94);
-            font-weight: bold;
-            font-family: 'Malgun Gothic', dotum, '돋움', sans-serif;
-            text-align: center;
-            font-size: 20px;
+            width: 100%;
+            height: 50px;
+            display: flex;
+            flex-direction: row;
+            background-color: #eee;
+            font-family: 'Noto Sans KR', sans-serif;
             padding: 0px;
+        }
 
+        .card-title {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            font-size: 18px;
+            justify-content: center;
+            align-items: center;
+            padding-left: 10px;
+            color: #000;
+        }
+
+        .card-input {
+            width: 95%;
+            height: 80%;
+            padding: 10px;
+            outline: none;
+        }
+
+        .card-close {
+            width: 10%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            padding-top: 3px;
+            margin-right: 8px;
+        }
+
+        .card-close .closeBtn {
+            color: #000;
+            font-size: 25px;
+        }
+
+        .closeBtn span {
+            cursor: pointer;
+            color: black;
         }
 
         .card-body {
+            width: 100%;
+            height: 100%;
+            padding: 20px 0px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
             font-family: 'Malgun Gothic', dotum, '돋움', sans-serif;
             text-align: center;
             font-size: 18px;
             overflow: auto;
-            padding: 0px;
         }
 
         .card-body-li {
             font-size: 15px;
             list-style: none;
-            padding-left: 0px;
+        }
 
+        .card-addBtn {
+            width: 80px;
+            height: 27px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: .2rem;
+            font-size: .875rem;
+            cursor: pointer;
+            background-color: orange;
+            transition-duration: .9s;
+        }
 
+        .card-addBtn:hover {
+            transition-duration: .9s;
+            background-color: darkorange;
         }
 
         < !-- modal-cost and TravelRoute-->< !-- modal-cost and TravelRoute-->.modal-cost {
@@ -356,6 +412,7 @@
             width: 10px;
             height: 10px;
         }
+
     </style>
 </head>
 
@@ -494,6 +551,7 @@
                 height: 300, //set editable area's height
             });
         });
+
     </script>
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=ebcd0c1accbe0ff4bbb47bd777ef2fcf&libraries=service&libraries=services,clusterer,drawing"></script>
 
@@ -673,7 +731,6 @@
         // drawManager의 상태가 변경되고
         // travelRoute와 변경
         manager.addListener('state_changed', function() {
-            //console.info("state_changed++++++++++++++++++++++++");
             closeCusOverlay();
             //console.info(this._historyStroage);
             refreshOverlayListener();
@@ -687,7 +744,7 @@
         manager.addListener('remove', function(e) {
 
         });
-
+//http://localhost:49862/
 
 
         function refreshOverlayListener() {
@@ -703,12 +760,13 @@
                         try {
                             //removeListener 시도
                             // 리스너를 만드는중에 오버레이를 전달
-                            kakao.maps.event.removeListener(value, 'click', onClick_overlay(value, false));
+                            kakao.maps.event.removeListener(value, 'click', onClick_overlay);
                         } catch (exception) {
                             //console.info(exception);
                         } finally {
-                            kakao.maps.event.addListener(value, 'click', onClick_overlay(value, true));
+                            kakao.maps.event.addListener(value, 'click', onClick_overlay);
                         }
+
 
                     });
 
@@ -721,7 +779,6 @@
         var geocoder = new kakao.maps.services.Geocoder();
 
         var customOverlay = new kakao.maps.CustomOverlay({
-            clickable: true,
             xAnchor: 0.5,
             yAnchor: 1.25,
             zIndex: 3
@@ -732,46 +789,28 @@
         }
 
 
+
+
+
+
         //-----------------------------------------------
         // 클릭시 발생하는 이벤트
         //----------------------------------------------
-        var onClick_overlay = function(overlay, flag) {
-            if (flag == true) {
-                console.info(overlay.constructor.name + '_' + overlay._index);
-                var wcongnamulX;
-                var wcongnamulY;
+        var onClick_overlay = function() {
+            
+                //console.info(overlay.constructor.name + '_' + overlay._index);
+
                 //console.info("onClick_overlay");
                 //alert(this._index + "번째 마커" + "\nk : " + this.k + "\nGa : " + this.k.Ga + "\nHa : " + this.k.Ha + '\nMARKER click!');
                 //console.info(this);
                 //console.info(overlay);
                 //---- 오버레이 타입마다 좌표가 존재하는 위치가 다름
-                if (overlay.constructor.name == "ExtendsMarker") {
-                    wcongnamulX = overlay.k.Ga;
-                    wcongnamulY = overlay.k.Ha;
-                } else if (overlay.constructor.name == "ExtendsCircle") {
-                    wcongnamulX = overlay.k.Ga;
-                    wcongnamulY = overlay.k.Ha;
-                } else if (overlay.constructor.name == "ExtendsRectangle") {
-                    //ExtendedRectangle has za{ea,ja,ka,la} as coords
-                    wcongnamulY = (overlay.za.ka + overlay.za.la) / 2;
-                    wcongnamulX = (overlay.za.ea + overlay.za.ja) / 2;
-                } else if (overlay.constructor.name == "ExtendsPolygon") {
-                    //ExtendedPolygon has ig{0: {ga: ha:}, }
-                    var gaTotal = 0;
-                    var haTotal = 0;
-                    overlay.Ig.forEach(function(value, index, array) {
-                        gaTotal += value.Ga;
-                        haTotal += value.Ha;
-                    });
-                    wcongnamulX = gaTotal / overlay.Ig.length;
-                    wcongnamulY = haTotal / overlay.Ig.length;
-                } else if (overlay.constructor.name == "ExtendsEllipse") {
-                    wcongnamulX = overlay.k.Ga;
-                    wcongnamulY = overlay.k.Ha;
-                }
+                
+                var coord_WCONGNAMUL =  getWCONGNAMULFromOverlay(this);
+                
 
                 //----좌표값으로 주소를 가져옴
-                geocoder.coord2Address(wcongnamulX, wcongnamulY, function(result, status) {
+                geocoder.coord2Address(coord_WCONGNAMUL.wcongnamulX, coord_WCONGNAMUL.wcongnamulY, function(result, status) {
 
 
                     if (status === kakao.maps.services.Status.OK) {
@@ -791,23 +830,47 @@
                                 //                                $('#searchPlaceModal').modal('show');
 
                                 content =
-                                    '<div class="card">' +
-                                    '<div class="card-header">  <div class="btn btn-link btn-lg" onclick="closeCusOverlay()" title="닫기" style="float: right; padding: 5px 5px;">X</div>' +
+
+
+                                    '<div class="card" >' +
+                                    '<div class="card-header">' +
+                                    '<div class="card-title">' +
+                                    '<input class="form-control card-input" type="text" placeholder="장소 이름" value="" />' +
                                     '</div>' +
+                                    '<div class="card-close">' +
+                                    '<div class="closeBtn" onclick="closeCusOverlay()">' +
+                                    '<span>×</span>' +
+                                    '</div>' +
+                                    '</div>' +
+                                    '</div>' +
+                                    '<div class="card-body">' +
                                     '<blockquote class="blockquote mb-0">';
 
                                 if (result[0].address.address_name != null) {
                                     content += '<li class="card-body-li">' + result[0].address.address_name + '</li>';
                                 }
                                 content +=
-                                    '<div class="btn btn-secondary" onclick=\'pushTravelRouteItem("","","","","","' + wcongnamulX + '","' + wcongnamulY + '")\'>추가</div>' +
-                                    '<div class="btn btn-secondary" onclick=\'searchPlacesByAddress("","' + result[0].address.address_name + '")\'>주소로 검색</div>' +
+                                    '<li class="card-body-li"> </li>'+
+                                '<li class="card-body-li"> </li>'+
                                     '</blockquote>' +
+                                    '<table style="margin-top: 10px;"><tr>'+
+                                    '<td>'+
+                                    '<div class="card-addBtn" onclick=\'pushTravelRouteItem("","","","","","' + coord_WCONGNAMUL.wcongnamulX + '","' + coord_WCONGNAMUL.wcongnamulY + '")\'>추가</div>' +
+                                    '</td>'+
+                                    '<td>'+
+                                    '<div class="card-addBtn" onclick=\'searchPlacesByAddress("","' + result[0].address.address_name + '")\'>주소로 검색</div>' +
+                                    '</td>'+
+                                    '</tr></table>'+
                                     '</div>';
 
 
                             }
                         }
+
+
+
+
+
                         //                    if (result[0].road_address != null) {
                         //                        if (result[0].road_address.address_name != null) {
                         //                            content += '<li class="card-body-li">' + result[0].road_address.address_name + '</li>';
@@ -839,7 +902,7 @@
 
 
 
-                        geocoder.transCoord(wcongnamulX, wcongnamulY,
+                        geocoder.transCoord(coord_WCONGNAMUL.wcongnamulX, coord_WCONGNAMUL.wcongnamulY,
                             function(result, status) {
 
                                 // 정상적으로 검색이 완료됐으면 
@@ -858,11 +921,39 @@
                     input_coord: kakao.maps.services.Coords.WCONGNAMUL
                 });
 
-            }
+            
         }
 
 
-
+function getWCONGNAMULFromOverlay(overlay){
+    var wcongnamulX;
+    var wcongnamulY;
+     if (overlay.constructor.name == "ExtendsMarker") {
+                    wcongnamulX = overlay.k.Ga;
+                    wcongnamulY = overlay.k.Ha;
+                } else if (overlay.constructor.name == "ExtendsCircle") {
+                    wcongnamulX = overlay.k.Ga;
+                    wcongnamulY = overlay.k.Ha;
+                } else if (overlay.constructor.name == "ExtendsRectangle") {
+                    //ExtendedRectangle has za{ea,ja,ka,la} as coords
+                    wcongnamulY = (overlay.za.ka + overlay.za.la) / 2;
+                    wcongnamulX = (overlay.za.ea + overlay.za.ja) / 2;
+                } else if (overlay.constructor.name == "ExtendsPolygon") {
+                    //ExtendedPolygon has ig{0: {ga: ha:}, }
+                    var gaTotal = 0;
+                    var haTotal = 0;
+                    overlay.Ig.forEach(function(value, index, array) {
+                        gaTotal += value.Ga;
+                        haTotal += value.Ha;
+                    });
+                    wcongnamulX = gaTotal / overlay.Ig.length;
+                    wcongnamulY = haTotal / overlay.Ig.length;
+                } else if (overlay.constructor.name == "ExtendsEllipse") {
+                    wcongnamulX = overlay.k.Ga;
+                    wcongnamulY = overlay.k.Ha;
+                }
+    return { "wcongnamulX":wcongnamulX,"wcongnamulY":wcongnamulY};
+}
 
 
 
@@ -1143,18 +1234,20 @@
         // 인포윈도우에 장소명을 표시합니다
         function displayInfowindow(marker, place) {
 
-
-
-
-
             var content =
                 '<div class="card">' +
                 '<div class="card-header">' +
+                '<div class="card-title">' +
                 place.place_name +
-                '<div class="btn btn-link" onclick="closeOverlay()" title="닫기" style="float: right">X</div>' +
                 '</div>' +
+                '<div class="card-close">' +
+                '<div class="closeBtn" onclick="closeOverlay()">' +
+                '<span >×</span>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '<div class="card-body">' +
                 '<blockquote class="blockquote mb-0">';
-
             if (place.road_address_name != null) {
                 content += '<li class="card-body-li">' + place.road_address_name + '</li>';
             }
@@ -1165,12 +1258,41 @@
                 content += '<li class="card-body-li">' + place.phone + '</li>';
             }
             if (place.place_url != null) {
-                content += '<li class="card-body-li"><a href="' + place.place_url + '" target="_blank" class="link">상세페이지</a></li>';
+                content += '<li class="card-body-li" style="padding: 15px 0;"><a href="' + place.place_url + '" target="_blank" style="text-decoration: none;">상세페이지</a></li>';
             }
             content +=
-                '<div class="btn btn-secondary" onclick=\'pushTravelRouteItem("' + place.place_name + '","' + place.road_address_name + '","' + place.ddress_name + '","' + place.phone + '","' + place.place_url + '","' + place.x + '","' + place.y + '")\'>여행경로에 추가</div>' +
                 '</blockquote>' +
+                '<div class="card-addBtn" onclick=\'pushTravelRouteItem("' + place.place_name + '","' + place.road_address_name + '","' + place.ddress_name + '","' + place.phone + '","' + place.place_url + '","' + place.x + '","' + place.y + '")\'>추가</div>' +
+                '</div>' +
                 '</div>';
+
+
+
+
+            //            var content =
+            //                '<div class="card">' +
+            //                '<div class="card-header">' +
+            //                place.place_name +
+            //                '<div class="btn btn-link" onclick="closeOverlay()" title="닫기" style="float: right">X</div>' +
+            //                '</div>' +
+            //                '<blockquote class="blockquote mb-0">';
+            //
+            //            if (place.road_address_name != null) {
+            //                content += '<li class="card-body-li">' + place.road_address_name + '</li>';
+            //            }
+            //            if (place.address_name != null) {
+            //                content += '<li class="card-body-li">' + place.address_name + '</li>';
+            //            }
+            //            if (place.phone != null) {
+            //                content += '<li class="card-body-li">' + place.phone + '</li>';
+            //            }
+            //            if (place.place_url != null) {
+            //                content += '<li class="card-body-li"><a href="' + place.place_url + '" target="_blank" class="link">상세페이지</a></li>';
+            //            }
+            //            content +=
+            //                '<div class="btn btn-secondary" onclick=\'pushTravelRouteItem("' + place.place_name + '","' + place.road_address_name + '","' + place.ddress_name + '","' + place.phone + '","' + place.place_url + '","' + place.x + '","' + place.y + '")\'>여행경로에 추가</div>' +
+            //                '</blockquote>' +
+            //                '</div>';
 
             infowindow.setContent(content);
             infowindow.open(drawingMap, marker);
@@ -1814,11 +1936,11 @@
         function postToNext() {
             var data = manager.getData();
             //rects  circles   polygons 
-                        markers = data[daum.maps.drawing.OverlayType.MARKER];
-                        polylines = data[daum.maps.drawing.OverlayType.POLYLINE];
-                        rects = data[daum.maps.drawing.OverlayType.RECTANGLE];
-                        circles = data[daum.maps.drawing.OverlayType.CIRCLE];
-                        polygons = data[daum.maps.drawing.OverlayType.POLYGON];
+            markers = data[daum.maps.drawing.OverlayType.MARKER];
+            polylines = data[daum.maps.drawing.OverlayType.POLYLINE];
+            rects = data[daum.maps.drawing.OverlayType.RECTANGLE];
+            circles = data[daum.maps.drawing.OverlayType.CIRCLE];
+            polygons = data[daum.maps.drawing.OverlayType.POLYGON];
             //
             //            markersPath = [];
             //            polylinesPath = [];
@@ -1933,8 +2055,8 @@
             //            insert5.setAttribute("name", "polygons"); // name 속성을 'stadium'으로 설정
             //            insert5.setAttribute("value", polygonsPath); // value 속성을 삽입
             //            form.appendChild(insert5);
-            
-            
+
+
 
             var mapData = document.createElement("input"); // input 엘리멘트 생성
             mapData.setAttribute("type", "hidden"); // type 속성을 hidden으로 설정
@@ -1963,5 +2085,8 @@
         //------------------------------------
         //----------Post END
         //------------------------------------
+
     </script>
-</body></html>
+</body>
+
+</html>
