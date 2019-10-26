@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 
 
 
@@ -356,7 +356,6 @@
             width: 10px;
             height: 10px;
         }
-
     </style>
 </head>
 
@@ -368,90 +367,87 @@
 
 
     <div class="container">
-        <div id="edit_right">
-            <form id="form1" runat="server" action="Write_get.aspx">
-                <input type="hidden" name="sendEmail" value="ok" />
-                <div class="row">
-                    <div class="col-sm">
-                        <div class="form-group">
-                            <asp:TextBox ID="title" runat="server" CssClass="form-control form-control-lg" placeholder="제목을 입력해주세요"></asp:TextBox>
-                        </div>
-                    </div>
+        <div class="row">
+            <div class="col-sm">
+                <div class="form-group">
+                    <input type="text" ID="title" name="title" class="form-control form-control-lg" placeholder="제목을 입력해주세요" />
                 </div>
-                <div class="row">
-                    <div class="col-sm">
-                        <div id="travelRoute_wrap">
-                            <div class="travelRoute-header">
-                                <span class="trTitle">여행지</span>
-                                <span class="trBody" id="trBody">방문 : 0</span>
-                            </div>
-                            <ul id="travelRoute" class="travelRoute">
-                            </ul>
-
-                        </div>
-                    </div>
-                    <div class="col-sm-6">
-                        <div class="map_wrap">
-                            <div id="drawingMap"></div>
-                        </div>
-                    </div>
-                    <div class="col-sm">
-                        <div id="travelCost_wrap">
-                            <div class="modal-cost">
-                                <div class="modal-cost-area">
-                                    <div class="cost-header" id="costHeader">
-                                        <span class="chTitle">전체 경비</span>
-                                        <span class="chBody">💰 0</span>
-                                    </div>
-                                    <div class="cost-body" id="costBody">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-">
-                        <!--폼 내부에서 버튼객체를 쓰려면 type=button을 써주면 된다.-->
-                        <button type="button" class="btn btn-secondary" onclick="selectOverlay('MARKER')">마커</button>
-                        <button type="button" class="btn btn-secondary" onclick="selectOverlay('POLYLINE')">선</button>
-                        <button type="button" class="btn btn-secondary" onclick="selectOverlay('CIRCLE')">원</button>
-                        <button type="button" class="btn btn-secondary" onclick="selectOverlay('RECTANGLE')">사각형</button>
-                        <button type="button" class="btn btn-secondary" onclick="selectOverlay('POLYGON')">다각형</button>
-                        <button type="button" class="btn btn-secondary" onclick="selectOverlay('ELLIPSE')">타원</button>
-                        <button type="button" class="btn btn-secondary" onclick="selectOverlay('ARROW')">화살표</button>
-                        <button type="button" class="btn btn-secondary" id="undo" onclick="undoAction()" disabled>UNDO</button>
-                        <button type="button" class="btn btn-secondary" id="redo" onclick="redoAction()" disabled>REDO</button>
-                        <!-- Button trigger modal -->
-                        <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#searchPlaceModal">
-                            검색
-                        </button>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm">
-                        <div class="form-group">
-                            <asp:TextBox ID="article" runat="server" TextMode="MultiLine" />
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm">
-                        <div class="form-group">
-                            <asp:TextBox ID="hashtag" runat="server" CssClass="form-control form-control-lg" placeholder="#해시태그를 입력해주세요"></asp:TextBox>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm">
-                        <div class="form-group">
-                            <input type="button" onclick="postToNext()" value="넘기기" />
-                        </div>
-                    </div>
-                </div>
-            </form>
+            </div>
         </div>
+        <div class="row">
+            <div class="col-sm">
+                <div id="travelRoute_wrap">
+                    <div class="travelRoute-header">
+                        <span class="trTitle">여행지</span>
+                        <span class="trBody" id="trBody">방문 : 0</span>
+                    </div>
+                    <ul id="travelRoute" class="travelRoute">
+                    </ul>
+
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="map_wrap">
+                    <div id="drawingMap"></div>
+                </div>
+            </div>
+            <div class="col-sm">
+                <div id="travelCost_wrap">
+                    <div class="modal-cost">
+                        <div class="modal-cost-area">
+                            <div class="cost-header" id="costHeader">
+                                <span class="chTitle">전체 경비</span>
+                                <span class="chBody">💰 0</span>
+                            </div>
+                            <div class="cost-body" id="costBody">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-">
+                <!--폼 내부에서 버튼객체를 쓰려면 type=button을 써주면 된다.-->
+                <button type="button" class="btn btn-secondary" onclick="selectOverlay('MARKER')">마커</button>
+                <button type="button" class="btn btn-secondary" onclick="selectOverlay('POLYLINE')">선</button>
+                <button type="button" class="btn btn-secondary" onclick="selectOverlay('CIRCLE')">원</button>
+                <button type="button" class="btn btn-secondary" onclick="selectOverlay('RECTANGLE')">사각형</button>
+                <button type="button" class="btn btn-secondary" onclick="selectOverlay('POLYGON')">다각형</button>
+                <button type="button" class="btn btn-secondary" onclick="selectOverlay('ELLIPSE')">타원</button>
+                <button type="button" class="btn btn-secondary" onclick="selectOverlay('ARROW')">화살표</button>
+                <button type="button" class="btn btn-secondary" id="undo" onclick="undoAction()" disabled>UNDO</button>
+                <button type="button" class="btn btn-secondary" id="redo" onclick="redoAction()" disabled>REDO</button>
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#searchPlaceModal">
+                    검색
+                </button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm">
+                <div class="form-group">
+                    <textarea type="text" ID="article" name="article"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm">
+                <div class="form-group">
+                    <input type="text" ID="hashtag" name="hashtag" Class="form-control form-control-lg" placeholder="#해시태그를 입력해주세요" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm">
+                <div class="form-group">
+                    <input type="button" onclick="postToNext()" value="넘기기" />
+                </div>
+            </div>
+        </div>
+
+
     </div>
 
     <!-- Modal -->
@@ -498,7 +494,6 @@
                 height: 300, //set editable area's height
             });
         });
-
     </script>
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=ebcd0c1accbe0ff4bbb47bd777ef2fcf&libraries=service&libraries=services,clusterer,drawing"></script>
 
@@ -622,12 +617,16 @@
         });
 
 
-        class History{
+        class History {
             constructor() {
                 this._cursor = 0;
-                this.cur_overlay 
+                this.cur_overlay
                 this.history = Array();
-                this.history.push({PlaceList:Array(),TravelRouteItemList:Array(),CostItemList:Array()});
+                this.history.push({
+                    PlaceList: Array(),
+                    TravelRouteItemList: Array(),
+                    CostItemList: Array()
+                });
             }
             setRoute(place_name, road_address_name, address_name, phone, place_url, x, y) {
 
@@ -639,9 +638,9 @@
                 this.x = x;
                 this.y = y;
             }
-                push
+            push
         }
-        
+
 
 
         // 버튼 클릭 시 호출되는 핸들러 입니다
@@ -792,17 +791,17 @@
                                 //                                $('#searchPlaceModal').modal('show');
 
                                 content =
-                                        '<div class="card">' +
-                                        '<div class="card-header">  <div class="btn btn-link btn-lg" onclick="closeCusOverlay()" title="닫기" style="float: right; padding: 5px 5px;">X</div>' +
-                                        '</div>' +
-                                        '<blockquote class="blockquote mb-0">';
+                                    '<div class="card">' +
+                                    '<div class="card-header">  <div class="btn btn-link btn-lg" onclick="closeCusOverlay()" title="닫기" style="float: right; padding: 5px 5px;">X</div>' +
+                                    '</div>' +
+                                    '<blockquote class="blockquote mb-0">';
 
                                 if (result[0].address.address_name != null) {
                                     content += '<li class="card-body-li">' + result[0].address.address_name + '</li>';
                                 }
                                 content +=
-                                '<div class="btn btn-secondary" onclick=\'pushTravelRouteItem("","","","","","' + wcongnamulX + '","' + wcongnamulY + '")\'>추가</div>' +
-                                    '<div class="btn btn-secondary" onclick=\'searchPlacesByAddress("","'+result[0].address.address_name+'")\'>주소로 검색</div>' +
+                                    '<div class="btn btn-secondary" onclick=\'pushTravelRouteItem("","","","","","' + wcongnamulX + '","' + wcongnamulY + '")\'>추가</div>' +
+                                    '<div class="btn btn-secondary" onclick=\'searchPlacesByAddress("","' + result[0].address.address_name + '")\'>주소로 검색</div>' +
                                     '</blockquote>' +
                                     '</div>';
 
@@ -863,7 +862,7 @@
         }
 
 
-       
+
 
 
 
@@ -897,7 +896,7 @@
             // 장소검색 객체를 통해 키워드로 장소검색을 요청합니다
             ps.keywordSearch(keyword, placesSearchCB);
         }
-         // 장소검색이 완료됐을 때 호출되는 콜백함수 입니다
+        // 장소검색이 완료됐을 때 호출되는 콜백함수 입니다
         function placesSearchCB(data, status, pagination) {
             if (status === kakao.maps.services.Status.OK) {
 
@@ -907,7 +906,7 @@
 
                 // 페이지 번호를 표출합니다
                 displayPagination(pagination);
-                
+
             } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
 
                 alert('검색 결과가 존재하지 않습니다.');
@@ -921,16 +920,16 @@
             }
         }
 
-        
+
         // 키워드(주소를 통해서 ) 주변 검색을 요청하는 함수입니다
-        function searchPlacesByAddress(overlay,address) {
+        function searchPlacesByAddress(overlay, address) {
             //주변검색을 하며 해당 마커는 삭제합니다.
             manager.remove(overlay);
-            
-            
+
+
             var keyword = document.getElementById('keyword');
             keyword.value = address;
-            
+
             if (!keyword.value.replace(/^\s+|\s+$/g, '')) {
                 alert('키워드를 입력해주세요!');
                 return false;
@@ -939,8 +938,8 @@
             // 장소검색 객체를 통해 키워드로 장소검색을 요청합니다
             ps.keywordSearch(keyword.value, placesSearchByAddressCB);
         }
-        
-       // 키워드(주소를 통해서 ) 주변 검색이 완료되었을때 호출되는 콜백함수 입니다
+
+        // 키워드(주소를 통해서 ) 주변 검색이 완료되었을때 호출되는 콜백함수 입니다
         function placesSearchByAddressCB(data, status, pagination) {
             if (status === kakao.maps.services.Status.OK) {
 
@@ -965,7 +964,7 @@
         }
 
 
-       
+
 
 
 
@@ -1169,7 +1168,7 @@
                 content += '<li class="card-body-li"><a href="' + place.place_url + '" target="_blank" class="link">상세페이지</a></li>';
             }
             content +=
-            '<div class="btn btn-secondary" onclick=\'pushTravelRouteItem("' + place.place_name + '","' + place.road_address_name + '","' + place.ddress_name + '","' + place.phone + '","' + place.place_url + '","' + place.x + '","' + place.y + '")\'>여행경로에 추가</div>' +
+                '<div class="btn btn-secondary" onclick=\'pushTravelRouteItem("' + place.place_name + '","' + place.road_address_name + '","' + place.ddress_name + '","' + place.phone + '","' + place.place_url + '","' + place.x + '","' + place.y + '")\'>여행경로에 추가</div>' +
                 '</blockquote>' +
                 '</div>';
 
@@ -1815,126 +1814,148 @@
         function postToNext() {
             var data = manager.getData();
             //rects  circles   polygons 
-            markers = data[daum.maps.drawing.OverlayType.MARKER];
-            polylines = data[daum.maps.drawing.OverlayType.POLYLINE];
-            rects = data[daum.maps.drawing.OverlayType.RECTANGLE];
-            circles = data[daum.maps.drawing.OverlayType.CIRCLE];
-            polygons = data[daum.maps.drawing.OverlayType.POLYGON];
-
-            markersPath = [];
-            polylinesPath = [];
-            rectsPath = [];
-            circlesPath = [];
-            polygonsPath = [];
-
-            for (var i = 0; i < markers.length; i++) {
-
-                var latlng = new daum.maps.LatLng(markers[i].y, markers[i].x);
-                markersPath.push(i + ":");
-                markersPath.push(latlng);
-
-
-            }
-
-
-
-
-            var len = polylines.length,
-                i = 0;
-
-            for (; i < len; i++) {
-                var path = pointsToPath(polylines[i].points);
-                polylinesPath.push(i + ":");
-                polylinesPath.push(path);
-
-            }
-
-
-            var len = circles.length,
-                i = 0;
-
-            for (; i < len; i++) {
-                circlesPath.push(i + ":");
-                circlesPath.push(new daum.maps.LatLng(circles[i].center.y, circles[i].center.x));
-                circlesPath.push(circles[i].radius);
-
-            }
-
-            var len = rects.length,
-                i = 0;
-
-            for (; i < len; i++) {
-
-
-                rectsPath.push(i + ":");
-                rectsPath.push(rects[i].sPoint.y, rects[i].sPoint.x, rects[i].ePoint.y, rects[i].ePoint.x);
-
-
-            }
-
-            var len = polygons.length,
-                i = 0;
-
-            for (; i < len; i++) {
-                var path = pointsToPath(polygons[i].points);
-                polygonsPath.push(i + ":");
-                polygonsPath.push(path);
-
-            }
+                        markers = data[daum.maps.drawing.OverlayType.MARKER];
+                        polylines = data[daum.maps.drawing.OverlayType.POLYLINE];
+                        rects = data[daum.maps.drawing.OverlayType.RECTANGLE];
+                        circles = data[daum.maps.drawing.OverlayType.CIRCLE];
+                        polygons = data[daum.maps.drawing.OverlayType.POLYGON];
+            //
+            //            markersPath = [];
+            //            polylinesPath = [];
+            //            rectsPath = [];
+            //            circlesPath = [];
+            //            polygonsPath = [];
+            //
+            //            for (var i = 0; i < markers.length; i++) {
+            //
+            //                var latlng = new daum.maps.LatLng(markers[i].y, markers[i].x);
+            //                markersPath.push(i + ":");
+            //                markersPath.push(latlng);
+            //
+            //
+            //            }
+            //
+            //
+            //
+            //
+            //            var len = polylines.length,
+            //                i = 0;
+            //
+            //            for (; i < len; i++) {
+            //                var path = pointsToPath(polylines[i].points);
+            //                polylinesPath.push(i + ":");
+            //                polylinesPath.push(path);
+            //
+            //            }
+            //
+            //
+            //            var len = circles.length,
+            //                i = 0;
+            //
+            //            for (; i < len; i++) {
+            //                circlesPath.push(i + ":");
+            //                circlesPath.push(new daum.maps.LatLng(circles[i].center.y, circles[i].center.x));
+            //                circlesPath.push(circles[i].radius);
+            //
+            //            }
+            //
+            //            var len = rects.length,
+            //                i = 0;
+            //
+            //            for (; i < len; i++) {
+            //
+            //
+            //                rectsPath.push(i + ":");
+            //                rectsPath.push(rects[i].sPoint.y, rects[i].sPoint.x, rects[i].ePoint.y, rects[i].ePoint.x);
+            //
+            //
+            //            }
+            //
+            //            var len = polygons.length,
+            //                i = 0;
+            //
+            //            for (; i < len; i++) {
+            //                var path = pointsToPath(polygons[i].points);
+            //                polygonsPath.push(i + ":");
+            //                polygonsPath.push(path);
+            //
+            //            }
 
 
 
 
             //document.getElementById("marker").value = markersPath;
             //document.getElementById("polygon").value = polylinesPath;
-            var title = document.getElementById("title").value;
-            var article = document.getElementById("article").value;
-            var hashtag = document.getElementById("hashtag").value;
+            var title = document.getElementById("title");
+            var article = document.getElementById("article");
+            var hashtag = document.getElementById("hashtag");
 
 
-            var form = document.getElementById("form1");
+            var form = document.createElement("form");
+            // Form submission canceled because the form is not connected 해결
+            document.body.appendChild(form);
+            form.setAttribute('method', "post");
+            form.setAttribute('action', "Write_get.aspx");
+            form.appendChild(title);
+            form.appendChild(article);
+            form.appendChild(hashtag);
 
-
-
-
-            var marker = document.createElement("input"); // input 엘리멘트 생성
-            insert1.setAttribute("type", "hidden"); // type 속성을 hidden으로 설정
-            insert1.setAttribute("name", "marker"); // name 속성을 'stadium'으로 설정
-            insert1.setAttribute("value", markersPath); // value 속성을 삽입
-            form.appendChild(insert1); // form 엘리멘트에 input 엘리멘트 추가
-
-            var polyline = document.createElement("input"); // input 엘리멘트 생성
-            insert2.setAttribute("type", "hidden"); // type 속성을 hidden으로 설정
-            insert2.setAttribute("name", "polyline"); // name 속성을 'stadium'으로 설정
-            insert2.setAttribute("value", polylinesPath); // value 속성을 삽입
-            form.appendChild(insert2);
-            //rects  circles   polygons 
-            var rects = document.createElement("input"); // input 엘리멘트 생성
-            insert3.setAttribute("type", "hidden"); // type 속성을 hidden으로 설정
-            insert3.setAttribute("name", "rects"); // name 속성을 'stadium'으로 설정
-            insert3.setAttribute("value", rectsPath); // value 속성을 삽입
-            form.appendChild(insert3);
-
-            var circles = document.createElement("input"); // input 엘리멘트 생성
-            insert4.setAttribute("type", "hidden"); // type 속성을 hidden으로 설정
-            insert4.setAttribute("name", "circles"); // name 속성을 'stadium'으로 설정
-            insert4.setAttribute("value", circlesPath); // value 속성을 삽입
-            form.appendChild(insert4);
-
-            var polygons = document.createElement("input"); // input 엘리멘트 생성
-            insert5.setAttribute("type", "hidden"); // type 속성을 hidden으로 설정
-            insert5.setAttribute("name", "polygons"); // name 속성을 'stadium'으로 설정
-            insert5.setAttribute("value", polygonsPath); // value 속성을 삽입
-            form.appendChild(insert5);
-
-            var insert6 = document.createElement("input"); // input 엘리멘트 생성
-            insert5.setAttribute("type", "hidden"); // type 속성을 hidden으로 설정
-            insert5.setAttribute("name", "data"); // name 속성을 'stadium'으로 설정
-            insert5.setAttribute("value", manager.getData()); // value 속성을 삽입
-            form.appendChild(insert6);
+            //JSON.stringify(obj)
 
 
 
+            //            var marker = document.createElement("input"); // input 엘리멘트 생성
+            //            insert1.setAttribute("type", "hidden"); // type 속성을 hidden으로 설정
+            //            insert1.setAttribute("name", "marker"); // name 속성을 'stadium'으로 설정
+            //            insert1.setAttribute("value", markersPath); // value 속성을 삽입
+            //            form.appendChild(insert1); // form 엘리멘트에 input 엘리멘트 추가
+            //
+            //            var polyline = document.createElement("input"); // input 엘리멘트 생성
+            //            insert2.setAttribute("type", "hidden"); // type 속성을 hidden으로 설정
+            //            insert2.setAttribute("name", "polyline"); // name 속성을 'stadium'으로 설정
+            //            insert2.setAttribute("value", polylinesPath); // value 속성을 삽입
+            //            form.appendChild(insert2);
+            //            //rects  circles   polygons 
+            //            var rects = document.createElement("input"); // input 엘리멘트 생성
+            //            insert3.setAttribute("type", "hidden"); // type 속성을 hidden으로 설정
+            //            insert3.setAttribute("name", "rects"); // name 속성을 'stadium'으로 설정
+            //            insert3.setAttribute("value", rectsPath); // value 속성을 삽입
+            //            form.appendChild(insert3);
+            //
+            //            var circles = document.createElement("input"); // input 엘리멘트 생성
+            //            insert4.setAttribute("type", "hidden"); // type 속성을 hidden으로 설정
+            //            insert4.setAttribute("name", "circles"); // name 속성을 'stadium'으로 설정
+            //            insert4.setAttribute("value", circlesPath); // value 속성을 삽입
+            //            form.appendChild(insert4);
+            //
+            //            var polygons = document.createElement("input"); // input 엘리멘트 생성
+            //            insert5.setAttribute("type", "hidden"); // type 속성을 hidden으로 설정
+            //            insert5.setAttribute("name", "polygons"); // name 속성을 'stadium'으로 설정
+            //            insert5.setAttribute("value", polygonsPath); // value 속성을 삽입
+            //            form.appendChild(insert5);
+            
+            
+
+            var mapData = document.createElement("input"); // input 엘리멘트 생성
+            mapData.setAttribute("type", "hidden"); // type 속성을 hidden으로 설정
+            mapData.setAttribute("name", "mapData"); // name 속성을 'stadium'으로 설정
+            mapData.setAttribute("value", JSON.stringify(markers)); // value 속성을 삽입
+            form.appendChild(mapData);
+
+            var TravelRouteListData = document.createElement("input"); // input 엘리멘트 생성
+            TravelRouteListData.setAttribute("type", "hidden"); // type 속성을 hidden으로 설정
+            TravelRouteListData.setAttribute("name", "TravelRouteListData"); // name 속성을 'stadium'으로 설정
+            TravelRouteListData.setAttribute("value", JSON.stringify(TravelRouteList)); // value 속성을 삽입
+            form.appendChild(TravelRouteListData);
+
+            var CostItemListData = document.createElement("input"); // input 엘리멘트 생성
+            CostItemListData.setAttribute("type", "hidden"); // type 속성을 hidden으로 설정
+            CostItemListData.setAttribute("name", "CostItemListData"); // name 속성을 'stadium'으로 설정
+            CostItemListData.setAttribute("value", JSON.stringify(CostItemList)); // value 속성을 삽입
+            form.appendChild(CostItemListData);
+
+
+            console.info(form.innerHTML);
             form.submit(); // 전송
         }
 
@@ -1942,8 +1963,5 @@
         //------------------------------------
         //----------Post END
         //------------------------------------
-
     </script>
-</body>
-
-</html>
+</body></html>
