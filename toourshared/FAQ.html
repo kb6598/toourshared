@@ -4,10 +4,14 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>TO OUR SHARED : 로그인</title>
+    <title>TO OUR SHARED : 고객센터</title>
 
     <!-- Font -->
-    <link href="https://fonts.googleapis.com/css?family=Mansalva|Nanum+Gothic|Nanum+Myeongjo|Noto+Sans+KR|Lora|Jua&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Mansalva|Nanum+Gothic|Nanum+Myeongjo|Noto+Sans+KR|Lora|East+Sea+Dokdo|Jua&display=swap" rel="stylesheet">
+
+    <!-- ICON -->
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -23,7 +27,6 @@
             padding: 0;
             list-style: none;
 
-            line-height: 1;
 
             /* 전체 배경색 */
             background-color: #00b9f1;
@@ -189,6 +192,7 @@
             border: none;
             outline: none;
             cursor: pointer;
+            line-height: 1;
 
             margin-top: 8px;
             color: white;
@@ -209,8 +213,11 @@
 
         .main {
             width: 100%;
-            height: 100%;
-            padding-top: 100px;
+            height: auto;
+            padding: 100px 0 150px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .title {
@@ -225,139 +232,191 @@
             font-family: 'Mansalva', cursive;
         }
 
-        .body {
+        .FAQ {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 1000px;
+            height: auto;
+            background-color: #fff;
+            transition-duration: .5s;
+            background-color: #e2e2e2;
+        }
+
+        .FAQ_HEADER {
             width: 100%;
-            height: 620px;
+            height: auto;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
+            padding: 40px 0 40px;
+            border-bottom: 1px solid rgba(0, 0, 0, .19);
         }
 
-        .area1 {
-            width: 600px;
-            height: 200px;
+        .FAQ_HEADER span {
+            font-size: 25px;
+            font-weight: 300;
+            font-family: 'Noto Sans KR', sans-serif;
+            cursor: default;
+        }
+
+        .FAQ_MAIN {
+            width: 100%;
+            height: 100%;
+            background-color: #eee;
+        }
+
+        .FAQ_ITEM {
+            width: 100%;
+            height: auto;
+            padding: 20px;
+
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
         }
 
-        .area1 .ID input {
-            width: 400px;
+        .FAQ_SUBTITLE {
+            width: 100%;
             height: 50px;
-            padding: 10px;
+            padding-top: 5px;
+            padding-left: 15px;
+        }
+
+        .FAQ_SUBTITLE span {
+            font-size: 20px;
+            font-weight: 600;
+            font-family: 'Noto Sans KR', sans-serif;
+            border-bottom: 3px solid orangered;
+        }
+
+        .FAQ_SUBTEXT {
+            width: 100%;
+            height: 30px;
+            margin-top: -10px;
+            padding-left: 15px;
+        }
+
+        .FAQ_SUBTEXT span {
             font-size: 13px;
-            color: rgba(0, 0, 0, 0.7);
-            border: none;
-            outline: none;
-            border-bottom: 0.5px solid rgba(0, 0, 0, 0.3);
+            color: rgba(0, 0, 0, .5);
         }
 
-        .area1 .PW input {
-            width: 400px;
-            height: 50px;
-            padding: 10px;
-            font-size: 13px;
-            color: rgba(0, 0, 0, 0.7);
-            border: none;
-            outline: none;
-        }
-
-        .LOGINBTNitem {
-            width: 400px;
-            height: 50px;
-            font-size: 13px;
-            border: none;
-            outline: none;
-            color: white;
-            background-color: orange;
-            transition-duration: .5s;
-        }
-
-        .LOGINBTNitem:hover {
-            transition-duration: .5s;
-            background-color: darkorange;
-        }
-
-        .area2 {
-            width: 400px;
-            height: 400px;
+        .FAQ_QUE_CATEGORY {
+            width: 900px;
+            margin-left: 12px;
+            padding-top: 20px;
             display: flex;
             flex-direction: row;
-            justify-content: flex-end;
-            align-items: center;
         }
 
-        .findID {
-            height: 13px;
-            padding-right: 10px;
+        .FAQ_QUE_CATEGORY>div {
+            margin: 0 2px;
         }
 
-        .findID a {
-            color: white;
-            font-size: 13px;
-            text-decoration: none;
+        .QUENUMBER {
+            width: 10%;
+            text-align: center;
+            padding: 10px 0 5px;
+            border-bottom: 3px solid orange;
+            font-size: 18px;
+            font-weight: 500;
+            font-family: 'Noto Sans KR', sans-serif;
         }
 
-        .findLine {
-            width: 0.5px;
-            height: 13px;
-            border-right: 0.5px solid black;
-            margin-top: 6px;
+        .QUETITLE {
+            width: 90%;
+            text-align: center;
+            padding: 10px 0 5px;
+            border-bottom: 3px solid orange;
+            font-size: 18px;
+            font-weight: 500;
+            font-family: 'Noto Sans KR', sans-serif;
         }
 
-        .findPW {
-            height: 13px;
-            padding-left: 10px;
-        }
-
-        .findPW a {
-            color: white;
-            font-size: 13px;
-            text-decoration: none;
-        }
-
-        .area3 {
-            width: 400px;
-            height: 400px;
-            padding: 50px 0px;
+        .FAQ_QUE_BOARD {
+            width: 900px;
             display: flex;
+            margin-left: 12px;
             flex-direction: column;
             justify-content: center;
             align-items: center;
         }
 
-        .joinText {
-            padding-top: 200px;
+        .FAQ_QUE_BOARD {
+            width: 900px;
+            margin-left: 12px;
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
         }
 
-        .joinText span {
+        .BOARDITEM1 {
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+        }
+
+        .BOARDITEM1>div {
+            margin: 0 2px;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        .BDNUMBER {
+            width: 10%;
+            font-size: 15px;
+            border-bottom: .5px solid rgba(0, 0, 0, .5);
+        }
+
+        .BDTITLE {
+            width: 90%;
+            font-size: 15px;
+            border-bottom: .5px solid rgba(0, 0, 0, .5);
+        }
+
+        .ANSWER {
+            padding: 20px 5px;
+            background-color: #eee;
+            color: rgba(0, 0, 0, .5);
+            margin: 0 1px;
+        }
+        
+        .FAQ_INQUIRE{
+            width: 100%;
+            height: 150px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .FAQ_INQUIRE > span{
+            padding: 0 3px;
+        }
+        
+        .nm{
+            font-size: 15px;
+        }
+        
+        .em{
+            width: 142px;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             cursor: default;
-            color: white;
-            font-size: 13px;
-        }
-
-        .joinBtn {
-            padding-top: 3px;
-        }
-
-        .joinBtnItem {
-            width: 400px;
-            height: 50px;
             color: #fff;
             font-size: 13px;
-            border: none;
-            outline: none;
-            background-color: orange;
+            font-weight: 300;
+            border-radius: .4rem;
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: rgba(0, 0, 0, .9);
             transition-duration: .5s;
         }
-
-        .joinBtnItem:hover {
-            transition-duration: .5s;
-            background-color: darkorange;
+        
+        .em:hover{
+            font-size: 15px;
         }
-
+        
         .footer {
             width: 100%;
             height: 250px;
@@ -365,6 +424,7 @@
         }
 
     </style>
+
     <script>
         /* scroll할 때 발생할 이벤트 */
         window.onscroll = function() {
@@ -383,6 +443,7 @@
         }
 
     </script>
+
 </head>
 
 <body>
@@ -451,55 +512,90 @@
                 To Our Shared
             </div>
         </div>
-        <div class="body">
-            <!-- 아이디 및 패스워드 입력, 로그인 버튼-->
-            <div class="area1">
-                <div class="ID">
-                    <input type="text" placeholder="아이디" maxlength="15" />
-                </div>
-                <div class="PW">
-                    <input type="password" placeholder="비밀번호" maxlength="20" />
-                </div>
-                <div class="LOGINBTN">
-                    <a href="#">
-                        <button class="LOGINBTNitem">로그인</button>
-                    </a>
-                </div>
-            </div>
 
-            <!-- 아이디 비밀번호 찾기 -->
-            <div class="area2">
-                <div class="findID">
-                    <a href="#">
-                        아이디찾기
-                    </a>
-                </div>
-                <!-- 구분선 -->
-                <div class="findLine"></div>
-                <div class="findPW">
-                    <a href="#">
-                        비밀번호찾기
-                    </a>
-                </div>
+        <div class="FAQ">
+            <div class="FAQ_HEADER">
+                <span>고객센터</span>
             </div>
+            <div class="FAQ_MAIN">
+                <div class="FAQ_ITEM">
 
-            <!-- 회원가입 버튼-->
-            <div class="area3">
-                <div class="joinText">
-                    <span>아직 회원이 아니신가요?</span>
+                    <div class="FAQ_SUBTITLE">
+                        <span>자주찾는질문</span>
+                    </div>
+                    <div class="FAQ_SUBTEXT">
+                        <span>보고싶은 질문을 눌러주세요.</span>
+                    </div>
+                    <div class="FAQ_QUE_CATEGORY">
+                        <div class="QUENUMBER">번호</div>
+                        <div class="QUETITLE">제목</div>
+                    </div>
+                    <div class="FAQ_QUE_BOARD" data-toggle="collapse" data-target="#board1">
+                        <div class="BOARDITEM1">
+                            <div class="BDNUMBER">1</div>
+                            <div class="BDTITLE">zz</div>
+                        </div>
+                        <div class="BOARDITEM2">
+                            <div id="board1" class="collapse">
+                                <div class="ANSWER">
+                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit,
+                                    sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="FAQ_QUE_BOARD" data-toggle="collapse" data-target="#board2">
+                        <div class="BOARDITEM1">
+                            <div class="BDNUMBER">2</div>
+                            <div class="BDTITLE">test</div>
+                        </div>
+                        <div class="BOARDITEM2">
+                            <div id="board2" class="collapse">
+                                <div class="ANSWER">
+                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit,
+                                    sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="FAQ_QUE_BOARD" data-toggle="collapse" data-target="#board3">
+                        <div class="BOARDITEM1">
+                            <div class="BDNUMBER">3</div>
+                            <div class="BDTITLE">test3</div>
+                        </div>
+                        <div class="BOARDITEM2">
+                            <div id="board3" class="collapse">
+                                <div class="ANSWER">
+                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit,
+                                    sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="joinBtn">
-                    <a href="#">
-                        <button class="joinBtnItem">회원가입</button>
-                    </a>
+                
+                <div class="FAQ_ITEM">
+                   
+                    <div class="FAQ_SUBTITLE">
+                        <span>문의사항</span>
+                    </div>
+                    <div class ="FAQ_INQUIRE">
+                        <span class = "nm">문의사항은</span>
+                        <span class = "em">email@naver.com</span>
+                        <span class = "nm"> 으로 문의주세요.</span>
+                    </div>
+                    
                 </div>
             </div>
         </div>
     </div>
-
+    
     <!-- footer 영역 -->
     <div class="footer">
-        a
+        바닥글
     </div>
 </body>
 
