@@ -14,6 +14,10 @@
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.11/dist/summernote-bs4.min.css" rel="stylesheet" />
     <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
     <script src='https://www.google.com/recaptcha/api.js'></script>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=ebcd0c1accbe0ff4bbb47bd777ef2fcf&libraries=service&libraries=services,clusterer,drawing"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bs4-summernote@0.8.10/dist/summernote-bs4.min.js"></script>
     <title></title>
     <style>
         .map_wrap {
@@ -219,7 +223,8 @@
         }
 
 
-        < !-- 커스텀 오버레이 스타일-->.card {
+        < !-- 커스텀 오버레이 스타일-->
+        .card-cus {
             border: 1px outset rgba(0, 0, 0, .19);
             width: 300px;
             word-spacing: -1px;
@@ -542,9 +547,6 @@
 
 
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bs4-summernote@0.8.10/dist/summernote-bs4.min.js"></script>
     <script>
         $(document).ready(function() {
             $('textarea').summernote({
@@ -553,7 +555,7 @@
         });
 
     </script>
-    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=ebcd0c1accbe0ff4bbb47bd777ef2fcf&libraries=service&libraries=services,clusterer,drawing"></script>
+
 
     <script>
         // Drawing Manager로 도형을 그릴 지도 div
@@ -832,7 +834,7 @@
                                 content =
 
 
-                                    '<div class="card" >' +
+                                    '<div class="card card-cus" >' +
                                     '<div class="card-header">' +
                                     '<div class="card-title">' +
                                     '<input class="form-control card-input" type="text" placeholder="장소 이름" value="" />' +
@@ -866,38 +868,6 @@
 
                             }
                         }
-
-
-
-
-
-                        //                    if (result[0].road_address != null) {
-                        //                        if (result[0].road_address.address_name != null) {
-                        //                            content += '<li class="card-body-li">' + result[0].road_address.address_name + '</li>';
-                        //                        }
-                        //                    }
-                        //                    address:
-                        //                        address_name: "서울 용산구 한남동 726-111"
-                        //                    main_address_no: "726"
-                        //                    mountain_yn: "N"
-                        //                    region_1depth_name: "서울"
-                        //                    region_2depth_name: "용산구"
-                        //                    region_3depth_name: "한남동"
-                        //                    sub_address_no: "111"
-                        //                    zip_code: ""
-                        //                    __proto__: Object
-                        //                    road_address:
-                        //                        address_name: "서울특별시 용산구 한남대로36길 54"
-                        //                    building_name: "한남힐사이드 아파트 D동"
-                        //                    main_building_no: "54"
-                        //                    region_1depth_name: "서울"
-                        //                    region_2depth_name: "용산구"
-                        //                    region_3depth_name: ""
-                        //                    road_name: "한남대로36길"
-                        //                    sub_building_no: ""
-                        //                    underground_yn: "N"
-                        //                    zone_no: "04417
-
 
 
 
@@ -1235,7 +1205,7 @@ function getWCONGNAMULFromOverlay(overlay){
         function displayInfowindow(marker, place) {
 
             var content =
-                '<div class="card">' +
+                '<div class="card card-cus">' +
                 '<div class="card-header">' +
                 '<div class="card-title">' +
                 place.place_name +
