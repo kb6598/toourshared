@@ -25,6 +25,7 @@
         travel.Trv_secret = "0";
         travel.Trv_tot_rate = "0";
         travel.Trv_views = "0";
+        travel.Trv_create_time = TimeLib.GetTimeStamp();
         travel.Mem_id = "billip";
         travel.Loc_name = "서울";
 

@@ -28,8 +28,11 @@ public class TravelDao
             MyDB myDB = new MyDB();
             MySqlConnection con = myDB.GetCon();
 
-            string Sql = "INSERT INTO toourshared.travel (trv_secret, trv_views, trv_tot_rate, trv_main_img, trv_title, trv_tag, trv_timestamp, trv_create_time, loc_name, mem_id)" +
-                "VALUES (@trv_secret, @trv_views, @trv_tot_rate, @trv_main_img, @trv_title, @trv_tag, @trv_timestamp, @trv_create_time, @loc_name,@mem_id)";
+            string Sql = "INSERT INTO toourshared.travel (trv_secret, trv_views, trv_tot_rate, trv_main_img, trv_title, trv_tag, trv_create_time, loc_name, mem_id) " +
+                "VALUES (@trv_secret, @trv_views, @trv_tot_rate, @trv_main_img, @trv_title, @trv_tag, @trv_create_time, @loc_name, @mem_id)";
+
+
+
 
             MySqlCommand cmd = new MySqlCommand(Sql, con);
 
@@ -39,6 +42,9 @@ public class TravelDao
             cmd.Parameters.AddWithValue("@trv_main_img", travel.Trv_main_img);
             cmd.Parameters.AddWithValue("@trv_title", travel.Trv_title);
             cmd.Parameters.AddWithValue("@trv_tag", travel.Trv_tag);
+            cmd.Parameters.AddWithValue("@loc_name", travel.Loc_name);
+            cmd.Parameters.AddWithValue("@mem_id", travel.Mem_id);
+            cmd.Parameters.AddWithValue("@trv_create_time", travel.Trv_create_time);
 
 
 
