@@ -54,6 +54,8 @@
         foreach(var item in Request.Form)
         {
             mapData.Text = Request.Form["mapData"];
+            TravelRouteListData.Text = Request.Form["TravelRouteListData"];
+            CostItemListData.Text = Request.Form["CostItemListData"];
             //foreach(var i in Request.Form[item.ToString()])
             //{
             //    Response.Write(i);
@@ -75,32 +77,32 @@
                 <tr>
                     <td>제목 : </td>
                     <td>
-                        <asp:TextBox ID="title" name="title" runat="server" TextMode="MultiLine" Width="400px" Height="100px"></asp:TextBox></td>
+                        <asp:TextBox ID="title"  runat="server" TextMode="MultiLine" Width="400px" Height="100px"></asp:TextBox></td>
                 </tr>
                 <tr>
                     <td>내용 :</td>
                     <td>
-                        <asp:TextBox ID="article" name="article" runat="server" TextMode="MultiLine" Width="400px" Height="100px"></asp:TextBox></td>
+                        <asp:TextBox ID="article"  runat="server" TextMode="MultiLine" Width="400px" Height="100px"></asp:TextBox></td>
                 </tr>
                 <tr>
                     <td>해시태그 :</td>
                     <td>
-                        <asp:TextBox ID="hashtag" name="hashtag" runat="server" TextMode="MultiLine" Width="400px" Height="100px"></asp:TextBox></td>
+                        <asp:TextBox ID="hashtag"  runat="server" TextMode="MultiLine" Width="400px" Height="100px"></asp:TextBox></td>
                 </tr>
                 <tr>
                     <td>지도 데이터</td>
                     <td>
-                        <asp:TextBox TextMode="MultiLine" ID="mapData" name="mapData" runat="server" Width="400px" Height="100px"></asp:TextBox></td>
+                        <asp:TextBox TextMode="MultiLine" ID="mapData"  runat="server" Width="400px" Height="100px"></asp:TextBox></td>
                 </tr>
                 <tr>
                     <td>TravelRouteList</td>
                     <td>
-                        <asp:TextBox TextMode="MultiLine" ID="TravelRouteListData" name="TravelRouteListData" runat="server" Width="400px" Height="100px"></asp:TextBox></td>
+                        <asp:TextBox TextMode="MultiLine" ID="TravelRouteListData"  runat="server" Width="400px" Height="100px"></asp:TextBox></td>
                 </tr>
                 <tr>
                     <td>CostItmeList</td>
                     <td>
-                        <asp:TextBox TextMode="MultiLine" ID="CostItemListData" name="CostItemListData" runat="server" Width="400px" Height="100px"></asp:TextBox></td>
+                        <asp:TextBox TextMode="MultiLine" ID="CostItemListData"  runat="server" Width="400px" Height="100px"></asp:TextBox></td>
                 </tr>
             </table>
         </div>
