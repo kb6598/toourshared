@@ -622,6 +622,28 @@
         });
 
 
+        class History{
+            constructor() {
+                this._cursor = 0;
+                this.cur_overlay 
+                this.history = Array();
+                this.history.push({PlaceList:Array(),TravelRouteItemList:Array(),CostItemList:Array()});
+            }
+            setRoute(place_name, road_address_name, address_name, phone, place_url, x, y) {
+
+                this.place_name = place_name;
+                this.road_address_name = road_address_name;
+                this.address_name = address_name;
+                this.phone = phone;
+                this.place_url = place_url;
+                this.x = x;
+                this.y = y;
+            }
+                push
+        }
+        
+
+
         // 버튼 클릭 시 호출되는 핸들러 입니다
         function selectOverlay(type) {
             // 그리기 중이면 그리기를 취소합니다
@@ -770,19 +792,17 @@
                                 //                                $('#searchPlaceModal').modal('show');
 
                                 content =
-                                    var content =
                                         '<div class="card">' +
-                                        '<div class="card-header">' +
-                                        place.place_name +
-                                        '<div class="btn btn-link" onclick="closeOverlay()" title="닫기" style="float: right">X</div>' +
+                                        '<div class="card-header">  <div class="btn btn-link btn-lg" onclick="closeCusOverlay()" title="닫기" style="float: right; padding: 5px 5px;">X</div>' +
                                         '</div>' +
                                         '<blockquote class="blockquote mb-0">';
 
-                                if (place.road_address_name != null) {
+                                if (result[0].address.address_name != null) {
                                     content += '<li class="card-body-li">' + result[0].address.address_name + '</li>';
                                 }
+                                content +=
                                 '<div class="btn btn-secondary" onclick=\'pushTravelRouteItem("","","","","","' + wcongnamulX + '","' + wcongnamulY + '")\'>추가</div>' +
-                                    '<div class="btn btn-secondary" onclick=\'pushTravelRouteItem("' + place.place_name + '","' + place.road_address_name + '","' + place.ddress_name + '","' + place.phone + '","' + place.place_url + '","' + place.x + '","' + place.y + '")\'>주변검색</div>' +
+                                    '<div class="btn btn-secondary" onclick=\'searchPlacesByAddress("","'+result[0].address.address_name+'")\'>주소로 검색</div>' +
                                     '</blockquote>' +
                                     '</div>';
 
@@ -877,25 +897,7 @@
             // 장소검색 객체를 통해 키워드로 장소검색을 요청합니다
             ps.keywordSearch(keyword, placesSearchCB);
         }
-        
-        // 키워드(주소를 통해서 ) 주변 검색을 요청하는 함수입니다
-        function searchPlacesByAddress() {
-
-            var keyword = document.getElementById('keyword').value;
-
-            if (!keyword.replace(/^\s+|\s+$/g, '')) {
-                alert('키워드를 입력해주세요!');
-                return false;
-            }
-
-            // 장소검색 객체를 통해 키워드로 장소검색을 요청합니다
-            ps.keywordSearch(keyword, placesSearchCB);
-        }
-        
-       
-
-
-        // 장소검색이 완료됐을 때 호출되는 콜백함수 입니다
+         // 장소검색이 완료됐을 때 호출되는 콜백함수 입니다
         function placesSearchCB(data, status, pagination) {
             if (status === kakao.maps.services.Status.OK) {
 
@@ -905,10 +907,10 @@
 
                 // 페이지 번호를 표출합니다
                 displayPagination(pagination);
-
+                
             } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
 
-                //alert('검색 결과가 존재하지 않습니다.');
+                alert('검색 결과가 존재하지 않습니다.');
                 return;
 
             } else if (status === kakao.maps.services.Status.ERROR) {
@@ -919,6 +921,51 @@
             }
         }
 
+        
+        // 키워드(주소를 통해서 ) 주변 검색을 요청하는 함수입니다
+        function searchPlacesByAddress(overlay,address) {
+            //주변검색을 하며 해당 마커는 삭제합니다.
+            manager.remove(overlay);
+            
+            
+            var keyword = document.getElementById('keyword');
+            keyword.value = address;
+            
+            if (!keyword.value.replace(/^\s+|\s+$/g, '')) {
+                alert('키워드를 입력해주세요!');
+                return false;
+            }
+
+            // 장소검색 객체를 통해 키워드로 장소검색을 요청합니다
+            ps.keywordSearch(keyword.value, placesSearchByAddressCB);
+        }
+        
+       // 키워드(주소를 통해서 ) 주변 검색이 완료되었을때 호출되는 콜백함수 입니다
+        function placesSearchByAddressCB(data, status, pagination) {
+            if (status === kakao.maps.services.Status.OK) {
+
+                // 정상적으로 검색이 완료됐으면
+                // 검색 목록과 마커를 표출합니다
+                displayPlaces(data);
+
+                // 페이지 번호를 표출합니다
+                displayPagination(pagination);
+                $('#searchPlaceModal').modal('show');
+            } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
+
+                alert('검색 결과가 존재하지 않습니다.');
+                return;
+
+            } else if (status === kakao.maps.services.Status.ERROR) {
+
+                alert('검색 결과 중 오류가 발생했습니다.');
+                return;
+
+            }
+        }
+
+
+       
 
 
 
@@ -1121,6 +1168,7 @@
             if (place.place_url != null) {
                 content += '<li class="card-body-li"><a href="' + place.place_url + '" target="_blank" class="link">상세페이지</a></li>';
             }
+            content +=
             '<div class="btn btn-secondary" onclick=\'pushTravelRouteItem("' + place.place_name + '","' + place.road_address_name + '","' + place.ddress_name + '","' + place.phone + '","' + place.place_url + '","' + place.x + '","' + place.y + '")\'>여행경로에 추가</div>' +
                 '</blockquote>' +
                 '</div>';
@@ -1849,31 +1897,31 @@
 
 
 
-            var insert1 = document.createElement("input"); // input 엘리멘트 생성
+            var marker = document.createElement("input"); // input 엘리멘트 생성
             insert1.setAttribute("type", "hidden"); // type 속성을 hidden으로 설정
             insert1.setAttribute("name", "marker"); // name 속성을 'stadium'으로 설정
             insert1.setAttribute("value", markersPath); // value 속성을 삽입
             form.appendChild(insert1); // form 엘리멘트에 input 엘리멘트 추가
 
-            var insert2 = document.createElement("input"); // input 엘리멘트 생성
+            var polyline = document.createElement("input"); // input 엘리멘트 생성
             insert2.setAttribute("type", "hidden"); // type 속성을 hidden으로 설정
             insert2.setAttribute("name", "polyline"); // name 속성을 'stadium'으로 설정
             insert2.setAttribute("value", polylinesPath); // value 속성을 삽입
             form.appendChild(insert2);
             //rects  circles   polygons 
-            var insert3 = document.createElement("input"); // input 엘리멘트 생성
+            var rects = document.createElement("input"); // input 엘리멘트 생성
             insert3.setAttribute("type", "hidden"); // type 속성을 hidden으로 설정
             insert3.setAttribute("name", "rects"); // name 속성을 'stadium'으로 설정
             insert3.setAttribute("value", rectsPath); // value 속성을 삽입
             form.appendChild(insert3);
 
-            var insert4 = document.createElement("input"); // input 엘리멘트 생성
+            var circles = document.createElement("input"); // input 엘리멘트 생성
             insert4.setAttribute("type", "hidden"); // type 속성을 hidden으로 설정
             insert4.setAttribute("name", "circles"); // name 속성을 'stadium'으로 설정
             insert4.setAttribute("value", circlesPath); // value 속성을 삽입
             form.appendChild(insert4);
 
-            var insert5 = document.createElement("input"); // input 엘리멘트 생성
+            var polygons = document.createElement("input"); // input 엘리멘트 생성
             insert5.setAttribute("type", "hidden"); // type 속성을 hidden으로 설정
             insert5.setAttribute("name", "polygons"); // name 속성을 'stadium'으로 설정
             insert5.setAttribute("value", polygonsPath); // value 속성을 삽입
