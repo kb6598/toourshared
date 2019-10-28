@@ -18,7 +18,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bs4-summernote@0.8.10/dist/summernote-bs4.min.js"></script>
-    <title></title>
+    <title>To Our Shared</title>
     <style>
         .map_wrap {
             width: 100%;
@@ -793,7 +793,7 @@
 
 
 
-
+        var curOverlay = Array(1);
 
         //-----------------------------------------------
         // 클릭시 발생하는 이벤트
@@ -834,7 +834,7 @@
                                 content =
 
 
-                                    '<div class="card card-cus" >' +
+                                    '<div class="card card-cus" style="width:300px;">' +
                                     '<div class="card-header">' +
                                     '<div class="card-title">' +
                                     '<input class="form-control card-input" type="text" placeholder="장소 이름" value="" />' +
@@ -860,11 +860,11 @@
                                     '<div class="card-addBtn" onclick=\'pushTravelRouteItem("","","","","","' + coord_WCONGNAMUL.wcongnamulX + '","' + coord_WCONGNAMUL.wcongnamulY + '")\'>추가</div>' +
                                     '</td>'+
                                     '<td>'+
-                                    '<div class="card-addBtn" onclick=\'searchPlacesByAddress("","' + result[0].address.address_name + '")\'>주소로 검색</div>' +
+                                    '<div class="card-addBtn" onclick=\'searchPlacesByAddress("' + result[0].address.address_name + '")\'>주소로 검색</div>' +
                                     '</td>'+
                                     '</tr></table>'+
                                     '</div>';
-
+                                    curOverlay[0] =this; 
 
                             }
                         }
@@ -983,9 +983,9 @@ function getWCONGNAMULFromOverlay(overlay){
 
 
         // 키워드(주소를 통해서 ) 주변 검색을 요청하는 함수입니다
-        function searchPlacesByAddress(overlay, address) {
+        function searchPlacesByAddress(address) {
             //주변검색을 하며 해당 마커는 삭제합니다.
-            manager.remove(overlay);
+            manager.remove(curOverlay[0]);
 
 
             var keyword = document.getElementById('keyword');
@@ -1003,7 +1003,8 @@ function getWCONGNAMULFromOverlay(overlay){
         // 키워드(주소를 통해서 ) 주변 검색이 완료되었을때 호출되는 콜백함수 입니다
         function placesSearchByAddressCB(data, status, pagination) {
             if (status === kakao.maps.services.Status.OK) {
-
+                        
+                manager.remove(curOverlay[0]);
                 // 정상적으로 검색이 완료됐으면
                 // 검색 목록과 마커를 표출합니다
                 displayPlaces(data);
@@ -1205,7 +1206,7 @@ function getWCONGNAMULFromOverlay(overlay){
         function displayInfowindow(marker, place) {
 
             var content =
-                '<div class="card card-cus">' +
+                '<div class="card card-cus" style="width:300px;">' +
                 '<div class="card-header">' +
                 '<div class="card-title">' +
                 place.place_name +
