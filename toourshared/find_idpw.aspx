@@ -439,7 +439,7 @@
 </head>
 
 <body>
-    <form id="form1" runat="server" method="POST">
+    <form id="form1" runat="server">
     <!-- navbar 영역 -->
     <div id="nav" class="topnav">
         <ul class="topnavUl">

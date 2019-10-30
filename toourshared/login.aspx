@@ -29,7 +29,7 @@
                 {
                     Session["mem_id"] = mem.Mem_id;
                     Session.Timeout = 100;
-                    Response.Redirect("/test02.aspx");
+                    Response.Redirect("/index_copy.aspx");
                 }
                 else
                 {

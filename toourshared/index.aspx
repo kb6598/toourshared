@@ -21,7 +21,9 @@
     <form id="form1" runat="server">
         <div>
         <% 
-            if (Session["mem_id"] == null)
+            IsLogin isLogin = new IsLogin();
+            
+            if (IsLogin.isLogin() == false)
             {
         %>
                로그인 안됨
