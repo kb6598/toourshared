@@ -3,9 +3,6 @@
 <!DOCTYPE html>
 
 <script runat="server">
-
-
-
     protected void btnJoin_Click(object sender, EventArgs e)
     {
         MemberDao member = new MemberDao();
@@ -59,22 +56,6 @@
     protected void LinkButton1_Click(object sender, EventArgs e)
     {
         setID.Text = "ddd";
-    }
-
-
-    protected void Page_Load(object sender, EventArgs e)
-    {
-        if (IsPostBack == true)
-        {
-            return;
-            // Page.ClientScript.RegisterStartupScript(this.GetType(), "displayalertmessage", "alert('IsPostBack is True.');", true);
-
-        }
-    }
-
-    protected void chkID_Click(object sender, EventArgs e)
-    {     
-        
     }
 </script>
 <head runat="server">
@@ -609,7 +590,7 @@
         $(document).ready(function () {
             document.getElementById("chkID").onclick = function () {
                 var footer = document.getElementById("modalFooter");
-                
+
                 if (footer.style.display != 'none') {
                     $('.modal-content').height("230px");
                     $('modalFooter').height("0px");
@@ -621,21 +602,11 @@
                     $('#result').html("😊 사용할 수 있는 아이디 입니다.");
                     document.getElementById("modalFooter").style.display = "flex";
                 }
-
-
-                
             };
         });
 
-        function ValidNum() {
-            var x = document.getElementById('setID').value;
-            if (x > 10) {
-                alert("Please Enter a valid number");
-                return false;
-            }
-            else {
-                return true;
-            }
+        function bch() {
+            return false;
         }
 
     </script>
@@ -821,8 +792,7 @@
                             <asp:TextBox ID="setID" runat="server"></asp:TextBox>
                         </div>
                         <div class="checkBtn">
-                            <!--<button id="chkID" class="btn btn-warning">중복확인</button>-->
-                            <asp:Button ID="chkID" runat="server" Text="중복확인" CssClass="btn btn-warning"  OnClientClick="return ValidNum();"  OnClick="chkID_Click" />
+                            <a runat="server" id ="chkID" class="btn btn-warning">중복확인</a>
                         </div>
                     </div>
                     <div class="bodyItem2">
