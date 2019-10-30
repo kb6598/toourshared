@@ -54,8 +54,8 @@
         GridView1.DataSource = ds;
         GridView1.DataBind();
 
-        Label3.Text = Session["userPW"].ToString();
-        Label4.Text = Request.QueryString["id"].ToString();
+        //Label3.Text = Session["userPW"].ToString();
+        //Label4.Text = Request.QueryString["id"].ToString();
 
 
 
