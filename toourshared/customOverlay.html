@@ -1,0 +1,221 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>TO OUR SHARED : SEARCH</title>
+
+    <!-- Font -->
+    <link href="https://fonts.googleapis.com/css?family=Mansalva|Nanum+Gothic|Nanum+Myeongjo|Noto+Sans+KR|Lora|East+Sea+Dokdo|Jua&display=swap" rel="stylesheet">
+
+    <!-- ICON -->
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <!-- JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <style>
+        .card {
+            border: 1px outset rgba(0, 0, 0, .19);
+            width: 300px;
+            word-spacing: -1px;
+        }
+
+        .card-header {
+            width: 100%;
+            height: 50px;
+            display: flex;
+            flex-direction: row;
+            background-color: #eee;
+            font-family: 'Noto Sans KR', sans-serif;
+            padding: 0px;
+        }
+
+        .card-title {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            font-size: 18px;
+            justify-content: center;
+            align-items: center;
+            padding-left: 10px;
+            color: #000;
+        }
+
+        .card-input {
+            width: 95%;
+            height: 80%;
+            padding: 10px;
+            outline: none;
+        }
+
+        .card-close {
+            width: 10%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            padding-top: 3px;
+            margin-right: 8px;
+        }
+
+        .card-close .closeBtn {
+            color: #000;
+            font-size: 25px;
+        }
+
+        .closeBtn span {
+            cursor: pointer;
+            color: black;
+        }
+
+        .card-body {
+            width: 100%;
+            height: 100%;
+            padding: 20px 0px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            font-family: 'Malgun Gothic', dotum, '돋움', sans-serif;
+            text-align: center;
+            font-size: 18px;
+            overflow: auto;
+        }
+
+        .card-body-li {
+            font-size: 15px;
+            list-style: none;
+        }
+
+        .card-addBtn {
+            width: 80px;
+            height: 27px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: .2rem;
+            font-size: .875rem;
+            cursor: pointer;
+            background-color: orange;
+            transition-duration: .9s;
+        }
+
+        .card-addBtn:hover {
+            transition-duration: .9s;
+            background-color: darkorange;
+        }
+
+
+    </style>
+
+</head>
+
+<body>
+
+
+
+
+    <div class="card">
+        <div class="card-header">
+            <div class="card-title">
+                씨스루
+            </div>
+            <div class="card-close">
+                <div class="closeBtn">
+                    <span>×</span>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <blockquote class="blockquote mb-0">
+                <li class="card-body-li">서울 용산구 녹사평대로40나길 37</li>
+                <li class="card-body-li">서울 용산구 이태원동 403-3</li>
+                <li class="card-body-li">tel : 070-7796-8991</li>
+                <li class="card-body-li" style="padding: 15px 0;"><a href="#" target="_blank" style="text-decoration: none;">상세페이지</a></li>
+            </blockquote>
+            <div class="card-addBtn">추가</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <div class="card-title">
+                <input class="form-control card-input" type="text" placeholder="장소 이름" value="" />
+            </div>
+            <div class="card-close">
+                <div class="closeBtn">
+                    <span>×</span>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <blockquote class="blockquote mb-0">
+                <li class="card-body-li">서울 용산구 녹사평대로40나길 37</li>
+                <li class="card-body-li">서울 용산구 이태원동 403-3</li>
+                <li class="card-body-li">tel : 070-7796-8991</li>
+                <li class="card-body-li" style="padding: 15px 0;"><a href="#" target="_blank">상세페이지</a></li>
+            </blockquote>
+
+            <div class="card-addBtn">추가</div>
+        </div>
+    </div>
+    
+    
+    <script>
+        '<div class="card">'+
+        '<div class="card-header">'+
+            '<div class="card-title">'+
+                '씨스루'+
+            '</div>'+
+            '<div class="card-close">'+
+                '<div class="closeBtn">'+
+                    '<span>×</span>'+
+                '</div>'+
+            '</div>'+
+        '</div>'+
+        '<div class="card-body">'+
+            '<blockquote class="blockquote mb-0">'+
+                '<li class="card-body-li">서울 용산구 녹사평대로40나길 37</li>'+
+                '<li class="card-body-li">서울 용산구 이태원동 403-3</li>'+
+                '<li class="card-body-li">tel : 070-7796-8991</li>'+
+                '<li class="card-body-li" style="padding: 15px 0;"><a href="#" target="_blank" style="text-decoration: none;">상세페이지</a></li>'+
+            '</blockquote>'+
+            '<div class="card-addBtn">추가</div>'+
+        '</div>'+
+    '</div>'+
+
+    '<div class="card">'+
+        '<div class="card-header">'+
+            '<div class="card-title">'+
+                '<input class="form-control card-input" type="text" placeholder="장소 이름" value="" />'+
+            '</div>'+
+            '<div class="card-close">'+
+                '<div class="closeBtn">'+
+                    '<span>×</span>'+
+                '</div>'+
+            '</div>'+
+        '</div>'+
+        '<div class="card-body">'+
+            '<blockquote class="blockquote mb-0">'+
+                '<li class="card-body-li">서울 용산구 녹사평대로40나길 37</li>'+
+                '<li class="card-body-li">서울 용산구 이태원동 403-3</li>'+
+                '<li class="card-body-li">tel : 070-7796-8991</li>'+
+                '<li class="card-body-li" style="padding: 15px 0;"><a href="#" target="_blank">상세페이지</a></li>'+
+            '</blockquote>'+
+            '<div class="card-addBtn">추가</div>'+
+        '</div>'+
+    '</div>'+
+    
+    
+    
+    </script>
+</body>
+</html>

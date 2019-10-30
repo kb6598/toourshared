@@ -346,6 +346,13 @@
             refreashCostItem();
         }
 
+        function swapCostItemParent(fIndex, sIndex) {
+            var tmp = CostItemList[fIndex];
+            CostItemList[fIndex] = CostItemList[sIndex];
+            CostItemList[sIndex] = tmp;
+            refreashCostItem();
+        }
+
 
         function setComa(number) {
             var resultStr = "";

@@ -1,4 +1,7 @@
-﻿<%@ Page Language="C#" EnableEventValidation="false" %>
+﻿<%@ Page Language="C#" EnableEventValidation="false" ValidateRequest="false"%>
+<%@ Import Namespace="MySql.Data.MySqlClient" %>
+<%@ Import Namespace="MySql.Data" %>
+<%@ Import Namespace="System.Data" %>
 
 <!DOCTYPE html>
 
@@ -6,7 +9,58 @@
 
     protected void Page_Load(object sender, EventArgs e)
     {
+        //post로 날아오는 값
+        //title
+        //article
+        //hashtag
+        //mapData
+        //TravelRouteListData
+        //CostItemListData
 
+        TravelDao travelDao = new TravelDao();
+        Travel travel = new Travel();
+
+        travel.Trv_title = Request.Form["title"].ToString();
+        travel.Trv_tag = Request.Form["hashtag"].ToString();
+        travel.Trv_secret = "0";
+        travel.Trv_tot_rate = "0";
+        travel.Trv_views = "0";
+        travel.Trv_create_time = TimeLib.GetTimeStamp();
+        travel.Mem_id = "billip";
+        travel.Loc_name = "서울";
+
+        var trv_no = travelDao.InsertTravel(travel);
+
+        Travel_DayDao travel_DayDao = new Travel_DayDao();
+        Travel_Day travel_Day = new Travel_Day();
+
+        travel_Day.Trv_day_content = Request.Form["article"].ToString();
+        travel_Day.Trv_no = trv_no;
+
+        var trv_day_no = travel_DayDao.InsertTravel_Day(travel_Day);
+
+        MapDao mapDao = new MapDao();
+        Map map = new Map();
+
+        map.Trv_day_no = trv_day_no;
+
+        var map_no = mapDao.InsertMap(map);
+
+
+
+
+
+        //title.Text = Request.Form["title"].ToString();
+        foreach(var item in Request.Form)
+        {
+            mapData.Text = Request.Form["mapData"];
+            TravelRouteListData.Text = Request.Form["TravelRouteListData"];
+            CostItemListData.Text = Request.Form["CostItemListData"];
+            //foreach(var i in Request.Form[item.ToString()])
+            //{
+            //    Response.Write(i);
+            //}
+        }
     }
 </script>
 
@@ -23,42 +77,32 @@
                 <tr>
                     <td>제목 : </td>
                     <td>
-                        <asp:TextBox ID="title" runat="server" TextMode="MultiLine" Width="400px" Height="100px"></asp:TextBox></td>
+                        <asp:TextBox ID="title"  runat="server" TextMode="MultiLine" Width="400px" Height="100px"></asp:TextBox></td>
                 </tr>
                 <tr>
                     <td>내용 :</td>
                     <td>
-                        <asp:TextBox ID="article" runat="server" TextMode="MultiLine" Width="400px" Height="100px"></asp:TextBox></td>
+                        <asp:TextBox ID="article"  runat="server" TextMode="MultiLine" Width="400px" Height="100px"></asp:TextBox></td>
                 </tr>
                 <tr>
                     <td>해시태그 :</td>
                     <td>
-                        <asp:TextBox ID="hashtag" runat="server" TextMode="MultiLine" Width="400px" Height="100px"></asp:TextBox></td>
+                        <asp:TextBox ID="hashtag"  runat="server" TextMode="MultiLine" Width="400px" Height="100px"></asp:TextBox></td>
                 </tr>
                 <tr>
-                    <td>마커 좌표 :</td>
+                    <td>지도 데이터</td>
                     <td>
-                        <asp:TextBox TextMode="MultiLine" ID="marker" runat="server" Width="400px" Height="100px"></asp:TextBox></td>
+                        <asp:TextBox TextMode="MultiLine" ID="mapData"  runat="server" Width="400px" Height="100px"></asp:TextBox></td>
                 </tr>
                 <tr>
-                    <td>선 Path :</td>
+                    <td>TravelRouteList</td>
                     <td>
-                        <asp:TextBox TextMode="MultiLine" ID="polyline" runat="server" Width="400px" Height="100px"></asp:TextBox></td>
+                        <asp:TextBox TextMode="MultiLine" ID="TravelRouteListData"  runat="server" Width="400px" Height="100px"></asp:TextBox></td>
                 </tr>
                 <tr>
-                    <td>원 Path :</td>
+                    <td>CostItmeList</td>
                     <td>
-                        <asp:TextBox TextMode="MultiLine" ID="circles" runat="server" Width="400px" Height="100px"></asp:TextBox></td>
-                </tr>
-                <tr>
-                    <td>사각형 Path :</td>
-                    <td>
-                        <asp:TextBox TextMode="MultiLine" ID="rects" runat="server" Width="400px" Height="100px"></asp:TextBox></td>
-                </tr>
-                <tr>
-                    <td>다각형 Path :</td>
-                    <td>
-                        <asp:TextBox TextMode="MultiLine" ID="polygons" runat="server" Width="400px" Height="100px"></asp:TextBox></td>
+                        <asp:TextBox TextMode="MultiLine" ID="CostItemListData"  runat="server" Width="400px" Height="100px"></asp:TextBox></td>
                 </tr>
             </table>
         </div>

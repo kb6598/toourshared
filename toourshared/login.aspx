@@ -6,7 +6,49 @@
 
     protected void BtnLogin_Click(object sender, EventArgs e)
     {
+        MemberDao member = new MemberDao();
 
+        Member mem = new Member();
+
+        mem.Mem_id = mem_id.Text;
+        mem.Mem_pw = mem_pw.Text;
+
+        int check = member.Login(mem);
+
+
+        if (Session["mem_id"] == null)
+        {
+            if (mem_id.Text.Equals("") || mem_pw.Text.Equals(""))
+            {
+                Page.ClientScript.RegisterStartupScript(this.GetType(), "displayalertmessage", "alert('아이디와 비밀번호를 입력해주세요.');", true);
+            }
+            else
+            {
+
+                if (check == 1)
+                {
+                    Session["mem_id"] = mem.Mem_id;
+                    Session.Timeout = 100;
+                    Response.Redirect("/test02.aspx");
+                }
+                else
+                {
+                    Page.ClientScript.RegisterStartupScript(this.GetType(), "displayalertmessage", "alert('아이디와, 비밀번호를 다시한번 확인해주세요.');", true);
+                    mem_id.Text = "";
+                    mem_pw.Text = "";
+
+
+                }
+            }
+        }
+    }
+
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        if(Session["mem_id"]!= null)
+        {
+            Response.Redirect("/index_old.aspx");
+        }
     }
 </script>
  <meta charset="utf-8">
@@ -461,7 +503,7 @@
                     <asp:TextBox ID="mem_id" runat="server" placeholder="아이디" maxlength="15"></asp:TextBox>
                 </div>
                 <div class="PW">
-                    <asp:TextBox ID="mem_pw" runat="server" placeholder="비밀번호" maxlength="20" ></asp:TextBox>
+                    <asp:TextBox ID="mem_pw" runat="server" placeholder="비밀번호" maxlength="20" TextMode="Password"></asp:TextBox>
                 </div>
                 <div class="LOGINBTN">
                     <asp:Button ID="BtnLogin" runat="server" Text="로그인"  CssClass="LOGINBTNitem" OnClick="BtnLogin_Click" />

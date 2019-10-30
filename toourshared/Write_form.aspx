@@ -36,19 +36,10 @@
         #drawingMap {
             top: 0px;
             width: auto;
-            height: 500px;
+            height: 700px;
             text-align: center;
         }
 
-        #travelRoute_wrap {
-            //max-height: 500px;
-            overflow-x: hidden;
-            overflow-y: scroll;
-            //position: absolute;
-            //text-align: center;
-            z-index: 3;
-            background-color: whitesmoke;
-        }
 
         .map_wrap, .map_wrap * {
             //margin: 10;
@@ -328,20 +319,24 @@
 
 
 
-        <!-- modal-cost-- >
+        <!-- modal-cost and TravelRoute-- >
+         < !-- modal-cost and TravelRoute-->
         .modal-cost {
-            //top: 0;
-            //margin-top: 28px;
-            //padding-right: 127px;
+
             display: flex;
             flex-direction: row-reverse;
             width: 100%;
-            position: absolute;
+
         }
 
-        .modal-cost-area {
-            //width: 300px;
-            height: 500px;
+        #travelRoute {
+            list-style: none;
+        }
+
+        .modal-cost-area,
+        #travelRoute_wrap {
+            width: auto;
+            height: 700px;
             border: 1px solid rgba(0, 0, 0, 0.6);
             background-color: #eee;
             border-radius: 4px;
@@ -349,7 +344,8 @@
             flex-direction: column;
         }
 
-        .cost-header {
+        .cost-header,
+        .travelRoute-header {
             cursor: default;
             width: 100%;
             height: 80px;
@@ -360,32 +356,37 @@
             border-bottom: 1px solid rgba(0, 0, 0, 0.1);
             display: flex;
             flex-direction: column;
+
         }
 
-            .cost-header .chTitle {
-                font-size: 23px;
-                font-weight: 700;
-            }
+        .cost-header .chTitle,
+        .travelRoute-header .trTitle {
+            font-size: 23px;
+            font-weight: 700;
+        }
 
-            .cost-header .chBody {
-                font-size: 15px;
-            }
+        .cost-header .chBody,
+        .travelRoute-header .trBody {
+            font-size: 15px;
+        }
 
-        .cost-body {
+        .cost-body,
+        .travelRoute {
             width: 100%;
-            height: 100%px;
+            height: 100%;
             padding: 0px 10px 10px;
             overflow: auto;
         }
 
-        .costItem {
+        .costItem,
+        .travelPoint {
             cursor: default;
             padding: 10px 0 5px;
             border-bottom: 1px dashed rgba(0, 0, 0, 0.2);
         }
 
         .costItem-header span {
-            font-size: 40px;
+            font-size: 30px;
             font-family: 'East Sea Dokdo', cursive;
         }
 
@@ -397,6 +398,33 @@
         .costItem-body li {
             font-size: 12px;
         }
+
+        < !--bootstrap customize-->.row {
+            width: 100%;
+        }
+
+        .btn-group-sm>.btn,
+        .btn-sm {
+            font-size: 8px;
+        }
+
+        .form-control-sm {
+            font-size: 10px;
+        }
+
+        
+
+        .btn-warning{
+            box-sizing: content-box;
+            font-size: 2px;
+            padding-top: 0px;
+            padding-bottom: 0px;
+            padding-left: 0px;
+            padding-right: 0px;
+            width: 10px;
+            height: 10px;
+        }
+
     </style>
 </head>
 <body>
@@ -420,10 +448,16 @@
                 <div class="row">
                     <div class="col-sm">
                         <div id="travelRoute_wrap">
-                            <ul id="travelRoute" class="travelRoute"></ul>
+                            <div class="travelRoute-header">
+                                <span class="trTitle">여행지</span>
+                                <span class="trBody" id="trBody">방문 : 0</span>
+                            </div>
+                            <ul id="travelRoute" class="travelRoute">
+                            </ul>
+
                         </div>
                     </div>
-                    <div class="col-sm-7">
+                    <div class="col-sm-6">
                         <div class="map_wrap">
                             <div id="drawingMap"></div>
                         </div>
@@ -434,75 +468,9 @@
                                 <div class="modal-cost-area">
                                     <div class="cost-header" id="costHeader">
                                         <span class="chTitle">전체 경비</span>
-                                        <span class="chBody">💰 290,000</span>
+                                        <span class="chBody">💰 0</span>
                                     </div>
-                                    <div class="cost-body" id="costBody">
-                                        <div class="costItem">
-                                            <div class="costItem-header">
-                                                <span># 1일 째</span>
-                                            </div>
-                                            <div class="costItem-body">
-                                                <ul>
-                                                    <li>식비 18,000</li>
-                                                    <li>쇼핑 40,000</li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div class="costItem">
-                                            <div class="costItem-header">
-                                                <span># 2일 째</span>
-                                            </div>
-                                            <div class="costItem-body">
-                                                <ul>
-                                                    <li>식비 18,000</li>
-                                                    <li>쇼핑 40,000</li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div class="costItem">
-                                            <div class="costItem-header">
-                                                <span># 3일 째</span>
-                                            </div>
-                                            <div class="costItem-body">
-                                                <ul>
-                                                    <li>식비 18,000</li>
-                                                    <li>쇼핑 40,000</li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div class="costItem">
-                                            <div class="costItem-header">
-                                                <span># 4일 째</span>
-                                            </div>
-                                            <div class="costItem-body">
-                                                <ul>
-                                                    <li>식비 18,000</li>
-                                                    <li>쇼핑 40,000</li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div class="costItem">
-                                            <div class="costItem-header">
-                                                <span># 5일 째</span>
-                                            </div>
-                                            <div class="costItem-body">
-                                                <ul>
-                                                    <li>식비 18,000</li>
-                                                    <li>쇼핑 40,000</li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div class="costItem">
-                                            <div class="costItem-header">
-                                                <span># 6일 째</span>
-                                            </div>
-                                            <div class="costItem-body">
-                                                <ul>
-                                                    <li>식비 18,000</li>
-                                                    <li>쇼핑 40,000</li>
-                                                </ul>
-                                            </div>
-                                        </div>
+                                    <div class="cost-body" id="costBody">                                        
                                     </div>
                                 </div>
                             </div>
@@ -1062,7 +1030,7 @@
                 '                <div class="jibun ellipsis">' + place.address_name + '</div>' +
                 '   <div class="jibun ellipsis">' + place.phone + '</div>' +
                 '                <div><a href="' + place.place_url + '" target="_blank" class="link">상세페이지</a></div>' +
-                '<div class="btn btn-secondary" onclick=\'addTravelRoute("' + place.place_name + '","' + place.road_address_name + '","' + place.ddress_name + '","' + place.phone + '","' + place.place_url + '","' + place.x + '","' + place.y + '")\'>여행경로에 추가</div>' +
+                '<div class="btn btn-secondary" onclick=\'pushTravelRouteItem("' + place.place_name + '","' + place.road_address_name + '","' + place.ddress_name + '","' + place.phone + '","' + place.place_url + '","' + place.x + '","' + place.y + '")\'>여행경로에 추가</div>' +
                 '            </div>' +
                 '        </div>' +
                 '    </div>' +
@@ -1430,7 +1398,7 @@
                 '                <div class="jibun ellipsis">' + place.address_name + '</div>' +
                 '   <div class="jibun ellipsis">' + place.phone + '</div>' +
                 '                <div><a href="' + place.place_url + '" target="_blank" class="link">상세페이지</a></div>' +
-                '<div class="btn btn-secondary" onclick=\'addTravelRoute("' + place.place_name + '","' + place.road_address_name + '","' + place.ddress_name + '","' + place.phone + '","' + place.place_url + '","' + place.x + '","' + place.y + '")\'>여행경로에 추가</div>' +
+                '<div class="btn btn-secondary" onclick=\'pushTravelRouteItem("' + place.place_name + '","' + place.road_address_name + '","' + place.ddress_name + '","' + place.phone + '","' + place.place_url + '","' + place.x + '","' + place.y + '")\'>여행경로에 추가</div>' +
                 '            </div>' +
                 '        </div>' +
                 '    </div>' +
@@ -1451,7 +1419,7 @@
             }
         }
 
-        //------------------------------------
+                //------------------------------------
         //----------TravelRouteItem and travelRouteList Start
         //------------------------------------
 
@@ -1464,6 +1432,7 @@
                 this.place_url = place_url;
                 this.x = x;
                 this.y = y;
+                this.info = "";
 
             }
             setRoute(place_name, road_address_name, address_name, phone, place_url, x, y) {
@@ -1477,107 +1446,173 @@
                 this.y = y;
 
             }
+            setName(place_name) {
+                this.place_name = place_name;
+            }
+            setInfo(info) {
+                this.info = info;
+            }
 
         }
 
-        var travelRouteList = Array();
+        var TravelRouteList = Array();
 
-        function refreshTravelRoute() {
-            var listEl = document.getElementById('travelRoute'),
+        function refreashTravelRoute() {
+
+            var travelRouteUl = document.getElementById('travelRoute'),
+                trBody = document.getElementById('trBody'),
                 fragment = document.createDocumentFragment(),
-                itemStr = '';
+                itemList = '',
+                el;
 
-            while (listEl.hasChildNodes()) {
-                listEl.removeChild(listEl.firstChild);
+            ;
+
+            // costBody 모든 자식 노드 삭제
+            while (travelRouteUl.hasChildNodes()) {
+                travelRouteUl.removeChild(travelRouteUl.firstChild);
             }
-            //
-            //
-            //
-            //
-            //
+            TravelRouteList.forEach(function(currentValue, index) {
 
-            travelRouteList.forEach(function (currentValue, index) {
-                var el = document.createElement('li'),
+                //console.info(index);
+                //console.info(currentValue);
+                el = document.createElement('li'),
                     itemStr =
-                        '<div class="travelRouteItem">' +
-                        '    <div class="travelRouteItem-area">' +
-                        '        <div class="travelRouteItem-header" id="travelRouteItemHeader">' +
-                        '            <span class="travelRouteItem_Title">전체 경비</span>' +
-                        '            <span class="travelRouteItem_Body">💰 290,000</span>' +
-                        '        </div>' +
-                        '        <div class="travelRouteItem-body" id="travelRouteItemBody">' +
-                        '            <div class="travelRouteItem">' +
-                        '                <div class="travelRouteItem-header">' +
-                        '                    <span># 1일 째</span>' +
-                        '                </div>' +
-                        '                <div class="travelRouteItem-body">' +
-                        '                    <ul>' +
-                        '                        <li>식비 18,000</li>' +
-                        '                        <li>쇼핑 40,000</li>' +
-                        '                    </ul>' +
-                        '                </div>' +
-                        '            </div>' +
-                        '        </div>' +
-                        '    </div>' +
-                        '</div>';
 
+                    '<div class="travelRouteItem-header">' +
+                    ' <div class="form-group">' +
+                    ' <table>' +
+                    ' <tr>' +
+                    ' <td>' +
+                    ' <input id="addTravelRoute_place_name_' + index + '" class="form-control form-control-sm" type="text" placeholder="장소 이름" value="' + currentValue.place_name + '" style="width:130px;" />' +
+                    ' </td>' +
+                    ' <td>' +
+                    ' <div class="btn btn-secondary btn-sm" onclick="setTravelRouteItemName(' + index + ')">이름변경</div>' +
+                    ' </td>' +
+                    ' <td>' +
+                    ' <div class="btn btn-danger btn-sm" onclick="removeTravelRouteItem(' + index + ')"> x </div>' +
+                    ' </td>' +
+                    ' </tr>' +
+                    '</table>' +
+                    ' </div>' +
+                    '</div>' +
+                    ' <div>' +
+                    '<table>' +
+                    '<tr>' +
+                    '<td>' +
+                    ' <textarea id="addTravelRoute_info_' + index + '" class="form-control form-control-sm" type="text" placeholder="설명" rows="3" >' + currentValue.info + '</textarea>' +
+                    '</td>' +
+                    '<td style="vertical-align:top">' +
+                    ' <div class="btn btn-secondary btn-sm" onclick="setTravelRouteItemInfo(' + index + ')" >설명저장</div>' +
+                    '</td>' +
+                    '</tr>' +
+                    '</table>';
+                    
+                if (currentValue.address_name != "" && currentValue.address_name != "undefined") {
+                    itemStr += currentValue.address_name + '<br/>';
+
+                }
+                if (currentValue.road_address_name != "" && currentValue.road_address_name != "undefined") {
+                    itemStr += currentValue.road_address_name + '<br/>';
+
+                }
+                if (currentValue.phone != "" && currentValue.phone != "undefined") {
+                    itemStr += currentValue.phone + '<br/>';
+
+                }
+                itemStr += '<a class="btn btn-primary btn-sm" href="' + currentValue.place_url + '" target="_blank">상세페이지</a>';
+
+
+
+
+                itemStr += '</div>';
                 el.innerHTML = itemStr;
                 el.setAttribute("draggable", 'true');
-                el.setAttribute("id", "travelPoint");
+                el.setAttribute("class", "travelPoint");
+                el.setAttribute("id", "travelPoint_" + index);
 
 
-                var itemEl = el; // 검색 결과 항목 Element를 생성합니다
+
+                var itemEl = el;
+
                 fragment.appendChild(itemEl);
-                listEl.appendChild(fragment);
+
+                travelRouteUl.appendChild(fragment);
+
+
+
             });
 
-        }
+            var trBodyStr = '방문 : ' + TravelRouteList.length;
+            //console.info(trBody);
+            trBody.innerHTML = trBodyStr;
 
 
-
-        // 검색결과에서 선택된 마커의 인포윈도우에서 travelRoute로 요소 추가
-        function addTravelRoute(place_name, road_address_name, address_name, phone, place_url, x, y) {
-            var menuEl = document.getElementById('travelRoute_wrap'),
-                searchBox = document.getElementById('keyword'),
-                paginationEl = document.getElementById('pagination');
-
-
-            travelRouteList.push(new TravelRouteItem(place_name, road_address_name, address_name, phone, place_url, x, y));
-            console.info("----------travelRouteList----------");
-            console.info(travelRouteList);
-            //travelRouteList[travelRouteList.length - 1].pushItem(place_name, road_address_name, address_name, phone, place_url, x, y);
-            //검색 키워드 삭제
-            searchBox.value = '';
-
-            // 검색 결과 목록에 추가된 항목들을 제거합니다
-            removeAllChildNods(document.getElementById('placesList'));
-
-            // 기존에 추가된 페이지번호를 삭제합니다
-            while (paginationEl.hasChildNodes()) {
-                paginationEl.removeChild(paginationEl.lastChild);
-            }
-            // 지도에 표시되고 있는 마커를 제거합니다
-            removeMarker();
-            //지도에 표시되고 있는 인포윈도우 제거
-            closeOverlay();
-            $('#travelRoute_wrap').collapse('show');
-            // refreshTravelRoute
-            refreshTravelRoute();
-            //// drawing 매니저에 마커 추가
-            var position = new kakao.maps.LatLng(y, x);
-            manager.put(kakao.maps.drawing.OverlayType.MARKER, position, 1);
-
-
-            //// 검색결과 항목들을 검색결과 목록 Elemnet에 추가합니다
-            menuEl.scrollTop = 0;
-
-            ////드래그 앤드롭 액션 실행
             dragAndDropAction();
 
         }
 
+        function pushTravelRouteItem(place_name, road_address_name, address_name, phone, place_url, x, y) {
+
+            TravelRouteList.push(new TravelRouteItem(place_name, road_address_name, address_name, phone, place_url, x, y));
+            addCostItemParent(place_name);
+            refreashTravelRoute();
+
+        }
+
+
+        function removeTravelRouteItem(index) {
+            TravelRouteList.splice(index, 1);
+            removeCostItemParent(index);
+            refreashTravelRoute();
+
+
+
+        }
+
+
+
+
+        function setTravelRouteItem(index, place_name, road_address_name, address_name, phone, place_url, x, y) {
+
+
+            TravelRouteList[index].setRoute(place_name, road_address_name, address_name, phone, place_url, x, y);
+            refreashTravelRoute();
+        }
+
+        function setTravelRouteItemName(index) {
+
+            var addTravelRoute_place_nameId = "addTravelRoute_place_name_" + index;
+            var place_name = document.getElementById(addTravelRoute_place_nameId).value;
+            TravelRouteList[index].setName(place_name);
+            refreashTravelRoute();
+
+            setCostItemParentName(index);
+        }
+
+        function setTravelRouteItemInfo(index) {
+
+            var addTravelRoute_infoId = "addTravelRoute_info_" + index;
+            var info = document.getElementById(addTravelRoute_infoId).value;
+            TravelRouteList[index].setInfo(info);
+            refreashTravelRoute();
+
+            setCostItemParentName(index);
+        }
+
+
+
+
+        function swapTravelRouteItem(fIndex, sIndex) {
+            var tmp = TravelRouteList[fIndex];
+            TravelRouteList[fIndex] = TravelRouteList[sIndex];
+            TravelRouteList[sIndex] = tmp;
+            refreashTravelRoute();
+        }
+
+
+
         //------------------------------------
-        //----------TravelRouteItem and travelRouteList Start
+        //----------TravelRouteItem and travelRouteList END
         //------------------------------------
 
         //------------------------------------
@@ -1605,10 +1640,7 @@
 
         var CostItemList = Array();
 
-        console.info(CostItemList);
-        console.info(CostItemList);
 
-        console.info(CostItemList);
 
         function button() {
 
@@ -1631,51 +1663,46 @@
             while (costBody.hasChildNodes()) {
                 costBody.removeChild(costBody.firstChild);
             }
-            CostItemList.forEach(function (currentValue, pindex) {
+            CostItemList.forEach(function(currentValue, pindex) {
                 pindexTmp = pindex;
-                console.info(pindex);
-                console.info(currentValue);
+                //console.info(pindex);
+                //console.info(currentValue);
                 el = document.createElement('div'),
                     itemStr =
 
                     '<div class="costItem-header">' +
-                    '   <div class="form-group">' +
-                    '       <table><tr>' +
-                    '           <td>' +
-                    '               <input id="addCost_place_name_' + pindex + '" class="form-control form-control-sm" type="text" placeholder="장소 이름" value="' + currentValue.place_name + '"  style="width:140px;" />' +
-                    '           </td>' +
-                    '           <td>' +
-                    '               <div class="btn btn-secondary btn-sm" onclick="setCostItemParentName(' + pindex + ')" >이름변경</div>' +
-                    '           </td>' +
-                    '           <td>' +
-                    '               <div class="btn btn-danger btn-sm" onclick="removeCostItemParent(' + pindex + ')"> x </div>' +
-                    '           </td>' +
-                    '       </tr></table>' +
-                    '   </div>' +
-                    //'         <span># ' + (index + 1) + '일 째</span>' +
+                    '         <span># ' + currentValue.place_name + '</span>' +
                     '</div>' +
                     '   <div class="costItem-body">' +
                     '       <ul>';
 
-                currentValue.itemList.forEach(function (currentValue, index) {
-                    itemStr += '<li>' + currentValue.costType + '<br/>' + setComa(currentValue.cost) + ' (' + currentValue.info + ')' + '</li>';
+                currentValue.itemList.forEach(function(currentValue, index) {
+                    itemStr += '<li>' + currentValue.costType +
+                        '               <div class="btn btn-sm btn-warning" onclick="removeCostItemChild(' + pindex + ',' + index + ')">x</div>' +
+                        '<br/>' +
+                        setComa(currentValue.cost) + ' (' + currentValue.info + ')' + '</li>';
                     totalCost += parseInt(currentValue.cost);
                 });
 
                 itemStr +=
-                    '           <li>' +
-                    '               <select id="addCost_costType_' + pindex + '" class="form-control form-control-sm">' +
-                    '                   <option value="식비">식비</option>' +
-                    '                   <option value="교통비">교통비</option>' +
-                    '                   <option value="숙박비">숙박비</option>' +
-                    '                   <option value="기타">기타</option>' +
-                    '               </select>' +
-                    '               <input id="addCost_cost_' + pindex + '" class="form-control form-control-sm" type="number" placeholder="비용">' +
-                    '               <input id="addCost_info_' + pindex + '" class="form-control form-control-sm" type="text" placeholder="비용 설명">' +
-                    '               <div class="btn btn-secondary btn-sm" onclick="pushCostItemChild(' + pindex + ')">+</div>' +
-                    '               <div class="btn btn-secondary btn-sm" onclick="popCostItemChild(' + pindex + ')">-</div>' +
-                    '           </li>' +
+                    '<li>' +
+                    '   <div class="btn btn-secondary btn-sm" data-toggle="collapse" data-target="#collapseAddCost_' + pindex + '" aria-expanded="false" aria-controls="collapseAddCost_' + pindex + '">추가</div>' +
+                    '   <div class="collapse" id="collapseAddCost_' + pindex + '">'+
+                    '       <select id="addCost_costType_' + pindex + '" class="form-control form-control-sm">' +
+                    '           <option value="식비">식비</option>' +
+                    '           <option value="교통비">교통비</option>' +
+                    '           <option value="숙박비">숙박비</option>' +
+                    '           <option value="기타">기타</option>' +
+                    '       </select>' +
+                    '       <input id="addCost_cost_' + pindex + '" class="form-control form-control-sm" type="number" placeholder="비용">' +
+                    '       <input id="addCost_info_' + pindex + '" class="form-control form-control-sm" type="text" placeholder="비용 설명">' +
+                    '       <div class="btn btn-secondary btn-sm" onclick="pushCostItemChild(' + pindex + ')">+</div>' +
+                    '       <div class="btn btn-secondary btn-sm" onclick="popCostItemChild(' + pindex + ')">-</div>' +
+                    
+                    '</div>' +
+                    '</li>' +
                     '   </ul>' +
+                    '</div>' +
                     '</div>';
                 el.innerHTML = itemStr;
                 //            el.setAttribute("draggable", 'true');
@@ -1694,24 +1721,24 @@
             });
 
             // 나중에 지도의 travelroute에서 추가할 버튼
-            el = document.createElement('div'),
-                itemStr =
+            //el = document.createElement('div'),
+            //    itemStr =
 
-                '<div class="btn btn-secondary btn-sm" onclick="addCostItemParent(' + pindexTmp + ')">+</div>';
+            //    '<div class="btn btn-secondary btn-sm" onclick="addCostItemParent(' + pindexTmp + ')">+</div>';
 
-            el.innerHTML = itemStr;
-            //            el.setAttribute("draggable", 'true');
-            //            el.setAttribute("id", "travelPoint");
-            el.setAttribute("class", "costItem");
+            //el.innerHTML = itemStr;
+            ////            el.setAttribute("draggable", 'true');
+            ////            el.setAttribute("id", "travelPoint");
+            //el.setAttribute("class", "costItem");
 
 
-            var itemEl = el;
+            //var itemEl = el;
 
-            fragment.appendChild(itemEl);
+            //fragment.appendChild(itemEl);
 
-            costBody.appendChild(fragment);
+            //costBody.appendChild(fragment);
 
-            //--------------------
+            ////--------------------
 
 
 
@@ -1735,9 +1762,17 @@
             cost = document.getElementById(costId),
                 info = document.getElementById(infoId);
 
-            CostItemList[index].pushItem(costType.options[costType.selectedIndex].value, cost.value, info.value);
-
+           if(cost.value == "") {
+               
+               alert("비용을 입력하세요");
+           }            
+            else{
+               
+               CostItemList[index].pushItem(costType.options[costType.selectedIndex].value, cost.value, info.value);
             refreashCostItem();
+           }
+            
+            
 
         }
 
@@ -1759,20 +1794,26 @@
 
 
 
-        // 나중에 인포윈도우에 추가하기
+
         function addCostItemParent(place_name) {
-            CostItemList.push(new CostItem("야호"));
+            CostItemList.push(new CostItem(place_name));
             refreashCostItem();
 
         }
 
         function setCostItemParentName(pindex) {
 
-            var addCost_place_nameId = "addCost_place_name_" + pindex;
-            var addCost_place_name = document.getElementById(addCost_place_nameId);
+            //var addCost_place_nameId = "addCost_place_name_" + pindex;
+            //var addCost_place_name = document.getElementById(addCost_place_nameId);
+            var addTravelRoute_place_nameId = "addTravelRoute_place_name_" + pindex;
+            var place_name = document.getElementById(addTravelRoute_place_nameId).value;
 
+            CostItemList[pindex].setPlace_name(place_name);
+            refreashCostItem();
+        }
 
-            CostItemList[pindex].setPlace_name(addCost_place_name.value);
+        function removeCostItemChild(pindex, index) {
+            CostItemList[pindex].itemList.splice(index, 1);
             refreashCostItem();
         }
 
@@ -1782,14 +1823,20 @@
             refreashCostItem();
         }
 
+        function swapCostItemParent(fIndex, sIndex) {
+            var tmp = CostItemList[fIndex];
+            CostItemList[fIndex] = CostItemList[sIndex];
+            CostItemList[sIndex] = tmp;
+            refreashCostItem();
+        }
 
         function setComa(number) {
             var resultStr = "";
             var strNumber = String(number);
-            console.info(strNumber);
-            console.info(strNumber.length);
+            //console.info(strNumber);
+            //console.info(strNumber.length);
             for (var i = strNumber.length - 1; i >= 0; i--) {
-                console.info(i);
+                //console.info(i);
 
                 if ((strNumber.length - i - 1) % 3 == 0 && i != strNumber.length - 1) {
                     resultStr = ',' + resultStr;
@@ -1807,25 +1854,34 @@
         //------------------------------------
 
 
+        
+        
+        //------------------------------------
+        //----------DragManager Start
+        //------------------------------------
+
+
+
 
 
         //여행경로 드래그 앤 드롭
         var DragManager;
+
         function dragAndDropAction() {
             //DragManger에 요소 추가 (추후 드래그 앤드롭 액션 실행)
             DragManager = {
                 travelRoutes: [],
                 currentContainer: null,
 
-                add: function (travelRoute) {
+                add: function(travelRoute) {
                     this.travelRoutes.push(travelRoute);
                 },
 
-                handleEvent: function (event) {
+                handleEvent: function(event) {
                     //console.info(event.target);
                     if (event.type == 'dragstart') {
                         console.info("dragstart");
-                        var containers = this.travelRoutes.filter(function (container) {
+                        var containers = this.travelRoutes.filter(function(container) {
 
                             return container.contains(event.target);
                         });
@@ -1859,12 +1915,12 @@
                 DragManager.add(this);
             }
 
-            travelRoute.prototype.contains = function (target) {
+            travelRoute.prototype.contains = function(target) {
                 //console.info(target);
                 return $(this.element).find(target).length;
             }
 
-            travelRoute.prototype.handleEvent = function (event) {
+            travelRoute.prototype.handleEvent = function(event) {
                 // NOTE: We've bound `this` to the travelRoute object, not
                 // the element the event was fired on.
                 var $t = $(event.target);
@@ -1873,18 +1929,19 @@
                     this.draggingItem = event.target;
                     console.info(event.target);
                     //setdata에 최상위 LIdml HTML을 데이터로 보낸다
-                    console.info("this.draggingItem");
-                    console.info(this.draggingItem);
+                    //console.info("this.draggingItem");
+                    //console.info(this.draggingItem);
                     var tgtItem = this.draggingItem;
                     while (1) {
                         //if(data.id == "travelPoint")
-                        console.info("tgtItem.tagName");
-                        console.info(tgtItem.tagName);
-                        if (tgtItem.tagName == "LI")
+                        //console.info("tgtItem.tagName");
+                        //console.info(tgtItem.tagName);
+                        //if (tgtItem.tagName == "LI")
+                        if (tgtItem.className == "travelPoint")
                             break;
                         tgtItem = tgtItem.parentNode;
                     }
-                    console.info("전송할 태그" + tgtItem);
+
 
                     event.dataTransfer.setData('text/html', tgtItem.innerHTML);
                 }
@@ -1911,14 +1968,23 @@
                         var tgtItem = event.target;
                         while (1) {
                             //if(data.id == "travelPoint")
-                            if (tgtItem.tagName == "LI")
+                            //if (tgtItem.tagName == "LI")
+                            if (tgtItem.className == "travelPoint")
                                 break;
                             tgtItem = tgtItem.parentNode;
                         }
+                        var fIndex, sIndex;
+                        //travelPoint_0
+                        fIndex = tgtItem.id.slice(12);
+                        sIndex = this.draggingItem.id.slice(12);
 
-                        //최상단  LI로만 옮김.
-                        this.draggingItem.innerHTML = tgtItem.innerHTML;
-                        tgtItem.innerHTML = event.dataTransfer.getData('text/html');
+                        console.info(fIndex);
+                        console.info(sIndex);
+                        swapTravelRouteItem(parseInt(fIndex), parseInt(sIndex));
+                        swapCostItemParent(parseInt(fIndex), parseInt(sIndex));
+                        //최상단  travelPoint로만 옮김.
+                        //this.draggingItem.innerHTML = tgtItem.innerHTML;
+                        //tgtItem.innerHTML = event.dataTransfer.getData('text/html');
                     } else if (this.type == 'reorder') {
                         console.info('reorder');
                         console.info(this.items.index(event.target));
@@ -1931,7 +1997,7 @@
                 }
             }
 
-            travelRoute.prototype.activate = function () {
+            travelRoute.prototype.activate = function() {
                 for (var i = 0, j = this.items.length; i < j; i++) {
                     // Make sure `this` is always a travelRoute instead of the element the
                     // event was activated on.
@@ -1942,7 +2008,7 @@
                 }
             }
 
-            travelRoute.prototype.deactivate = function () {
+            travelRoute.prototype.deactivate = function() {
                 this.draggingItem = null;
                 for (var i = 0, j = this.items.length; i < j; i++) {
                     //this.items[i].removeEventListener('dragenter', this.handleEvent);
@@ -1959,6 +2025,11 @@
             }
 
         }
+        //------------------------------------
+        //----------DragManager END
+        //------------------------------------
+
+
 
 
     </script>

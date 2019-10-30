@@ -28,8 +28,11 @@ public class TravelDao
             MyDB myDB = new MyDB();
             MySqlConnection con = myDB.GetCon();
 
-            string Sql = "INSERT INTO toourshared.travel (trv_secret, trv_views, trv_tot_rate, trv_main_img, trv_title, trv_tag, trv_timestamp, trv_create_time, loc_name, mem_id)" +
-                "VALUES (@trv_secret, @trv_views, @trv_tot_rate, @trv_main_img, @trv_title, @trv_tag, @trv_timestamp, @trv_create_time, @loc_name,@mem_id)";
+            string Sql = "INSERT INTO toourshared.travel (trv_secret, trv_views, trv_tot_rate, trv_main_img, trv_title, trv_tag, trv_create_time, loc_name, mem_id) " +
+                "VALUES (@trv_secret, @trv_views, @trv_tot_rate, @trv_main_img, @trv_title, @trv_tag, @trv_create_time, @loc_name, @mem_id)";
+
+
+
 
             MySqlCommand cmd = new MySqlCommand(Sql, con);
 
@@ -39,6 +42,9 @@ public class TravelDao
             cmd.Parameters.AddWithValue("@trv_main_img", travel.Trv_main_img);
             cmd.Parameters.AddWithValue("@trv_title", travel.Trv_title);
             cmd.Parameters.AddWithValue("@trv_tag", travel.Trv_tag);
+            cmd.Parameters.AddWithValue("@loc_name", travel.Loc_name);
+            cmd.Parameters.AddWithValue("@mem_id", travel.Mem_id);
+            cmd.Parameters.AddWithValue("@trv_create_time", travel.Trv_create_time);
 
 
 
@@ -57,6 +63,84 @@ public class TravelDao
             Console.WriteLine(e.StackTrace);
             
         }
+
+        return result;
+    }
+    public DataSet SelectTravel()
+    {
+        MyDB myDB = new MyDB();
+        MySqlConnection con = myDB.GetCon();
+
+        string sql = "Select trv_no, trv_secret, trv_views, trv_tot_rate, trv_main_img, trv_title, trv_tag," +
+            "trv_timestamp, trv_create_time, loc_name,mem_id From toourshared.travel";
+        MySqlCommand cmd = new MySqlCommand(sql, con); // 커맨드(sql문을 con에서 수행하기 위한 명령문) 생성 DB에서 수행시킬 명령 생성   
+
+        MySqlDataAdapter ad = new MySqlDataAdapter();
+        ad.SelectCommand = cmd;
+        DataSet ds = new DataSet();
+        ad.Fill(ds);
+
+
+        return ds;
+    }
+
+    //public List<Member> selectMember()
+    public Travel selectTravelBytrv_no(Travel travel)
+    {
+
+        MyDB mydb = new MyDB();
+
+        Travel result = new Travel();
+        MySqlConnection con;
+
+        try
+        {
+
+            con = mydb.GetCon();
+
+            string Sql = "SELECT trv_no, trv_secret, trv_views, trv_tot_rate, trv_main_img, trv_title, trv_tag, trv_timestamp, trv_create_time, loc_name, mem_id FROM toourshared.travel where trv_no=@trv_no";
+
+
+            MySqlCommand cmd = new MySqlCommand(Sql, con);
+
+            cmd.Parameters.AddWithValue("@trv_no", travel.Trv_no);
+
+            con.Open();
+            MySqlDataReader rd = cmd.ExecuteReader();
+
+            if (rd.HasRows)
+            {
+                rd.Read();
+
+                result.Trv_no = rd["trv_no"].ToString();
+                result.Trv_secret = rd["trv_secret"].ToString();
+                result.Trv_views = rd["trv_views"].ToString();
+                result.Trv_tot_rate = rd["trv_tot_rate"].ToString();
+                result.Trv_main_img = rd["trv_main_img"].ToString();
+                result.Trv_title = rd["trv_title"].ToString();
+                result.Trv_tag = rd["trv_tag"].ToString();
+                result.Trv_timestamp = rd["trv_timestamp"].ToString();
+                result.Trv_create_time = rd["trv_create_time"].ToString();
+                result.Loc_name = rd["loc_name"].ToString();
+                result.Mem_id = rd["mem_id"].ToString();
+             
+
+                //lstMember.Add(tmpMemberPointer);
+
+                return result;
+
+            }
+
+            con.Close();
+
+
+        }
+        catch (Exception ex)
+        {
+            Console.Write(ex.ToString());
+        }
+
+
 
         return result;
     }
