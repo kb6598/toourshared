@@ -1,22 +1,8 @@
 ﻿<%@ Page Language="C#" %>
 
 <!DOCTYPE html>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-<script runat="server">
 
-    protected void Page_Load(object sender, EventArgs e)
-    {
-        if(Request.QueryString["name"] != null)
-        {
-            string result = Session["userID"].ToString();
-            txtResult.Text = result;
-        }
-        if(Request.QueryString["id"] != null)
-        {
-            string result = Session["userPW"].ToString();
-            txtResult.Text = result;
-        }
-    }
+<script runat="server">
     protected void btnLogout_Click(object sender, EventArgs e)
     {
         Session.Abandon();
@@ -39,12 +25,19 @@
     }
 </script>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 <head>
-    <title>TO OUR SHARED : 여행일수 작성</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>TO OUR SHARED : 고객센터</title>
 
     <!-- Font -->
-    <link href="https://fonts.googleapis.com/css?family=Mansalva|Nanum+Gothic|Nanum+Myeongjo|Noto+Sans+KR|Lora|Jua&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Mansalva|Nanum+Gothic|Nanum+Myeongjo|Noto+Sans+KR|Lora|East+Sea+Dokdo|Jua&display=swap" rel="stylesheet">
+
+    <!-- ICON -->
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -54,16 +47,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
-    <!-- 아이콘 유니코드 설정-->
-    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
-
     <style>
         body {
             margin: 0;
             padding: 0;
             list-style: none;
 
-            line-height: 1;
 
             /* 전체 배경색 */
             background-color: #00b9f1;
@@ -231,6 +220,7 @@
             border: none;
             outline: none;
             cursor: pointer;
+            line-height: 1;
 
             margin-top: 8px;
             color: white;
@@ -251,13 +241,15 @@
 
         .main {
             width: 100%;
-            height: 100%;
-            padding-top: 100px;
-            padding-bottom: 150px;
+            height: auto;
+            padding: 100px 0 150px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         .title {
-            padding: 150px 0px 0px;
+            padding: 150px 0px 70px;
             text-align: center;
         }
 
@@ -268,131 +260,197 @@
             font-family: 'Mansalva', cursive;
         }
 
-        .body {
-            width: 100%;
-            height: 600px;
-
-            display: flex;
-            justify-content: center;
-        }
-
-        .contents {
-            width: 1100px;
-            height: 500px;
-            margin-top: 100px;
+        .FAQ {
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 15px;
-            border-top-left-radius: 15px;
-            border-bottom-right-radius: 15px;
+            width: 1000px;
+            height: auto;
+            background-color: #fff;
+            transition-duration: .5s;
+            background-color: #e2e2e2;
+        }
+
+        .FAQ_HEADER {
+            width: 100%;
+            height: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 0 40px;
+            border-bottom: 1px solid rgba(0, 0, 0, .19);
+        }
+
+        .FAQ_HEADER span {
+            font-size: 25px;
+            font-weight: 300;
+            font-family: 'Noto Sans KR', sans-serif;
+            cursor: default;
+        }
+
+        .FAQ_MAIN {
+            width: 100%;
+            height: 100%;
             background-color: #eee;
         }
 
-        .contentTitle {
-            padding: 10px 0;
-        }
+        .FAQ_ITEM {
+            width: 100%;
+            height: auto;
+            padding: 20px;
 
-        .contentTitle h3 {
-            font-size: 25px;
-            font-weight: 700;
-            border-bottom: 5px solid orange;
-        }
-
-        .contentResult1 {
-            width: auto;
-            height: 100px;
-            padding: 30px;
             display: flex;
             flex-direction: column;
-            align-items: center;
         }
-        
-        .result1Item{
+
+        .FAQ_SUBTITLE {
+            width: 100%;
+            height: 50px;
+            padding-top: 5px;
+            padding-left: 15px;
+        }
+
+        .FAQ_SUBTITLE span {
+            font-size: 20px;
+            font-weight: 600;
+            font-family: 'Noto Sans KR', sans-serif;
+            border-bottom: 3px solid orangered;
+        }
+
+        .FAQ_SUBTEXT {
+            width: 100%;
+            height: 30px;
+            margin-top: -10px;
+            padding-left: 15px;
+        }
+
+        .FAQ_SUBTEXT span {
+            font-size: 13px;
+            color: rgba(0, 0, 0, .5);
+        }
+
+        .FAQ_QUE_CATEGORY {
+            width: 900px;
+            margin-left: 12px;
+            padding-top: 20px;
             display: flex;
             flex-direction: row;
         }
 
-        .user {
-            font-size: 15px;
-            font-weight: 700;
+        .FAQ_QUE_CATEGORY>div {
+            margin: 0 2px;
         }
 
-        .normal {
-            font-size: 13px;
-            padding-right: 5px;
+        .QUENUMBER {
+            width: 10%;
+            text-align: center;
+            padding: 10px 0 5px;
+            border-bottom: 3px solid orange;
+            font-size: 18px;
+            font-weight: 500;
+            font-family: 'Noto Sans KR', sans-serif;
         }
 
-        .type {
-            font-size: 15px;
-            font-weight: 700;
-            padding-right: 1px;
+        .QUETITLE {
+            width: 90%;
+            text-align: center;
+            padding: 10px 0 5px;
+            border-bottom: 3px solid orange;
+            font-size: 18px;
+            font-weight: 500;
+            font-family: 'Noto Sans KR', sans-serif;
         }
-        
-        .control input{
-            width: 400px;
-            height: 60px;
-            padding: 10px;
-            outline: none;
-            font-size: 15px;
-            font-weight: 400;
-            text-align-last: center;
-            color: rgba(0, 0, 0, 0.7);
-            border-radius: 4px;
-            border: 1px solid rgba(0, 0, 0, .1);
-            background-color: rgb(25, 25, 25);
-            transition-duration: .5s;
-            cursor: default;
+
+        .FAQ_QUE_BOARD {
+            width: 900px;
+            display: flex;
+            margin-left: 12px;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
-        
-        .control input:hover{
-            transition-duration: .5s;
-            background-image: none;
+
+        .FAQ_QUE_BOARD {
+            width: 900px;
+            margin-left: 12px;
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .BOARDITEM1 {
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+        }
+
+        .BOARDITEM1>div {
+            margin: 0 2px;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        .BDNUMBER {
+            width: 10%;
+            font-size: 15px;
+            border-bottom: .5px solid rgba(0, 0, 0, .5);
+        }
+
+        .BDTITLE {
+            width: 90%;
+            font-size: 15px;
+            border-bottom: .5px solid rgba(0, 0, 0, .5);
+        }
+
+        .ANSWER {
+            padding: 20px 5px;
             background-color: #eee;
+            color: rgba(0, 0, 0, .5);
+            margin: 0 1px;
+        }
+        
+        .FAQ_INQUIRE{
+            width: 100%;
+            height: 150px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .FAQ_INQUIRE > span{
+            padding: 0 3px;
+        }
+        
+        .nm{
             font-size: 15px;
         }
         
-        .contentBtn{
-            padding: 70px 50px 50px;
-        }
-        
-        .contentBtn .go{
-            margin-bottom: 30px;
-        }
-        
-        .go input{
-            width: 250px;
-            height: 40px;
-            border: none;
-            outline: none;
-            font-size: 12px;
-            border-radius: 4px;
+        .em{
+            width: 142px;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: default;
+            color: #fff;
+            font-size: 13px;
+            font-weight: 300;
+            border-radius: .4rem;
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: rgba(0, 0, 0, .9);
             transition-duration: .5s;
         }
         
-        .go.Back input{
-            background-color: orange;
-        }
-        
-        .go.Home input{
-            background-color: orange;
-        }
-        
-        .go input:hover{
-            transition-duration: .5s;
-            background-color: darkorange;
+        .em:hover{
+            font-size: 15px;
         }
         
         .footer {
             width: 100%;
             height: 250px;
-            color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             background-color: #272625;
         }
-        
+
     </style>
 
     <script>
@@ -411,6 +469,7 @@
                 document.getElementById("nav").style.background = "";
             }
         }
+
     </script>
 
 </head>
@@ -418,7 +477,7 @@
 <body>
     <form name="form1" runat="server">
     <!-- navbar 영역 -->
-<div id="nav" class="topnav">
+    <div id="nav" class="topnav">
         <ul class="topnavUl">
             <li class="topnavLi">
                 <div class="nav-logo">
@@ -486,76 +545,100 @@
         %>
         </ul>
     </div>
-    
+
     <!-- main 영역 -->
     <div class="main">
-
-        <!-- title -->
         <div class="title">
             <div class="titleItem">
                 To Our Shared
             </div>
         </div>
 
-        <!-- body -->
-        <div class="body">
-            <div class="contents">
-                <div class="contentTitle">
-                    <h3>조회결과</h3>
+        <div class="FAQ">
+            <div class="FAQ_HEADER">
+                <span>고객센터</span>
+            </div>
+            <div class="FAQ_MAIN">
+                <div class="FAQ_ITEM">
+
+                    <div class="FAQ_SUBTITLE">
+                        <span>자주찾는질문</span>
+                    </div>
+                    <div class="FAQ_SUBTEXT">
+                        <span>보고싶은 질문을 눌러주세요.</span>
+                    </div>
+                    <div class="FAQ_QUE_CATEGORY">
+                        <div class="QUENUMBER">번호</div>
+                        <div class="QUETITLE">제목</div>
+                    </div>
+                    <div class="FAQ_QUE_BOARD" data-toggle="collapse" data-target="#board1">
+                        <div class="BOARDITEM1">
+                            <div class="BDNUMBER">1</div>
+                            <div class="BDTITLE">zz</div>
+                        </div>
+                        <div class="BOARDITEM2">
+                            <div id="board1" class="collapse">
+                                <div class="ANSWER">
+                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit,
+                                    sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="FAQ_QUE_BOARD" data-toggle="collapse" data-target="#board2">
+                        <div class="BOARDITEM1">
+                            <div class="BDNUMBER">2</div>
+                            <div class="BDTITLE">test</div>
+                        </div>
+                        <div class="BOARDITEM2">
+                            <div id="board2" class="collapse">
+                                <div class="ANSWER">
+                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit,
+                                    sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="FAQ_QUE_BOARD" data-toggle="collapse" data-target="#board3">
+                        <div class="BOARDITEM1">
+                            <div class="BDNUMBER">3</div>
+                            <div class="BDTITLE">test3</div>
+                        </div>
+                        <div class="BOARDITEM2">
+                            <div id="board3" class="collapse">
+                                <div class="ANSWER">
+                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit,
+                                    sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="contentResult1">
-                   <div class = "result1Item">
-                    <div class="user">
-                        <% 
-                            if (Request.QueryString["name"] != null)
-                            {
-                                Response.Write(Request.QueryString["name"]);
-                        %>
+                
+                <div class="FAQ_ITEM">
+                   
+                    <div class="FAQ_SUBTITLE">
+                        <span>문의사항</span>
                     </div>
-                    <div class="normal">님의</div>
-                    <div class="type">아이디</div>
-                    <div class="normal">조회 결과입니다.</div>
+                    <div class ="FAQ_INQUIRE">
+                        <span class = "nm">문의사항은</span>
+                        <span class = "em">email@naver.com</span>
+                        <span class = "nm"> 으로 문의주세요.</span>
                     </div>
-                        <%
-                            }
-                        %>
-                        <%
-                            if(Request.QueryString["id"] != null)
-                            {
-                                Response.Write(Request.QueryString["id"]);
-                        %>
-                    </div>
-                    <div class="normal">님의</div>
-                    <div class="type">비밀번호</div>
-                    <div class="normal">조회 결과입니다.</div>
-                    </div>
-                        <%
-                            }
-                        %>
-                    <div class = "result1Item">
-                       <div class="normal" style="padding-top: 10px;">아래 영역에 마우스를 대면 조회 결과를 확인할 수 있습니다.</div>
-                    </div>
-                </div>
-                <div class="contentResult2">
-                    <div class="control">
-                        <asp:TextBox ID="txtResult" runat="server" ReadOnly="true"></asp:TextBox>
-                    </div>
-                </div>
-                <div class = "contentBtn">
-                    <div class = "go Back">
-                        <asp:Button ID="btnBack" runat="server" Text="이전으로" PostBackUrl="~/find_idpw.aspx"/>
-                    </div>
-                    <div class = "go Home">
-                        <asp:Button ID="btnHome" runat="server" Text="메인으로" PostBackUrl="~/index_old.aspx"/>
-                    </div>
+                    
                 </div>
             </div>
         </div>
     </div>
-
+    
+    <!-- footer 영역 -->
     <div class="footer">
         바닥글
     </div>
-</form>
+    </form>
 </body>
+
 </html>

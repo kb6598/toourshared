@@ -1,32 +1,6 @@
-﻿<%@ Page Language="C#" %>
-
-<!DOCTYPE html>
-
-<script runat="server">
-
-    protected void btnLogout_Click(object sender, EventArgs e)
-    {
-        Session.Abandon();
-        Response.Redirect("/index.aspx");
-    }
-
-    protected void btnMypage_Click(object sender, EventArgs e)
-    {
-        Response.Redirect("/MyPage.aspx");
-    }
-
-    protected void btnJoin_Click(object sender, EventArgs e)
-    {
-        Response.Redirect("/join.aspx");
-    }
-
-    protected void btnFindIDPW_Click(object sender, EventArgs e)
-    {
-        Response.Redirect("/find_idpw.aspx");
-    }
-</script>
-
+﻿<!doctype html>
 <html>
+
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -77,8 +51,6 @@
 
             font-size: 20px;
             font-family: '맑은고딕';
-
-            cursor : default;
         }
 
         .topnavLi ul,
@@ -268,7 +240,7 @@
 
             cursor: default;
             /* Title 그림자 */
-            /*text-shadow: 0px 0px 15px;*/
+            //text-shadow: 0px 0px 15px;
         }
 
         .section01-title2 {
@@ -401,7 +373,7 @@
         }
 
         .carousel-img-sty {
-            /*border-radius: 15px;*/
+            //border-radius: 15px;
             border-radius: 15px;
             border: 1px solid white;
         }
@@ -761,74 +733,61 @@
 </head>
 
 <body>
-<form name="form1" runat="server">
     <!-- navbar 영역 -->
     <div id="nav" class="topnav">
         <ul class="topnavUl">
             <li class="topnavLi">
                 <div class="nav-logo">
-                    <a href="index.aspx" class="nav-logo-item">To Our Shared</a>
+                    <a href="#" class="nav-logo-item">To Our Shared</a>
                 </div>
             </li>
             <li class="topnavLi">
-                <a>Intro</a>
+                <a href="#">소개</a>
                 <ul>
                     <li><a href="#">TOUPLE</a></li>
+                    <li><a href="#">서브메뉴1-2</a></li>
+                    <li><a href="#">서브메뉴1-3</a></li>
                 </ul>
             </li>
             <li class="topnavLi">
-                <a>Shared</a>
+                <a href="#">메뉴 2</a>
                 <ul>
-                    <li><a href="search.aspx">검색</a></li>
+                    <li><a href="#">서브메뉴2-1</a></li>
+                    <li><a href="#">서브메뉴2-2</a></li>
+                    <li><a href="#">서브메뉴2-3</a></li>
                 </ul>
             </li>
             <li class="topnavLi">
-                <a>Event</a>
+                <a href="#">메뉴 3</a>
                 <ul>
-                    <li><a>진행중인 이벤트</a></li>
-                    <li><a>종료된 이벤트</a></li>
+                    <li><a href="#">서브메뉴3-1</a></li>
+                    <li><a href="#">서브메뉴3-2</a></li>
+                    <li><a href="#">서브메뉴3-3</a></li>
                 </ul>
             </li>
             <li class="topnavLi">
-                <a>Help</a>
+                <a href="#">커뮤니티</a>
                 <ul>
-                    <li><a href="FAQ.aspx">자주 찾는 질문</a></li>
+                    <li><a href="#">자유게시판</a></li>
+                    <li><a href="#">리뷰게시판</a></li>
                 </ul>
             </li>
-        <% 
-            if (IsLogin.isLogin() == false)
-            {
-        %>
+            <li class="topnavLi">
+                <a href="#">고객센터</a>
+                <ul>
+                    <li><a href="#">도움말</a></li>
+                    <li><a href="#">건의사항</a></li>
+                </ul>
+            </li>
             <li class="topnavLi">
                 <div class="nav-log">
-                    <a>
+                    <a href="#">
                         <div class="nav-log-area">
-                            <asp:Button ID="btnLogin" runat="server" Text="로그인" class="nav-log-item" PostBackUrl="~/login.aspx"/>
+                            <input type="button" value="로그인" class="nav-log-item">
                         </div>
                     </a>
                 </div>
-                <ul>
-                    <br />
-                    <li><asp:Button ID="btnJoin" runat="server" Text="회원가입" OnClick="btnJoin_Click" /></li>
-                    <li><asp:Button ID="btnFindIDPW" runat="server" Text="계정찾기" OnClick="btnFindIDPW_Click" /></li>
-                </ul>
             </li>
-        <%  
-            }
-            else
-            {
-        %>
-            <li class = "topnavLi" >
-				<a href = "#" ><% string id = Session["mem_id"].ToString(); Response.Write(id); %></a>
-                <ul>
-                    <li><asp:Button ID="btnMypage" runat="server" Text="마이페이지" OnClick="btnMypage_Click" /></li>
-                    <li><asp:Button ID="btnLogout" runat="server" Text="로그아웃" OnClick="btnLogout_Click" /></li>
-
-                </ul>
-            </li>
-        <% 
-            }
-        %>
         </ul>
     </div>
 
@@ -1420,8 +1379,6 @@
             바 닥 글
         </div>
     </div>
-</form>
 </body>
 
 </html>
-
