@@ -1,4 +1,15 @@
-﻿<!doctype html>
+﻿<%@ Page Language="C#" %>
+
+<!DOCTYPE html>
+
+<script runat="server">
+
+    protected void btnHome_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("index.aspx");
+    }
+</script>
+
 <html>
 
 <head>
@@ -133,6 +144,27 @@
         }
 
         .sideBarHome button:hover {
+            transition-duration: .5s;
+            background-color: rgba(0, 185, 241, 1);
+        }
+
+        .sideBarHome .homeBtn {
+            width: auto;
+            height: 50px;
+
+            font-size: 18px;
+            padding: 0 10px;
+            font-family: 'Mansalva', cursive;
+
+            outline: none;
+            border-radius: 4px;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            color: white;
+            background-color: rgba(0, 185, 241, 0.8);
+            transition-duration: .5s;
+        }
+
+        .sideBarHome .homeBtn:hover {
             transition-duration: .5s;
             background-color: rgba(0, 185, 241, 1);
         }
@@ -1006,6 +1038,7 @@
 </head>
 
 <body>
+    <form name ="form1" runat="server">
     <div class="main">
         <div class="searchBar">
 
@@ -1301,7 +1334,7 @@
             <!-- To Our Shared Home Button -->
             <div class="sideBarHome" id="sideBarhome">
                 <div class="btnArea">
-                    <button>To Our Shared</button>
+                    <asp:Button ID="btnHome" runat="server" Text="To Our Shared" class="homeBtn" OnClick="btnHome_Click" />
                 </div>
             </div>
         </div>
@@ -1585,7 +1618,7 @@
             </div>
         </div>
     </div>
-
+</form>
 </body>
 
 </html>
