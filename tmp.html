@@ -1,0 +1,26 @@
+<div style="font-size:9pt;" _foo="view">
+<p>DataSet 을 사용하기 위해서 Hashtable로 재매핑시키기</p>
+<p>&nbsp;</p>
+<p><font color="#009e25">/// &lt;summary&gt;<br>/// <strong>DB 레코드내용을 Hashtable로 변환 (단일 레코드인 경우)</strong><br>/// &lt;/summary&gt;<br>/// &lt;param name="set"&gt;DB DataSet&lt;/param&gt;<br>/// &lt;returns&gt;&lt;/returns&gt;</font><br>public static Hashtable <font color="#ff0000"><strong>ConvertDataSetToHashtable</strong></font>(DataSet set)<br>{<br>&nbsp;&nbsp;&nbsp;Hashtable result = new Hashtable();</p>
+<p>&nbsp;&nbsp;&nbsp;try<br>&nbsp;&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;DataTable table = set.Tables[0];<br>&nbsp;&nbsp;&nbsp;&nbsp;if (table.Rows.Count == 0) return result;<br>&nbsp;&nbsp;&nbsp;&nbsp;DataRow row = table.Rows[0];</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;result = ConvertDataSetToHashtable(table.Columns, row);<br>&nbsp;&nbsp;&nbsp;}<br>&nbsp;&nbsp;&nbsp;catch (Exception)<br>&nbsp;&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;}</p>
+<p>&nbsp;&nbsp;&nbsp;return result;<br>}</p>
+<p>&nbsp;</p>
+<p><font color="#009e25">/// &lt;summary&gt;<br>/// <strong>DB 레코드내용을 Hashtable로 변환 (단일 레코드인 경우)</strong><br>/// &lt;/summary&gt;<br>/// &lt;param name="cols"&gt;Column List&lt;/param&gt;<br>/// &lt;param name="row"&gt;DataRow&lt;/param&gt;<br>/// &lt;returns&gt;&lt;/returns&gt;</font><br>public static Hashtable <strong><font color="#ff0000">ConvertDataSetToHashtable</font></strong>(DataColumnCollection cols, DataRow row)<br>{<br>&nbsp;&nbsp;&nbsp;Hashtable result = new Hashtable();</p>
+<p>&nbsp;&nbsp;&nbsp;try<br>&nbsp;&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;for (int i = 0; i &lt; cols.Count; i++)<br>&nbsp;&nbsp;&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DataColumn col = cols[i];<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;result.Add(col.ColumnName.ToLower(), row[col]);<br>&nbsp;&nbsp;&nbsp;&nbsp;}<br>&nbsp;&nbsp;&nbsp;}<br>&nbsp;&nbsp;&nbsp;catch (Exception)<br>&nbsp;&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;}</p>
+<p>&nbsp;&nbsp;&nbsp;return result;<br>}</p>
+<p>&nbsp;</p>
+<p><font color="#009e25">/// &lt;summary&gt;<br>/// <strong>DB 레코드내용을 List로 변환 (다중 레코드인 경우)</strong><br>/// &lt;/summary&gt;<br>/// &lt;param name="set"&gt;&lt;/param&gt;<br>/// &lt;returns&gt;&lt;/returns&gt;</font><br>public static List&lt;Hashtable&gt; <strong><font color="#ff0000">ConvertDataSetToList</font></strong>(DataSet set)<br>{<br>&nbsp;&nbsp;&nbsp;List&lt;Hashtable&gt; result = new List&lt;Hashtable&gt;();</p>
+<p>&nbsp;&nbsp;&nbsp;try<br>&nbsp;&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;DataTable table = set.Tables[0];</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;for (int i = 0; i &lt; table.Rows.Count; i++)<br>&nbsp;&nbsp;&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DataRow row = table.Rows[i];<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;result.Add(ConvertDataSetToHashtable(table.Columns, row));<br>&nbsp;&nbsp;&nbsp;&nbsp;}<br>&nbsp;&nbsp;&nbsp;}<br>&nbsp;&nbsp;&nbsp;catch (Exception)<br>&nbsp;&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;}</p>
+<p>&nbsp;&nbsp;&nbsp;return result;<br>}</p>
+<p>&nbsp;</p>
+<p><font color="#009e25">/// &lt;summary&gt;<br>/// <strong>DB 레코드내용을 Key/Value 타입으로 변환</strong><br>/// &lt;/summary&gt;<br>/// &lt;param name="set"&gt;&lt;/param&gt;<br>/// &lt;param name="key"&gt;&lt;/param&gt;<br>/// &lt;param name="value"&gt;&lt;/param&gt;<br>/// &lt;returns&gt;&lt;/returns&gt;</font><br>public static Hashtable <font color="#ff0000"><strong>ConvertDataSetToKeyValue</strong></font>(DataSet set, string key, string value)<br>{<br>&nbsp;&nbsp;&nbsp;Hashtable result = new Hashtable();</p>
+<p>&nbsp;&nbsp;&nbsp;try<br>&nbsp;&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;DataTable table = set.Tables[0];</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;for (int i = 0; i &lt; table.Rows.Count; i++)<br>&nbsp;&nbsp;&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DataRow row = table.Rows[i];<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;result.Add(row[key].ToString().ToLower(), row[value]);<br>&nbsp;&nbsp;&nbsp;&nbsp;}<br>&nbsp;&nbsp;&nbsp;}<br>&nbsp;&nbsp;&nbsp;catch (Exception)<br>&nbsp;&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;}</p>
+<p>&nbsp;&nbsp;&nbsp;return result;<br>}</p>
+<p>&nbsp;</p>
+<p><font color="#009e25">/// &lt;summary&gt;<br>/// <strong>DB 레코드내용을 Key/Value 타입으로 변환</strong><br>/// &lt;/summary&gt;<br>/// &lt;param name="set"&gt;&lt;/param&gt;<br>/// &lt;param name="key"&gt;&lt;/param&gt;<br>/// &lt;param name="value"&gt;&lt;/param&gt;<br>/// &lt;returns&gt;&lt;/returns&gt;</font><br>public static Hashtable <font color="#ff0000"><strong>ConvertDataSetToKeyValue</strong></font>(DataSet set, int key, int value)<br>{<br>&nbsp;&nbsp;&nbsp;Hashtable result = new Hashtable();</p>
+<p>&nbsp;&nbsp;&nbsp;try<br>&nbsp;&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;DataTable table = set.Tables[0];</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;for (int i = 0; i &lt; table.Rows.Count; i++)<br>&nbsp;&nbsp;&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;DataRow row = table.Rows[i];<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;result.Add(row[key].ToString().ToLower(), row[value]);<br>&nbsp;&nbsp;&nbsp;&nbsp;}<br>&nbsp;&nbsp;&nbsp;}<br>&nbsp;&nbsp;&nbsp;catch (Exception)<br>&nbsp;&nbsp;&nbsp;{<br>&nbsp;&nbsp;&nbsp;}</p>
+<p>&nbsp;&nbsp;&nbsp;return result;<br>}<br></p></div>

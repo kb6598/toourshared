@@ -141,7 +141,7 @@ public class CommentDao
 
             if (rd.HasRows)
             {
-                rd.Read();
+                
 
                 result.Cmt_no = rd["cmt_no"].ToString();
                 result.Trv_no = rd["trv_no"].ToString();
