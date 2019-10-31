@@ -3,19 +3,31 @@
 <!DOCTYPE html>
 
 <script runat="server">
-
-    protected void Label1_Load(object sender, EventArgs e)
+    protected void btnLogout_Click(object sender, EventArgs e)
     {
-        MemberDao member = new MemberDao();
+        Session.Abandon();
+        Response.Redirect("/index.aspx");
+    }
 
-        Member mem = new Member();
-        
-        
+    protected void btnMypage_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("/MyPage.aspx");
+    }
+
+    protected void btnJoin_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("/join.aspx");
+    }
+
+    protected void btnFindIDPW_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("/find_idpw.aspx");
     }
 </script>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
+
+<html>
+<head>
     <meta charset = "utf-8">
     <meta name = "viewport" content= "width=device-width, initial-scale=1">
 
@@ -31,9 +43,9 @@
     <script src= "https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity= "sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin= "anonymous" ></script>
     <script src= "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity= "sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin= "anonymous" ></script>
     <script src= "https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity= "sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin= "anonymous" ></script>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-        <style>
-        html, body {
+
+    <style>
+        html, body, form{
             margin: 0;
             padding: 0;
             list-style: none;
@@ -616,7 +628,7 @@
 			width: 1px;
 			height: 1px;
 			padding: 0;
-			margin: -1px;
+			margin -1px;
 			overflow: hidden;
 			clip: rect(0,0,0,0);
 			border: 0;
@@ -699,10 +711,7 @@
 		}
 		
 	</style>
-    <title></title>
-</head>
-    
-    	<script>
+	<script>
         /* scroll할 때 발생할 이벤트 */
         window.onscroll = function() {
             scrollFunction();
@@ -759,63 +768,79 @@
 		});
 		
 	</script>
+</head>
 
 <body>
-    <form id="form1" runat="server">
-        <div id= "nav" class= "topnav" >
-        <ul class = "topnavUl" >
-            <li class = "topnavLi" >
-                <div class= "nav-logo" >
-                    <a href = "#" class= "nav-logo-item" >To Our Shared</a>
+    <form name="form1" runat="server">
+    <!-- navbar 영역 -->
+    <div id="nav" class="topnav">
+        <ul class="topnavUl">
+            <li class="topnavLi">
+                <div class="nav-logo">
+                    <a href="index.aspx" class="nav-logo-item">To Our Shared</a>
                 </div>
             </li>
-            <li class = "topnavLi" >
-                <a href = "#" >소개</a>
+            <li class="topnavLi">
+                <a>Intro</a>
                 <ul>
-                    <li><a href = "#" >TOUPLE</a></li>
-                    <li><a href = "#" >서브메뉴1-2</a></li>
-                    <li><a href = "#" >서브메뉴1-3</a></li>
+                    <li><a href="#">TOUPLE</a></li>
                 </ul>
             </li>
-            <li class = "topnavLi" >
-				<a href = "#" >메뉴 2</a>
+            <li class="topnavLi">
+                <a>Shared</a>
                 <ul>
-                    <li><a href = "#" >서브메뉴2-1</a></li>
-                    <li><a href = "#" >서브메뉴2-2</a></li>
-                    <li><a href = "#" >서브메뉴2-3</a></li>
+                    <li><a href="search.aspx">검색</a></li>
                 </ul>
             </li>
-            <li class = "topnavLi" >
-				<a href = "#" >메뉴 3</a>
+            <li class="topnavLi">
+                <a>Event</a>
                 <ul>
-                    <li><a href = "#" >서브메뉴3-1</a></li>
-                    <li><a href = "#" >서브메뉴3-2</a></li>
-                    <li><a href = "#" >서브메뉴3-3</a></li>
+                    <li><a>진행중인 이벤트</a></li>
+                    <li><a>종료된 이벤트</a></li>
                 </ul>
             </li>
-            <li class = "topnavLi" >
-				<a href = "#" >커뮤니티</a>
+            <li class="topnavLi">
+                <a>Help</a>
                 <ul>
-                    <li><a href = "#" >자유게시판</a></li>
-                    <li><a href = "#" >리뷰게시판</a></li>
+                    <li><a href="FAQ.aspx">자주 찾는 질문</a></li>
                 </ul>
             </li>
-            <li class = "topnavLi" >
-				<a href = "#" >고객센터</a>
+        <% 
+            if (IsLogin.isLogin() == false)
+            {
+        %>
+            <li class="topnavLi">
+                <div class="nav-log">
+                    <a>
+                        <div class="nav-log-area">
+                            <asp:Button ID="btnLogin" runat="server" Text="로그인" class="nav-log-item" PostBackUrl="~/login.aspx"/>
+                        </div>
+                    </a>
+                </div>
                 <ul>
-                    <li><a href = "#" >도움말</a></li>
-                    <li><a href = "#" >건의사항</a></li>
+                    <br />
+                    <li><asp:Button ID="btnJoin" runat="server" Text="회원가입" OnClick="btnJoin_Click" /></li>
+                    <li><asp:Button ID="btnFindIDPW" runat="server" Text="계정찾기" OnClick="btnFindIDPW_Click" /></li>
                 </ul>
             </li>
+        <%  
+            }
+            else
+            {
+        %>
             <li class = "topnavLi" >
-				<a href = "#" >milk9503</a>
+				<a href = "#" ><% string id = Session["mem_id"].ToString(); Response.Write(id); %></a>
                 <ul>
-                    <li><a href = "#" >마이페이지</a></li>
-                    <li><a href = "#" >로그아웃</a></li>
+                    <li><asp:Button ID="btnMypage" runat="server" Text="마이페이지" OnClick="btnMypage_Click" /></li>
+                    <li><asp:Button ID="btnLogout" runat="server" Text="로그아웃" OnClick="btnLogout_Click" /></li>
+
                 </ul>
             </li>
+        <% 
+            }
+        %>
         </ul>
-	</div>
+    </div>
 	<div class = "section">
 		
 		<!-- profile edit -->
@@ -848,7 +873,7 @@
 								<span class = "pwTxtSpan">비밀번호</span>
 							</div>
 							<div class = "profilePwEdit">
-								<input type ="password" placeholder = "변경하실 비밀번호를 입력하세요."/>
+								<input type = "password" placeholder = "변경하실 비밀번호를 입력하세요.">
 							</div>
 						</div>
 					</div>
@@ -858,7 +883,7 @@
 								<span>연락처</span>
 							</div>
 							<div class = "profileTelEdit">
-								<input type = "text" placeholder = "변경하실 연락처를 입력하세요. (- 제외)"/>
+								<input type = "text" placeholder = "변경하실 연락처를 입력하세요. (- 제외)">
 							</div>
 						</div>
 					</div>
@@ -879,7 +904,7 @@
 								</div>
 								<div class = "profileA">
 									<div class = "profileAEdit">
-										<input type = "text" placeholder = "변경하실 답변을 입력하세요."/>
+										<input type = "text" placeholder = "변경하실 답변을 입력하세요.">
 									</div>
 								</div>
 							</div>
@@ -944,7 +969,6 @@
     		</div>
   		</div>
 	</div>
-        </form>
+  </form>
 </body>
-	
 </html>
