@@ -33,6 +33,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
+    <!-- kakodev -->
+      <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=ebcd0c1accbe0ff4bbb47bd777ef2fcf&libraries=service&libraries=services,clusterer,drawing"></script>
     <style>
         html,
         body {
@@ -51,8 +53,8 @@
         }
 
         .searchBar {
-            width: 100%;
-            height: 100%;
+            /*width: 100%;
+            height: 100%;*/
             display: flex;
             flex-direction: row;
 
@@ -64,7 +66,7 @@
             width: 100%;
             height: 100%;
 
-            background: url(./img/map.jpg);
+            
             background-size: cover;
             background-repeat: no-repeat;
             z-index: 0;
@@ -1619,6 +1621,19 @@
         </div>
     </div>
 </form>
+    <script>
+        var drawingMapContainer = document.getElementById('mapArea'),
+            drawingMap = {
+                center: new kakao.maps.LatLng(37.56671, 126.98298), // 지도의 중심좌표
+                level: 4, // 지도의 확대 레벨
+                mapTypeId: kakao.maps.MapTypeId.ROADMAP // 지도종류
+            };
+
+        // 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
+        //var drawingMap = new daum.maps.Map(drawingMapContainer, mapOption);
+        var drawingMap = new daum.maps.Map(drawingMapContainer, drawingMap);
+
+    </script>
 </body>
 
 </html>
