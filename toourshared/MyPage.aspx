@@ -793,17 +793,14 @@
                 <!-- boardTap -->
                 <div class="boardTap">
                     <a
-                        class="boardTapOpen" onclick="openPage('travel_board', this)">
-                        <span class="boardTapTxt">▦ 내가 작성한 여행</span>
+                        class="boardTapOpen" onclick="openPage('MyTravels', this)">
+                        <span class="boardTapTxt">▦ My Travels</span>
                     </a>
-                    <a class="boardTapOpen" onclick="openPage('board2', this)">
-                        <span class="boardTapTxt">▦ 내가 작성한 리뷰</span>
+                    <a class="boardTapOpen" onclick="openPage('MyReviews', this)">
+                        <span class="boardTapTxt">▦ My Reviews</span>
                     </a>
-                    <a class="boardTapOpen" onclick="openPage('board3', this)">
-                        <span class="boardTapTxt">▦ 팔로잉 페이지</span>
-                    </a>
-                    <a class="boardTapOpen" onclick="openPage('board4', this)">
-                        <span class="boardTapTxt">▦ 나를 팔로우한 사람</span>
+                    <a class="boardTapOpen" onclick="openPage('FollowingTouple', this)">
+                        <span class="boardTapTxt">▦ Following Touple</span>
                     </a>
                 </div>
             </div>
@@ -813,7 +810,7 @@
                 <div id="boardItemDefault">
                     <div>작성된 게시글이 없습니다.</div>
                 </div>
-                <div id="travel_board" class="boardItem">
+                <div id="MyTravels" class="boardItem">
                     <div class="boardItemContent">
 
                         <asp:Table ID="Table_travel" runat="server">
@@ -821,17 +818,13 @@
 
                     </div>
                 </div>
-                <div id="board2" class="boardItem">
+                <div id="MyReviews" class="boardItem">
                     <h3>Board2</h3>
                     <p>Some news this fine day!</p>
                 </div>
-                <div id="board3" class="boardItem">
+                <div id="FollowingTouple" class="boardItem">
                     <h3>Board3</h3>
                     <p>Get in touch, or swing by for a cup of coffee.</p>
-                </div>
-                <div id="board4" class="boardItem">
-                    <h3>Board4</h3>
-                    <p>Who we are and what we do.</p>
                 </div>
             </div>
         </div>
