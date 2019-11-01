@@ -23,16 +23,7 @@ namespace adminForm
             myDB.GetCon();
         }
 
-        /*public DataTable GetDBTable(string sql)
-        {
-            MySqlConnection con = myDB.GetCon();
-            MySqlDataAdapter adapter = new MySqlDataAdapter(sql, con);
-            MySqlCommandBuilder builder = new MySqlCommandBuilder(adapter);
-            DataTable dt = new DataTable();
-            adapter.Fill(dt);
-            return dt;
-        }*/
-
+        //조회 버튼
         private void button1_Click(object sender, EventArgs e)
         {
             ReportDao reportdao = new ReportDao();
@@ -53,6 +44,41 @@ namespace adminForm
 
             //Console.WriteLine(report.Rep_no);
 
+        }
+
+        //여기는 제재.
+        private void button2_Click(object sender, EventArgs e)
+        {
+            //server=itbuddy.iptime.org;user=yuhan;database=toourshared;password=yuhan1234;port=8233;"
+            using (MySqlConnection myconn = new MySqlConnection(@"server=itbuddy.iptime.org;user=yuhan;database=toourshared;password=yuhan1234;port=8233;"))
+            {
+                myconn.Open();
+                int selectCell = dataGridView1.GetCellCount(DataGridViewElementStates.Selected);
+
+                MySqlCommand update = new MySqlCommand();
+                update.Connection = myconn;
+                update.CommandText = "update travel set trv_secret = 3 where trv_no = selectCell";
+                update.ExecuteNonQuery();
+
+                myconn.Close();
+            }            
+        }
+
+        //여기는 해제.
+        private void button3_Click(object sender, EventArgs e)
+        {
+            using (MySqlConnection myconn = new MySqlConnection(@"server=itbuddy.iptime.org;user=yuhan;database=toourshared;password=yuhan1234;port=8233;"))
+            {
+                myconn.Open();
+                int selectCell = dataGridView1.GetCellCount(DataGridViewElementStates.Selected);
+
+                MySqlCommand update = new MySqlCommand();
+                update.Connection = myconn;
+                update.CommandText = "update travel set trv_secret = 0 where trv_no = selectCell";
+                update.ExecuteNonQuery();
+
+                myconn.Close();
+            }
         }
     }
 }
