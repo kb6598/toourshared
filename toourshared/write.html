@@ -524,16 +524,7 @@
             transition-duration: .5s;
         }
         
-        /* 장소 검색 Modal 중앙 정렬 */
-        #searchPlaceModal{
-            position: absolute;
-            width: 500px;
-            height: 500px;
-            left: 50%;
-            top: 50%;
-            margin-left: -250px;
-            margin-top: -250px;
-        }
+
         
         .mainImgArea{
             width: 100%;
@@ -865,6 +856,7 @@
 
         .costItem,
         .travelPoint {
+            width: 100%;
             cursor: default;
             padding: 10px 0 5px;
             border-bottom: 1px dashed rgba(0, 0, 0, 0.2);
@@ -1142,7 +1134,7 @@
 
     <!-- 장소 검색 Modal 영역 -->
     <div class="modal fade" id="searchPlaceModal" tabindex="-1" role="dialog" aria-labelledby="searchPlaceModalTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable" role="document">
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered " role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="searchPlaceModalTitle">장소 검색</h5>
@@ -1231,7 +1223,39 @@
             },
             markerOptions: { // 마커 옵션입니다
                 draggable: true, // 마커를 그리고 나서 드래그 가능하게 합니다
-                removable: false // 마커를 삭제 할 수 있도록 x 버튼이 표시됩니다
+                removable: false, // 마커를 삭제 할 수 있도록 x 버튼이 표시됩니다
+                markerImages: [
+                    null, // API에서 제공하는 기본 마커 이미지
+                    {
+                        src: 'http://t1.daumcdn.net/localimg/localimages/07/2009/map/icon/ico_mn_13.png',
+                        width: 31,
+                        height: 35,
+                        shape: 'rect',
+                        coords: '0,0,31,35',
+                        hoverImage: {
+                            src: 'http://t1.daumcdn.net/localimg/localimages/07/2012/img/marker_normal.png',
+                            width: 33,
+                            height: 36,
+                            offsetX: 12,
+                            offsetY: 36,
+                            spriteWidth: 644,
+                            spriteHeight: 946,
+                            spriteOriginX: 10,
+                            spriteOriginY: 10
+                        },
+                        dragImage: {
+                            src: 'http://t1.daumcdn.net/localimg/localimages/07/2012/attach/pc_img/ico_comm.png',
+                            width: 20, // 마커 크기
+                            height: 20, // 마커 크기
+                            offsetX: 10, // 지도에 고정시킬 이미지 내 위치 좌표
+                            offsetY: 20, // 지도에 고정시킬 이미지 내 위치 좌표
+                            spriteWidth: 118, // 이미지 전체 크기
+                            spriteHeight: 111, // 이미지 전체 크기
+                            spriteOriginX: 0, // 이미지 중 마커로 사용할 위치
+                            spriteOriginY: 90 // 이미지 중 마커로 사용할 위치
+                        }
+                    }
+                ]
             },
             polylineOptions: { // 선 옵션입니다
                 draggable: true, // 그린 후 드래그가 가능하도록 설정합니다
@@ -1610,7 +1634,7 @@
         // 키워드(주소를 통해서 ) 주변 검색을 요청하는 함수입니다
         function searchPlacesByAddress(address) {
             //주변검색을 하며 해당 마커는 삭제합니다.
-            console.info(curOverlay[0]);
+            //console.info(curOverlay[0]);
             //manager.remove(curOverlay[0]);
 
 
@@ -1640,7 +1664,10 @@
                 $('#searchPlaceModal').modal('show');
             } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
 
-                alert('검색 결과가 존재하지 않습니다.');
+                alert('검색 결과가 존재하지 않아 더 넓은 주소로 찾습니다.');
+                var keyword = document.getElementById('keyword');
+                keyword.value = keyword.value.split('-')[0];
+                ps.keywordSearch(keyword.value, placesSearchByAddressCB);
                 return;
 
             } else if (status === kakao.maps.services.Status.ERROR) {

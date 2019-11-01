@@ -84,7 +84,7 @@ public class TravelDao
         return ds;
     }
 
-    //public List<Member> selectMember()
+ 
     public Travel selectTravelBytrv_no(Travel travel)
     {
 

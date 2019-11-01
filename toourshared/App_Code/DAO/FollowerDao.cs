@@ -109,4 +109,55 @@ public class FollowerDao
         return result;
     }
 
+    public List<Follower> selectFollwerListByMem_id(Follower follower)
+    {
+        MyDB mydb = new MyDB();
+
+        List<Follower> resultList = new List<Follower>();
+        Follower result;
+        MySqlConnection con;
+
+        try
+        {
+
+
+
+            con = mydb.GetCon();
+
+            string Sql = "SELECT * FROM toourshared.follower where mem_id=@mem_id";
+
+
+            MySqlCommand cmd = new MySqlCommand(Sql, con);
+
+            cmd.Parameters.AddWithValue("@mem_id", follower.Mem_id);
+
+            con.Open();
+            MySqlDataReader rd = cmd.ExecuteReader();
+
+            while (rd.Read())
+            {
+
+                result = new Follower();
+                result.Fol_id = rd["fol_id"].ToString();
+                result.Mem_id = rd["mem_id"].ToString();
+
+                //lstMember.Add(tmpMemberPointer);
+
+                resultList.Add(result);
+
+            }
+
+            con.Close();
+
+
+        }
+        catch (Exception ex)
+        {
+            Console.Write(ex.ToString());
+        }
+
+
+
+        return resultList;
+    }
 }

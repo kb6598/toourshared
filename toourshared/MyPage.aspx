@@ -150,13 +150,13 @@
         Input.Trv_no = trv_no;
         output = dao.selectTravelBytrv_no(Input);
 
-        result = output.Trv_main_img; 
+        result = output.Trv_main_img;
 
         return result;
     }
     protected void Bind_Table_MyReviews()
     {
-         List<Comment> resultList = getReviewsList("billip");
+        List<Comment> resultList = getReviewsList("billip");
 
         TableRow tmpTableRow_article;
         TableCell tmpTableCell_article1;
@@ -266,6 +266,26 @@
 
     }
 
+    protected List<Follower> getFollowerList(string mem_id)
+    {
+         List<Follower> resultList;
+        Follower Input = new Follower();
+        FollowerDao dao = new FollowerDao();
+
+        Input.Mem_id = "billip";
+        resultList = dao.selectFollwerListByMem_id(Input);
+
+        //resultDataset = travelDao.SelectTravel();
+
+
+        return resultList;
+    }
+
+
+    protected void BInd_Table_FollowingTouple()
+    {
+
+    }
 
 
     protected void Page_Load(object sender, EventArgs e)
