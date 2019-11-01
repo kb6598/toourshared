@@ -1,4 +1,4 @@
-<html>
+﻿<html>
 
 <head>
     <title>TO OUR SHARED : 글 작성 #일차</title>
@@ -586,6 +586,327 @@
             height: 100%;
             border: 1px solid black;
         }
+        <!-- 원본 style-->
+                     .modes {
+            top: 10px;
+            left: 10px;
+            z-index: 1;
+        }
+
+        .map_wrap a,
+        .map_wrap a:hover,
+        .map_wrap a:active {
+            color: #000;
+            text-decoration: none;
+        }
+
+        #menu_wrap {
+            margin: 10px 0 30px 10px;
+            padding: 5px;
+            overflow-y: auto;
+            background: rgba(255, 255, 255, 0.7);
+            z-index: 1;
+            font-size: 12px;
+            border-radius: 10px;
+        }
+
+        .bg_white {
+            background: #fff;
+        }
+
+        #menu_wrap hr {
+            display: block;
+            height: 1px;
+            border: 0;
+            border-top: 2px solid #5F5F5F;
+            margin: 3px 0;
+        }
+
+        #menu_wrap .option {
+            text-align: center;
+        }
+
+        #menu_wrap .option p {
+            margin: 10px 0;
+        }
+
+        #menu_wrap .option button {
+            margin-left: 5px;
+        }
+
+        #placesList li {
+            list-style: none;
+        }
+
+        #placesList .item {
+            position: relative;
+            border-bottom: 1px solid #888;
+            overflow: hidden;
+            cursor: pointer;
+            min-height: 65px;
+        }
+
+        #placesList .item span {
+            display: block;
+            margin-top: 4px;
+        }
+
+        #placesList .item h5,
+        #placesList .item .info {
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        #placesList .item .info {
+            padding: 10px 0 10px 55px;
+        }
+
+        #placesList .info .gray {
+            color: #8a8a8a;
+        }
+
+        #placesList .info .jibun {
+            padding-left: 26px;
+            background: url(http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/places_jibun.png) no-repeat;
+        }
+
+        #placesList .info .tel {
+            color: #009900;
+        }
+
+        #placesList .item .markerbg {
+            float: left;
+            position: absolute;
+            width: 36px;
+            height: 37px;
+            margin: 10px 0 0 10px;
+            background: url(http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png) no-repeat;
+        }
+
+        #placesList .item .marker_1 {
+            background-position: 0 -10px;
+        }
+
+        #placesList .item .marker_2 {
+            background-position: 0 -56px;
+        }
+
+        #placesList .item .marker_3 {
+            background-position: 0 -102px
+        }
+
+        #placesList .item .marker_4 {
+            background-position: 0 -148px;
+        }
+
+        #placesList .item .marker_5 {
+            background-position: 0 -194px;
+        }
+
+        #placesList .item .marker_6 {
+            background-position: 0 -240px;
+        }
+
+        #placesList .item .marker_7 {
+            background-position: 0 -286px;
+        }
+
+        #placesList .item .marker_8 {
+            background-position: 0 -332px;
+        }
+
+        #placesList .item .marker_9 {
+            background-position: 0 -378px;
+        }
+
+        #placesList .item .marker_10 {
+            background-position: 0 -423px;
+        }
+
+        #placesList .item .marker_11 {
+            background-position: 0 -470px;
+        }
+
+        #placesList .item .marker_12 {
+            background-position: 0 -516px;
+        }
+
+        #placesList .item .marker_13 {
+            background-position: 0 -562px;
+        }
+
+        #placesList .item .marker_14 {
+            background-position: 0 -608px;
+        }
+
+        #placesList .item .marker_15 {
+            background-position: 0 -654px;
+        }
+
+        #pagination {
+            margin: 10px auto;
+            text-align: center;
+        }
+
+        #pagination a {
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        #pagination .on {
+            font-weight: bold;
+            cursor: default;
+            color: #777;
+        }
+
+
+        < !-- 커스텀 오버레이 스타일-->
+        .card-cus {
+            border: 1px outset rgba(0, 0, 0, .19);
+            width: 300px;
+            word-spacing: -1px;
+        }
+
+        .card-header {
+            width: 100%;
+            height: 50px;
+            display: flex;
+            flex-direction: row;
+            background-color: #eee;
+            font-family: 'Noto Sans KR', sans-serif;
+            padding: 0px;
+        }
+
+        .card-title {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            font-size: 18px;
+            justify-content: center;
+            align-items: center;
+            padding-left: 10px;
+            color: #000;
+        }
+
+        .card-input {
+            width: 95%;
+            height: 80%;
+            padding: 10px;
+            outline: none;
+        }
+
+        .card-close {
+            width: 10%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            padding-top: 3px;
+            margin-right: 8px;
+        }
+
+        .card-close .closeBtn {
+            color: #000;
+            font-size: 25px;
+        }
+
+        .closeBtn span {
+            cursor: pointer;
+            color: black;
+        }
+
+        .card-body {
+            width: 100%;
+            height: 100%;
+            padding: 20px 0px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            font-family: 'Malgun Gothic', dotum, '돋움', sans-serif;
+            text-align: center;
+            font-size: 18px;
+            overflow: auto;
+        }
+
+        .card-body-li {
+            font-size: 15px;
+            list-style: none;
+        }
+
+        .card-addBtn {
+            width: 80px;
+            height: 27px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: .2rem;
+            font-size: .875rem;
+            cursor: pointer;
+            background-color: orange;
+            transition-duration: .9s;
+        }
+
+        .card-addBtn:hover {
+            transition-duration: .9s;
+            background-color: darkorange;
+        }
+
+        < !-- modal-cost and TravelRoute-->< !-- modal-cost and TravelRoute-->
+	.modal-cost {
+            display: flex;
+            flex-direction: row-reverse;
+            width: 100%;
+        }
+
+        #travelRoute {
+            list-style: none;
+        }
+
+        .costItem,
+        .travelPoint {
+            cursor: default;
+            padding: 10px 0 5px;
+            border-bottom: 1px dashed rgba(0, 0, 0, 0.2);
+        }
+
+        .costItem-header span {
+            font-size: 30px;
+            font-family: 'East Sea Dokdo', cursive;
+        }
+
+        .costItem-body ul {
+            padding: 0 5px 0 20px;
+            list-style-type: circle;
+        }
+
+        .costItem-body li {
+            font-size: 12px;
+        }
+
+        < !--bootstrap customize-->
+	.row {
+            width: 100%;
+        }
+
+        .btn-group-sm>.btn, .btn-sm {
+            font-size: 8px;
+        }
+
+        .form-control-sm {
+            font-size: 10px;
+        }
+
+        .btn-warning {
+            box-sizing: content-box;
+            font-size: 2px;
+            padding-top: 0px;
+            padding-bottom: 0px;
+            padding-left: 0px;
+            padding-right: 0px;
+            width: 10px;
+            height: 10px;
+        }
     </style>
 
     <script>
@@ -644,6 +965,212 @@
 
     </script>
     
+   
+
+</head>
+
+<!-- 1일 차에만 게시글 제목 입력과 메인사진 첨부, 해쉬태그 입력 영역을 추가해주고 2일 차 이상부터는 추가하지 않는다. -->
+
+<body>
+    <!-- navbar 영역 -->
+    <div id="nav" class="topnav">
+        <ul class="topnavUl">
+            <li class="topnavLi">
+                <div class="nav-logo">
+                    <a href="#" class="nav-logo-item">To Our Shared</a>
+                </div>
+            </li>
+            <li class="topnavLi">
+                <a href="#">소개</a>
+                <ul>
+                    <li><a href="#">TOUPLE</a></li>
+                    <li><a href="#">서브메뉴1-2</a></li>
+                    <li><a href="#">서브메뉴1-3</a></li>
+                </ul>
+            </li>
+            <li class="topnavLi">
+                <a href="#">메뉴 2</a>
+                <ul>
+                    <li><a href="#">서브메뉴2-1</a></li>
+                    <li><a href="#">서브메뉴2-2</a></li>
+                    <li><a href="#">서브메뉴2-3</a></li>
+                </ul>
+            </li>
+            <li class="topnavLi">
+                <a href="#">메뉴 3</a>
+                <ul>
+                    <li><a href="#">서브메뉴3-1</a></li>
+                    <li><a href="#">서브메뉴3-2</a></li>
+                    <li><a href="#">서브메뉴3-3</a></li>
+                </ul>
+            </li>
+            <li class="topnavLi">
+                <a href="#">커뮤니티</a>
+                <ul>
+                    <li><a href="#">자유게시판</a></li>
+                    <li><a href="#">리뷰게시판</a></li>
+                </ul>
+            </li>
+            <li class="topnavLi">
+                <a href="#">고객센터</a>
+                <ul>
+                    <li><a href="#">도움말</a></li>
+                    <li><a href="#">건의사항</a></li>
+                </ul>
+            </li>
+            <li class="topnavLi">
+                <div class="nav-log">
+                    <a href="#">
+                        <div class="nav-log-area">
+                            <input type="button" value="로그인" class="nav-log-item">
+                        </div>
+                    </a>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div id="main" class="main">
+        <!-- 메인 상단 영역 -->
+        <div class="TitleArea">
+            <div class="TitleAlign">
+                <input type="text" placeholder="게시글의 제목을 정해주세요." />
+            </div>
+            <div class="TitleSub">
+                <div class="SubItem">
+                    <span>#일 차 작성 중...</span>
+                </div>
+                <div class="SubItem">
+                    <select name="goDay" class="goDay">
+                        <option value="1">1일 차</option>
+                        <option value="2">2일 차</option>
+                        <option value="3">3일 차</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- 중앙 영역 1 -->
+        <div class="MapArea">
+            <div id="travelRoute_wrap">
+                <div class="travelRouteItem-Left">
+                    <div class="travelRoute-header">
+                        <div class="trTitle1"><span class="trTitle">여행지</span></div>
+                        <div class="trTitle2"><span id="trBody">방문 : 0</span></div>
+                    </div>
+                    <div class="travelRoute-content">
+                        <ul id="travelRoute" class="travelRoute"></ul>
+                    </div>
+                </div>
+                <div class="travelRouteItem-Center">
+                    <div class="travelRoute-header">
+                        <button type="button" class="TIFIRST" onClick="selectOverlay('MARKER')"><p>📌</p><p>마커</p></button>
+                        <button type="button" onClick="selectOverlay('POLYLINE')"><p>🥖</p><p>선</p></button>
+                        <button type="button" onClick="selectOverlay('CIRCLE')"><p>🍅</p><p>원</p></button>
+                        <button type="button" onClick="selectOverlay('RECTANGLE')"><p>🍱</p><p>사각형</p></button>
+                        <button type="button" onClick="selectOverlay('POLYGON')"><p>🍰</p><p>다각형</p></button>
+                        <button type="button" onClick="selectOverlay('ELLIPSE')"><p>🍪</p><p>타원</p></button>
+                        <button type="button" onClick="selectOverlay('ARROW')"><p>👉</p><p>화살표</p></button>
+                        <button type="button" id="undo" onclick="undoAction()" disabled><p>↺</p><p>동작취소</p></button>
+                        <button type="button" id="redo" onclick="redoAction()" disabled><p>↻</p><p>되돌리기</p></button>
+                        <button type="button" class="TILAST" data-toggle="modal" data-target="#searchPlaceModal"><p>🍳</p><p>장소검색</p></button>
+                    </div>
+                    <div class="map_wrap">
+                        <div id="drawingMap"></div>
+                    </div>
+                </div>
+
+                <div class="travelRouteItem-Right">
+                    <div id="travelCost_wrap">
+                        <div class="modal-cost">
+                            <div class="modal-cost-area">
+                                <div class="cost-header" id="costHeader">
+                                    <div class="chTitle1"><span class="chTitle">전체 경비</span></div>
+                                    <div class="chTitle2"><span class="chBody">💰 0</span></div>
+                                </div>
+                                <div class="cost-body" id="costBody">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 중앙 영역 2 -->
+        <div class="taArea">
+            <div class="form-group">
+                <textarea type="text" ID="article" name="article"></textarea>
+            </div>
+        </div>
+
+        <!-- 메인페이지 영역 -->
+        <div class="mainImgArea">
+            <div class="mainImg_wrap">
+                <div class="mainImg_AlignLeft">
+                    <div class="mainImg_Label">게시글의 메인이미지를 첨부하세요.</div>
+                    <div class="mainImg_Input">
+                        <input type="file" accept=".jpg,.jpeg,.png" class="fileItem" />
+                    </div>
+                </div>
+                <div class="mainImg_AlignRight">
+                    <img src="./img/%EC%A0%9C%EC%A3%BC%EB%8F%84.jpg" alt="userMainImage" id="mainImgItem" />
+                </div>
+            </div>
+        </div>
+
+        <!-- 해쉬태그 영역 -->
+        <div class="hashArea">
+            <input type="text" placeholder="해쉬태그를 입력하세요. (ex : #여행 #추억) (스페이스바로 구분지어 주세요.)" class="hashAreaItem" />
+        </div>
+
+        <!-- 하단부 영역 -->
+        <div class="btnArea">
+            <!-- 임시 저장 버튼 -->
+            <div class="tempSaveBtn">
+                <input type="button" value="임시 저장" class="btnAreaItem">
+            </div>
+            <!-- 다음 일로 이동 -->
+            <div class="nextPageBtn">
+                <input type="button" value="다음 일 입력" class="btnAreaItem">
+            </div>
+            <!-- 글 작성 완료 버튼 -->
+            <div class="finishBtn">
+                <input type="button" value="글 작성 완료" class="btnAreaItem">
+            </div>
+        </div>
+    </div>
+
+    <!-- 장소 검색 Modal 영역 -->
+    <div class="modal fade" id="searchPlaceModal" tabindex="-1" role="dialog" aria-labelledby="searchPlaceModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="searchPlaceModalTitle">장소 검색</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="menu_wrap" class="bg_white">
+                        <div class="option">
+                            <div>
+                                키워드 :
+                                <input id="keyword" value="이태원 맛집" type="text" />
+                                <button onclick="searchPlaces();">검색하기</button>
+                            </div>
+                        </div>
+                        <hr />
+                        <ul id="placesList"></ul>
+                        <div id="pagination"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- KAKAO -->
     <script>
         // Drawing Manager로 도형을 그릴 지도 div
@@ -702,14 +1229,14 @@
                 fillColor: '#39f',
                 fillOpacity: 0.3
             },
-            markerOptions: { // 마커 옵션입니다 
-                draggable: true, // 마커를 그리고 나서 드래그 가능하게 합니다 
-                removable: false // 마커를 삭제 할 수 있도록 x 버튼이 표시됩니다  
+            markerOptions: { // 마커 옵션입니다
+                draggable: true, // 마커를 그리고 나서 드래그 가능하게 합니다
+                removable: false // 마커를 삭제 할 수 있도록 x 버튼이 표시됩니다
             },
             polylineOptions: { // 선 옵션입니다
                 draggable: true, // 그린 후 드래그가 가능하도록 설정합니다
                 removable: false, // 그린 후 삭제 할 수 있도록 x 버튼이 표시됩니다
-                editable: true, // 그린 후 수정할 수 있도록 설정합니다 
+                editable: true, // 그린 후 수정할 수 있도록 설정합니다
                 strokeColor: '#39f', // 선 색
                 hintStrokeStyle: 'dash', // 그리중 마우스를 따라다니는 보조선의 선 스타일
                 hintStrokeOpacity: 0.5 // 그리중 마우스를 따라다니는 보조선의 투명도
@@ -743,26 +1270,27 @@
         var redoBtn = document.getElementById('redo');
 
         // Drawing Manager 객체에 state_changed 이벤트를 등록합니다
-        // state_changed 이벤트는 그리기 요소의 생성/수정/이동/삭제 동작 
+        // state_changed 이벤트는 그리기 요소의 생성/수정/이동/삭제 동작
         // 또는 Drawing Manager의 undo, redo 메소드가 실행됐을 때 발생합니다
-        manager.addListener('state_changed', function() {
+        manager.addListener('state_changed', function () {
 
-            // 되돌릴 수 있다면 undo 버튼을 활성화 시킵니다 
+            // 되돌릴 수 있다면 undo 버튼을 활성화 시킵니다
             if (manager.undoable()) {
                 undoBtn.disabled = false;
 
-            } else { // 아니면 undo 버튼을 비활성화 시킵니다 
+            } else { // 아니면 undo 버튼을 비활성화 시킵니다
                 undoBtn.disabled = true;
             }
 
-            // 취소할 수 있다면 redo 버튼을 활성화 시킵니다 
+            // 취소할 수 있다면 redo 버튼을 활성화 시킵니다
             if (manager.redoable()) {
                 redoBtn.disabled = false;
-            } else { // 아니면 redo 버튼을 비활성화 시킵니다 
+            } else { // 아니면 redo 버튼을 비활성화 시킵니다
                 redoBtn.disabled = true;
             }
 
         });
+
 
         class History {
             constructor() {
@@ -788,6 +1316,8 @@
             push
         }
 
+
+
         // 버튼 클릭 시 호출되는 핸들러 입니다
         function selectOverlay(type) {
             // 그리기 중이면 그리기를 취소합니다
@@ -796,6 +1326,8 @@
             // 클릭한 그리기 요소 타입을 선택합니다
             manager.select(daum.maps.drawing.OverlayType[type]);
         }
+
+
 
         // undo 버튼 클릭시 호출되는 함수입니다.
         function undoAction() {
@@ -809,9 +1341,22 @@
             manager.redo();
         }
 
+
+        ////////////////////////////////////////////
+
+
+
+        manager.addListener('drawend', function (data) {
+            // data.target 에 그려진 오버레이 객체가 넘어온다.
+            console.info(data.target);
+        });
+
+
+
+
         // drawManager의 상태가 변경되고
         // travelRoute와 변경
-        manager.addListener('state_changed', function() {
+        manager.addListener('state_changed', function () {
             closeCusOverlay();
             //console.info(this._historyStroage);
             refreshOverlayListener();
@@ -822,21 +1367,22 @@
         // 대상이 삭제되면 listener 도 같이 삭제됨
         // 애초에 리스너가 ExtenedMarker의 부분 요소로 들어가기 때문에
         // 같이 삭제됨
-        manager.addListener('remove', function(e) {
+        manager.addListener('remove', function (e) {
 
         });
-//http://localhost:49862/
+        //http://localhost:49862/
+
 
         function refreshOverlayListener() {
             var data = manager.getOverlays();
             var overlayType = ["circle", "ellipse", "marker", "polygon", "rectangle"];
-            overlayType.forEach(function(overlay, overlayIndex, overlayArray) {
+            overlayType.forEach(function (overlay, overlayIndex, overlayArray) {
                 // 각 오버레이들은 길이가 0인 배열로 최초부터 존제
                 //if (data[overlay] != null) {
                 if (data[overlay].length > 0) {
                     //현재 상태와 이전 상태의 오버레이 갯수가 같다면 해당 리스트 전부 새로고침
                     //console.info(overlay + " : " + data[overlay]._index + "를 새로 고침");
-                    data[overlay].forEach(function(value, index, array) {
+                    data[overlay].forEach(function (value, index, array) {
                         try {
                             //removeListener 시도
                             // 리스너를 만드는중에 오버레이를 전달
@@ -854,6 +1400,7 @@
             });
         }
 
+
         //주소 - 좌표간 변환 서비스 객체를 생성한다.
         var geocoder = new kakao.maps.services.Geocoder();
 
@@ -867,130 +1414,151 @@
             customOverlay.setMap(null);
         }
 
+
+
+
         var curOverlay = Array(1);
+
         //-----------------------------------------------
         // 클릭시 발생하는 이벤트
         //----------------------------------------------
-        var onClick_overlay = function() {
-            
-                //console.info(overlay.constructor.name + '_' + overlay._index);
+        var onClick_overlay = function () {
 
-                //console.info("onClick_overlay");
-                //alert(this._index + "번째 마커" + "\nk : " + this.k + "\nGa : " + this.k.Ga + "\nHa : " + this.k.Ha + '\nMARKER click!');
-                //console.info(this);
-                //console.info(overlay);
-                //---- 오버레이 타입마다 좌표가 존재하는 위치가 다름
-                
-                var coord_WCONGNAMUL =  getWCONGNAMULFromOverlay(this);
-                
-                //----좌표값으로 주소를 가져옴
-                geocoder.coord2Address(coord_WCONGNAMUL.wcongnamulX, coord_WCONGNAMUL.wcongnamulY, function(result, status) {
+            //console.info(overlay.constructor.name + '_' + overlay._index);
 
-                    if (status === kakao.maps.services.Status.OK) {
-                        //console.info(result);
+            //console.info("onClick_overlay");
+            //alert(this._index + "번째 마커" + "\nk : " + this.k + "\nGa : " + this.k.Ga + "\nHa : " + this.k.Ha + '\nMARKER click!');
+            //console.info(this);
+            //console.info(overlay);
+            //---- 오버레이 타입마다 좌표가 존재하는 위치가 다름
 
-                        var content = "<div>ok</div>";
-                        var keyword = document.getElementById('keyword');
+            var coord_WCONGNAMUL = getWCONGNAMULFromOverlay(this);
+            curOverlay[0] = this;
 
-                        //주소가 있다면 검색
-                        if (result[0].address != null) {
+
+            //----좌표값으로 주소를 가져옴
+            geocoder.coord2Address(coord_WCONGNAMUL.wcongnamulX, coord_WCONGNAMUL.wcongnamulY, function (result, status) {
+
+
+                if (status === kakao.maps.services.Status.OK) {
+                    //console.info(result);
+
+                    var content = "<div>ok</div>";
+                    var keyword = document.getElementById('keyword');
+
+
+
+                    //주소가 있다면 검색
+                    if (result[0].address != null) {
+                        if (result[0].address.address_name != null) {
+                            //                                keyword.value = result[0].address.address_name;
+                            //                                //
+                            //                                ps.keywordSearch(keyword.value, placesSearchByStateChange);
+                            //                                $('#searchPlaceModal').modal('show');
+
+                            content =
+
+
+                                '<div class="card card-cus" style="width:300px;">' +
+                                '<div class="card-header">' +
+                                '<div class="card-title">' +
+                                '<input class="form-control card-input" type="text" placeholder="장소 이름" value="" />' +
+                                '</div>' +
+                                '<div class="card-close">' +
+                                '<div class="closeBtn" onclick="closeCusOverlay()">' +
+                                '<span>×</span>' +
+                                '</div>' +
+                                '</div>' +
+                                '</div>' +
+                                '<div class="card-body">' +
+                                '<blockquote class="blockquote mb-0">';
+
                             if (result[0].address.address_name != null) {
-                                //                                keyword.value = result[0].address.address_name;
-                                //                                //
-                                //                                ps.keywordSearch(keyword.value, placesSearchByStateChange);
-                                //                                $('#searchPlaceModal').modal('show');
-
-                                content =
-
-
-                                    '<div class="card card-cus" style="width:300px;">' +
-                                    '<div class="card-header">' +
-                                    '<div class="card-title">' +
-                                    '<input class="form-control card-input" type="text" placeholder="장소 이름" value="" />' +
-                                    '</div>' +
-                                    '<div class="card-close">' +
-                                    '<div class="closeBtn" onclick="closeCusOverlay()">' +
-                                    '<span>×</span>' +
-                                    '</div>' +
-                                    '</div>' +
-                                    '</div>' +
-                                    '<div class="card-body">' +
-                                    '<blockquote class="blockquote mb-0">';
-
-                                if (result[0].address.address_name != null) {
-                                    content += '<li class="card-body-li">' + result[0].address.address_name + '</li>';
-                                }
-                                content +=
-                                    '<li class="card-body-li"> </li>'+
-                                '<li class="card-body-li"> </li>'+
-                                    '</blockquote>' +
-                                    '<table style="margin-top: 10px;"><tr>'+
-                                    '<td>'+
-                                    '<div class="card-addBtn" onclick=\'pushTravelRouteItem("","","","","","' + coord_WCONGNAMUL.wcongnamulX + '","' + coord_WCONGNAMUL.wcongnamulY + '")\'>추가</div>' +
-                                    '</td>'+
-                                    '<td>'+
-                                    '<div class="card-addBtn" onclick=\'searchPlacesByAddress("' + result[0].address.address_name + '")\'>주소로 검색</div>' +
-                                    '</td>'+
-                                    '</tr></table>'+
-                                    '</div>';
-                                    curOverlay[0] =this; 
-
+                                content += '<li class="card-body-li">' + result[0].address.address_name + '</li>';
                             }
+                            content +=
+                                '<li class="card-body-li"> </li>' +
+                                '<li class="card-body-li"> </li>' +
+                                '</blockquote>' +
+                                '<table style="margin-top: 10px;"><tr>' +
+                                '<td>' +
+                                '<div class="card-addBtn" onclick=\'pushTravelRouteItem("","","","","","' + coord_WCONGNAMUL.wcongnamulX + '","' + coord_WCONGNAMUL.wcongnamulY + '")\'>추가</div>' +
+                                '</td>' +
+                                '<td>' +
+                                '<div class="card-addBtn" onclick=\'searchPlacesByAddress("' + result[0].address.address_name + '")\'>주소로 검색</div>' +
+                                '</td>' +
+                                '</tr></table>' +
+                                '</div>';
+
+
                         }
-                        
-                        geocoder.transCoord(coord_WCONGNAMUL.wcongnamulX, coord_WCONGNAMUL.wcongnamulY,
-                            function(result, status) {
-
-                                // 정상적으로 검색이 완료됐으면 
-                                if (status === kakao.maps.services.Status.OK) {
-                                    customOverlay.setPosition(new kakao.maps.LatLng(result[0].y, result[0].x));
-                                    customOverlay.setContent(content);
-                                    customOverlay.setMap(drawingMap);
-                                }
-                            }, {
-                                input_coord: kakao.maps.services.Coords.WCONGNAMUL, // 변환을 위해 입력한 좌표계 입니다
-                                output_coord: kakao.maps.services.Coords.WGS84 // 변환 결과로 받을 좌표계 입니다 
-                            });
-
                     }
-                }, {
+
+
+
+
+                    geocoder.transCoord(coord_WCONGNAMUL.wcongnamulX, coord_WCONGNAMUL.wcongnamulY,
+                        function (result, status) {
+
+                            // 정상적으로 검색이 완료됐으면
+                            if (status === kakao.maps.services.Status.OK) {
+                                customOverlay.setPosition(new kakao.maps.LatLng(result[0].y, result[0].x));
+                                customOverlay.setContent(content);
+                                customOverlay.setMap(drawingMap);
+                            }
+                        }, {
+                            input_coord: kakao.maps.services.Coords.WCONGNAMUL, // 변환을 위해 입력한 좌표계 입니다
+                            output_coord: kakao.maps.services.Coords.WGS84 // 변환 결과로 받을 좌표계 입니다
+                        });
+
+                }
+            }, {
                     input_coord: kakao.maps.services.Coords.WCONGNAMUL
                 });
+
+
         }
 
-function getWCONGNAMULFromOverlay(overlay){
-    var wcongnamulX;
-    var wcongnamulY;
-     if (overlay.constructor.name == "ExtendsMarker") {
-                    wcongnamulX = overlay.k.Ga;
-                    wcongnamulY = overlay.k.Ha;
-                } else if (overlay.constructor.name == "ExtendsCircle") {
-                    wcongnamulX = overlay.k.Ga;
-                    wcongnamulY = overlay.k.Ha;
-                } else if (overlay.constructor.name == "ExtendsRectangle") {
-                    //ExtendedRectangle has za{ea,ja,ka,la} as coords
-                    wcongnamulY = (overlay.za.ka + overlay.za.la) / 2;
-                    wcongnamulX = (overlay.za.ea + overlay.za.ja) / 2;
-                } else if (overlay.constructor.name == "ExtendsPolygon") {
-                    //ExtendedPolygon has ig{0: {ga: ha:}, }
-                    var gaTotal = 0;
-                    var haTotal = 0;
-                    overlay.Ig.forEach(function(value, index, array) {
-                        gaTotal += value.Ga;
-                        haTotal += value.Ha;
-                    });
-                    wcongnamulX = gaTotal / overlay.Ig.length;
-                    wcongnamulY = haTotal / overlay.Ig.length;
-                } else if (overlay.constructor.name == "ExtendsEllipse") {
-                    wcongnamulX = overlay.k.Ga;
-                    wcongnamulY = overlay.k.Ha;
-                }
-    return { "wcongnamulX":wcongnamulX,"wcongnamulY":wcongnamulY};
-}
+
+        function getWCONGNAMULFromOverlay(overlay) {
+            var wcongnamulX;
+            var wcongnamulY;
+            if (overlay.constructor.name == "ExtendsMarker") {
+                wcongnamulX = overlay.k.Ga;
+                wcongnamulY = overlay.k.Ha;
+            } else if (overlay.constructor.name == "ExtendsCircle") {
+                wcongnamulX = overlay.k.Ga;
+                wcongnamulY = overlay.k.Ha;
+            } else if (overlay.constructor.name == "ExtendsRectangle") {
+                //ExtendedRectangle has za{ea,ja,ka,la} as coords
+                wcongnamulY = (overlay.za.ka + overlay.za.la) / 2;
+                wcongnamulX = (overlay.za.ea + overlay.za.ja) / 2;
+            } else if (overlay.constructor.name == "ExtendsPolygon") {
+                //ExtendedPolygon has ig{0: {ga: ha:}, }
+                var gaTotal = 0;
+                var haTotal = 0;
+                overlay.Ig.forEach(function (value, index, array) {
+                    gaTotal += value.Ga;
+                    haTotal += value.Ha;
+                });
+                wcongnamulX = gaTotal / overlay.Ig.length;
+                wcongnamulY = haTotal / overlay.Ig.length;
+            } else if (overlay.constructor.name == "ExtendsEllipse") {
+                wcongnamulX = overlay.k.Ga;
+                wcongnamulY = overlay.k.Ha;
+            }
+            return { "wcongnamulX": wcongnamulX, "wcongnamulY": wcongnamulY };
+        }
+
+
 
         // 검색 시스템
 
+
+
         var find_markers = [];
+
+
         var ps = new kakao.maps.services.Places();
 
         // 검색 결과 목록이나 마커를 클릭했을 때 장소명을 표출할 인포윈도우를 생성합니다
@@ -1038,10 +1606,12 @@ function getWCONGNAMULFromOverlay(overlay){
             }
         }
 
+
         // 키워드(주소를 통해서 ) 주변 검색을 요청하는 함수입니다
         function searchPlacesByAddress(address) {
             //주변검색을 하며 해당 마커는 삭제합니다.
-            manager.remove(curOverlay[0]);
+            console.info(curOverlay[0]);
+            //manager.remove(curOverlay[0]);
 
 
             var keyword = document.getElementById('keyword');
@@ -1059,7 +1629,7 @@ function getWCONGNAMULFromOverlay(overlay){
         // 키워드(주소를 통해서 ) 주변 검색이 완료되었을때 호출되는 콜백함수 입니다
         function placesSearchByAddressCB(data, status, pagination) {
             if (status === kakao.maps.services.Status.OK) {
-                        
+
                 manager.remove(curOverlay[0]);
                 // 정상적으로 검색이 완료됐으면
                 // 검색 목록과 마커를 표출합니다
@@ -1077,8 +1647,16 @@ function getWCONGNAMULFromOverlay(overlay){
 
                 alert('검색 결과 중 오류가 발생했습니다.');
                 return;
+
             }
         }
+
+
+
+
+
+
+
 
         // 검색 결과 목록과 마커를 표출하는 함수입니다
         function displayPlaces(places) {
@@ -1110,16 +1688,16 @@ function getWCONGNAMULFromOverlay(overlay){
                 // 마커와 검색결과 항목에 mouseover 했을때
                 // 해당 장소에 인포윈도우에 장소명을 표시합니다
                 // mouseout 했을 때는 인포윈도우를 닫습니다
-                (function(marker, place) {
-                    kakao.maps.event.addListener(marker, 'click', function() {
+                (function (marker, place) {
+                    kakao.maps.event.addListener(marker, 'click', function () {
                         displayInfowindow(marker, place);
                     });
 
-                    itemEl.onmouseover = function() {
+                    itemEl.onmouseover = function () {
                         displayInfowindow(marker, place);
                     };
 
-                    itemEl.onmouseclick = function() {
+                    itemEl.onmouseclick = function () {
                         displayInfowindow(marker, place);
                         $('#searchPlaceModal').modal('hide');
 
@@ -1170,8 +1748,8 @@ function getWCONGNAMULFromOverlay(overlay){
 
             var el = document.createElement('li'),
                 itemStr = '<span class="markerbg marker_' + (index + 1) + '"></span>' +
-                '<div class="info">' +
-                '   <h5 data-dismiss="modal">' + places.place_name + '</h5>';
+                    '<div class="info">' +
+                    '   <h5 data-dismiss="modal">' + places.place_name + '</h5>';
 
             if (places.road_address_name) {
                 itemStr += '    <span data-dismiss="modal">' + places.road_address_name + '</span>' +
@@ -1237,8 +1815,8 @@ function getWCONGNAMULFromOverlay(overlay){
                 if (i === pagination.current) {
                     el.className = 'on';
                 } else {
-                    el.onclick = (function(i) {
-                        return function() {
+                    el.onclick = (function (i) {
+                        return function () {
                             pagination.gotoPage(i);
                         }
                     })(i);
@@ -1374,13 +1952,14 @@ function getWCONGNAMULFromOverlay(overlay){
                 fragment = document.createDocumentFragment(),
                 itemList = '',
                 el;
+
             ;
 
             // costBody 모든 자식 노드 삭제
             while (travelRouteUl.hasChildNodes()) {
                 travelRouteUl.removeChild(travelRouteUl.firstChild);
             }
-            TravelRouteList.forEach(function(currentValue, index) {
+            TravelRouteList.forEach(function (currentValue, index) {
 
                 ////console.info(index);
                 ////console.info(currentValue);
@@ -1430,11 +2009,16 @@ function getWCONGNAMULFromOverlay(overlay){
                 }
                 itemStr += '<a class="btn btn-primary btn-sm" href="' + currentValue.place_url + '" target="_blank">상세페이지</a>';
 
+
+
+
                 itemStr += '</div>';
                 el.innerHTML = itemStr;
                 el.setAttribute("draggable", 'true');
                 el.setAttribute("class", "travelPoint");
                 el.setAttribute("id", "travelPoint_" + index);
+
+
 
                 var itemEl = el;
 
@@ -1442,13 +2026,17 @@ function getWCONGNAMULFromOverlay(overlay){
 
                 travelRouteUl.appendChild(fragment);
 
+
+
             });
 
             var trBodyStr = '방문 : ' + TravelRouteList.length;
             ////console.info(trBody);
             trBody.innerHTML = trBodyStr;
 
+
             dragAndDropAction();
+
         }
 
         function pushTravelRouteItem(place_name, road_address_name, address_name, phone, place_url, x, y) {
@@ -1456,14 +2044,23 @@ function getWCONGNAMULFromOverlay(overlay){
             TravelRouteList.push(new TravelRouteItem(place_name, road_address_name, address_name, phone, place_url, x, y));
             addCostItemParent(place_name);
             refreashTravelRoute();
+            closeOverlay();
+            closeCusOverlay();
 
         }
+
 
         function removeTravelRouteItem(index) {
             TravelRouteList.splice(index, 1);
             removeCostItemParent(index);
             refreashTravelRoute();
+
+
+
         }
+
+
+
 
         function setTravelRouteItem(index, place_name, road_address_name, address_name, phone, place_url, x, y) {
 
@@ -1492,12 +2089,17 @@ function getWCONGNAMULFromOverlay(overlay){
             setCostItemParentName(index);
         }
 
+
+
+
         function swapTravelRouteItem(fIndex, sIndex) {
             var tmp = TravelRouteList[fIndex];
             TravelRouteList[fIndex] = TravelRouteList[sIndex];
             TravelRouteList[sIndex] = tmp;
             refreashTravelRoute();
         }
+
+
 
         //------------------------------------
         //----------TravelRouteItem and travelRouteList END
@@ -1528,8 +2130,12 @@ function getWCONGNAMULFromOverlay(overlay){
 
         var CostItemList = Array();
 
+
+
         function button() {
+
         }
+
 
         function refreashCostItem() {
 
@@ -1547,7 +2153,7 @@ function getWCONGNAMULFromOverlay(overlay){
             while (costBody.hasChildNodes()) {
                 costBody.removeChild(costBody.firstChild);
             }
-            CostItemList.forEach(function(currentValue, pindex) {
+            CostItemList.forEach(function (currentValue, pindex) {
                 pindexTmp = pindex;
                 ////console.info(pindex);
                 ////console.info(currentValue);
@@ -1560,7 +2166,7 @@ function getWCONGNAMULFromOverlay(overlay){
                     '   <div class="costItem-body">' +
                     '       <ul>';
 
-                currentValue.itemList.forEach(function(currentValue, index) {
+                currentValue.itemList.forEach(function (currentValue, index) {
                     itemStr += '<li>' + currentValue.costType +
                         '               <div class="btn btn-sm btn-warning" onclick="removeCostItemChild(' + pindex + ',' + index + ')">x</div>' +
                         '<br/>' +
@@ -1570,7 +2176,7 @@ function getWCONGNAMULFromOverlay(overlay){
 
                 itemStr +=
                     '<li>' +
-                    '   <div class="btn btn-secondary btn-sm" data-toggle="collapse" data-target="#collapseAddCost_' + pindex + '" aria-expanded="false" aria-controls="collapseAddCost_' + pindex + '">추가</div>' +
+                    '   <div class="btn btn-secondary btn-sm" data-toggle="collapse" data-target="#collapseAddCost_' + pindex + '" aria-expanded="false" aria-controls="collapseAddCost_' + pindex + '">경비추가</div>' +
                     '   <div class="collapse" id="collapseAddCost_' + pindex + '">' +
                     '       <select id="addCost_costType_' + pindex + '" class="form-control form-control-sm">' +
                     '           <option value="식비">식비</option>' +
@@ -1581,7 +2187,7 @@ function getWCONGNAMULFromOverlay(overlay){
                     '       <input id="addCost_cost_' + pindex + '" class="form-control form-control-sm" type="number" placeholder="비용">' +
                     '       <input id="addCost_info_' + pindex + '" class="form-control form-control-sm" type="text" placeholder="비용 설명">' +
                     '       <div class="btn btn-secondary btn-sm" onclick="pushCostItemChild(' + pindex + ')">+</div>' +
-                    '       <div class="btn btn-secondary btn-sm" onclick="popCostItemChild(' + pindex + ')">-</div>' +
+                    //'       <div class="btn btn-secondary btn-sm" onclick="popCostItemChild(' + pindex + ')">-</div>' +
 
                     '</div>' +
                     '</li>' +
@@ -1592,10 +2198,16 @@ function getWCONGNAMULFromOverlay(overlay){
                 //            el.setAttribute("draggable", 'true');
                 //            el.setAttribute("id", "travelPoint");
                 el.setAttribute("class", "costItem");
-                
+
+
                 var itemEl = el;
+
                 fragment.appendChild(itemEl);
+
                 costBody.appendChild(fragment);
+
+
+
             });
 
             // 나중에 지도의 travelroute에서 추가할 버튼
@@ -1609,16 +2221,25 @@ function getWCONGNAMULFromOverlay(overlay){
             ////            el.setAttribute("id", "travelPoint");
             //el.setAttribute("class", "costItem");
 
+
             //var itemEl = el;
+
             //fragment.appendChild(itemEl);
+
             //costBody.appendChild(fragment);
 
             ////--------------------
+
+
 
             var headerStr =
                 '<span class="chTitle">전체 경비</span>' +
                 '<span class="chBody">💰 ' + setComa(totalCost) + '</span>';
             costHeader.innerHTML = headerStr;
+
+
+
+
         }
 
         function pushCostItemChild(index) {
@@ -1640,7 +2261,10 @@ function getWCONGNAMULFromOverlay(overlay){
                 refreashCostItem();
             }
 
+
+
         }
+
 
         function popCostItemChild(index) {
 
@@ -1656,6 +2280,9 @@ function getWCONGNAMULFromOverlay(overlay){
             refreashCostItem();
 
         }
+
+
+
 
         function addCostItemParent(place_name) {
             CostItemList.push(new CostItem(place_name));
@@ -1715,9 +2342,16 @@ function getWCONGNAMULFromOverlay(overlay){
         //----------CostItems and CostItemList End
         //------------------------------------
 
+
+
+
         //------------------------------------
         //----------DragManager Start
         //------------------------------------
+
+
+
+
 
         //여행경로 드래그 앤 드롭
         var DragManager;
@@ -1728,15 +2362,15 @@ function getWCONGNAMULFromOverlay(overlay){
                 travelRoutes: [],
                 currentContainer: null,
 
-                add: function(travelRoute) {
+                add: function (travelRoute) {
                     this.travelRoutes.push(travelRoute);
                 },
 
-                handleEvent: function(event) {
+                handleEvent: function (event) {
                     ////console.info(event.target);
                     if (event.type == 'dragstart') {
                         //console.info("dragstart");
-                        var containers = this.travelRoutes.filter(function(container) {
+                        var containers = this.travelRoutes.filter(function (container) {
 
                             return container.contains(event.target);
                         });
@@ -1770,12 +2404,12 @@ function getWCONGNAMULFromOverlay(overlay){
                 DragManager.add(this);
             }
 
-            travelRoute.prototype.contains = function(target) {
+            travelRoute.prototype.contains = function (target) {
                 ////console.info(target);
                 return $(this.element).find(target).length;
             }
 
-            travelRoute.prototype.handleEvent = function(event) {
+            travelRoute.prototype.handleEvent = function (event) {
                 // NOTE: We've bound `this` to the travelRoute object, not
                 // the element the event was fired on.
                 var $t = $(event.target);
@@ -1852,7 +2486,7 @@ function getWCONGNAMULFromOverlay(overlay){
                 }
             }
 
-            travelRoute.prototype.activate = function() {
+            travelRoute.prototype.activate = function () {
                 for (var i = 0, j = this.items.length; i < j; i++) {
                     // Make sure `this` is always a travelRoute instead of the element the
                     // event was activated on.
@@ -1863,7 +2497,7 @@ function getWCONGNAMULFromOverlay(overlay){
                 }
             }
 
-            travelRoute.prototype.deactivate = function() {
+            travelRoute.prototype.deactivate = function () {
                 this.draggingItem = null;
                 for (var i = 0, j = this.items.length; i < j; i++) {
                     //this.items[i].removeEventListener('dragenter', this.handleEvent);
@@ -1878,6 +2512,7 @@ function getWCONGNAMULFromOverlay(overlay){
             for (var i = 0, j = travelRoutes.length; i < j; i++) {
                 new travelRoute(travelRoutes[i], (i % 2 == 0) ? 'swap' : 'reorder');
             }
+
         }
         //------------------------------------
         //----------DragManager END
@@ -1887,12 +2522,19 @@ function getWCONGNAMULFromOverlay(overlay){
         //----------Post START
         //------------------------------------
 
+
+
+
+
         overlays = []; // 지도에 그려진 도형을 담을 배열
+
+
+
 
         // 다음페이지로 markers, polyline, rect, circle, polygon 보내는 기능
         function postToNext() {
             var data = manager.getData();
-            //rects  circles   polygons 
+            //rects  circles   polygons
             markers = data[daum.maps.drawing.OverlayType.MARKER];
             polylines = data[daum.maps.drawing.OverlayType.POLYLINE];
             rects = data[daum.maps.drawing.OverlayType.RECTANGLE];
@@ -1960,11 +2602,15 @@ function getWCONGNAMULFromOverlay(overlay){
             //
             //            }
 
+
+
+
             //document.getElementById("marker").value = markersPath;
             //document.getElementById("polygon").value = polylinesPath;
             var title = document.getElementById("title");
             var article = document.getElementById("article");
             var hashtag = document.getElementById("hashtag");
+
 
             var form = document.createElement("form");
             // Form submission canceled because the form is not connected 해결
@@ -1977,6 +2623,8 @@ function getWCONGNAMULFromOverlay(overlay){
 
             //JSON.stringify(obj)
 
+
+
             //            var marker = document.createElement("input"); // input 엘리멘트 생성
             //            insert1.setAttribute("type", "hidden"); // type 속성을 hidden으로 설정
             //            insert1.setAttribute("name", "marker"); // name 속성을 'stadium'으로 설정
@@ -1988,7 +2636,7 @@ function getWCONGNAMULFromOverlay(overlay){
             //            insert2.setAttribute("name", "polyline"); // name 속성을 'stadium'으로 설정
             //            insert2.setAttribute("value", polylinesPath); // value 속성을 삽입
             //            form.appendChild(insert2);
-            //            //rects  circles   polygons 
+            //            //rects  circles   polygons
             //            var rects = document.createElement("input"); // input 엘리멘트 생성
             //            insert3.setAttribute("type", "hidden"); // type 속성을 hidden으로 설정
             //            insert3.setAttribute("name", "rects"); // name 속성을 'stadium'으로 설정
@@ -2006,6 +2654,8 @@ function getWCONGNAMULFromOverlay(overlay){
             //            insert5.setAttribute("name", "polygons"); // name 속성을 'stadium'으로 설정
             //            insert5.setAttribute("value", polygonsPath); // value 속성을 삽입
             //            form.appendChild(insert5);
+
+
 
             var mapData = document.createElement("input"); // input 엘리멘트 생성
             mapData.setAttribute("type", "hidden"); // type 속성을 hidden으로 설정
@@ -2025,220 +2675,17 @@ function getWCONGNAMULFromOverlay(overlay){
             CostItemListData.setAttribute("value", JSON.stringify(CostItemList)); // value 속성을 삽입
             form.appendChild(CostItemListData);
 
+
             console.info(form.innerHTML);
             form.submit(); // 전송
         }
+
 
         //------------------------------------
         //----------Post END
         //------------------------------------
 
     </script>
-
-</head>
-
-<!-- 1일 차에만 게시글 제목 입력과 메인사진 첨부, 해쉬태그 입력 영역을 추가해주고 2일 차 이상부터는 추가하지 않는다. -->
-
-<body>
-    <!-- navbar 영역 -->
-    <div id="nav" class="topnav">
-        <ul class="topnavUl">
-            <li class="topnavLi">
-                <div class="nav-logo">
-                    <a href="#" class="nav-logo-item">To Our Shared</a>
-                </div>
-            </li>
-            <li class="topnavLi">
-                <a href="#">소개</a>
-                <ul>
-                    <li><a href="#">TOUPLE</a></li>
-                    <li><a href="#">서브메뉴1-2</a></li>
-                    <li><a href="#">서브메뉴1-3</a></li>
-                </ul>
-            </li>
-            <li class="topnavLi">
-                <a href="#">메뉴 2</a>
-                <ul>
-                    <li><a href="#">서브메뉴2-1</a></li>
-                    <li><a href="#">서브메뉴2-2</a></li>
-                    <li><a href="#">서브메뉴2-3</a></li>
-                </ul>
-            </li>
-            <li class="topnavLi">
-                <a href="#">메뉴 3</a>
-                <ul>
-                    <li><a href="#">서브메뉴3-1</a></li>
-                    <li><a href="#">서브메뉴3-2</a></li>
-                    <li><a href="#">서브메뉴3-3</a></li>
-                </ul>
-            </li>
-            <li class="topnavLi">
-                <a href="#">커뮤니티</a>
-                <ul>
-                    <li><a href="#">자유게시판</a></li>
-                    <li><a href="#">리뷰게시판</a></li>
-                </ul>
-            </li>
-            <li class="topnavLi">
-                <a href="#">고객센터</a>
-                <ul>
-                    <li><a href="#">도움말</a></li>
-                    <li><a href="#">건의사항</a></li>
-                </ul>
-            </li>
-            <li class="topnavLi">
-                <div class="nav-log">
-                    <a href="#">
-                        <div class="nav-log-area">
-                            <input type="button" value="로그인" class="nav-log-item">
-                        </div>
-                    </a>
-                </div>
-            </li>
-        </ul>
-    </div>
-    <div id="main" class="main">
-        <!-- 메인 상단 영역 -->
-        <div class="TitleArea">
-            <div class="TitleAlign">
-                <input type="text" placeholder="게시글의 제목을 정해주세요." />
-            </div>
-            <div class="TitleSub">
-                <div class="SubItem">
-                    <span>#일 차 작성 중...</span>
-                </div>
-                <div class="SubItem">
-                    <select name="goDay" class="goDay">
-                        <option value="1">1일 차</option>
-                        <option value="2">2일 차</option>
-                        <option value="3">3일 차</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-
-        <!-- 중앙 영역 1 -->
-        <div class="MapArea">
-            <div id="travelRoute_wrap">
-                <div class="travelRouteItem-Left">
-                    <div class="travelRoute-header">
-                        <div class="trTitle1"><span class="trTitle">여행지</span></div>
-                        <div class="trTitle2"><span class="trBody">방문 : 0</span></div>
-                    </div>
-                    <div class="travelRoute-content">
-                        <ul id="travelRoute" class="travelRoute">
-                        </ul>
-                    </div>
-                </div>
-                <div class="travelRouteItem-Center">
-                   <div class="travelRoute-header">
-                       <button type="button" class="TIFIRST" onClick="selectOverlay('MARKER')"><p>📌</p><p>마커</p></button>
-                       <button type="button" onClick="selectOverlay('POLYLINE')"><p>🥖</p><p>선</p></button>
-                       <button type="button" onClick="selectOverlay('CIRCLE')"><p>🍅</p><p>원</p></button>
-                       <button type="button" onClick="selectOverlay('RECTANGLE')"><p>🍱</p><p>사각형</p></button>
-                       <button type="button" onClick="selectOverlay('POLYGON')"><p>🍰</p><p>다각형</p></button>
-                       <button type="button" onClick="selectOverlay('ELLIPSE')"><p>🍪</p><p>타원</p></button>
-                       <button type="button" onClick="selectOverlay('ARROW')"><p>👉</p><p>화살표</p></button>
-                       <button type="button" id="undo" onclick="undoAction()" disabled><p>↺</p><p>동작취소</p></button>
-                       <button type="button" id="redo" onclick="redoAction()" disabled><p>↻</p><p>되돌리기</p></button>
-                       <button type="button" class="TILAST" data-toggle="modal" data-target="#searchPlaceModal"><p>🍳</p><p>장소검색</p></button>
-                   </div>
-                    <div class="map_wrap">
-                        <div id="drawingMap"></div>
-                    </div>
-                </div>
-                
-                <div class="travelRouteItem-Right">
-                    <div id="travelCost_wrap">
-                        <div class="modal-cost">
-                            <div class="modal-cost-area">
-                                <div class="cost-header" id="costHeader">
-                                    <div class="chTitle1"><span class="chTitle">전체 경비</span></div>
-                                    <div class="chTitle2"><span class="chBody">💰 0</span></div>
-                                </div>
-                                <div class="cost-body" id="costBody">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- 중앙 영역 2 -->
-        <div class="taArea">
-            <div class="form-group">
-                <textarea type="text" ID="article" name="article"></textarea>
-            </div>
-        </div>
-        
-        <!-- 메인페이지 영역 -->
-        <div class = "mainImgArea">
-            <div class = "mainImg_wrap">
-                <div class = "mainImg_AlignLeft">
-                    <div class = "mainImg_Label">게시글의 메인이미지를 첨부하세요.</div>
-                    <div class = "mainImg_Input">
-                        <input type = "file" accept=".jpg,.jpeg,.png" class="fileItem"/>
-                    </div>
-                </div>
-                <div class="mainImg_AlignRight">
-                    <img src = "./img/%EC%A0%9C%EC%A3%BC%EB%8F%84.jpg" alt="userMainImage" id="mainImgItem"/>
-                </div>
-            </div>
-        </div>
-        
-        <!-- 해쉬태그 영역 -->
-        <div class = "hashArea">
-            <input type = "text" placeholder="해쉬태그를 입력하세요. (ex : #여행 #추억) (스페이스바로 구분지어 주세요.)" class="hashAreaItem"/>
-        </div>
-        
-        <!-- 하단부 영역 -->
-        <div class="btnArea">
-            <!-- 임시 저장 버튼 -->
-            <div class = "tempSaveBtn">
-                <input type = "button" value="임시 저장" class="btnAreaItem">
-            </div>
-            <!-- 다음 일로 이동 -->
-            <div class = "nextPageBtn">
-                <input type = "button" value="다음 일 입력" class="btnAreaItem">
-            </div>
-            <!-- 글 작성 완료 버튼 -->
-            <div class = "finishBtn">
-                <input type = "button" value="글 작성 완료" class="btnAreaItem">
-            </div>
-        </div>
-    </div>
-
-    <!-- 장소 검색 Modal 영역 -->
-    <div class="modal fade" id="searchPlaceModal" tabindex="-1" role="dialog" aria-labelledby="searchPlaceModalTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-scrollable" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="searchPlaceModalTitle">장소 검색</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div id="menu_wrap" class="bg_white">
-                            <div class="option">
-                                <div>
-                                    키워드 :
-                                    <input id="keyword" value="이태원 맛집" type="text" />
-                                    <button onclick="searchPlaces();">검색하기</button>
-                                </div>
-                            </div>
-                            <hr />
-                            <ul id="placesList"></ul>
-                            <div id="pagination"></div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>
 </body>
 
 </html>
