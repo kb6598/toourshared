@@ -224,7 +224,7 @@
             <asp:Button ID="Button7" runat="server" Text="넘겨" OnClick="Button7_Click" />
             <asp:Button ID="Button8" runat="server" Text="꺼버려" />
         </asp:Panel>
-     
+        
         <ajaxToolkit:ModalPopupExtender ID="ModalPopupExtender1" runat="server" CancelControlID="Button8" PopupControlID="Panel1" TargetControlID="Button6"></ajaxToolkit:ModalPopupExtender>
     </form>
 </body>
