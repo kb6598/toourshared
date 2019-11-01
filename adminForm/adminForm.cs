@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using MySql.Data.MySqlClient;
-using tooushared.Lib;
+
 
 namespace adminForm
 {
@@ -38,7 +38,7 @@ namespace adminForm
             dataGridView1.Columns[2].HeaderCell.Value = "신고 일시";
             dataGridView1.Columns[3].HeaderCell.Value = "신고인";
             dataGridView1.Columns[4].HeaderCell.Value = "신고 사유";
-
+            
             //inputReport.Rep_no = "1";
             //report = reportdao.selectReportByrep_no(inputReport);
 
@@ -49,36 +49,91 @@ namespace adminForm
         //여기는 제재.
         private void button2_Click(object sender, EventArgs e)
         {
-            //server=itbuddy.iptime.org;user=yuhan;database=toourshared;password=yuhan1234;port=8233;"
-            using (MySqlConnection myconn = new MySqlConnection(@"server=itbuddy.iptime.org;user=yuhan;database=toourshared;password=yuhan1234;port=8233;"))
+            ////server=itbuddy.iptime.org;user=yuhan;database=toourshared;password=yuhan1234;port=8233;"
+            //using (MySqlConnection myconn = new MySqlConnection(@"server=itbuddy.iptime.org;user=yuhan;database=toourshared;password=yuhan1234;port=8233;"))
+            //{
+            //    try { 
+            //    myconn.Open();
+            //    int selectCell = dataGridView1.GetCellCount(DataGridViewElementStates.Selected);
+
+            //    MySqlCommand update = new MySqlCommand();
+            //    update.Connection = myconn;
+            //    update.CommandText = "update travel set trv_secret = 3 where trv_no = @selectCell";
+            //       update.Parameters.Add("@selectCell", selectCell.ToString());
+            //    update.ExecuteNonQuery();
+
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        Console.WriteLine(ex.StackTrace.ToString());
+
+            //    }
+            //}     
+
+
+            Travel inputTravel = new Travel();
+            Travel outputTravel = new Travel();
+            TravelDao travelDao = new TravelDao();
+            int selectedCellCount =dataGridView1.GetCellCount(DataGridViewElementStates.Selected);
+            for (int i = 0; i < selectedCellCount; i++)
             {
-                myconn.Open();
-                int selectCell = dataGridView1.GetCellCount(DataGridViewElementStates.Selected);
+                //선택한 셀들의 행을 구해오고 그행의 두번째열 trv_no의 값을 가져온다.
+                inputTravel.Trv_no = dataGridView1.Rows[dataGridView1.SelectedCells[i].RowIndex].Cells[1].Value.ToString();
+                outputTravel = travelDao.selectTravelBytrv_no(inputTravel);
 
-                MySqlCommand update = new MySqlCommand();
-                update.Connection = myconn;
-                update.CommandText = "update travel set trv_secret = 3 where trv_no = selectCell";
-                update.ExecuteNonQuery();
+                 outputTravel.Trv_secret = "3";
 
-                myconn.Close();
-            }            
+            travelDao.UpdatetTravel(outputTravel);
+                    
+
+            }
+
+
+
+
+
+
+
         }
 
         //여기는 해제.
         private void button3_Click(object sender, EventArgs e)
         {
-            using (MySqlConnection myconn = new MySqlConnection(@"server=itbuddy.iptime.org;user=yuhan;database=toourshared;password=yuhan1234;port=8233;"))
-            {
-                myconn.Open();
-                int selectCell = dataGridView1.GetCellCount(DataGridViewElementStates.Selected);
+            //using (MySqlConnection myconn = new MySqlConnection(@"server=itbuddy.iptime.org;user=yuhan;database=toourshared;password=yuhan1234;port=8233;"))
+            //{
+            //    try
+            //    {
+            //        myconn.Open();
+            //    int selectCell = dataGridView1.GetCellCount(DataGridViewElementStates.Selected);
 
-                MySqlCommand update = new MySqlCommand();
-                update.Connection = myconn;
-                update.CommandText = "update travel set trv_secret = 0 where trv_no = selectCell";
-                update.ExecuteNonQuery();
+            //    MySqlCommand update = new MySqlCommand();
+            //    update.Connection = myconn;
+            //    update.CommandText = "update travel set trv_secret = 0 where trv_no = selectCell";
 
-                myconn.Close();
-            }
+
+            //    update.ExecuteNonQuery();
+
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        Console.WriteLine(ex.StackTrace.ToString());
+
+            //    }
+
+            //}
+
+            Travel inputTravel = new Travel();
+            Travel outputTravel = new Travel();
+            TravelDao travelDao = new TravelDao();
+
+
+            int selectCell = dataGridView1.GetCellCount(DataGridViewElementStates.Selected);
+            inputTravel.Trv_no = selectCell.ToString();
+            outputTravel = travelDao.selectTravelBytrv_no(inputTravel);
+
+            outputTravel.Trv_secret = "0";
+
+            travelDao.UpdatetTravel(outputTravel);
         }
     }
 }

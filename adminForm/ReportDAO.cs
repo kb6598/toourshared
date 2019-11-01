@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Web;
-using tooushared.Lib;
+
 
 
 /// <summary>
@@ -23,7 +23,7 @@ public class ReportDao
 
         string result = "";
         MyDB myDB = new MyDB();
-        MySqlConnection con = myDB.GetCon();
+        MySql.Data.MySqlClient.MySqlConnection con = myDB.GetCon();
 
         string Sql = "INSERT INTO toourshared.report (trv_no,rep_timestap,rep_mem_id, rep_reason) VALUES(@trv_no,@rep_timestap,@rep_mem_id, @rep_reason); select last_insert_id()";
         MySqlCommand cmd = new MySqlCommand(Sql, con);

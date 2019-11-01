@@ -4,9 +4,7 @@
 
 
 
-
 <%@ Import Namespace="MySql.Data.MySqlClient" %>
-<%@ Import Namespace="MySql.Data" %>
 <%@ Import Namespace="System.Data" %>
 
 

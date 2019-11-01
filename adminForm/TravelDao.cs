@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-
 using MySql.Data.MySqlClient;
 using System.Data;
-using tooushared.Lib;
-using tooushared.DTO;
+
 
 /// <summary>
 /// TravelDao의 요약 설명입니다.
@@ -240,15 +238,17 @@ public class TravelDao
         MyDB myDB = new MyDB();
         MySqlConnection con = myDB.GetCon();
 
-        string Sql = "UPDATE toourshared.travel SET trv_no =@trv_no, trv_secret =@trv_secret, trv_views =@trv_views, trv_tot_rate =@trv_tot_rate, trv_main_img =@trv_main_img, trv_title =@trv_title, trv_tag =@trv_tag, trv_timestamp =@trv_timestamp, trv_create_time =@trv_create_time, loc_name =@loc_name, mem_id =@mem_id  WHERE trv_no =@"; 
+        string Sql = "UPDATE toourshared.travel SET trv_secret =@trv_secret, trv_views =@trv_views, trv_tot_rate =@trv_tot_rate, trv_main_img =@trv_main_img, trv_title =@trv_title, trv_tag =@trv_tag, trv_timestamp =@trv_timestamp, trv_create_time =@trv_create_time, loc_name =@loc_name, mem_id =@mem_id  WHERE trv_no =@trv_no"; 
 
         MySqlCommand cmd = new MySqlCommand(Sql, con);
+                cmd.Parameters.AddWithValue("@trv_no", travel.Trv_no);
+
 
         cmd.Parameters.AddWithValue("@loc_name", travel.Loc_name);
         cmd.Parameters.AddWithValue("@mem_id", travel.Mem_id);
         cmd.Parameters.AddWithValue("@trv_create_time", travel.Trv_create_time);
         cmd.Parameters.AddWithValue("@trv_main_img", travel.Trv_main_img);
-        cmd.Parameters.AddWithValue("@trv_no", travel.Trv_no);
+
         cmd.Parameters.AddWithValue("@trv_secret", travel.Trv_secret);
         cmd.Parameters.AddWithValue("@trv_tag", travel.Trv_tag);
         cmd.Parameters.AddWithValue("@trv_timestamp", travel.Trv_timestamp);
