@@ -176,7 +176,7 @@
 
             <asp:Button ID="Button1" runat="server" Text="Button" OnClick="Button1_Click" />
 
-
+            
             <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="false"> 
                                 <Columns>
                     <asp:BoundField HeaderText="댓글번호" DataField="cmt_no" />
