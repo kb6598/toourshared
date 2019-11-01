@@ -167,4 +167,57 @@ public class CommentDao
         return result;
     }
 
+
+    public List<Comment> selectCommentListByMem_id(Comment travel)
+    {
+        MyDB mydb = new MyDB();
+
+        List<Comment> resultList = new List<Comment>();
+        Comment result;
+        MySqlConnection con;
+
+        try
+        {
+                       
+            con = mydb.GetCon();
+
+            string Sql = "SELECT * FROM toourshared.comment where mem_id=@mem_id";
+
+
+            MySqlCommand cmd = new MySqlCommand(Sql, con);
+
+            cmd.Parameters.AddWithValue("@mem_id", travel.Mem_id);
+
+            con.Open();
+            MySqlDataReader rd = cmd.ExecuteReader();
+
+            while (rd.Read())
+            {
+
+                result = new Comment();
+                result.Cmt_content = rd["Cmt_content"].ToString();
+                result.Cmt_no = rd["Cmt_no"].ToString();
+                result.Cmt_rate = rd["Cmt_rate"].ToString();
+                result.Cmt_timestamp = rd["Cmt_timestamp"].ToString();
+                result.Mem_id = rd["Mem_id"].ToString();
+                result.Trv_no = rd["Trv_no"].ToString();
+
+                resultList.Add(result);
+
+            }
+
+            con.Close();
+
+
+        }
+        catch (Exception ex)
+        {
+            Console.Write(ex.ToString());
+        }
+
+
+
+        return resultList;
+    }
+
 }
