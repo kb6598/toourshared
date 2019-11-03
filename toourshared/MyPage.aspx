@@ -13,7 +13,7 @@
         Travel travelIn = new Travel();
         TravelDao travelDao = new TravelDao();
 
-        travelIn.Mem_id = "billip";
+        travelIn.Mem_id = mem_id;
         resultList = travelDao.selectTravelListByMem_id(travelIn);
         //resultDataset = travelDao.SelectTravel();
 
@@ -39,7 +39,7 @@
             tmpTableCell_article1 = new TableCell();
             tmpTableCell_article1.Text = "<a href = \"#\" alt = \"bg2\">" +
                                             "<div class = \"tableContainer\" >" +
-                                            "<img src = \"" + resultList[i].Trv_main_img + "\" alt= \"milk9503\" >" +
+                                            "<img src = \"" + resultList[i].Trv_main_img + "\" alt= \""+ resultList[i].Trv_title + "\" >" +
                                                 "<div class = \"tableOverlay\" >" +
                                                     "<div class = \"tableText\" >" +
                                                         "<div class = \"tableAlign\">" +
@@ -69,7 +69,7 @@
             tmpTableCell_article2 = new TableCell();
             tmpTableCell_article2.Text = "<a href = \"#\" alt = \"bg2\">" +
                                             "<div class = \"tableContainer\" >" +
-                                            "<img src = \"" + resultList[i].Trv_main_img + "\" alt= \"milk9503\" >" +
+                                            "<img src = \"" + resultList[i].Trv_main_img + "\" alt= \""+ resultList[i].Trv_title + "\" >" +
                                                 "<div class = \"tableOverlay\" >" +
                                                     "<div class = \"tableText\" >" +
                                                         "<div class = \"tableAlign\">" +
@@ -100,7 +100,7 @@
             tmpTableCell_article3 = new TableCell();
             tmpTableCell_article3.Text = "<a href = \"#\" alt = \"bg2\">" +
                                             "<div class = \"tableContainer\" >" +
-                                            "<img src = \"" + resultList[i].Trv_main_img + "\" alt= \"milk9503\" >" +
+                                            "<img src = \"" + resultList[i].Trv_main_img + "\" alt= \""+ resultList[i].Trv_title + "\" >" +
                                                 "<div class = \"tableOverlay\" >" +
                                                     "<div class = \"tableText\" >" +
                                                         "<div class = \"tableAlign\">" +
@@ -133,7 +133,7 @@
         Comment Input = new Comment();
         CommentDao dao = new CommentDao();
 
-        Input.Mem_id = "billip";
+        Input.Mem_id = mem_id;
         resultList = dao.selectCommentListByMem_id(Input);
         //resultDataset = travelDao.SelectTravel();
 
@@ -171,7 +171,7 @@
             tmpTableCell_article1 = new TableCell();
             tmpTableCell_article1.Text = "<a href = \"#\" alt = \"bg2\">" +
                                             "<div class = \"tableContainer\" >" +
-                                            "<img src = \"" + getTrv_Main_Img(resultList[i].Trv_no) + "\" alt= \"milk9503\" >" +
+                                            "<img src = \"" + getTrv_Main_Img(resultList[i].Trv_no) + "\" alt= \""+ resultList[i].Cmt_no + "\" >" +
                                                 "<div class = \"tableOverlay\" >" +
                                                     "<div class = \"tableText\" >" +
                                                         "<div class = \"tableAlign\">" +
@@ -201,7 +201,7 @@
             tmpTableCell_article2 = new TableCell();
             tmpTableCell_article2.Text = "<a href = \"#\" alt = \"bg2\">" +
                                             "<div class = \"tableContainer\" >" +
-                                            "<img src = \"" + getTrv_Main_Img(resultList[i].Trv_no) + "\" alt= \"milk9503\" >" +
+                                            "<img src = \"" + getTrv_Main_Img(resultList[i].Trv_no) + "\" alt= \""+ resultList[i].Cmt_no + "\" >" +
                                                 "<div class = \"tableOverlay\" >" +
                                                     "<div class = \"tableText\" >" +
                                                         "<div class = \"tableAlign\">" +
@@ -232,7 +232,7 @@
             tmpTableCell_article3 = new TableCell();
             tmpTableCell_article3.Text = "<a href = \"#\" alt = \"bg2\">" +
                                             "<div class = \"tableContainer\" >" +
-                                            "<img src = \"" + getTrv_Main_Img(resultList[i].Trv_no) + "\" alt= \"milk9503\" >" +
+                                            "<img src = \"" + getTrv_Main_Img(resultList[i].Trv_no) + "\" alt= \""+ resultList[i].Cmt_no + "\" >" +
                                                 "<div class = \"tableOverlay\" >" +
                                                     "<div class = \"tableText\" >" +
                                                         "<div class = \"tableAlign\">" +
@@ -266,16 +266,17 @@
 
     }
 
-    protected List<Follower> getFollowerList(string mem_id)
+
+
+
+    protected List<Travel> getFollowersTravelList(string mem_id ,int start, int count)
     {
-         List<Follower> resultList;
-        Follower Input = new Follower();
-        FollowerDao dao = new FollowerDao();
+        Member input = new Member();
+        List<Travel> resultList= new List<Travel>();
+        MyPageDao dao = new MyPageDao();
+        input.Mem_id = mem_id;
 
-        Input.Mem_id = "billip";
-        resultList = dao.selectFollwerListByMem_id(Input);
-
-        //resultDataset = travelDao.SelectTravel();
+        resultList = dao.selectMembersFollowersTravelLimitOrderByTimestampLimit(input, start, count);
 
 
         return resultList;
@@ -285,6 +286,114 @@
     protected void BInd_Table_FollowingTouple()
     {
 
+        int start = 0, count = 10;
+
+        List < Travel >  resultList = getFollowersTravelList("billip",start, count);
+        TableRow tmpTableRow_article;
+        TableCell tmpTableCell_article1;
+        TableCell tmpTableCell_article2;
+        TableCell tmpTableCell_article3;
+
+
+        for (int i = 0; i < resultList.Count - 1; i++)
+        {
+
+
+            tmpTableCell_article1 = new TableCell();
+            tmpTableCell_article1.Text = "<a href = \"#\" alt = \"bg2\">" +
+                                            "<div class = \"tableContainer\" >" +
+                                            "<img src = \"" + resultList[i].Trv_main_img + "\" alt= \""+ resultList[i].Trv_title + "\" >" +
+                                                "<div class = \"tableOverlay\" >" +
+                                                    "<div class = \"tableText\" >" +
+                                                        "<div class = \"tableAlign\">" +
+                                                            "<div class = \"star\">" +
+                                                                "<span>☆</span>" + resultList[i].Trv_tot_rate +
+                                                            "</div>" +
+                                                            "<div class = \"good\">" +
+                                                                "<span><i class= \"far fa-thumbs-up\" ></i></span> x3" +
+                                                            "</div>" +
+                                                            "<div class = \"reply\">" +
+                                                                "<span><i class= \"fa fa-comment-o\" ></i></span> x5" +
+                                                            "</div>" +
+                                                        "</div>" +
+                                                    "</div>" +
+                                                "</div>" +
+                                            "</div>" +
+                                        "</a>";
+            i++;
+            if (i == resultList.Count)
+            {
+                tmpTableRow_article = new TableRow();
+                tmpTableRow_article.Cells.Add(tmpTableCell_article1);
+
+                Table_travel.Rows.Add(tmpTableRow_article);
+                break;
+            }
+            tmpTableCell_article2 = new TableCell();
+            tmpTableCell_article2.Text = "<a href = \"#\" alt = \"bg2\">" +
+                                            "<div class = \"tableContainer\" >" +
+                                            "<img src = \"" + resultList[i].Trv_main_img + "\" alt= \""+ resultList[i].Trv_title + "\" >" +
+                                                "<div class = \"tableOverlay\" >" +
+                                                    "<div class = \"tableText\" >" +
+                                                        "<div class = \"tableAlign\">" +
+                                                            "<div class = \"star\">" +
+                                                                "<span>☆</span>" + resultList[i].Trv_tot_rate +
+                                                            "</div>" +
+                                                            "<div class = \"good\">" +
+                                                                "<span><i class= \"far fa-thumbs-up\" ></i></span> x3" +
+                                                            "</div>" +
+                                                            "<div class = \"reply\">" +
+                                                                "<span><i class= \"fa fa-comment-o\" ></i></span> x5" +
+                                                            "</div>" +
+                                                        "</div>" +
+                                                    "</div>" +
+                                                "</div>" +
+                                            "</div>" +
+                                        "</a>";
+            i++;
+            if (i == resultList.Count)
+            {
+                tmpTableRow_article = new TableRow();
+                tmpTableRow_article.Cells.Add(tmpTableCell_article1);
+                tmpTableRow_article.Cells.Add(tmpTableCell_article2);
+
+                Table_travel.Rows.Add(tmpTableRow_article);
+                break;
+            }
+            tmpTableCell_article3 = new TableCell();
+            tmpTableCell_article3.Text = "<a href = \"#\" alt = \"bg2\">" +
+                                            "<div class = \"tableContainer\" >" +
+                                            "<img src = \"" + resultList[i].Trv_main_img + "\" alt= \""+ resultList[i].Trv_title + "\" >" +
+                                                "<div class = \"tableOverlay\" >" +
+                                                    "<div class = \"tableText\" >" +
+                                                        "<div class = \"tableAlign\">" +
+                                                            "<div class = \"star\">" +
+                                                                "<span>☆</span>" + resultList[i].Trv_tot_rate +
+                                                            "</div>" +
+                                                            "<div class = \"good\">" +
+                                                                "<span><i class= \"far fa-thumbs-up\" ></i></span> x3" +
+                                                            "</div>" +
+                                                            "<div class = \"reply\">" +
+                                                                "<span><i class= \"fa fa-comment-o\" ></i></span> x5" +
+                                                            "</div>" +
+                                                        "</div>" +
+                                                    "</div>" +
+                                                "</div>" +
+                                            "</div>" +
+                                        "</a>";
+
+
+            tmpTableRow_article = new TableRow();
+            tmpTableRow_article.Cells.Add(tmpTableCell_article1);
+            tmpTableRow_article.Cells.Add(tmpTableCell_article2);
+            tmpTableRow_article.Cells.Add(tmpTableCell_article3);
+            Table_travel.Rows.Add(tmpTableRow_article);
+        }
+
+
+
+
+
     }
 
 
@@ -293,7 +402,7 @@
 
         Bind_Table_Travel();
         Bind_Table_MyReviews();
-
+        BInd_Table_FollowingTouple();
 
 
     }
@@ -832,7 +941,7 @@
             </ul>
         </li>
         <li class="topnavLi">
-            <a href="#">milk9503</a>
+            <a href="#">"+ resultList[i].Trv_title + "</a>
             <ul>
                 <li><a href="#">마이페이지</a></li>
                 <li><a href="#">로그아웃</a></li>

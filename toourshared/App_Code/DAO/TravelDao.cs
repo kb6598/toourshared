@@ -145,6 +145,56 @@ public class TravelDao
         return result;
     }
 
+    public int countTravelBytrv_no(Travel travel)
+    {
+
+        MyDB mydb = new MyDB();
+
+        int result = 0;
+        MySqlConnection con;
+
+        try
+        {
+
+            con = mydb.GetCon();
+
+            string Sql = "SELECT count(trv_no) as count FROM toourshared.travel where mem_id=@mem_id";
+
+
+            MySqlCommand cmd = new MySqlCommand(Sql, con);
+
+            cmd.Parameters.AddWithValue("@trv_no", travel.Trv_no);
+
+            con.Open();
+            MySqlDataReader rd = cmd.ExecuteReader();
+
+            if (rd.HasRows)
+            {
+                rd.Read();
+
+                result = int.Parse(rd["count"].ToString());
+
+
+                //lstMember.Add(tmpMemberPointer);
+
+                return result;
+
+            }
+
+            con.Close();
+
+
+        }
+        catch (Exception ex)
+        {
+            Console.Write(ex.ToString());
+        }
+
+
+
+        return result;
+    }
+
     public DataSet selectTravelByMem_id(Travel travel)
     {
 
@@ -170,6 +220,8 @@ public class TravelDao
 
         return ds;
     }
+
+    
 
     public List<Travel> selectTravelListByMem_id(Travel travel)
     {
@@ -266,5 +318,70 @@ public class TravelDao
 
         return result;
     }
+
+    public List<Travel> selectTravelListByMem_idNLimitOrderByDate(Travel travel,int start,int count)
+    {
+        MyDB mydb = new MyDB();
+
+        List<Travel> resultList = new List<Travel>();
+        Travel result;
+        MySqlConnection con;
+
+        try
+        {
+
+
+
+            con = mydb.GetCon();
+
+            string Sql = "SELECT * FROM toourshared.travel where mem_id=@mem_id order by trv_create_time limit @start,@count";
+
+
+            MySqlCommand cmd = new MySqlCommand(Sql, con);
+
+            cmd.Parameters.AddWithValue("@mem_id", travel.Mem_id);
+            cmd.Parameters.AddWithValue("@start", start);
+            cmd.Parameters.AddWithValue("@count", count);
+
+            con.Open();
+            MySqlDataReader rd = cmd.ExecuteReader();
+
+            while (rd.Read())
+            {
+
+                result = new Travel();
+                result.Trv_no = rd["trv_no"].ToString();
+                result.Trv_secret = rd["trv_secret"].ToString();
+                result.Trv_views = rd["trv_views"].ToString();
+                result.Trv_tot_rate = rd["trv_tot_rate"].ToString();
+                result.Trv_main_img = rd["trv_main_img"].ToString();
+                result.Trv_title = rd["trv_title"].ToString();
+                result.Trv_tag = rd["trv_tag"].ToString();
+                result.Trv_timestamp = rd["trv_timestamp"].ToString();
+                result.Trv_create_time = rd["trv_create_time"].ToString();
+                result.Loc_name = rd["loc_name"].ToString();
+                result.Mem_id = rd["mem_id"].ToString();
+
+
+                //lstMember.Add(tmpMemberPointer);
+
+                resultList.Add(result);
+
+            }
+
+            con.Close();
+
+
+        }
+        catch (Exception ex)
+        {
+            Console.Write(ex.ToString());
+        }
+
+
+
+        return resultList;
+    }
+
 
 }
