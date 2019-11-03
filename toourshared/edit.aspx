@@ -4,14 +4,41 @@
 
 <script runat="server">
 
-    protected void Label1_Load(object sender, EventArgs e)
+    protected void Page_Load(object sender, EventArgs e)
     {
-        MemberDao member = new MemberDao();
+        if(Session["mem_id"] == null)
+        {
+            MessageBox.Show("접근 할 수 없습니다.", this.Page);
+            Response.Redirect("/index.aspx");
+        }
+        else
+        {
+            MemberDao member = new MemberDao();
 
-        Member mem = new Member();
-        
-        
+            Member mem = new Member();
+
+            mem.Mem_id = Session["mem_id"].ToString();
+
+            Member resultMem = member.selectMemberByMem_id(mem);
+
+            mem_id.Text = resultMem.Mem_id;
+            mem_name.Text = resultMem.Mem_name;
+
+
+        }
     }
+    protected void btnLogout_Click(object sender, EventArgs e)
+    {
+        Session.Abandon();
+        Response.Redirect("/index.aspx");
+    }
+
+    protected void btnMypage_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("/MyPage.aspx");
+    }
+
+
 </script>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -764,55 +791,46 @@
     <form id="form1" runat="server">
         <div id= "nav" class= "topnav" >
         <ul class = "topnavUl" >
-            <li class = "topnavLi" >
-                <div class= "nav-logo" >
-                    <a href = "#" class= "nav-logo-item" >To Our Shared</a>
+            <li class="topnavLi">
+                <div class="nav-logo">
+                    <a href="index.aspx" class="nav-logo-item">To Our Shared</a>
                 </div>
             </li>
-            <li class = "topnavLi" >
-                <a href = "#" >소개</a>
+            <li class="topnavLi">
+                <a>Intro</a>
                 <ul>
-                    <li><a href = "#" >TOUPLE</a></li>
-                    <li><a href = "#" >서브메뉴1-2</a></li>
-                    <li><a href = "#" >서브메뉴1-3</a></li>
+                    <li><a href="#">TOUPLE</a></li>
                 </ul>
             </li>
-            <li class = "topnavLi" >
-				<a href = "#" >메뉴 2</a>
+            <li class="topnavLi">
+                <a>Shared</a>
                 <ul>
-                    <li><a href = "#" >서브메뉴2-1</a></li>
-                    <li><a href = "#" >서브메뉴2-2</a></li>
-                    <li><a href = "#" >서브메뉴2-3</a></li>
+                    <li><a href="search.aspx">검색</a></li>
                 </ul>
             </li>
-            <li class = "topnavLi" >
-				<a href = "#" >메뉴 3</a>
+            <li class="topnavLi">
+                <a>Event</a>
                 <ul>
-                    <li><a href = "#" >서브메뉴3-1</a></li>
-                    <li><a href = "#" >서브메뉴3-2</a></li>
-                    <li><a href = "#" >서브메뉴3-3</a></li>
+                    <li><a>진행중인 이벤트</a></li>
+                    <li><a>종료된 이벤트</a></li>
                 </ul>
             </li>
-            <li class = "topnavLi" >
-				<a href = "#" >커뮤니티</a>
+            <li class="topnavLi">
+                <a>Help</a>
                 <ul>
-                    <li><a href = "#" >자유게시판</a></li>
-                    <li><a href = "#" >리뷰게시판</a></li>
+                    <li><a href="FAQ.aspx">자주 찾는 질문</a></li>
                 </ul>
             </li>
-            <li class = "topnavLi" >
-				<a href = "#" >고객센터</a>
+             <li class = "topnavLi" >
+                 <% if (Session["mem_id"] != null)
+                     {%>
+				<a href = "#" ><% string id = Session["mem_id"].ToString(); Response.Write(id); %></a>
                 <ul>
-                    <li><a href = "#" >도움말</a></li>
-                    <li><a href = "#" >건의사항</a></li>
+                    <li><asp:Button ID="btnMypage" runat="server" Text="마이페이지" OnClick="btnMypage_Click" /></li>
+                    <li><asp:Button ID="btnLogout" runat="server" Text="로그아웃" OnClick="btnLogout_Click" /></li>
+
                 </ul>
-            </li>
-            <li class = "topnavLi" >
-				<a href = "#" >milk9503</a>
-                <ul>
-                    <li><a href = "#" >마이페이지</a></li>
-                    <li><a href = "#" >로그아웃</a></li>
-                </ul>
+                 <%} %>
             </li>
         </ul>
 	</div>
@@ -828,8 +846,9 @@
 						</div>
 						<div class = "profileID">
 							<div class = "ID">
-								<span class = "idSpan1">milk9503</span>
-								<span class = "idSpan2">(이민혁)</span>
+								<span class = "idSpan1">
+                                    <asp:Label ID="mem_id" runat="server" Text=""></asp:Label></span>
+								<span class = "idSpan2">(<asp:Label ID="mem_name" runat="server" Text=""></asp:Label>)</span>
 							</div>
 							<div class = "imageEdit">
 								<div class = "editTxt">
@@ -848,7 +867,7 @@
 								<span class = "pwTxtSpan">비밀번호</span>
 							</div>
 							<div class = "profilePwEdit">
-								<input type ="password" placeholder = "변경하실 비밀번호를 입력하세요."/>
+                                <asp:TextBox ID="mem_pw" runat="server" placeholder = "변경하실 비밀번호를 입력하세요." TextMode="Password"></asp:TextBox>
 							</div>
 						</div>
 					</div>
@@ -858,7 +877,7 @@
 								<span>연락처</span>
 							</div>
 							<div class = "profileTelEdit">
-								<input type = "text" placeholder = "변경하실 연락처를 입력하세요. (- 제외)"/>
+                                <asp:TextBox ID="mem_phone" runat="server" placeholder = "변경하실 연락처를 입력하세요. (- 제외)"></asp:TextBox>
 							</div>
 						</div>
 					</div>
@@ -869,20 +888,19 @@
 							</div>
 							<div class = "profileQnaItem">
 								<div class = "profileQSelect">
-									<select>
-										<option value = "1">본인이 태어난 곳은?</option>
-										<option value = "2">처음 키운 반려견은?</option>
-										<option value = "3">본인의 출신 초등학교는?</option>
-										<option value = "4">내 부모님의 고향은?</option>
-										<option value = "5">학창시절 나의 별명은?</option>
-									</select>
+                                    <asp:DropDownList ID="QnAList" runat="server">
+                                        <asp:ListItem Value="question1">본인이 태어난 출생지는?</asp:ListItem>
+                                        <asp:ListItem Value="question2">본인의 출신 초등학교 이름은?</asp:ListItem>
+                                        <asp:ListItem Value="question3">본인의 반려견 이름은?</asp:ListItem>
+                                        <asp:ListItem Value="question4">본인의 어머니 성함은?</asp:ListItem>
+                                        <asp:ListItem Value="question5">본인의 소중한 보물 1호는?</asp:ListItem>
+                                    </asp:DropDownList>
 								</div>
 								<div class = "profileA">
 									<div class = "profileAEdit">
 										<input type = "text" placeholder = "변경하실 답변을 입력하세요."/>
 									</div>
 								</div>
-							</div>
 						</div>
 					</div>
 					<div class = "profileItem5">

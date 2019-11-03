@@ -1,7 +1,5 @@
 ﻿<%@ Page Language="C#" %>
 
-<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
-
 
 
 <%@ Import Namespace="MySql.Data.MySqlClient" %>
@@ -152,10 +150,6 @@
         }
     }
 
-    protected void Button7_Click(object sender, EventArgs e)
-    {
-        Label5.Text = TextBox10.Text;
-    }
 </script>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -210,20 +204,6 @@
             <asp:Label ID="Label3" runat="server" Text="Label"></asp:Label>
         </div>
 
-
-
-        <asp:Button ID="Button6" runat="server" Text="Button" />
-        <asp:Label ID="Label5" runat="server" Text="Label"></asp:Label>
-        <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
-        <asp:Panel ID="Panel1" runat="server" BackColor="#6600FF">
-            모달 테스트
-            <asp:TextBox ID="TextBox10" runat="server"></asp:TextBox>
-            <br />
-            <asp:Button ID="Button7" runat="server" Text="넘겨" OnClick="Button7_Click" />
-            <asp:Button ID="Button8" runat="server" Text="꺼버려" />
-        </asp:Panel>
-        
-        <ajaxToolkit:ModalPopupExtender ID="ModalPopupExtender1" runat="server" CancelControlID="Button8" PopupControlID="Panel1" TargetControlID="Button6"></ajaxToolkit:ModalPopupExtender>
     </form>
 </body>
 </html>
