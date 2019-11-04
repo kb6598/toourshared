@@ -1,7 +1,11 @@
-﻿<html>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="write.aspx.cs" Inherits="write" %>
 
-<head>
-    <title>TO OUR SHARED : 글 작성 #일차</title>
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <title>TO OUR SHARED : 글 작성 #일차</title>
 
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -29,7 +33,7 @@
     <script src="./kakaoMapJS.js"></script>
 
     <style>
-        body {
+        body, form{
             margin: 0;
             padding: 0;
             list-style: none;
@@ -956,73 +960,10 @@
 		});
 
     </script>
-    
-   
-
 </head>
-
-<!-- 1일 차에만 게시글 제목 입력과 메인사진 첨부, 해쉬태그 입력 영역을 추가해주고 2일 차 이상부터는 추가하지 않는다. -->
-
 <body>
-
-    <!-- navbar 영역 -->
-    <div id="nav" class="topnav">
-        <ul class="topnavUl">
-            <li class="topnavLi">
-                <div class="nav-logo">
-                    <a href="#" class="nav-logo-item">To Our Shared</a>
-                </div>
-            </li>
-            <li class="topnavLi">
-                <a href="#">소개</a>
-                <ul>
-                    <li><a href="#">TOUPLE</a></li>
-                    <li><a href="#">서브메뉴1-2</a></li>
-                    <li><a href="#">서브메뉴1-3</a></li>
-                </ul>
-            </li>
-            <li class="topnavLi">
-                <a href="#">메뉴 2</a>
-                <ul>
-                    <li><a href="#">서브메뉴2-1</a></li>
-                    <li><a href="#">서브메뉴2-2</a></li>
-                    <li><a href="#">서브메뉴2-3</a></li>
-                </ul>
-            </li>
-            <li class="topnavLi">
-                <a href="#">메뉴 3</a>
-                <ul>
-                    <li><a href="#">서브메뉴3-1</a></li>
-                    <li><a href="#">서브메뉴3-2</a></li>
-                    <li><a href="#">서브메뉴3-3</a></li>
-                </ul>
-            </li>
-            <li class="topnavLi">
-                <a href="#">커뮤니티</a>
-                <ul>
-                    <li><a href="#">자유게시판</a></li>
-                    <li><a href="#">리뷰게시판</a></li>
-                </ul>
-            </li>
-            <li class="topnavLi">
-                <a href="#">고객센터</a>
-                <ul>
-                    <li><a href="#">도움말</a></li>
-                    <li><a href="#">건의사항</a></li>
-                </ul>
-            </li>
-            <li class="topnavLi">
-                <div class="nav-log">
-                    <a href="#">
-                        <div class="nav-log-area">
-                            <input type="button" value="로그인" class="nav-log-item">
-                        </div>
-                    </a>
-                </div>
-            </li>
-        </ul>
-    </div>
-    <div id="main" class="main">
+    <form id="form1" runat="server">
+        <div id="main" class="main">
         <!-- 메인 상단 영역 -->
         <div class="TitleArea">
             <div class="TitleAlign">
@@ -2714,6 +2655,6 @@
         //------------------------------------
 
     </script>
+    </form>
 </body>
-
 </html>
