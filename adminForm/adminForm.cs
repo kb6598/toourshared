@@ -23,8 +23,7 @@ namespace adminForm
             myDB.GetCon();
         }
 
-        //조회 버튼
-        private void button1_Click(object sender, EventArgs e)
+        public void After_Bind()
         {
             ReportDao reportdao = new ReportDao();
             Report report = new Report();
@@ -39,12 +38,12 @@ namespace adminForm
             dataGridView1.Columns[2].HeaderCell.Value = "신고 일시";
             dataGridView1.Columns[3].HeaderCell.Value = "신고인";
             dataGridView1.Columns[4].HeaderCell.Value = "신고 사유";
-            
-            //inputReport.Rep_no = "1";
-            //report = reportdao.selectReportByrep_no(inputReport);
+        }
 
-            //Console.WriteLine(report.Rep_no);
-
+        //조회 버튼
+        private void button1_Click(object sender, EventArgs e)
+        {
+            After_Bind();
         }
 
         //여기는 제재.
@@ -110,7 +109,9 @@ namespace adminForm
                 {
 
                 }
+                
             }
+            After_Bind();
         }
 
         //여기는 해제.
@@ -185,6 +186,7 @@ namespace adminForm
                 }
 
             }
+            After_Bind();
         }
     }
 }
