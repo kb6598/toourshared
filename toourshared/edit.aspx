@@ -6,7 +6,7 @@
 
     protected void Page_Load(object sender, EventArgs e)
     {
-        if(Session["mem_id"] == null)
+        /*if(Session["mem_id"] == null)
         {
             MessageBox.Show("접근 할 수 없습니다.", this.Page);
             Response.Redirect("/index.aspx");
@@ -24,8 +24,8 @@
             mem_id.Text = resultMem.Mem_id;
             mem_name.Text = resultMem.Mem_name;
 
-
-        }
+        
+        }*/
     }
     protected void btnLogout_Click(object sender, EventArgs e)
     {
