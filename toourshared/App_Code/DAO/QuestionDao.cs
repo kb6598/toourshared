@@ -9,9 +9,9 @@ using tooushared.Lib;
 /// <summary>
 /// QusetionDao의 요약 설명입니다.
 /// </summary>
-public class QusetionDao
+public class QuestionDao
 {
-    public QusetionDao()
+    public QuestionDao()
     {
         //
         // TODO: 여기에 생성자 논리를 추가합니다.
@@ -24,7 +24,7 @@ public class QusetionDao
         MyDB myDB = new MyDB();
         MySqlConnection con = myDB.GetCon();
 
-        string Sql = "INSERT INTO toourshared.qusetion (qus_title,qus_content,qus_ask) VALUES(@qus_title,@qus_content,@qus_ask); select last_insert_id()";
+        string Sql = "INSERT INTO toourshared.question (qus_title,qus_content,qus_ask) VALUES(@qus_title,@qus_content,@qus_ask); select last_insert_id()";
         MySqlCommand cmd = new MySqlCommand(Sql, con);
 
         cmd.Parameters.AddWithValue("@qus_title", question.Qus__title);
@@ -49,7 +49,7 @@ public class QusetionDao
         MyDB myDB = new MyDB();
         MySqlConnection con = myDB.GetCon();
 
-        string sql = "Select qus_no, qus_title, qus_content, qus_ask  From toourshared.qusetion";
+        string sql = "Select qus_no, qus_title, qus_content, qus_ask  From toourshared.question";
         MySqlCommand cmd = new MySqlCommand(sql, con); // 커맨드(sql문을 con에서 수행하기 위한 명령문) 생성 DB에서 수행시킬 명령 생성   
 
         MySqlDataAdapter ad = new MySqlDataAdapter();
