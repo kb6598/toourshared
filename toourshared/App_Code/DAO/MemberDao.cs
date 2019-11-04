@@ -330,5 +330,45 @@ namespace tooushared.DAO
             return FindPW;
 
         }
+
+        public Member UpdateMember(Member member)
+        {
+
+            try
+            {
+                MyDB myDB = new MyDB();
+                MySqlConnection con = myDB.GetCon();
+
+                string Sql = "update toourshared.member set mem_pw = @mem_pw, mem_phone = @mem_phone, mem_ques = @mem_ques, mem_answer = @mem_answer, mem_timestmap = @mem_timestmap where mem_id = @mem_id";
+
+                MySqlCommand cmd = new MySqlCommand(Sql, con);
+
+                cmd.Parameters.AddWithValue("@mem_pw", member.Mem_pw);
+                cmd.Parameters.AddWithValue("@mem_phone", member.Mem_phone);
+                cmd.Parameters.AddWithValue("@mem_ques", member.Mem_ques);
+                cmd.Parameters.AddWithValue("@mem_answer", member.Mem_answer);
+                cmd.Parameters.AddWithValue("@mem_timestmap", member.Mem_timestmap);
+                cmd.Parameters.AddWithValue("@mem_id", member.Mem_id);
+
+
+
+                con.Open();
+                cmd.ExecuteNonQuery();
+
+                con.Close();
+
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.StackTrace);
+                //-1 이면 오류
+
+
+            }
+
+
+            return member;
+        }
     }
 }
