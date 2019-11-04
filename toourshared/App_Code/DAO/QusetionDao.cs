@@ -110,4 +110,52 @@ public class QusetionDao
         }
         return result;
     }
+    public List<Question> selectAllQuestion(Question question)
+    {
+        MyDB mydb = new MyDB();
+
+        List<Question> resultList = new List<Question>();
+        Question result;
+        MySqlConnection con;
+
+        try
+        {
+            con = mydb.GetCon();
+
+            string Sql = "SELECT qus_no, qus__title, qus_ask FROM toourshared.question";
+
+
+            MySqlCommand cmd = new MySqlCommand(Sql, con);
+            con.Open();
+            MySqlDataReader rd = cmd.ExecuteReader();
+
+            while (rd.Read())
+            {
+
+                result = new Question();
+                result.Qus_no = rd["qus_no"].ToString();
+                result.Qus__title = rd["qus__title"].ToString();
+                result.Qus_ask = rd["qus_ask"].ToString();
+
+
+                //lstMember.Add(tmpMemberPointer);
+
+                resultList.Add(result);
+
+            }
+
+            con.Close();
+
+
+        }
+        catch (Exception ex)
+        {
+            Console.Write(ex.ToString());
+        }
+
+
+
+        return resultList;
+    }
 }
+
