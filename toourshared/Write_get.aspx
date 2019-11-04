@@ -39,6 +39,9 @@
 
         var trv_day_no = travel_DayDao.InsertTravel_Day(travel_Day);
 
+
+
+
         MapDao mapDao = new MapDao();
         Map map = new Map();
 
