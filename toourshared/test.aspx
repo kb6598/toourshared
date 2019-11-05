@@ -60,10 +60,37 @@
         //Label4.Text = Request.QueryString["id"].ToString();
 
 
+        List<Question> resultList;
+        Question question = new Question();
+        QuestionDao qus = new QuestionDao();
 
+        resultList = qus.selectAllQuestion(question);
+
+        for(int i=0; i < resultList.Count; i++)
+        {
+
+            Literal1.Text+=                                                            
+            "        <div class=\"FAQ_QUE_BOARD\" data-toggle=\"collapse\" data-target=\"#board"+i +"\">"+
+            "            <div class=\"BOARDITEM1\">                                            "+
+            "                <div class=\"BDNUMBER\">                                          "+
+                                resultList[i].Qus_no+"</div>"                                  +
+            "                <div class=\"BDTITLE\">                                           "+
+                                resultList[i].Qus__title+"</div>"                              +
+            "            </div>                                                              "+
+            "            <div class=\"BOARDITEM2\">                                            "+
+            "                <div id=\"board"+i+"\" class=\"collapse\">                              "+
+            "                    <div class=\"ANSWER\">                                        " +
+                                    resultList[i].Qus_ask                                    +
+            "                                                                                " +
+            "                    </div>                                                      " +
+            "                </div>                                                          " +
+            "            </div>                                                              " +
+            "        </div>                                                                  ";
+        }
 
 
     }
+
 
     protected void Button2_Click(object sender, EventArgs e)
     {
@@ -154,6 +181,146 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
+        <!-- Font -->
+    <link href="https://fonts.googleapis.com/css?family=Mansalva|Nanum+Gothic|Nanum+Myeongjo|Noto+Sans+KR|Lora|East+Sea+Dokdo|Jua&display=swap" rel="stylesheet">
+
+    <!-- ICON -->
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <!-- JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <style>
+
+         .FAQ_QUE_CATEGORY {
+            width: 900px;
+            margin-left: 12px;
+            padding-top: 20px;
+            display: flex;
+            flex-direction: row;
+        }
+
+        .FAQ_QUE_CATEGORY>div {
+            margin: 0 2px;
+        }
+
+        .QUENUMBER {
+            width: 10%;
+            text-align: center;
+            padding: 10px 0 5px;
+            border-bottom: 3px solid orange;
+            font-size: 18px;
+            font-weight: 500;
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+
+        .QUETITLE {
+            width: 90%;
+            text-align: center;
+            padding: 10px 0 5px;
+            border-bottom: 3px solid orange;
+            font-size: 18px;
+            font-weight: 500;
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+
+        .FAQ_QUE_BOARD {
+            width: 900px;
+            display: flex;
+            margin-left: 12px;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .FAQ_QUE_BOARD {
+            width: 900px;
+            margin-left: 12px;
+            display: flex;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .BOARDITEM1 {
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+        }
+
+        .BOARDITEM1>div {
+            margin: 0 2px;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        .BDNUMBER {
+            width: 10%;
+            font-size: 15px;
+            border-bottom: .5px solid rgba(0, 0, 0, .5);
+        }
+
+        .BDTITLE {
+            width: 90%;
+            font-size: 15px;
+            border-bottom: .5px solid rgba(0, 0, 0, .5);
+        }
+
+        .ANSWER {
+            padding: 20px 5px;
+            background-color: #eee;
+            color: rgba(0, 0, 0, .5);
+            margin: 0 1px;
+        }
+        
+        .FAQ_INQUIRE{
+            width: 100%;
+            height: 150px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .FAQ_INQUIRE > span{
+            padding: 0 3px;
+        }
+        
+        .nm{
+            font-size: 15px;
+        }
+        
+        .em{
+            width: 142px;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: default;
+            color: #fff;
+            font-size: 13px;
+            font-weight: 300;
+            border-radius: .4rem;
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: rgba(0, 0, 0, .9);
+            transition-duration: .5s;
+        }
+        
+        .em:hover{
+            font-size: 15px;
+        }
+        
+        .footer {
+            width: 100%;
+            height: 250px;
+            background-color: #272625;
+        }
+    </style>
+
+
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title></title>
 </head>
@@ -201,7 +368,15 @@
 
             <asp:Label ID="Label4" runat="server" Text="Label"></asp:Label>님이
             찾은 아이디는 : 
-            <asp:Label ID="Label3" runat="server" Text="Label"></asp:Label>
+            <asp:Label ID="Label3" runat="server" Text="Label"></asp:Label>'
+            
+            <div class="FAQ_QUE_CATEGORY">
+            <div class="QUENUMBER">번호</div>
+            <div class="QUETITLE">제목</div> 
+            </div>      
+            <asp:Literal ID="Literal1" runat="server"></asp:Literal>
+            
+ 
         </div>
 
     </form>
