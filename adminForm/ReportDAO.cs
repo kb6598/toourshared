@@ -18,6 +18,7 @@ public class ReportDao
         // TODO: 여기에 생성자 논리를 추가합니다.
         //
     }
+
     public string InsertReport(Report report)
     {
 
