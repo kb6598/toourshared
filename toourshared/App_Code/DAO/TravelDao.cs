@@ -492,6 +492,54 @@ public class TravelDao
 
         return resultList;
     }
+
+    public List<Travel> test(Travel travel)
+    {
+        MyDB mydb = new MyDB();
+
+        List<Travel> resultList = new List<Travel>();
+        Travel result;
+        MySqlConnection con;
+
+        try
+        {
+            con = mydb.GetCon();
+
+            string Sql = "SELECT * FROM toourshared.travel";
+
+
+            MySqlCommand cmd = new MySqlCommand(Sql, con);
+            con.Open();
+            MySqlDataReader rd = cmd.ExecuteReader();
+
+            while (rd.Read())
+            {
+
+                result = new Travel();
+                result.Trv_no = rd["trv_no"].ToString();
+                result.Trv_title = rd["trv_title"].ToString();
+                result.Trv_timestamp = rd["trv_timestamp"].ToString();
+
+
+                //lstMember.Add(tmpMemberPointer);
+
+                resultList.Add(result);
+
+            }
+
+            con.Close();
+
+
+        }
+        catch (Exception ex)
+        {
+            Console.Write(ex.ToString());
+        }
+
+
+
+        return resultList;
+    }
 }
 
 
