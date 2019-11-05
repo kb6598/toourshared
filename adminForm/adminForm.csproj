@@ -180,6 +180,10 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Member.cs" />
+    <Compile Include="MemberDao.cs" />
+    <Compile Include="Member_Block.cs" />
+    <Compile Include="Member_BlockDao.cs" />
     <Compile Include="MyDB.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

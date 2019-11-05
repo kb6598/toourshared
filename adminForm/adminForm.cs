@@ -8,7 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using MySql.Data.MySqlClient;
-
+using tooushared.DAO;
+using tooushared.DTO;
 
 namespace adminForm
 {
@@ -23,7 +24,8 @@ namespace adminForm
             myDB.GetCon();
         }
 
-        public void After_Bind()
+        //신고글 조회 기능(함수)
+        public void After_Report()
         {
             ReportDao reportdao = new ReportDao();
             Report report = new Report();
@@ -40,13 +42,43 @@ namespace adminForm
             dataGridView1.Columns[4].HeaderCell.Value = "신고 사유";
         }
 
-        //조회 버튼
-        private void button1_Click(object sender, EventArgs e)
+        //신고글 계정 조회 기능(함수)
+        public void Member_Bind()
         {
-            After_Bind();
+            Member_Block memberBlock = new Member_Block();
+            Member_BlockDao memberBlockDao = new Member_BlockDao();
+
+            DataSet ds = memberBlockDao.SelectMember_Block();
+            dataGridView2.DataSource = ds.Tables[0];
+
+            //mem_blo_no, mem_id, mem_blo_date, mem_blo_length
+            dataGridView2.Columns[0].HeaderCell.Value = "계정정지 번호";
+            dataGridView2.Columns[1].HeaderCell.Value = "아이디";
+            dataGridView2.Columns[2].HeaderCell.Value = "계정정지 시작일";
+            dataGridView2.Columns[3].HeaderCell.Value = "계정정지 기간";            
         }
 
-        //여기는 제재.
+        public void ABC()
+        {
+            MemberDao memberDao = new MemberDao();
+            Member member = new Member();
+
+            DataSet ds = memberDao.Select_MemberID();
+            dataGridView2.DataSource = ds.Tables[0];
+
+            dataGridView2.Columns[0].HeaderCell.Value = "해당 ID";
+            dataGridView2.Columns[1].HeaderCell.Value = "해당 계정";
+            dataGridView2.Columns[2].HeaderCell.Value = "해당 일정";
+            dataGridView2.Columns[3].HeaderCell.Value = "해당 시간";
+        }
+
+        //신고목록조회 버튼
+        private void button1_Click(object sender, EventArgs e)
+        {
+            After_Report();
+        }
+
+        //신고글 제재 버튼
         private void button2_Click(object sender, EventArgs e)
         {            
             //server=itbuddy.iptime.org;user=yuhan;database=toourshared;password=yuhan1234;port=8233;"
@@ -108,13 +140,12 @@ namespace adminForm
                 catch (Exception ex)
                 {
 
-                }
-                
+                }                
             }
-            After_Bind();
+            After_Report();
         }
 
-        //여기는 해제.
+        //신고글 해제 버튼
         private void button3_Click(object sender, EventArgs e)
         {
             //using (MySqlConnection myconn = new MySqlConnection(@"server=itbuddy.iptime.org;user=yuhan;database=toourshared;password=yuhan1234;port=8233;"))
@@ -184,9 +215,25 @@ namespace adminForm
                 {
 
                 }
-
             }
-            After_Bind();
+            After_Report();
+        }
+
+        //계정정지 목록 조회버튼
+        private void button4_Click(object sender, EventArgs e)
+        {
+            Member_Bind();
+        }
+
+        //계정정지 목록 조회버튼
+        private void button5_Click(object sender, EventArgs e)
+        {
+            ABC();
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
