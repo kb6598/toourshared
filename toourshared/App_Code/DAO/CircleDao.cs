@@ -36,7 +36,6 @@ public class CircleDao
 
         con.Open();
 
-     
 
         string result = cmd.LastInsertedId.ToString();
 
