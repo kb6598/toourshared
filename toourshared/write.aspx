@@ -30,6 +30,7 @@
         //{
         //    Response.Redirect("/index.aspx");
         //}
+        // 테스트 코드
         if(HttpContext.Current.Session["mem_id"] == null)
         {
             Session["mem_id"] = "billip";
@@ -38,7 +39,7 @@
 
         //status -> 편집 페이지 정보
         //세션 status가 비어있다면 새로운 status 생성
-        if (HttpContext.Current.Session["status"] == null)
+        if (HttpContext.Current.Session["write_status"] == null)
         {
 
 
@@ -46,13 +47,22 @@
             Travel inTravel = new Travel();
             inTravel.Mem_id = HttpContext.Current.Session["mem_id"].ToString();
             inTravel.Trv_create_time = TimeLib.GetTimeStamp();
+            inTravel.Trv_secret = 0.ToString();
+            inTravel.Trv_timestamp = TimeLib.GetTimeStamp();
+            inTravel.Trv_title = Request.Form["title"];
+            inTravel.Trv_tot_rate = 0.ToString();
+            inTravel.Trv_views = 0.ToString();
+
+
+
             TravelDao travelDao = new TravelDao();
             string trv_no = travelDao.InsertTravel(inTravel);
 
             //travel_day도 생성
             Travel_Day travel_Day = new Travel_Day();
             travel_Day.Trv_no = trv_no;
-            
+
+
             Travel_DayDao travel_DayDao = new Travel_DayDao();
             string trv_day_no = travel_DayDao.InsertTravel_Day(travel_Day);
             // 현재폼 정보를 저장할 딕셔너리 생성 나중에 세션에 넘겨줌
@@ -61,24 +71,47 @@
                 {"status","first" },
                 { "trv_no", trv_no},
                 { "cur_trv_day_no",trv_day_no},
+                { "cur_day","1"},
                 {"trv_day_cnt","1" },
-                {"trv_day_1",trv_day_no }
+                {"1",trv_day_no }
             };
-            Session["status"] = newWriteStatus;
+            Session["write_status"] = newWriteStatus;
             Session.Timeout = SESSION_TIME_OUT_MIN;
-        }//세션 status가 비어있지 않다면!
-        else if (HttpContext.Current.Session["status"] != null)
-        {
-            //세션에서 편집 정보를 가져옴
-            Dictionary<string, string> readWriteStatus = new Dictionary<string, string>();
-            readWriteStatus = (Dictionary<string, string>)Session["status"];
-            foreach (var item in readWriteStatus)
-            {
-                Response.Write(item.Key + " : " + item.Value+"<br/>");
-            }
-            //Response.Write(readWriteStatus["status"]);
-
         }
+
+        Dictionary<string, string> readWriteStatus = new Dictionary<string, string>();
+        readWriteStatus = (Dictionary<string, string>)Session["write_status"];
+
+        BindDropDownList();
+        Literal_day.Text = readWriteStatus["cur_day"];
+
+
+
+
+
+    }
+    protected void BindDropDownList()
+    {
+
+
+        Dictionary<string, string> readWriteStatus = new Dictionary<string, string>();
+        readWriteStatus = SessionLib.getWriteStatus();
+        if (readWriteStatus != null)
+        {
+            int i = 1;
+            ListItem lst;
+            while (true)
+            {
+                if (!readWriteStatus.ContainsKey(i.ToString())) break;
+                lst = new ListItem(i + "일차", i.ToString());
+                goDay.Items.Add(lst);
+                i++;
+            }
+        }
+
+        //세션에서 편집 정보를 가져옴
+
+
 
 
     }
@@ -86,27 +119,20 @@
 
     protected void DropDownList_goDay_SelectedIndexChanged(object sender, EventArgs e)
     {
-        if (HttpContext.Current.Session["status"] != null)
+
+        if(HttpContext.Current.Session["write_status"] != null)
         {
-            //세션에서 편집 정보를 가져옴
             Dictionary<string, string> readWriteStatus = new Dictionary<string, string>();
-            readWriteStatus = (Dictionary<string, string>)Session["status"];
-            foreach (var item in readWriteStatus)
-            {
-                Response.Write(item.Key + " : " + item.Value+"<br/>");
-            }
-            //Response.Write(readWriteStatus["status"]);
+            readWriteStatus = (Dictionary<string, string>)Session["write_status"];
+
 
         }
+
     }
 
     protected void Page_Load(object sender, EventArgs e)
     {
         WriteSessionProcess();
-
-
-
-
     }
 </script>
 
@@ -140,7 +166,7 @@
 
 
     <style>
-        body {
+        body, form {
             margin: 0;
             padding: 0;
             list-style: none;
@@ -1131,11 +1157,12 @@
                 </div>
                 <div class="TitleSub">
                     <div class="SubItem">
-                        <span>#일 차 작성 중...</span>
+                        <span>
+                            <asp:Literal ID="Literal_day" runat="server"></asp:Literal>일 차 작성 중...</span>
                     </div>
                     <div class="SubItem">
 
-                        <asp:DropDownList ID="DropDownList_goDay" runat="server" OnSelectedIndexChanged="DropDownList_goDay_SelectedIndexChanged">
+                        <asp:DropDownList ID="goDay" runat="server" OnSelectedIndexChanged="DropDownList_goDay_SelectedIndexChanged">
                         </asp:DropDownList>
 
                     </div>
@@ -1232,7 +1259,7 @@
                     <div class="mainImg_AlignLeft">
                         <div class="mainImg_Label">게시글의 메인이미지를 첨부하세요.</div>
                         <div class="mainImg_Input">
-                            <input type="file" accept=".jpg,.jpeg,.png" class="fileItem" />
+                            <asp:FileUpload ID="main_img" runat="server" />
                         </div>
                     </div>
                     <div class="mainImg_AlignRight">
@@ -1298,7 +1325,7 @@
 
     </form>
     <!-- KAKAO -->
-    <script>
+    <script type="text/javascript">
         // Drawing Manager로 도형을 그릴 지도 div
         var drawingMapContainer = document.getElementById('drawingMap'),
             drawingMap = {
