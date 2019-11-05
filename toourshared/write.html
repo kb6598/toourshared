@@ -520,7 +520,10 @@
             font-size: 13px;
             color: white;
             background-color: #D81159;
-            transition-duration: .5s;
+            transition-duration: .5s;            
+            padding: 12px;
+            text-align: center
+            
         }
         
 
@@ -1118,7 +1121,7 @@
         <div class="btnArea">
             <!-- 임시 저장 버튼 -->
             <div class="tempSaveBtn">
-                <input type="button" value="임시 저장" class="btnAreaItem">
+                <div class="btnAreaItem">임시 저장</div>
             </div>
             <!-- 다음 일로 이동 -->
             <div class="nextPageBtn">
@@ -1163,6 +1166,8 @@
     </div>
 
     <!-- KAKAO -->
+
+
     <script>
         // Drawing Manager로 도형을 그릴 지도 div
         var drawingMapContainer = document.getElementById('drawingMap'),

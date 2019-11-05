@@ -1,0 +1,856 @@
+﻿
+body, form {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    min-width: 100%;
+    min-height: 100%;
+    display: flex;
+    line-height: 1;
+    /* 전체 배경색 */
+    background-color: #00b9f1;
+    background-repeat: no-repeat;
+}
+
+.topnavUl {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    text-decoration: none;
+    font-size: 20px;
+    font-family: '맑은고딕';
+}
+
+.topnavLi {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    text-decoration: none;
+    font-size: 20px;
+    font-family: '맑은고딕';
+}
+
+    .topnavLi ul,
+    li {
+        list-style: none;
+        text-decoration: none;
+        padding: 0;
+        margin: 0;
+    }
+
+a {
+    color: white;
+    text-decoration: none;
+}
+
+#nav {
+    z-index: 99999;
+    position: absolute;
+    width: 100%;
+    /* absolute는 부피를 못잡으니까 width 100% */
+    overflow: hidden;
+    font-size: 25px;
+    transition-duration: 0.5s;
+    position: fixed;
+}
+
+    #nav:hover {
+        height: 250px;
+        transition: background .5s;
+        background-color: rgba(249, 192, 12, 0.95);
+    }
+
+    #nav > ul {
+        text-align: center;
+        font-family: 'Mansalva', cursive;
+        font-size: 25px;
+    }
+
+        #nav > ul > li {
+            display: inline-block;
+            position: relative;
+            padding: 0px 50px;
+        }
+
+            #nav > ul > li > a {
+                display: block;
+                padding: 30px 15px 20px;
+                line-height: 30px;
+                transition: color 0.9s;
+                transition: background 0.4s;
+                /* 부트스트랩 적용 후 nav 효과 적용이 되는걸 방지하기 위해 */
+                text-decoration: none;
+                /* 상단 메뉴 글씨 색 */
+                color: white;
+            }
+
+            #nav > ul > li:hover > a {
+                /* 메뉴에 마우스 올렸을 때 발생할 스타일(1Depth) */
+                transition: border .5s;
+                border-bottom: 3px solid #ff7473;
+            }
+
+    #nav ul ul {
+        /*display: none;*/
+        position: absolute;
+        width: 100%;
+        /* absolute는 부피를 가질 수 없다 */
+        margin: 0px -50px;
+    }
+
+        #nav ul ul a {
+            /* 2Depth li Style */
+            display: block;
+            line-height: 40px;
+            font-size: 14px;
+            color: white;
+        }
+
+            #nav ul ul a:hover {
+                /* SubMenu 마우스 올렸을 때 발생할 스타일 */
+                font-weight: bold;
+                /* 부트스트랩 적용 후 nav 효과 적용이 되는걸 방지하기 위해 */
+                text-decoration: none;
+            }
+
+    #nav li:hover ul {
+        display: block;
+    }
+
+    #nav li:nth-child(1) ul {
+        left: 0;
+        width: 100%;
+    }
+
+.nav-logo {
+    /* 웹 사이트 좌측 상단에 위치한 로고 div style */
+}
+
+.nav-logo-item {
+    font-family: 'Mansalva', cursive;
+    font-size: 25px;
+    transition-duration: .5s;
+}
+
+    .nav-logo-item:hover {
+        transition-duration: .5s;
+        font-size: 28px;
+        color: white;
+        /* 부트스트랩 적용 후 텍스트에 적용되는 효과 방지를 위해 */
+        text-decoration: none;
+    }
+
+.nav-log-area {
+    /* 로그인, 로그아웃 영역 */
+    width: 150px;
+    height: 40px;
+    padding-bottom: 5px;
+    border: 2px solid white;
+    border-radius: 15px;
+    transition: .5s;
+}
+
+.nav-log-item {
+    font-size: 20px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    margin-top: 8px;
+    color: white;
+    background-color: transparent;
+}
+
+/* 창 크기 조절 시 nav display none 설정 */
+@media only screen and (max-width: 1600px) {
+    .topnav {
+        display: none;
+    }
+
+        .topnav > ul > li > .nav-logo > .nav-logo-item {
+            float: left;
+            display: block;
+        }
+}
+
+.main {
+    margin-top: 250px;
+    width: 100%;
+    height: 1500px;
+    padding: 10px;
+}
+
+.TitleArea {
+    width: 100%;
+    height: 130px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.TitleAlign {
+    width: 100%;
+    height: 50%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+    .TitleAlign > input {
+        width: 800px;
+        height: 60px;
+        padding: 0 auto;
+        text-align-last: center;
+        color: rgba(0, 0, 0, 0.7);
+        font-size: 15px;
+        border: none;
+        outline: none;
+        border-radius: 4px;
+        transition-duration: .9s;
+    }
+
+        .TitleAlign > input:focus {
+            font-size: 28px;
+        }
+
+.TitleSub {
+    width: 100%;
+    height: 50%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.SubItem {
+    padding: 0 30px;
+}
+
+    .SubItem span {
+        font-size: 13px;
+        width: 130px;
+        height: 40px;
+        color: #eee;
+        border-radius: 5px;
+        background-color: #2e2e2e;
+        display: flex;
+        cursor: default;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .SubItem .goDay {
+        width: 130px;
+        height: 40px;
+        border: none;
+        outline: none;
+        color: #eee;
+        text-align-last: center;
+        background-color: #2e2e2e;
+        font-size: 13px;
+        padding: 10px;
+        border-radius: 5px;
+    }
+
+/* 글 작성 영역 外 */
+.MapArea {
+    width: 100%;
+    height: 850px;
+    margin-top: 100px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 글 작성 영역 內 */
+#travelRoute_wrap {
+    width: 1530px;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+/* 글 작성 좌측 사이드 영역 */
+.travelRouteItem-Left {
+    width: 20%;
+    height: 100%;
+    padding: 10px;
+}
+
+/* 글 작성 센터 영역 */
+.travelRouteItem-Center {
+    width: 60%;
+    height: 100%;
+    padding: 10px;
+}
+
+/* 글 작성 우측 사이드 영역 */
+.travelRouteItem-Right {
+    width: 20%;
+    height: 100%;
+    padding: 10px;
+}
+
+/* 여행 방문 헤더 영역 */
+.travelRoute-header {
+    width: 100%;
+    height: 100px;
+}
+
+/* 여행 방문 내용 영역 */
+.travelRoute-content {
+    width: 100%;
+    height: 730px;
+}
+
+.travelRouteItem-Left .travelRoute-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border: none;
+    border-bottom: 0.5px solid rgba(0, 0, 0, .2);
+    background-color: darkorange;
+}
+
+.travelRouteItem-Left .travelRoute-content {
+    display: flex;
+    flex-direction: column;
+    background-color: #FFEEE4;
+}
+
+.travelRoute-header .trTitle1 {
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.travelRoute-header .trTitle2 {
+    padding-top: 5px;
+    font-size: 12px;
+    font-weight: 300;
+}
+
+.travelRouteItem-Center .travelRoute-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border: none;
+    border-bottom: 0.5px solid rgba(0, 0, 0, .2);
+    background-color: darkorange;
+}
+
+    .travelRouteItem-Center .travelRoute-header button {
+        margin: 0 8px;
+        width: 80px;
+        height: 80px;
+        font-size: 11px;
+        border: none;
+        outline: none;
+        background-color: transparent;
+        transition-duration: .3s;
+    }
+
+        .travelRouteItem-Center .travelRoute-header button:hover {
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+.travelRoute-header button p {
+    margin: 5px;
+}
+
+.travelRouteItem-Center .map_wrap {
+    width: 100%;
+    height: 730px;
+    padding: 10px;
+    background-color: #FFEEE4;
+}
+
+.travelRouteItem-Right .modal-cost {
+}
+
+.travelRouteItem-Right .cost-header {
+    width: 100%;
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border: none;
+    border-bottom: 0.5px solid rgba(0, 0, 0, .2);
+    background-color: darkorange;
+}
+
+    .travelRouteItem-Right .cost-header .chTitle1 {
+        font-size: 14px;
+        font-weight: 700;
+    }
+
+    .travelRouteItem-Right .cost-header .chTitle2 {
+        padding-top: 5px;
+        font-size: 12px;
+        font-weight: 300;
+        padding-right: 35px;
+    }
+
+.travelRouteItem-Right .cost-body {
+    width: 100%;
+    height: 730px;
+    background-color: #FFEEE4;
+}
+
+.hashArea {
+    width: 100%;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
+}
+
+.hashAreaItem {
+    width: 1200px;
+    height: 50px;
+    padding: 10px;
+    font-size: 13px;
+    border-radius: 5px;
+    border: none;
+    outline: none;
+}
+
+.taArea {
+    width: 100%;
+    height: 600px;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+    .taArea .form-group {
+        width: 1510px;
+        height: 100%;
+    }
+
+.note-editing-area {
+    height: 600px;
+    resize: none;
+}
+
+.note-statusbar {
+    display: none;
+}
+
+.btnArea {
+    width: 100%;
+    height: 150px;
+    padding: 10px;
+    margin-top: 50px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+    .btnArea > div {
+        padding: 0 30px;
+    }
+
+.btnAreaItem {
+    width: 200px;
+    height: 40px;
+    outline: none;
+    border: none;
+    font-size: 13px;
+    color: white;
+    background-color: #D81159;
+    transition-duration: .5s;
+    padding: 12px;
+    text-align: center
+}
+
+
+
+.mainImgArea {
+    width: 100%;
+    height: 200px;
+    margin-top: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.mainImg_wrap {
+    width: 1200px;
+    height: 200px;
+    border-radius: 5px;
+    background-color: #eee;
+    border: 1px solid white;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.mainImg_label {
+    font-size: 13px;
+    font-weight: 700;
+    padding: 10px 0;
+}
+
+.mainImg_Input {
+    background-color: white;
+    font-size: 13px;
+    padding: 10px;
+}
+
+.mainImg_AlignRight {
+    padding: 100px;
+}
+
+#mainImgItem {
+    width: 0;
+    height: 0;
+    transition-duration: .5s;
+}
+
+.mapWrap {
+    padding: 10px;
+}
+
+#drawingMap {
+    z-index: 3;
+    height: 100%;
+    border: 1px solid black;
+}
+<!-- 원본 style-- >
+.modes {
+    top: 10px;
+    left: 10px;
+    z-index: 1;
+}
+
+.map_wrap a,
+.map_wrap a:hover,
+.map_wrap a:active {
+    color: #000;
+    text-decoration: none;
+}
+
+#menu_wrap {
+    margin: 10px 0 30px 10px;
+    padding: 5px;
+    overflow-y: auto;
+    background: rgba(255, 255, 255, 0.7);
+    z-index: 1;
+    font-size: 12px;
+    border-radius: 10px;
+}
+
+.bg_white {
+    background: #fff;
+}
+
+#menu_wrap hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 2px solid #5F5F5F;
+    margin: 3px 0;
+}
+
+#menu_wrap .option {
+    text-align: center;
+}
+
+    #menu_wrap .option p {
+        margin: 10px 0;
+    }
+
+    #menu_wrap .option button {
+        margin-left: 5px;
+    }
+
+#placesList li {
+    list-style: none;
+}
+
+#placesList .item {
+    position: relative;
+    border-bottom: 1px solid #888;
+    overflow: hidden;
+    cursor: pointer;
+    min-height: 65px;
+}
+
+    #placesList .item span {
+        display: block;
+        margin-top: 4px;
+    }
+
+    #placesList .item h5,
+    #placesList .item .info {
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+    }
+
+    #placesList .item .info {
+        padding: 10px 0 10px 55px;
+    }
+
+#placesList .info .gray {
+    color: #8a8a8a;
+}
+
+#placesList .info .jibun {
+    padding-left: 26px;
+    background: url(http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/places_jibun.png) no-repeat;
+}
+
+#placesList .info .tel {
+    color: #009900;
+}
+
+#placesList .item .markerbg {
+    float: left;
+    position: absolute;
+    width: 36px;
+    height: 37px;
+    margin: 10px 0 0 10px;
+    background: url(http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png) no-repeat;
+}
+
+#placesList .item .marker_1 {
+    background-position: 0 -10px;
+}
+
+#placesList .item .marker_2 {
+    background-position: 0 -56px;
+}
+
+#placesList .item .marker_3 {
+    background-position: 0 -102px
+}
+
+#placesList .item .marker_4 {
+    background-position: 0 -148px;
+}
+
+#placesList .item .marker_5 {
+    background-position: 0 -194px;
+}
+
+#placesList .item .marker_6 {
+    background-position: 0 -240px;
+}
+
+#placesList .item .marker_7 {
+    background-position: 0 -286px;
+}
+
+#placesList .item .marker_8 {
+    background-position: 0 -332px;
+}
+
+#placesList .item .marker_9 {
+    background-position: 0 -378px;
+}
+
+#placesList .item .marker_10 {
+    background-position: 0 -423px;
+}
+
+#placesList .item .marker_11 {
+    background-position: 0 -470px;
+}
+
+#placesList .item .marker_12 {
+    background-position: 0 -516px;
+}
+
+#placesList .item .marker_13 {
+    background-position: 0 -562px;
+}
+
+#placesList .item .marker_14 {
+    background-position: 0 -608px;
+}
+
+#placesList .item .marker_15 {
+    background-position: 0 -654px;
+}
+
+#pagination {
+    margin: 10px auto;
+    text-align: center;
+}
+
+    #pagination a {
+        display: inline-block;
+        margin-right: 10px;
+    }
+
+    #pagination .on {
+        font-weight: bold;
+        cursor: default;
+        color: #777;
+    }
+
+
+< !-- 커스텀 오버레이 스타일-- >
+.card-cus {
+    border: 1px outset rgba(0, 0, 0, .19);
+    width: 300px;
+    word-spacing: -1px;
+}
+
+.card-header {
+    width: 100%;
+    height: 50px;
+    display: flex;
+    flex-direction: row;
+    background-color: #eee;
+    font-family: 'Noto Sans KR', sans-serif;
+    padding: 0px;
+}
+
+.card-title {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    font-size: 18px;
+    justify-content: center;
+    align-items: center;
+    padding-left: 10px;
+    color: #000;
+}
+
+.card-input {
+    width: 95%;
+    height: 80%;
+    padding: 10px;
+    outline: none;
+}
+
+.card-close {
+    width: 10%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    padding-top: 3px;
+    margin-right: 8px;
+}
+
+    .card-close .closeBtn {
+        color: #000;
+        font-size: 25px;
+    }
+
+.closeBtn span {
+    cursor: pointer;
+    color: black;
+}
+
+.card-body {
+    width: 100%;
+    height: 100%;
+    padding: 20px 0px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: 'Malgun Gothic', dotum, '돋움', sans-serif;
+    text-align: center;
+    font-size: 18px;
+    overflow: auto;
+}
+
+.card-body-li {
+    font-size: 15px;
+    list-style: none;
+}
+
+.card-addBtn {
+    width: 80px;
+    height: 27px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: .2rem;
+    font-size: .875rem;
+    cursor: pointer;
+    background-color: orange;
+    transition-duration: .9s;
+}
+
+    .card-addBtn:hover {
+        transition-duration: .9s;
+        background-color: darkorange;
+    }
+
+< !-- modal-cost and TravelRoute-- > < !-- modal-cost and TravelRoute-- >
+.modal-cost {
+    display: flex;
+    flex-direction: row-reverse;
+    width: 100%;
+}
+
+#travelRoute {
+    list-style: none;
+}
+
+.costItem,
+.travelPoint {
+    width: 100%;
+    cursor: default;
+    padding: 10px 0 5px;
+    border-bottom: 1px dashed rgba(0, 0, 0, 0.2);
+}
+
+.costItem-header span {
+    font-size: 30px;
+    font-family: 'East Sea Dokdo', cursive;
+}
+
+.costItem-body ul {
+    padding: 0 5px 0 20px;
+    list-style-type: circle;
+}
+
+.costItem-body li {
+    font-size: 12px;
+}
+
+< !--bootstrap customize-- >
+.row {
+    width: 100%;
+}
+
+.btn-group-sm > .btn, .btn-sm {
+    font-size: 8px;
+}
+
+.form-control-sm {
+    font-size: 10px;
+}
+
+.btn-warning {
+    box-sizing: content-box;
+    font-size: 2px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 0px;
+    padding-right: 0px;
+    width: 10px;
+    height: 10px;
+}
+
+
