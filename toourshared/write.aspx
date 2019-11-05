@@ -23,6 +23,11 @@
         Response.Redirect("/find_idpw.aspx");
     }
 
+
+    //<div class="mainImg_Input">
+    //                        <input type="file" name="main_img" id="main_img">
+    //                    </div>
+
     protected void WriteSessionProcess()
     {
         int SESSION_TIME_OUT_MIN = 60;
@@ -74,28 +79,52 @@
                 { "cur_day","1"},
                 {"trv_day_cnt","1" },
                 {"1",trv_day_no }
+
             };
             Session["write_status"] = newWriteStatus;
             Session.Timeout = SESSION_TIME_OUT_MIN;
+
         }
 
-        Dictionary<string, string> readWriteStatus = new Dictionary<string, string>();
-        readWriteStatus = (Dictionary<string, string>)Session["write_status"];
 
-        BindDropDownList();
-        Literal_day.Text = readWriteStatus["cur_day"];
+
+
+
 
 
 
 
 
     }
+    protected void BindTables()
+    {
+
+        Dictionary<string, string> readWriteStatus = SessionLib.getWriteStatus();
+        if (readWriteStatus != null)
+        {
+
+            Literal_day.Text = readWriteStatus["cur_day"];
+
+            Travel_Day input = new Travel_Day();
+            Travel_Day output = new Travel_Day();
+            Travel_DayDao dao = new Travel_DayDao();
+
+            input.Trv_day_no = readWriteStatus["cur_day"];
+            output = dao.selectTrvel_DayBytrv_day_no(input);
+
+
+
+
+
+        }
+
+    }
+
     protected void BindDropDownList()
     {
 
 
-        Dictionary<string, string> readWriteStatus = new Dictionary<string, string>();
-        readWriteStatus = SessionLib.getWriteStatus();
+        Dictionary<string, string> readWriteStatus = SessionLib.getWriteStatus();
         if (readWriteStatus != null)
         {
             int i = 1;
@@ -133,6 +162,7 @@
     protected void Page_Load(object sender, EventArgs e)
     {
         WriteSessionProcess();
+        BindDropDownList();
     }
 </script>
 
@@ -1277,15 +1307,16 @@
             <div class="btnArea">
                 <!-- 임시 저장 버튼 -->
                 <div class="tempSaveBtn">
-                    <input type="button" value="임시 저장" class="btnAreaItem">
+                    <div onclick ="tmpSave()" class="btnAreaItem">임시 저장"</div>
                 </div>
                 <!-- 다음 일로 이동 -->
-                <div class="nextPageBtn">
-                    <input type="button" value="다음 일 입력" class="btnAreaItem">
+                <div onclick ="nextDay()" class="nextPageBtn">
+                    <div class="btnAreaItem">다음 일 입력</div>
                 </div>
                 <!-- 글 작성 완료 버튼 -->
                 <div class="finishBtn">
-                    <input type="button" value="글 작성 완료" class="btnAreaItem">
+                    <div onclick ="endWrite`
+                        ()" class="btnAreaItem">글 작성 완료</div>
                 </div>
             </div>
         </div>
@@ -1325,7 +1356,7 @@
 
     </form>
     <!-- KAKAO -->
-    <script type="text/javascript">
+    <script type="text/javascript" >
         // Drawing Manager로 도형을 그릴 지도 div
         var drawingMapContainer = document.getElementById('drawingMap'),
             drawingMap = {
@@ -2537,7 +2568,7 @@
         //----------DragManager Start
         //------------------------------------
 
-
+        
 
 
 
@@ -2705,6 +2736,48 @@
         //------------------------------------
         //----------DragManager END
         //------------------------------------
+
+         //-----placeList 데이터 가져오기
+         
+        <%
+        if(Request["placeList"] != null)
+        {
+            Response.Write("TravelRouteList ="+Request["placeList"]+";");
+
+        }
+        else
+        {
+            Response.Write("{}");
+        }
+        %>
+        //-----costList 가져오기
+        <%
+        if(Request["costList"] != null)
+        {
+            Response.Write(Request["costList"]);
+
+        }
+        else
+        {
+            Response.Write("{}");
+        }
+        %>
+
+        //------MapDato 가져오기
+        <%
+        if(Request["mapData"] != null)
+        {
+            Response.Write(Request["mapData"]);
+
+        }
+        else
+        {
+            Response.Write("{}");
+        }
+        %>
+
+
+
 
         //------------------------------------
         //----------Post START
