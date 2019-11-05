@@ -384,7 +384,7 @@ public class TravelDao
 
         return resultList;
     }
-    public List<Travel> SelectTagTravel(Travel travel, int start, int count)
+    public List<Travel> SelectTagTravel(Travel travel,string keyword, int start, int count)
     {
         MyDB mydb = new MyDB();
 
@@ -398,7 +398,7 @@ public class TravelDao
 
             con = mydb.GetCon();
 
-            string Sql = "SELECT * FROM toourshared.travel where trv_tag like '%@keyword%' order by trv_create_time desc limit @start,@count";
+            string Sql = "SELECT * FROM toourshared.travel where trv_tag like '%"+keyword+"%' order by trv_create_time desc limit @start,@count";
 
 
             MySqlCommand cmd = new MySqlCommand(Sql, con);
@@ -424,6 +424,54 @@ public class TravelDao
                 result.Trv_tag = rd["trv_tag"].ToString();
                 result.Trv_timestamp = rd["trv_timestamp"].ToString();
                 result.Trv_create_time = rd["trv_create_time"].ToString();
+
+                //lstMember.Add(tmpMemberPointer);
+
+                resultList.Add(result);
+
+            }
+
+            con.Close();
+
+
+        }
+        catch (Exception ex)
+        {
+            Console.Write(ex.ToString());
+        }
+
+
+
+        return resultList;
+    }
+
+    public List<Travel> selectAll(Travel travel, string like)
+    {
+        MyDB mydb = new MyDB();
+
+        List<Travel> resultList = new List<Travel>();
+        Travel result;
+        MySqlConnection con;
+
+        try
+        {
+            con = mydb.GetCon();
+
+            string Sql = "SELECT * FROM toourshared.travel where trv_tag LIKE "+ like;
+
+            
+            MySqlCommand cmd = new MySqlCommand(Sql, con);
+            con.Open();
+            MySqlDataReader rd = cmd.ExecuteReader();
+
+            while (rd.Read())
+            {
+
+                result = new Travel();
+                result.Trv_no = rd["trv_no"].ToString();
+                result.Trv_title = rd["trv_title"].ToString();
+                result.Trv_timestamp = rd["trv_timestamp"].ToString();
+
 
                 //lstMember.Add(tmpMemberPointer);
 

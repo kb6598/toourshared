@@ -6,26 +6,29 @@
 
     protected void Button_selecttag_Click(object sender, EventArgs e)
     {
+
         List<Travel> travelList;
         Travel travel = new Travel();
+
         TravelDao tra = new TravelDao();
 
         travel.Trv_tag = txtTag.Text;
-        int start = 1;
-        int count = 10;
+        string like = "'%" + txtTag.Text + "%'";
 
-        travelList = tra.SelectTagTravel(travel, start, count);
+        travelList = tra.selectAll(travel, like);
 
-        txt1.Text = travelList[0].Trv_no;
-        txt2.Text = travelList[0].Trv_title;
-        txt3.Text = travelList[0].Trv_timestamp;
-        txt4.Text = travelList[0].Trv_create_time;
+        txt1.Text = travelList[1].Trv_no;
+        txt2.Text = travelList[1].Trv_title;
+        txt3.Text = travelList[1].Trv_timestamp;
+
+
+
+    }
+
+    protected void Page_Load(object sender, EventArgs e)
+    {
         
-        
 
-
-        
-       
     }
 </script>
 
