@@ -15,7 +15,7 @@ namespace adminForm
     public partial class adminForm : Form
     {
         MyDB myDB = new MyDB();
-        
+
         public adminForm()
         {
             InitializeComponent();
@@ -23,7 +23,8 @@ namespace adminForm
             myDB.GetCon();
         }
 
-        public void After_Bind()
+        //조회 버튼
+        private void button1_Click(object sender, EventArgs e)
         {
             ReportDao reportdao = new ReportDao();
             Report report = new Report();
@@ -31,25 +32,24 @@ namespace adminForm
 
             DataSet ds = reportdao.SelectReport();
             dataGridView1.DataSource = ds.Tables[0];
-
             //rep_no, trv_no, rep_timestap, rep_mem_id, rep_reason
             dataGridView1.Columns[0].HeaderCell.Value = "신고 번호";
             dataGridView1.Columns[1].HeaderCell.Value = "게시글 번호";
             dataGridView1.Columns[2].HeaderCell.Value = "신고 일시";
             dataGridView1.Columns[3].HeaderCell.Value = "신고인";
             dataGridView1.Columns[4].HeaderCell.Value = "신고 사유";
-        }
+            
+            //inputReport.Rep_no = "1";
+            //report = reportdao.selectReportByrep_no(inputReport);
 
-        //조회 버튼
-        private void button1_Click(object sender, EventArgs e)
-        {
-            After_Bind();
+            //Console.WriteLine(report.Rep_no);
+
         }
 
         //여기는 제재.
         private void button2_Click(object sender, EventArgs e)
-        {            
-            //server=itbuddy.iptime.org;user=yuhan;database=toourshared;password=yuhan1234;port=8233;"
+        {
+            ////server=itbuddy.iptime.org;user=yuhan;database=toourshared;password=yuhan1234;port=8233;"
             //using (MySqlConnection myconn = new MySqlConnection(@"server=itbuddy.iptime.org;user=yuhan;database=toourshared;password=yuhan1234;port=8233;"))
             //{
             //    try { 
@@ -68,50 +68,32 @@ namespace adminForm
             //        Console.WriteLine(ex.StackTrace.ToString());
 
             //    }
-            //}
+            //}     
 
 
             Travel inputTravel = new Travel();
             Travel outputTravel = new Travel();
             TravelDao travelDao = new TravelDao();
-            Report delete = new Report();
-
-
             int selectedCellCount =dataGridView1.GetCellCount(DataGridViewElementStates.Selected);
-
             for (int i = 0; i < selectedCellCount; i++)
             {
                 //선택한 셀들의 행을 구해오고 그행의 두번째열 trv_no의 값을 가져온다.
                 inputTravel.Trv_no = dataGridView1.Rows[dataGridView1.SelectedCells[i].RowIndex].Cells[1].Value.ToString();
-
                 outputTravel = travelDao.selectTravelBytrv_no(inputTravel);
 
-                outputTravel.Trv_secret = "3";
+                 outputTravel.Trv_secret = "3";
 
-                travelDao.UpdatetTravel(outputTravel);
+            travelDao.UpdatetTravel(outputTravel);
+                    
 
-                //선택 행의 첫번째 rep_no 가져오기
-                delete.Rep_no = dataGridView1.Rows[dataGridView1.SelectedCells[i].RowIndex].Cells[0].Value.ToString();
-
-                try
-                {
-                    string sql = "Delete from toourshared.report where rep_no = @rep_no";
-                    MySqlConnection con = myDB.GetCon();
-                    MySqlCommand cmd = new MySqlCommand(sql, con);
-                    cmd.Parameters.AddWithValue("@rep_no", delete.Rep_no);
-
-                    con.Open();
-                    cmd.ExecuteNonQuery();
-                    con.Close();
-                }
-
-                catch (Exception ex)
-                {
-
-                }
-                
             }
-            After_Bind();
+
+
+
+
+
+
+
         }
 
         //여기는 해제.
@@ -143,50 +125,15 @@ namespace adminForm
             Travel inputTravel = new Travel();
             Travel outputTravel = new Travel();
             TravelDao travelDao = new TravelDao();
-            Report delete = new Report();
 
 
-            int selectedCellCount = dataGridView1.GetCellCount(DataGridViewElementStates.Selected);
-
-            /*inputTravel.Trv_no = selectCell.ToString();
+            int selectCell = dataGridView1.GetCellCount(DataGridViewElementStates.Selected);
+            inputTravel.Trv_no = selectCell.ToString();
             outputTravel = travelDao.selectTravelBytrv_no(inputTravel);
 
             outputTravel.Trv_secret = "0";
 
-            travelDao.UpdatetTravel(outputTravel);*/
-
-            for (int i = 0; i < selectedCellCount; i++)
-            {
-                //선택한 셀들의 행을 구해오고 그행의 두번째열 trv_no의 값을 가져온다.
-                inputTravel.Trv_no = dataGridView1.Rows[dataGridView1.SelectedCells[i].RowIndex].Cells[1].Value.ToString();
-                outputTravel = travelDao.selectTravelBytrv_no(inputTravel);
-
-                outputTravel.Trv_secret = "0";
-
-                travelDao.UpdatetTravel(outputTravel);
-
-                //선택 행의 첫번째 rep_no 가져오기
-                delete.Rep_no = dataGridView1.Rows[dataGridView1.SelectedCells[i].RowIndex].Cells[0].Value.ToString();
-
-                try
-                {
-                    string sql = "Delete from toourshared.report where rep_no = @rep_no";
-                    MySqlConnection con = myDB.GetCon();
-                    MySqlCommand cmd = new MySqlCommand(sql, con);
-                    cmd.Parameters.AddWithValue("@rep_no", delete.Rep_no);
-
-                    con.Open();
-                    cmd.ExecuteNonQuery();
-                    con.Close();
-                }
-
-                catch (Exception ex)
-                {
-
-                }
-
-            }
-            After_Bind();
+            travelDao.UpdatetTravel(outputTravel);
         }
     }
 }

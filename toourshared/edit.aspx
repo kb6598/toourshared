@@ -6,14 +6,14 @@
 
     protected void Page_Load(object sender, EventArgs e)
     {
-        if(Session["mem_id"] == null)
+        /*if(Session["mem_id"] == null)
         {
-            Response.Write("<script language=javascript>alert('접근 할 수 없습니다.'); location.replace('index.aspx');</script language=javascript>");
+            MessageBox.Show("접근 할 수 없습니다.", this.Page);
+            Response.Redirect("/index.aspx");
         }
         else
         {
             MemberDao member = new MemberDao();
-
 
             Member mem = new Member();
 
@@ -24,8 +24,8 @@
             mem_id.Text = resultMem.Mem_id;
             mem_name.Text = resultMem.Mem_name;
 
-
-        }
+        
+        }*/
     }
     protected void btnLogout_Click(object sender, EventArgs e)
     {
@@ -39,35 +39,6 @@
     }
 
 
-    protected void btnUpdate_Click(object sender, EventArgs e)
-    {
-
-        if(mem_pw.Text.Equals("") || mem_phone.Text.Equals("") || mem_answer.Text.Equals(""))
-        {
-            Page.ClientScript.RegisterStartupScript(this.GetType(), "displayalertmessage", "alert('입력되지 않은사항이 있습니다.');", true);
-        }
-        else if (mem_pw.Text.Length < 6)
-        {
-            Page.ClientScript.RegisterStartupScript(this.GetType(), "displayalertmessage", "alert('비밀번호는 6자 이상으로 입력해주세요.');", true);
-        }
-        else
-        {
-            Member member = new Member();
-            MemberDao mem = new MemberDao();
-
-            member.Mem_pw = mem_pw.Text;
-            member.Mem_phone = mem_phone.Text;
-            member.Mem_ques = QnAList.SelectedItem.Text;
-            member.Mem_answer = mem_answer.Text;
-            member.Mem_timestmap = TimeLib.GetTimeStamp();
-            member.Mem_id = Session["mem_id"].ToString();
-
-            mem.UpdateMember(member);
-            Response.Write("<script language=javascript>alert('수정이 완료되었습니다.'); location.replace('index.aspx');</script language=javascript>");
-        }
-        
-
-    }
 </script>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -89,7 +60,7 @@
     <script src= "https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity= "sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin= "anonymous" ></script>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
         <style>
-        html, body , form{
+        html, body, form {
             margin: 0;
             padding: 0;
             list-style: none;
@@ -927,7 +898,7 @@
 								</div>
 								<div class = "profileA">
 									<div class = "profileAEdit">
-                                        <asp:TextBox ID="mem_answer" runat="server" placeholder = "변경하실 답변을 입력하세요."></asp:TextBox>
+										<input type = "text" placeholder = "변경하실 답변을 입력하세요."/>
 									</div>
 								</div>
 						</div>
@@ -935,7 +906,7 @@
 					<div class = "profileItem5">
 						<div class = "profileUpdate">
 							<div class = "updateButton">
-                                <asp:Button ID="btnUpdate" runat="server" Text="프로필 편집 완료" OnClick="btnUpdate_Click" />
+								<input type = "button" value = "프로필 편집 완료"/>
 							</div>
 						</div>
 					</div>

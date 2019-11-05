@@ -179,6 +179,9 @@ public class TravelDao
 
         try
         {
+
+
+
             con = mydb.GetCon();
 
             string Sql = "SELECT * FROM toourshared.travel where mem_id=@mem_id";
