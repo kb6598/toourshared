@@ -9,6 +9,16 @@
 
     protected void Page_Load(object sender, EventArgs e)
     {
+        // 세션에 저장된 정보
+        //Dictionary<string, string> newWriteStatus = new Dictionary<string, string>()
+        //    {
+        //        {"status","first" },
+        //        { "trv_no", trv_no},
+        //        { "cur_trv_day_no",trv_day_no},
+        //        { "cur_day","1"},
+        //        {"trv_day_cnt","1" },
+        //        {"1",trv_day_no }
+        //    };
         //post로 날아오는 값
         //title
         //article
@@ -16,36 +26,39 @@
         //mapData
         //TravelRouteListData
         //CostItemListData
+        Dictionary<string, string> WriteStatus = SessionLib.getWriteStatus();
+        if (WriteStatus != null)
+        {
 
-        TravelDao travelDao = new TravelDao();
-        Travel travel = new Travel();
+            //-----------------------------------
+            //
+            TravelDao travelDao = new TravelDao();
+            Travel inTravel = new Travel();
+            inTravel.Trv_no = WriteStatus["trv_no"];
+            Travel curTravel = travelDao.selectTravelBytrv_no(inTravel);
 
-        travel.Trv_title = Request.Form["title"].ToString();
-        travel.Trv_tag = Request.Form["hashtag"].ToString();
-        travel.Trv_secret = "0";
-        travel.Trv_tot_rate = "0";
-        travel.Trv_views = "0";
-        travel.Trv_create_time = TimeLib.GetTimeStamp();
-        travel.Mem_id = "billip";
-        travel.Loc_name = "서울";
+          
+            //loc_name을 가져와야함
+            curTravel.Loc_name = Request.Form["loc_name"];
+            curTravel.Trv_main_img = Request.Form["main_img"];
+            curTravel.Trv_no = WriteStatus["trv_no"];
+            curTravel.Trv_secret = Request.Form["trv_secret"];
+            curTravel.Trv_tag = Request.Form["hashtag"];
+            curTravel.Trv_timestamp = TimeLib.GetTimeStamp();
+            curTravel.Trv_title = Request.Form["title"];
 
-        var trv_no = travelDao.InsertTravel(travel);
+            travelDao.UpdatetTravel(curTravel);
 
-        Travel_DayDao travel_DayDao = new Travel_DayDao();
-        Travel_Day travel_Day = new Travel_Day();
 
-        travel_Day.Trv_day_content = Request.Form["article"].ToString();
-        travel_Day.Trv_no = trv_no;
 
-        var trv_day_no = travel_DayDao.InsertTravel_Day(travel_Day);
 
-        MapDao mapDao = new MapDao();
-        Map map = new Map();
 
-        map.Trv_day_no = trv_day_no;
 
-        var map_no = mapDao.InsertMap(map);
+        }
+        else
+        {
 
+        }
 
 
 
