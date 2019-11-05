@@ -2085,30 +2085,6 @@
 
 
 
-            //            var content =
-            //                '<div class="card">' +
-            //                '<div class="card-header">' +
-            //                place.place_name +
-            //                '<div class="btn btn-link" onclick="closeOverlay()" title="닫기" style="float: right">X</div>' +
-            //                '</div>' +
-            //                '<blockquote class="blockquote mb-0">';
-            //
-            //            if (place.road_address_name != null) {
-            //                content += '<li class="card-body-li">' + place.road_address_name + '</li>';
-            //            }
-            //            if (place.address_name != null) {
-            //                content += '<li class="card-body-li">' + place.address_name + '</li>';
-            //            }
-            //            if (place.phone != null) {
-            //                content += '<li class="card-body-li">' + place.phone + '</li>';
-            //            }
-            //            if (place.place_url != null) {
-            //                content += '<li class="card-body-li"><a href="' + place.place_url + '" target="_blank" class="link">상세페이지</a></li>';
-            //            }
-            //            content +=
-            //                '<div class="btn btn-secondary" onclick=\'pushTravelRouteItem("' + place.place_name + '","' + place.road_address_name + '","' + place.ddress_name + '","' + place.phone + '","' + place.place_url + '","' + place.x + '","' + place.y + '")\'>여행경로에 추가</div>' +
-            //                '</blockquote>' +
-            //                '</div>';
 
             infowindow.setContent(content);
             infowindow.open(drawingMap, marker);
@@ -2737,45 +2713,6 @@
         //----------DragManager END
         //------------------------------------
 
-         //-----placeList 데이터 가져오기
-         
-        <%
-        if(Request["placeList"] != null)
-        {
-            Response.Write("TravelRouteList ="+Request["placeList"]+";");
-
-        }
-        else
-        {
-            Response.Write("{}");
-        }
-        %>
-        //-----costList 가져오기
-        <%
-        if(Request["costList"] != null)
-        {
-            Response.Write(Request["costList"]);
-
-        }
-        else
-        {
-            Response.Write("{}");
-        }
-        %>
-
-        //------MapDato 가져오기
-        <%
-        if(Request["mapData"] != null)
-        {
-            Response.Write(Request["mapData"]);
-
-        }
-        else
-        {
-            Response.Write("{}");
-        }
-        %>
-
 
 
 
@@ -2945,6 +2882,191 @@
         //------------------------------------
         //----------Post END
         //------------------------------------
+
+
+        //------------------------------------
+        //----------DataBind Start
+        //------------------------------------
+
+        function getDataFromDrawingMap(mapData) {
+            // Drawing Manager에서 그려진 데이터 정보를 가져옵니다 
+            var data = mapData;
+
+            // 아래 지도에 그려진 도형이 있다면 모두 지웁니다
+            removeOverlays();
+
+            // 지도에 가져온 데이터로 도형들을 그립니다
+            drawMarker(data[kakao.maps.drawing.OverlayType.MARKER]);
+            drawPolyline(data[kakao.maps.drawing.OverlayType.POLYLINE]);
+            drawRectangle(data[kakao.maps.drawing.OverlayType.RECTANGLE]);
+            drawCircle(data[kakao.maps.drawing.OverlayType.CIRCLE]);
+            drawPolygon(data[kakao.maps.drawing.OverlayType.POLYGON]);
+        }
+
+        // 아래 지도에 그려진 도형이 있다면 모두 지웁니다
+        function removeOverlays() {
+            var len = overlays.length, i = 0;
+
+            for (; i < len; i++) {
+                overlays[i].setMap(null);
+            }
+
+            overlays = [];
+        }
+
+        // Drawing Manager에서 가져온 데이터 중 마커를 아래 지도에 표시하는 함수입니다
+        function drawMarker(markers) {
+            var len = markers.length, i = 0;
+
+            for (; i < len; i++) {
+                var marker = new kakao.maps.Marker({
+                    map: map,
+                    position: new kakao.maps.LatLng(markers[i].y, markers[i].x),
+                    zIndex: markers[i].zIndex
+                });
+
+                overlays.push(marker);
+            }
+        }
+
+        // Drawing Manager에서 가져온 데이터 중 선을 아래 지도에 표시하는 함수입니다
+        function drawPolyline(lines) {
+            var len = lines.length, i = 0;
+
+            for (; i < len; i++) {
+                var path = pointsToPath(lines[i].points);
+                var style = lines[i].options;
+                var polyline = new kakao.maps.Polyline({
+                    map: map,
+                    path: path,
+                    strokeColor: style.strokeColor,
+                    strokeOpacity: style.strokeOpacity,
+                    strokeStyle: style.strokeStyle,
+                    strokeWeight: style.strokeWeight
+                });
+
+                overlays.push(polyline);
+            }
+        }
+
+        // Drawing Manager에서 가져온 데이터 중 사각형을 아래 지도에 표시하는 함수입니다
+        function drawRectangle(rects) {
+            var len = rects.length, i = 0;
+
+            for (; i < len; i++) {
+                var style = rects[i].options;
+                var rect = new kakao.maps.Rectangle({
+                    map: map,
+                    bounds: new kakao.maps.LatLngBounds(
+                        new kakao.maps.LatLng(rects[i].sPoint.y, rects[i].sPoint.x),
+                        new kakao.maps.LatLng(rects[i].ePoint.y, rects[i].ePoint.x)
+                    ),
+                    strokeColor: style.strokeColor,
+                    strokeOpacity: style.strokeOpacity,
+                    strokeStyle: style.strokeStyle,
+                    strokeWeight: style.strokeWeight,
+                    fillColor: style.fillColor,
+                    fillOpacity: style.fillOpacity
+                });
+
+                overlays.push(rect);
+            }
+        }
+
+        // Drawing Manager에서 가져온 데이터 중 원을 아래 지도에 표시하는 함수입니다
+        function drawCircle(circles) {
+            var len = circles.length, i = 0;
+
+            for (; i < len; i++) {
+                var style = circles[i].options;
+                var circle = new kakao.maps.Circle({
+                    map: map,
+                    center: new kakao.maps.LatLng(circles[i].center.y, circles[i].center.x),
+                    radius: circles[i].radius,
+                    strokeColor: style.strokeColor,
+                    strokeOpacity: style.strokeOpacity,
+                    strokeStyle: style.strokeStyle,
+                    strokeWeight: style.strokeWeight,
+                    fillColor: style.fillColor,
+                    fillOpacity: style.fillOpacity
+                });
+
+                overlays.push(circle);
+            }
+        }
+
+        // Drawing Manager에서 가져온 데이터 중 다각형을 아래 지도에 표시하는 함수입니다
+        function drawPolygon(polygons) {
+            var len = polygons.length, i = 0;
+
+            for (; i < len; i++) {
+                var path = pointsToPath(polygons[i].points);
+                var style = polygons[i].options;
+                var polygon = new kakao.maps.Polygon({
+                    map: map,
+                    path: path,
+                    strokeColor: style.strokeColor,
+                    strokeOpacity: style.strokeOpacity,
+                    strokeStyle: style.strokeStyle,
+                    strokeWeight: style.strokeWeight,
+                    fillColor: style.fillColor,
+                    fillOpacity: style.fillOpacity
+                });
+
+                overlays.push(polygon);
+            }
+        }
+
+        // Drawing Manager에서 가져온 데이터 중 
+        // 선과 다각형의 꼭지점 정보를 kakao.maps.LatLng객체로 생성하고 배열로 반환하는 함수입니다 
+        function pointsToPath(points) {
+            var len = points.length,
+                path = [],
+                i = 0;
+
+            for (; i < len; i++) {
+                var latlng = new kakao.maps.LatLng(points[i].y, points[i].x);
+                path.push(latlng);
+            }
+
+            return path;
+        }
+
+
+         //-----placeList 데이터 가져오기
+
+        <%
+        if(Request["placeList"] != null)
+        {
+           Response.Write("TravelRouteList ="+Request["mapRoute"]+";");
+           Response.Write("refreashTravelRoute();");
+        }
+        %>
+        //-----costList 가져오기
+        <%
+        if(Request["costList"] != null)
+        {
+            Response.Write("CostItemList="+Request["mapCost"]+";");
+            Response.Write("refreashCostItem();");
+
+        }
+        %>
+
+        //------MapDato 가져오기
+        <%
+        if(Request["mapData"] != null)
+        {
+            Response.Write("getDataFromDrawingMap("+Request["mapData"]+");");
+            Response.Write("closeCusOverlay();");            
+            Response.Write("refreshOverlayListener();");
+
+        }
+        %>
+
+        //------------------------------------
+        //----------DataBind End
+        //------------------------------------
+
 
     </script>
 </body>
