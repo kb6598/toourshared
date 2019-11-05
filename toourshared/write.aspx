@@ -2731,74 +2731,8 @@
 
         // 다음페이지로 markers, polyline, rect, circle, polygon 보내는 기능
         function postToNext() {
-            var data = manager.getData();
-            //rects  circles   polygons
-            markers = data[daum.maps.drawing.OverlayType.MARKER];
-            polylines = data[daum.maps.drawing.OverlayType.POLYLINE];
-            rects = data[daum.maps.drawing.OverlayType.RECTANGLE];
-            circles = data[daum.maps.drawing.OverlayType.CIRCLE];
-            polygons = data[daum.maps.drawing.OverlayType.POLYGON];
-            //
-            //            markersPath = [];
-            //            polylinesPath = [];
-            //            rectsPath = [];
-            //            circlesPath = [];
-            //            polygonsPath = [];
-            //
-            //            for (var i = 0; i < markers.length; i++) {
-            //
-            //                var latlng = new daum.maps.LatLng(markers[i].y, markers[i].x);
-            //                markersPath.push(i + ":");
-            //                markersPath.push(latlng);
-            //
-            //
-            //            }
-            //
-            //
-            //
-            //
-            //            var len = polylines.length,
-            //                i = 0;
-            //
-            //            for (; i < len; i++) {
-            //                var path = pointsToPath(polylines[i].points);
-            //                polylinesPath.push(i + ":");
-            //                polylinesPath.push(path);
-            //
-            //            }
-            //
-            //
-            //            var len = circles.length,
-            //                i = 0;
-            //
-            //            for (; i < len; i++) {
-            //                circlesPath.push(i + ":");
-            //                circlesPath.push(new daum.maps.LatLng(circles[i].center.y, circles[i].center.x));
-            //                circlesPath.push(circles[i].radius);
-            //
-            //            }
-            //
-            //            var len = rects.length,
-            //                i = 0;
-            //
-            //            for (; i < len; i++) {
-            //
-            //
-            //                rectsPath.push(i + ":");
-            //                rectsPath.push(rects[i].sPoint.y, rects[i].sPoint.x, rects[i].ePoint.y, rects[i].ePoint.x);
-            //
-            //
-            //            }
-            //
-            //            var len = polygons.length,
-            //                i = 0;
-            //
-            //            for (; i < len; i++) {
-            //                var path = pointsToPath(polygons[i].points);
-            //                polygonsPath.push(i + ":");
-            //                polygonsPath.push(path);
-            //
-            //            }
+            
+           
 
 
 
@@ -2806,8 +2740,11 @@
             //document.getElementById("marker").value = markersPath;
             //document.getElementById("polygon").value = polylinesPath;
             var title = document.getElementById("title");
+            title.setAttribute("type", "hidden");
             var article = document.getElementById("article");
+            article.setAttribute("type", "hidden");
             var hashtag = document.getElementById("hashtag");
+            hashtag.setAttribute("type", "hidden");
 
 
             var form = document.createElement("form");
@@ -2854,22 +2791,22 @@
             //            form.appendChild(insert5);
 
 
-
+            
             var mapData = document.createElement("input"); // input 엘리멘트 생성
             mapData.setAttribute("type", "hidden"); // type 속성을 hidden으로 설정
             mapData.setAttribute("name", "mapData"); // name 속성을 'stadium'으로 설정
-            mapData.setAttribute("value", JSON.stringify(data)); // value 속성을 삽입
+            mapData.setAttribute("value", JSON.stringify(manager.getData())); // value 속성을 삽입
             form.appendChild(mapData);
 
             var TravelRouteListData = document.createElement("input"); // input 엘리멘트 생성
             TravelRouteListData.setAttribute("type", "hidden"); // type 속성을 hidden으로 설정
-            TravelRouteListData.setAttribute("name", "TravelRouteListData"); // name 속성을 'stadium'으로 설정
+            TravelRouteListData.setAttribute("name", "mapRoute"); // name 속성을 'stadium'으로 설정
             TravelRouteListData.setAttribute("value", JSON.stringify(TravelRouteList)); // value 속성을 삽입
             form.appendChild(TravelRouteListData);
 
             var CostItemListData = document.createElement("input"); // input 엘리멘트 생성
             CostItemListData.setAttribute("type", "hidden"); // type 속성을 hidden으로 설정
-            CostItemListData.setAttribute("name", "CostItemListData"); // name 속성을 'stadium'으로 설정
+            CostItemListData.setAttribute("name", "mapCost"); // name 속성을 'stadium'으로 설정
             CostItemListData.setAttribute("value", JSON.stringify(CostItemList)); // value 속성을 삽입
             form.appendChild(CostItemListData);
 
