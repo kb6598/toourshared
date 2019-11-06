@@ -711,12 +711,12 @@
         console.info(data["arrow"]);
         // 지도에 가져온 데이터로 도형들을 그립니다
         drawMarker(data["marker"]);
-        //drawPolyline(data["polyline"]);
-        //drawRectangle(data["rectangle"]);
-        //drawCircle(data["circle"]);
-        //drawPolygon(data["polygon"]);
-        //drawEllipse(data["ellipse"]);
-        //drawArrow(data["arrow"]);
+        drawPolyline(data["polyline"]);
+        drawRectangle(data["rectangle"]);
+        drawCircle(data["circle"]);
+        drawPolygon(data["polygon"]);
+        drawEllipse(data["ellipse"]);
+        drawArrow(data["arrow"]);
 
 
 
@@ -741,8 +741,8 @@
         for (; i < len; i++) {
             var style = ellipse[i].options;
             bounds = new kakao.maps.LatLngBounds(
-                new kakao.maps.LatLng(rects[i].sPoint.y, rects[i].sPoint.x),
-                new kakao.maps.LatLng(rects[i].ePoint.y, rects[i].ePoint.x)
+                new kakao.maps.LatLng(ellipse[i].sPoint.y, ellipse[i].sPoint.x),
+                new kakao.maps.LatLng(ellipse[i].ePoint.y, ellipse[i].ePoint.x)
             );
             manager.put(kakao.maps.drawing.OverlayType.ELLIPSE, bounds);
         }
