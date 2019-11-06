@@ -131,7 +131,7 @@ public class TravelDao
                 return result;
 
             }
-
+            rd.Close();
             con.Close();
 
 
@@ -181,7 +181,7 @@ public class TravelDao
                 return result;
 
             }
-
+            rd.Close();
             con.Close();
 
 
@@ -271,7 +271,7 @@ public class TravelDao
                 resultList.Add(result);
 
             }
-
+            rd.Close();
             con.Close();
 
 
@@ -370,7 +370,7 @@ public class TravelDao
                 resultList.Add(result);
 
             }
-
+            rd.Close();
             con.Close();
 
 
@@ -430,7 +430,7 @@ public class TravelDao
                 resultList.Add(result);
 
             }
-
+            rd.Close();
             con.Close();
 
 
@@ -478,7 +478,7 @@ public class TravelDao
                 resultList.Add(result);
 
             }
-
+            rd.Close();
             con.Close();
 
 
@@ -526,7 +526,7 @@ public class TravelDao
                 resultList.Add(result);
 
             }
-
+            rd.Close();
             con.Close();
 
 

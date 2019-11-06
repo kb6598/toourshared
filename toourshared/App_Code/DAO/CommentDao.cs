@@ -156,8 +156,7 @@ public class CommentDao
                 return result;
 
             }
-            
-            
+            rd.Close();
             con.Close();
 
         }
@@ -206,7 +205,7 @@ public class CommentDao
                 resultList.Add(result);
 
             }
-
+            rd.Close();
             con.Close();
 
 
