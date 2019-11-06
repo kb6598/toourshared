@@ -445,7 +445,7 @@ public class TravelDao
         return resultList;
     }
 
-    public List<Travel> selectAll(Travel travel, string like)
+    public List<Travel> selectAll(Travel travel,string date, string loc, string title, string tag, string orderBy)
     {
         MyDB mydb = new MyDB();
 
@@ -457,7 +457,7 @@ public class TravelDao
         {
             con = mydb.GetCon();
 
-            string Sql = "SELECT * FROM toourshared.travel where trv_tag LIKE "+ like;
+            string Sql = "SELECT * FROM toourshared.travel where "+ date + "loc_name LIKE" + loc + "or trv_title LIKE " + title + "or trv_tag LIKE " + tag + " " + orderBy;
 
             
             MySqlCommand cmd = new MySqlCommand(Sql, con);
@@ -469,16 +469,23 @@ public class TravelDao
 
                 result = new Travel();
                 result.Trv_no = rd["trv_no"].ToString();
+                result.Trv_secret = rd["trv_secret"].ToString();
+                result.Trv_views = rd["trv_views"].ToString();
+                result.Trv_tot_rate = rd["trv_tot_rate"].ToString();
+                result.Trv_main_img = rd["trv_main_img"].ToString();
                 result.Trv_title = rd["trv_title"].ToString();
+                result.Trv_tag = rd["trv_tag"].ToString();
                 result.Trv_timestamp = rd["trv_timestamp"].ToString();
+                result.Trv_create_time = rd["trv_create_time"].ToString();
 
 
                 //lstMember.Add(tmpMemberPointer);
 
                 resultList.Add(result);
+                
 
             }
-
+            rd.Close();
             con.Close();
 
 
@@ -505,7 +512,7 @@ public class TravelDao
         {
             con = mydb.GetCon();
 
-            string Sql = "SELECT * FROM toourshared.travel";
+            string Sql = "SELECT * FROM toourshared.travel where ";
 
 
             MySqlCommand cmd = new MySqlCommand(Sql, con);
@@ -527,6 +534,7 @@ public class TravelDao
 
             }
 
+            rd.Close();
             con.Close();
 
 
