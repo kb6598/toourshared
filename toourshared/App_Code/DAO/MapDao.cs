@@ -28,7 +28,7 @@ public class MapDao
 
         cmd.Parameters.AddWithValue("@map_cost", map.Map_cost);
         cmd.Parameters.AddWithValue("@map_data", map.Map_data);
-        cmd.Parameters.AddWithValue("@ map_route", map.Map_route);
+        cmd.Parameters.AddWithValue("@map_route", map.Map_route);
         cmd.Parameters.AddWithValue("@trv_day_no", map.Trv_day_no);
 
 
@@ -74,7 +74,7 @@ public class MapDao
         return result;
     }
 
-    public DataSet Selectmap()
+    public DataSet SelectMap()
     {
         MyDB myDB = new MyDB();
         MySqlConnection con = myDB.GetCon();
@@ -92,7 +92,7 @@ public class MapDao
     }
 
 
-    public Map selectCommentByMap_no(Map map)
+    public Map selectMapByMap_no(Map map)
     {
 
         MyDB mydb = new MyDB();
@@ -140,4 +140,53 @@ public class MapDao
         }
         return result;
     }
+    public Map selectMapByTrv_day_no(Map map)
+    {
+
+        MyDB mydb = new MyDB();
+
+        Map result = new Map();
+        MySqlConnection con;
+
+        try
+        {
+            con = mydb.GetCon();
+
+            string Sql = "SELECT * FROM toourshared.map where trv_day_no=@trv_day_no";
+
+
+            MySqlCommand cmd = new MySqlCommand(Sql, con);
+
+            cmd.Parameters.AddWithValue("@trv_day_no", map.Trv_day_no);
+
+            con.Open();
+            MySqlDataReader rd = cmd.ExecuteReader();
+
+            if (rd.HasRows)
+            {
+
+
+                result.Map_no = rd["map_no"].ToString();
+                result.Map_cost = rd["map_cost"].ToString();
+                result.Map_data = rd["map_data"].ToString();
+                result.Map_route = rd["map_route"].ToString();
+                result.Trv_day_no = rd["trv_day_no"].ToString();
+
+
+                //lstMember.Add(tmpMemberPointer);
+
+                return result;
+
+            }
+
+            con.Close();
+
+        }
+        catch (Exception ex)
+        {
+            Console.Write(ex.ToString());
+        }
+        return result;
+    }
+
 }

@@ -97,14 +97,25 @@
 
             Literal_day.Text = readWriteStatus["cur_day"];
 
-            Travel_Day input = new Travel_Day();
-            Travel_Day output = new Travel_Day();
-            Travel_DayDao dao = new Travel_DayDao();
+            Travel_Day inputTravel_day = new Travel_Day();
+            Travel_Day outputTravel_day = new Travel_Day();
+            Travel_DayDao Travel_daydao = new Travel_DayDao();
 
-            input.Trv_day_no = readWriteStatus["cur_day"];
-            output = dao.selectTrvel_DayBytrv_day_no(input);
+            inputTravel_day.Trv_day_no = readWriteStatus["cur_day"];
+            outputTravel_day = Travel_daydao.selectTrvel_DayBytrv_day_no(inputTravel_day);
+
+            Travel inputTravel = new Travel();
+            Travel outputTravel = new Travel();
+            TravelDao daoTravel = new TravelDao();
+            inputTravel.Trv_no = readWriteStatus["trv_no"];
+            outputTravel = daoTravel.selectTravelBytrv_no(inputTravel);
 
             // 바인드
+            title.Text = outputTravel.Trv_title;
+            hashtag.Text = outputTravel.Trv_tag;
+            article.Text = outputTravel_day.Trv_day_content;
+
+
 
 
         }
@@ -113,8 +124,6 @@
 
     protected void BindDropDownList()
     {
-
-
         Dictionary<string, string> readWriteStatus = SessionLib.getWriteStatus();
         if (readWriteStatus != null)
         {
@@ -128,12 +137,6 @@
                 i++;
             }
         }
-
-        //세션에서 편집 정보를 가져옴
-
-
-
-
     }
 
 
@@ -322,7 +325,7 @@
             <!-- 메인 상단 영역 -->
             <div class="TitleArea">
                 <div class="TitleAlign">
-                    <input type="text" placeholder="게시글의 제목을 정해주세요." />
+                    <asp:TextBox ID="title"  runat="server" type="text" placeholder="게시글의 제목을 정해주세요." />
                 </div>
                 <div class="TitleSub">
                     <div class="SubItem">
@@ -418,7 +421,7 @@
             <!-- 중앙 영역 2 -->
             <div class="taArea">
                 <div class="form-group">
-                    <textarea type="text" id="article" name="article"></textarea>
+                    <asp:TextBox ID="article" runat="server" TextMode="MultiLine" type="text"  name="article"></asp:TextBox>
                 </div>
             </div>
 
@@ -439,7 +442,7 @@
 
             <!-- 해쉬태그 영역 -->
             <div class="hashArea">
-                <input type="text" placeholder="해쉬태그를 입력하세요. (ex : #여행 #추억) (스페이스바로 구분지어 주세요.)" class="hashAreaItem" />
+                <asp:TextBox ID="hashtag" runat="server" type="text" placeholder="해쉬태그를 입력하세요. (ex : #여행 #추억) (스페이스바로 구분지어 주세요.)" class="hashAreaItem" />
             </div>
 
             <!-- 하단부 영역 -->
@@ -512,7 +515,7 @@
         //------------------------------------
     var form = document.createElement("form");
 
-
+    overlays = [];
      // 다음페이지로 markers, polyline, rect, circle, polygon 보내는 기능
     function addDataAtForm() {
 
@@ -542,33 +545,36 @@
 
             var TravelRouteListData = document.createElement("input"); // input 엘리멘트 생성
             TravelRouteListData.setAttribute("type", "hidden"); // type 속성을 hidden으로 설정
-            TravelRouteListData.setAttribute("name", "TravelRouteListData"); // name 속성을 'stadium'으로 설정
-            TravelRouteListData.setAttribute("value", JSON.stringify(getTravelRouteData()t)); // value 속성을 삽입
+            TravelRouteListData.setAttribute("name", "mapRoute"); // name 속성을 'stadium'으로 설정
+            TravelRouteListData.setAttribute("value", JSON.stringify(getTravelRouteData())); // value 속성을 삽입
             form.appendChild(TravelRouteListData);
 
             var CostItemListData = document.createElement("input"); // input 엘리멘트 생성
             CostItemListData.setAttribute("type", "hidden"); // type 속성을 hidden으로 설정
-            CostItemListData.setAttribute("name", "CostItemListData"); // name 속성을 'stadium'으로 설정
+            CostItemListData.setAttribute("name", "mapCost"); // name 속성을 'stadium'으로 설정
             CostItemListData.setAttribute("value", JSON.stringify(getCostData())); // value 속성을 삽입
             form.appendChild(CostItemListData);
 
 
-            console.info(form.innerHTML);
+     
             
         }
 
 
-
+    
     function tmpSave() {
+        addDataAtForm();
         form.setAttribute('action', "Write_tmpSave.aspx");
         form.submit(); // 전송
     }
     function nextDay() {
+        addDataAtForm();
         form.setAttribute('action', "Write_nextDay.aspx");
         form.submit(); // 전송
     }
     function endWrite() {
-        form.setAttribute('action', "Write_tempSave.aspx");
+        addDataAtForm();
+        form.setAttribute('action', "Write_get_endWrite.aspx");
         form.submit(); // 전송
     }
 

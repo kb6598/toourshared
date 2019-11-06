@@ -31,7 +31,7 @@
         {
 
             //-----------------------------------
-            //
+            //Travel 업데이트 (필수)
             TravelDao travelDao = new TravelDao();
             Travel inTravel = new Travel();
             inTravel.Trv_no = WriteStatus["trv_no"];
@@ -50,6 +50,14 @@
             travelDao.UpdatetTravel(curTravel);
 
 
+            //--------------------------------------
+            // Travel_day 업데이트
+            Travel_Day inTravel_Day = new Travel_Day();
+            Travel_DayDao travel_DayDao = new Travel_DayDao();
+            // 작업중인던 Trv_day_no 가져옴
+            inTravel_Day.Trv_day_no = WriteStatus[WriteStatus["cur_day"]];
+            inTravel_Day.Trv_no = WriteStatus[WriteStatus["trv_no"]];
+            inTravel_Day.Trv_day_content = Request.Form["article"];
 
 
 
