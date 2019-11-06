@@ -101,7 +101,7 @@ public class ReportDao
                 return result;
 
             }
-
+            rd.Close();
             con.Close();
 
         }

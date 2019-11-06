@@ -98,7 +98,7 @@ public class Member_BlockDao
                 return result;
 
             }
-
+            rd.Close();
             con.Close();
 
         }

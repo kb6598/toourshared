@@ -109,7 +109,7 @@ public class Travel_DayDao
                 return result;
 
             }
-
+            rd.Close();
             con.Close();
 
         }
@@ -119,4 +119,33 @@ public class Travel_DayDao
         }
         return result;
     }
+
+    public int UpdatetTravel_Day(Travel_Day travel_day)
+    {
+        int result;
+
+        MyDB myDB = new MyDB();
+        MySqlConnection con = myDB.GetCon();
+
+        string Sql = "UPDATE toourshared.travel_day SET trv_no =@trv_no, trv_day_content =@trv_day_content  WHERE Trv_day_no =@trv_day_no";
+
+        MySqlCommand cmd = new MySqlCommand(Sql, con);
+
+
+        cmd.Parameters.AddWithValue("@trv_no", travel_day.Trv_no);
+        cmd.Parameters.AddWithValue("@trv_day_no", travel_day.Trv_day_no);
+        cmd.Parameters.AddWithValue("@trv_day_content", travel_day.Trv_day_content);
+
+
+        con.Open();
+
+        result = cmd.ExecuteNonQuery();
+
+
+        con.Close();
+
+
+        return result;
+    }
+
 }

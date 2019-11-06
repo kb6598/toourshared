@@ -52,7 +52,7 @@ public class MyPageDao
                                                  
 
             }
-
+            rd.Close();
             con.Close();
 
         }
@@ -117,7 +117,7 @@ public class MyPageDao
                 resultList.Add(result);
 
             }
-
+            rd.Close();
             con.Close();
 
         }
