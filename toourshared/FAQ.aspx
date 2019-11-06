@@ -23,6 +23,41 @@
     {
         Response.Redirect("/find_idpw.aspx");
     }
+
+    protected void Page_Load(object sender, EventArgs e)
+    {
+         List<Question> resultList;
+        Question question = new Question();
+        QuestionDao qus = new QuestionDao();
+
+        resultList = qus.selectAllQuestion(question);
+
+        for(int i=0; i < resultList.Count; i++)
+        {
+
+            Literal1.Text+=                                                            
+            "        <div class=\"FAQ_QUE_BOARD\" data-toggle=\"collapse\" data-target=\"#board"+i +"\">"+
+            "            <div class=\"BOARDITEM1\">                                            "+
+            "                <div class=\"BDNUMBER\">                                          "+
+                                resultList[i].Qus_no+"</div>"                                  +
+            "                <div class=\"BDTITLE\">                                           "+
+                                resultList[i].Qus__title+"</div>"                              +
+            "            </div>                                                              "+
+            "            <div class=\"BOARDITEM2\">                                            "+
+            "                <div id=\"board"+i+"\" class=\"collapse\">                              "+
+            "                    <div class=\"ANSWER\">                                        " +
+                                    resultList[i].Qus_ask                                    +
+            "                                                                                " +
+            "                    </div>                                                      " +
+            "                </div>                                                          " +
+            "            </div>                                                              " +
+            "        </div>                                                                  ";
+        }
+        
+
+
+
+    }
 </script>
 
 <html>
@@ -517,7 +552,7 @@
                 <div class="nav-log">
                     <a>
                         <div class="nav-log-area">
-                            <asp:Button ID="btnLogin" runat="server" Text="로그인" class="nav-log-item" PostBackUrl="~/login.aspx"/>
+                            <asp:Button ID="btnLogin" runat="server" Text="로그인" CssClass="nav-log-item" PostBackUrl="~/login.aspx"/>
                         </div>
                     </a>
                 </div>
@@ -571,51 +606,7 @@
                         <div class="QUENUMBER">번호</div>
                         <div class="QUETITLE">제목</div>
                     </div>
-                    <div class="FAQ_QUE_BOARD" data-toggle="collapse" data-target="#board1">
-                        <div class="BOARDITEM1">
-                            <div class="BDNUMBER">1</div>
-                            <div class="BDTITLE">zz</div>
-                        </div>
-                        <div class="BOARDITEM2">
-                            <div id="board1" class="collapse">
-                                <div class="ANSWER">
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                                    sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="FAQ_QUE_BOARD" data-toggle="collapse" data-target="#board2">
-                        <div class="BOARDITEM1">
-                            <div class="BDNUMBER">2</div>
-                            <div class="BDTITLE">test</div>
-                        </div>
-                        <div class="BOARDITEM2">
-                            <div id="board2" class="collapse">
-                                <div class="ANSWER">
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                                    sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="FAQ_QUE_BOARD" data-toggle="collapse" data-target="#board3">
-                        <div class="BOARDITEM1">
-                            <div class="BDNUMBER">3</div>
-                            <div class="BDTITLE">test3</div>
-                        </div>
-                        <div class="BOARDITEM2">
-                            <div id="board3" class="collapse">
-                                <div class="ANSWER">
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                                    sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <asp:Literal ID="Literal1" runat="server"></asp:Literal>
                 </div>
                 
                 <div class="FAQ_ITEM">

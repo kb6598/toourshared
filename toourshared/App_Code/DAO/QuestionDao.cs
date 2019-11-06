@@ -100,7 +100,7 @@ public class QuestionDao
                 return result;
 
             }
-
+            rd.Close();
             con.Close();
 
         }
@@ -143,7 +143,7 @@ public class QuestionDao
                 resultList.Add(result);
 
             }
-
+            rd.Close();
             con.Close();
 
 

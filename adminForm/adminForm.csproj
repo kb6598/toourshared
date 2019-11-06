@@ -180,6 +180,10 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Member.cs" />
+    <Compile Include="MemberDao.cs" />
+    <Compile Include="Member_Block.cs" />
+    <Compile Include="Member_BlockDao.cs" />
     <Compile Include="MyDB.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -187,6 +191,12 @@
     <Compile Include="ReportDao.cs" />
     <Compile Include="Travel.cs" />
     <Compile Include="TravelDao.cs" />
+    <Compile Include="WebForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WebForm.Designer.cs">
+      <DependentUpon>WebForm.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="adminForm.resx">
       <DependentUpon>adminForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -202,6 +212,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="WebForm.resx">
+      <DependentUpon>WebForm.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

@@ -20,6 +20,7 @@ public class TravelDao
         //
     }
 
+
     public string InsertTravel(Travel travel)
     {
         string result = "";
@@ -84,7 +85,7 @@ public class TravelDao
         return ds;
     }
 
- 
+
     public Travel selectTravelBytrv_no(Travel travel)
     {
 
@@ -221,7 +222,7 @@ public class TravelDao
         return ds;
     }
 
-    
+
 
     public List<Travel> selectTravelListByMem_id(Travel travel)
     {
@@ -250,7 +251,7 @@ public class TravelDao
 
             while (rd.Read())
             {
-                
+
                 result = new Travel();
                 result.Trv_no = rd["trv_no"].ToString();
                 result.Trv_secret = rd["trv_secret"].ToString();
@@ -292,7 +293,7 @@ public class TravelDao
         MyDB myDB = new MyDB();
         MySqlConnection con = myDB.GetCon();
 
-        string Sql = "UPDATE toourshared.travel SET trv_no =@trv_no, trv_secret =@trv_secret, trv_views =@trv_views, trv_tot_rate =@trv_tot_rate, trv_main_img =@trv_main_img, trv_title =@trv_title, trv_tag =@trv_tag, trv_timestamp =@trv_timestamp, trv_create_time =@trv_create_time, loc_name =@loc_name, mem_id =@mem_id  WHERE trv_no =@"; 
+        string Sql = "UPDATE toourshared.travel SET trv_no =@trv_no, trv_secret =@trv_secret, trv_views =@trv_views, trv_tot_rate =@trv_tot_rate, trv_main_img =@trv_main_img, trv_title =@trv_title, trv_tag =@trv_tag, trv_timestamp =@trv_timestamp, trv_create_time =@trv_create_time, loc_name =@loc_name, mem_id =@mem_id  WHERE trv_no =@";
 
         MySqlCommand cmd = new MySqlCommand(Sql, con);
 
@@ -319,7 +320,8 @@ public class TravelDao
         return result;
     }
 
-    public List<Travel> selectTravelListByMem_idNLimitOrderByDate(Travel travel,int start,int count)
+
+    public List<Travel> selectTravelListByMem_idNLimitOrderByDate(Travel travel, int start, int count)
     {
         MyDB mydb = new MyDB();
 
@@ -382,6 +384,170 @@ public class TravelDao
 
         return resultList;
     }
+    public List<Travel> SelectTagTravel(Travel travel,string keyword, int start, int count)
+    {
+        MyDB mydb = new MyDB();
+
+        List<Travel> resultList = new List<Travel>();
+        Travel result;
+        MySqlConnection con;
+        try
+        {
 
 
+
+            con = mydb.GetCon();
+
+            string Sql = "SELECT * FROM toourshared.travel where trv_tag like '%"+keyword+"%' order by trv_create_time desc limit @start,@count";
+
+
+            MySqlCommand cmd = new MySqlCommand(Sql, con);
+
+            
+            cmd.Parameters.AddWithValue("@keyword", travel.Trv_tag);
+            cmd.Parameters.AddWithValue("@start", start);
+            cmd.Parameters.AddWithValue("@count", count);
+
+            con.Open();
+            MySqlDataReader rd = cmd.ExecuteReader();
+
+            while (rd.Read())
+            {
+
+                result = new Travel();
+                result.Trv_no = rd["trv_no"].ToString();
+                result.Trv_secret = rd["trv_secret"].ToString();
+                result.Trv_views = rd["trv_views"].ToString();
+                result.Trv_tot_rate = rd["trv_tot_rate"].ToString();
+                result.Trv_main_img = rd["trv_main_img"].ToString();
+                result.Trv_title = rd["trv_title"].ToString();
+                result.Trv_tag = rd["trv_tag"].ToString();
+                result.Trv_timestamp = rd["trv_timestamp"].ToString();
+                result.Trv_create_time = rd["trv_create_time"].ToString();
+
+                //lstMember.Add(tmpMemberPointer);
+
+                resultList.Add(result);
+
+            }
+
+            con.Close();
+
+
+        }
+        catch (Exception ex)
+        {
+            Console.Write(ex.ToString());
+        }
+
+
+
+        return resultList;
+    }
+
+    public List<Travel> selectAll(Travel travel,string date, string loc, string title, string tag, string orderBy)
+    {
+        MyDB mydb = new MyDB();
+
+        List<Travel> resultList = new List<Travel>();
+        Travel result;
+        MySqlConnection con;
+
+        try
+        {
+            con = mydb.GetCon();
+
+            string Sql = "SELECT * FROM toourshared.travel where "+ date + "loc_name LIKE" + loc + "or trv_title LIKE " + title + "or trv_tag LIKE " + tag + " " + orderBy;
+
+            
+            MySqlCommand cmd = new MySqlCommand(Sql, con);
+            con.Open();
+            MySqlDataReader rd = cmd.ExecuteReader();
+
+            while (rd.Read())
+            {
+
+                result = new Travel();
+                result.Trv_no = rd["trv_no"].ToString();
+                result.Trv_secret = rd["trv_secret"].ToString();
+                result.Trv_views = rd["trv_views"].ToString();
+                result.Trv_tot_rate = rd["trv_tot_rate"].ToString();
+                result.Trv_main_img = rd["trv_main_img"].ToString();
+                result.Trv_title = rd["trv_title"].ToString();
+                result.Trv_tag = rd["trv_tag"].ToString();
+                result.Trv_timestamp = rd["trv_timestamp"].ToString();
+                result.Trv_create_time = rd["trv_create_time"].ToString();
+
+
+                //lstMember.Add(tmpMemberPointer);
+
+                resultList.Add(result);
+                
+
+            }
+            rd.Close();
+            con.Close();
+
+
+        }
+        catch (Exception ex)
+        {
+            Console.Write(ex.ToString());
+        }
+
+
+
+        return resultList;
+    }
+
+    public List<Travel> test(Travel travel)
+    {
+        MyDB mydb = new MyDB();
+
+        List<Travel> resultList = new List<Travel>();
+        Travel result;
+        MySqlConnection con;
+
+        try
+        {
+            con = mydb.GetCon();
+
+            string Sql = "SELECT * FROM toourshared.travel where ";
+
+
+            MySqlCommand cmd = new MySqlCommand(Sql, con);
+            con.Open();
+            MySqlDataReader rd = cmd.ExecuteReader();
+
+            while (rd.Read())
+            {
+
+                result = new Travel();
+                result.Trv_no = rd["trv_no"].ToString();
+                result.Trv_title = rd["trv_title"].ToString();
+                result.Trv_timestamp = rd["trv_timestamp"].ToString();
+
+
+                //lstMember.Add(tmpMemberPointer);
+
+                resultList.Add(result);
+
+            }
+
+            rd.Close();
+            con.Close();
+
+
+        }
+        catch (Exception ex)
+        {
+            Console.Write(ex.ToString());
+        }
+
+
+
+        return resultList;
+    }
 }
+
+

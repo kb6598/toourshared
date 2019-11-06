@@ -95,7 +95,7 @@ public class LocationDao
                 return result;
 
             }
-
+            rd.Close();
             con.Close();
 
         }

@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-
 using MySql.Data.MySqlClient;
 using System.Data;
-using tooushared.Lib;
 using tooushared.DTO;
 
 
@@ -26,8 +24,6 @@ namespace tooushared.DAO
             // TODO: 여기에 생성자 논리를 추가합니다.
             //
         }
-
-
 
         public string InsertMember(Member member)
         {
@@ -92,6 +88,7 @@ namespace tooushared.DAO
             return result;
 
         }
+
         public DataSet SelectMember()
         {
             MyDB myDB = new MyDB();
@@ -157,7 +154,7 @@ namespace tooushared.DAO
                         return resultMember;
 
                 }
-                rd.Close();
+
                 con.Close();
 
 
@@ -276,7 +273,6 @@ namespace tooushared.DAO
                     return FindID;
 
                 }
-                rd.Close();
                 con.Close();
             }
             catch (Exception ex)
@@ -322,7 +318,6 @@ namespace tooushared.DAO
                     return FindPW;
 
                 }
-                rd.Close();
                 con.Close();
             }
             catch (Exception ex)
@@ -331,6 +326,38 @@ namespace tooushared.DAO
             }
             return FindPW;
 
+        }
+
+        public DataSet Select_MemberID()
+        {
+            MyDB myDB = new MyDB();
+            MySqlConnection con2 = myDB.GetCon();
+
+            String sql = "Select member.mem_id as id from member, travel where member.mem_state = 1 and travel.trv_secret = 3";
+            String userID = "";
+
+            MySqlCommand cmd2 = new MySqlCommand(sql, con2);
+            con2.Open();
+
+            MySqlDataReader reader = cmd2.ExecuteReader();
+            while(reader.Read())
+            {
+                userID = reader["id"].ToString();
+            }
+
+            reader.Close();
+            con2.Close();
+
+            string sql2 = "select mem_blo_no, mem_id, mem_blo_date, mem_blo_length from member_block where mem_id = " + userID;
+            
+
+            cmd2 = new MySqlCommand(sql, con2);
+            MySqlDataAdapter ad = new MySqlDataAdapter();
+            ad.SelectCommand = cmd2;
+
+            DataSet ds2 = new DataSet();
+            ad.Fill(ds2);
+            return ds2;
         }
     }
 }

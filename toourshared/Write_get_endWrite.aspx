@@ -29,6 +29,9 @@
         Dictionary<string, string> WriteStatus = SessionLib.getWriteStatus();
         if (WriteStatus != null)
         {
+
+            //-----------------------------------
+            //
             TravelDao travelDao = new TravelDao();
             Travel inTravel = new Travel();
             inTravel.Trv_no = WriteStatus["trv_no"];
@@ -45,6 +48,9 @@
             curTravel.Trv_title = Request.Form["title"];
 
             travelDao.UpdatetTravel(curTravel);
+
+
+
 
 
 

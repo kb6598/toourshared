@@ -1,0 +1,1533 @@
+<!DOCTYPE html>
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head runat="server">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>TO OUR SHARED : 글 작성 #일차</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Font -->
+    <link href="https://fonts.googleapis.com/css?family=Mansalva|Nanum+Gothic|Nanum+Myeongjo|Noto+Sans+KR|Lora|East+Sea+Dokdo|Jua&display=swap" rel="stylesheet">
+
+    <!-- ICON -->
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <!-- summerNote -->
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.11/dist/summernote-bs4.min.css" rel="stylesheet" />
+
+    <!-- JS -->
+    <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+    <script src='https://www.google.com/recaptcha/api.js'></script>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=ebcd0c1accbe0ff4bbb47bd777ef2fcf&libraries=service&libraries=services,clusterer,drawing"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bs4-summernote@0.8.10/dist/summernote-bs4.min.js"></script>
+
+    <link rel="stylesheet" href="/css/write.css">
+    <style>
+        body,
+        form {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            min-width: 100%;
+            min-height: 100%;
+            display: flex;
+            line-height: 1;
+            /* 전체 배경색 */
+            background-color: #00b9f1;
+            background-repeat: no-repeat;
+        }
+
+        .topnavUl {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            text-decoration: none;
+            font-size: 20px;
+            font-family: '맑은고딕';
+        }
+
+        .topnavLi {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+            text-decoration: none;
+            font-size: 20px;
+            font-family: '맑은고딕';
+        }
+
+        .topnavLi ul,
+        li {
+            list-style: none;
+            text-decoration: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        a {
+            color: white;
+            text-decoration: none;
+        }
+
+        #nav {
+            z-index: 99999;
+            position: absolute;
+            width: 100%;
+            /* absolute는 부피를 못잡으니까 width 100% */
+            overflow: hidden;
+            font-size: 25px;
+            transition-duration: 0.5s;
+            position: fixed;
+        }
+
+        #nav:hover {
+            height: 250px;
+            transition: background .5s;
+            background-color: rgba(249, 192, 12, 0.95);
+        }
+
+        #nav>ul {
+            text-align: center;
+            font-family: 'Mansalva', cursive;
+            font-size: 25px;
+        }
+
+        #nav>ul>li {
+            display: inline-block;
+            position: relative;
+            padding: 0px 50px;
+        }
+
+        #nav>ul>li>a {
+            display: block;
+            padding: 30px 15px 20px;
+            line-height: 30px;
+            transition: color 0.9s;
+            transition: background 0.4s;
+            /* 부트스트랩 적용 후 nav 효과 적용이 되는걸 방지하기 위해 */
+            text-decoration: none;
+            /* 상단 메뉴 글씨 색 */
+            color: white;
+        }
+
+        #nav>ul>li:hover>a {
+            /* 메뉴에 마우스 올렸을 때 발생할 스타일(1Depth) */
+            transition: border .5s;
+            border-bottom: 3px solid #ff7473;
+        }
+
+        #nav ul ul {
+            /*display: none;*/
+            position: absolute;
+            width: 100%;
+            /* absolute는 부피를 가질 수 없다 */
+            margin: 0px -50px;
+        }
+
+        #nav ul ul a {
+            /* 2Depth li Style */
+            display: block;
+            line-height: 40px;
+            font-size: 14px;
+            color: white;
+        }
+
+        #nav ul ul a:hover {
+            /* SubMenu 마우스 올렸을 때 발생할 스타일 */
+            font-weight: bold;
+            /* 부트스트랩 적용 후 nav 효과 적용이 되는걸 방지하기 위해 */
+            text-decoration: none;
+        }
+
+        #nav li:hover ul {
+            display: block;
+        }
+
+        #nav li:nth-child(1) ul {
+            left: 0;
+            width: 100%;
+        }
+
+        .nav-logo {
+            /* 웹 사이트 좌측 상단에 위치한 로고 div style */
+        }
+
+        .nav-logo-item {
+            font-family: 'Mansalva', cursive;
+            font-size: 25px;
+            transition-duration: .5s;
+        }
+
+        .nav-logo-item:hover {
+            transition-duration: .5s;
+            font-size: 28px;
+            color: white;
+            /* 부트스트랩 적용 후 텍스트에 적용되는 효과 방지를 위해 */
+            text-decoration: none;
+        }
+
+        .nav-log-area {
+            /* 로그인, 로그아웃 영역 */
+            width: 150px;
+            height: 40px;
+            padding-bottom: 5px;
+            border: 2px solid white;
+            border-radius: 15px;
+            transition: .5s;
+        }
+
+        .nav-log-item {
+            font-size: 20px;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            margin-top: 8px;
+            color: white;
+            background-color: transparent;
+        }
+
+        /* 창 크기 조절 시 nav display none 설정 */
+        @media only screen and (max-width: 1600px) {
+            .topnav {
+                display: none;
+            }
+
+            .topnav>ul>li>.nav-logo>.nav-logo-item {
+                float: left;
+                display: block;
+            }
+        }
+
+        .main {
+            margin-top: 250px;
+            width: 100%;
+            height: 1500px;
+            padding: 10px;
+        }
+
+        .TitleArea {
+            width: 100%;
+            height: 130px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .TitleAlign {
+            width: 100%;
+            height: 50%;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .TitleAlign>input {
+            width: 800px;
+            height: 60px;
+            padding: 0 auto;
+            text-align-last: center;
+            color: rgba(0, 0, 0, 0.7);
+            font-size: 15px;
+            border: none;
+            outline: none;
+            border-radius: 4px;
+            transition-duration: .9s;
+        }
+
+        .TitleAlign>input:focus {
+            font-size: 28px;
+        }
+
+        .TitleSub {
+            width: 100%;
+            height: 50%;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .SubItem {
+            padding: 0 30px;
+        }
+
+        .SubItem span {
+            font-size: 13px;
+            width: 130px;
+            height: 40px;
+            color: #eee;
+            border-radius: 5px;
+            background-color: #2e2e2e;
+            display: flex;
+            cursor: default;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .SubItem .goDay {
+            width: 130px;
+            height: 40px;
+            border: none;
+            outline: none;
+            color: #eee;
+            text-align-last: center;
+            background-color: #2e2e2e;
+            font-size: 13px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        /* 글 작성 영역 外 */
+        .MapArea {
+            width: 100%;
+            height: 850px;
+            margin-top: 100px;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* 글 작성 영역 內 */
+        #travelRoute_wrap {
+            width: 1530px;
+            height: 100%;
+            display: flex;
+            flex-direction: row;
+        }
+
+        /* 글 작성 좌측 사이드 영역 */
+        .travelRouteItem-Left {
+            width: 20%;
+            height: 100%;
+            padding: 10px;
+        }
+
+        /* 글 작성 센터 영역 */
+        .travelRouteItem-Center {
+            width: 60%;
+            height: 100%;
+            padding: 10px;
+        }
+
+        /* 글 작성 우측 사이드 영역 */
+        .travelRouteItem-Right {
+            width: 20%;
+            height: 100%;
+            padding: 10px;
+        }
+
+        /* 여행 방문 헤더 영역 */
+        .travelRoute-header {
+            width: 100%;
+            height: 100px;
+        }
+
+        /* 여행 방문 내용 영역 */
+        .travelRoute-content {
+            width: 100%;
+            height: 730px;
+        }
+
+        .travelRouteItem-Left .travelRoute-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+            border: none;
+            border-bottom: 0.5px solid rgba(0, 0, 0, .2);
+            background-color: darkorange;
+        }
+
+        .travelRouteItem-Left .travelRoute-content {
+            display: flex;
+            flex-direction: column;
+            background-color: #FFEEE4;
+        }
+
+        .travelRoute-header .trTitle1 {
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .travelRoute-header .trTitle2 {
+            padding-top: 5px;
+            font-size: 12px;
+            font-weight: 300;
+        }
+
+        .travelRouteItem-Center .travelRoute-header {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+            border: none;
+            border-bottom: 0.5px solid rgba(0, 0, 0, .2);
+            background-color: darkorange;
+        }
+
+        .travelRouteItem-Center .travelRoute-header button {
+            margin: 0 8px;
+            width: 80px;
+            height: 80px;
+            font-size: 11px;
+            border: none;
+            outline: none;
+            background-color: transparent;
+            transition-duration: .3s;
+        }
+
+        .travelRouteItem-Center .travelRoute-header button:hover {
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .travelRoute-header button p {
+            margin: 5px;
+        }
+
+        .travelRouteItem-Center .map_wrap {
+            width: 100%;
+            height: 730px;
+            padding: 10px;
+            background-color: #FFEEE4;
+        }
+
+        .travelRouteItem-Right .modal-cost {}
+
+        .travelRouteItem-Right .cost-header {
+            width: 100%;
+            height: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+            border: none;
+            border-bottom: 0.5px solid rgba(0, 0, 0, .2);
+            background-color: darkorange;
+        }
+
+        .travelRouteItem-Right .cost-header .chTitle1 {
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .travelRouteItem-Right .cost-header .chTitle2 {
+            padding-top: 5px;
+            font-size: 12px;
+            font-weight: 300;
+            padding-right: 35px;
+        }
+
+        .travelRouteItem-Right .cost-body {
+            width: 100%;
+            height: 730px;
+            background-color: #FFEEE4;
+        }
+
+        .hashArea {
+            width: 100%;
+            height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 50px;
+        }
+
+        .hashAreaItem {
+            width: 1200px;
+            height: 50px;
+            padding: 10px;
+            font-size: 13px;
+            border-radius: 5px;
+            border: none;
+            outline: none;
+        }
+
+        .taArea {
+            width: 100%;
+            height: 600px;
+            margin-top: 20px;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .taArea .form-group {
+            width: 1510px;
+            height: 100%;
+        }
+
+        .note-editing-area {
+            height: 600px;
+            resize: none;
+        }
+
+        .note-statusbar {
+            display: none;
+        }
+
+        .btnArea {
+            width: 100%;
+            height: 150px;
+            padding: 10px;
+            margin-top: 50px;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+        }
+
+        .btnArea>div {
+            padding: 0 30px;
+        }
+
+        .btnAreaItem {
+            width: 200px;
+            height: 40px;
+            outline: none;
+            border: none;
+            font-size: 13px;
+            color: white;
+            background-color: #D81159;
+            transition-duration: .5s;
+            padding: 12px;
+            text-align: center
+        }
+
+
+
+        .mainImgArea {
+            width: 100%;
+            height: 200px;
+            margin-top: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .mainImg_wrap {
+            width: 1200px;
+            height: 200px;
+            border-radius: 5px;
+            background-color: #eee;
+            border: 1px solid white;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .mainImg_label {
+            font-size: 13px;
+            font-weight: 700;
+            padding: 10px 0;
+        }
+
+        .mainImg_Input {
+            background-color: white;
+            font-size: 13px;
+            padding: 10px;
+        }
+
+        .mainImg_AlignRight {
+            padding: 100px;
+        }
+
+        #mainImgItem {
+            width: 0;
+            height: 0;
+            transition-duration: .5s;
+        }
+
+        .mapWrap {
+            padding: 10px;
+        }
+
+        #drawingMap {
+            z-index: 3;
+            height: 100%;
+            border: 1px solid black;
+        }
+
+        < !-- 원본 style-->.modes {
+            top: 10px;
+            left: 10px;
+            z-index: 1;
+        }
+
+        .map_wrap a,
+        .map_wrap a:hover,
+        .map_wrap a:active {
+            color: #000;
+            text-decoration: none;
+        }
+
+        #menu_wrap {
+            margin: 10px 0 30px 10px;
+            padding: 5px;
+            overflow-y: auto;
+            background: rgba(255, 255, 255, 0.7);
+            z-index: 1;
+            font-size: 12px;
+            border-radius: 10px;
+        }
+
+        .bg_white {
+            background: #fff;
+        }
+
+        #menu_wrap hr {
+            display: block;
+            height: 1px;
+            border: 0;
+            border-top: 2px solid #5F5F5F;
+            margin: 3px 0;
+        }
+
+        #menu_wrap .option {
+            text-align: center;
+        }
+
+        #menu_wrap .option p {
+            margin: 10px 0;
+        }
+
+        #menu_wrap .option button {
+            margin-left: 5px;
+        }
+
+        #placesList li {
+            list-style: none;
+        }
+
+        #placesList .item {
+            position: relative;
+            border-bottom: 1px solid #888;
+            overflow: hidden;
+            cursor: pointer;
+            min-height: 65px;
+        }
+
+        #placesList .item span {
+            display: block;
+            margin-top: 4px;
+        }
+
+        #placesList .item h5,
+        #placesList .item .info {
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        #placesList .item .info {
+            padding: 10px 0 10px 55px;
+        }
+
+        #placesList .info .gray {
+            color: #8a8a8a;
+        }
+
+        #placesList .info .jibun {
+            padding-left: 26px;
+            background: url(http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/places_jibun.png) no-repeat;
+        }
+
+        #placesList .info .tel {
+            color: #009900;
+        }
+
+        #placesList .item .markerbg {
+            float: left;
+            position: absolute;
+            width: 36px;
+            height: 37px;
+            margin: 10px 0 0 10px;
+            background: url(http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png) no-repeat;
+        }
+
+        #placesList .item .marker_1 {
+            background-position: 0 -10px;
+        }
+
+        #placesList .item .marker_2 {
+            background-position: 0 -56px;
+        }
+
+        #placesList .item .marker_3 {
+            background-position: 0 -102px
+        }
+
+        #placesList .item .marker_4 {
+            background-position: 0 -148px;
+        }
+
+        #placesList .item .marker_5 {
+            background-position: 0 -194px;
+        }
+
+        #placesList .item .marker_6 {
+            background-position: 0 -240px;
+        }
+
+        #placesList .item .marker_7 {
+            background-position: 0 -286px;
+        }
+
+        #placesList .item .marker_8 {
+            background-position: 0 -332px;
+        }
+
+        #placesList .item .marker_9 {
+            background-position: 0 -378px;
+        }
+
+        #placesList .item .marker_10 {
+            background-position: 0 -423px;
+        }
+
+        #placesList .item .marker_11 {
+            background-position: 0 -470px;
+        }
+
+        #placesList .item .marker_12 {
+            background-position: 0 -516px;
+        }
+
+        #placesList .item .marker_13 {
+            background-position: 0 -562px;
+        }
+
+        #placesList .item .marker_14 {
+            background-position: 0 -608px;
+        }
+
+        #placesList .item .marker_15 {
+            background-position: 0 -654px;
+        }
+
+        #pagination {
+            margin: 10px auto;
+            text-align: center;
+        }
+
+        #pagination a {
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        #pagination .on {
+            font-weight: bold;
+            cursor: default;
+            color: #777;
+        }
+
+
+        < !-- 커스텀 오버레이 스타일-->.card-cus {
+            border: 1px outset rgba(0, 0, 0, .19);
+            width: 300px;
+            word-spacing: -1px;
+        }
+
+        .card-header {
+            width: 100%;
+            height: 50px;
+            display: flex;
+            flex-direction: row;
+            background-color: #eee;
+            font-family: 'Noto Sans KR', sans-serif;
+            padding: 0px;
+        }
+
+        .card-title {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            font-size: 18px;
+            justify-content: center;
+            align-items: center;
+            padding-left: 10px;
+            color: #000;
+        }
+
+        .card-input {
+            width: 95%;
+            height: 80%;
+            padding: 10px;
+            outline: none;
+        }
+
+        .card-close {
+            width: 10%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            padding-top: 3px;
+            margin-right: 8px;
+        }
+
+        .card-close .closeBtn {
+            color: #000;
+            font-size: 25px;
+        }
+
+        .closeBtn span {
+            cursor: pointer;
+            color: black;
+        }
+
+        .card-body {
+            width: 100%;
+            height: 100%;
+            padding: 20px 0px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: 'Malgun Gothic', dotum, '돋움', sans-serif;
+            text-align: center;
+            font-size: 18px;
+            overflow: auto;
+        }
+
+        .card-body-li {
+            font-size: 15px;
+            list-style: none;
+        }
+
+        .card-addBtn {
+            width: 80px;
+            height: 27px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: .2rem;
+            font-size: .875rem;
+            cursor: pointer;
+            background-color: orange;
+            transition-duration: .9s;
+        }
+
+        .card-addBtn:hover {
+            transition-duration: .9s;
+            background-color: darkorange;
+        }
+
+        < !-- modal-cost and TravelRoute-->< !-- modal-cost and TravelRoute-->.modal-cost {
+            display: flex;
+            flex-direction: row-reverse;
+            width: 100%;
+        }
+
+        #travelRoute {
+            list-style: none;
+        }
+
+        .costItem,
+        .travelPoint {
+            width: 100%;
+            cursor: default;
+            padding: 10px 0 5px;
+            border-bottom: 1px dashed rgba(0, 0, 0, 0.2);
+        }
+
+        .costItem-header span {
+            font-size: 30px;
+            font-family: 'East Sea Dokdo', cursive;
+        }
+
+        .costItem-body ul {
+            padding: 0 5px 0 20px;
+            list-style-type: circle;
+        }
+
+        .costItem-body li {
+            font-size: 12px;
+        }
+
+        < !--bootstrap customize-->.row {
+            width: 100%;
+        }
+
+        .btn-group-sm>.btn,
+        .btn-sm {
+            font-size: 8px;
+        }
+
+        .form-control-sm {
+            font-size: 10px;
+        }
+
+        .btn-warning {
+            box-sizing: content-box;
+            font-size: 2px;
+            padding-top: 0px;
+            padding-bottom: 0px;
+            padding-left: 0px;
+            padding-right: 0px;
+            width: 10px;
+            height: 10px;
+        }
+    </style>
+
+    
+</head>
+
+<body>
+    <form id="form1" runat="server">
+        <!-- navbar 영역 -->
+
+        <div id="main" class="main">
+            <!-- 메인 상단 영역 -->
+            <div class="TitleArea">
+                <div class="TitleAlign">
+                    <asp:TextBox ID="mapData" runat="server" />
+                    <asp:TextBox ID="mapRoute" runat="server" />
+                    <asp:TextBox ID="mapCost" runat="server" />
+                    <asp:TextBox ID="title" runat="server" type="text" placeholder="게시글의 제목을 정해주세요." />
+                </div>
+                <div class="TitleSub">
+                    <div class="SubItem">
+                        <span>
+                            <asp:Literal ID="Literal_day" runat="server"></asp:Literal>일 차 작성 중...
+                        </span>
+                    </div>
+                    <div class="SubItem">
+
+                        <asp:DropDownList ID="goDay" runat="server" OnSelectedIndexChanged="DropDownList_goDay_SelectedIndexChanged">
+                        </asp:DropDownList>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- 중앙 영역 1 -->
+            <div class="MapArea">
+                <div id="travelRoute_wrap">
+                    <div class="travelRouteItem-Left">
+                        <div class="travelRoute-header">
+                            <div class="trTitle1"><span class="trTitle">여행지</span></div>
+                            <div class="trTitle2"><span id="trBody">방문 : 0</span></div>
+                        </div>
+                        <div class="travelRoute-content">
+                            <ul id="travelRoute" class="travelRoute"></ul>
+                        </div>
+                    </div>
+                    <div class="travelRouteItem-Center">
+                        <div class="travelRoute-header">
+                            <button type="button" class="TIFIRST" onclick="selectOverlay('MARKER')">
+                                <p>📌</p>
+                                <p>마커</p>
+                            </button>
+                            <button type="button" onclick="selectOverlay('POLYLINE')">
+                                <p>🥖</p>
+                                <p>선</p>
+                            </button>
+                            <button type="button" onclick="selectOverlay('CIRCLE')">
+                                <p>🍅</p>
+                                <p>원</p>
+                            </button>
+                            <button type="button" onclick="selectOverlay('RECTANGLE')">
+                                <p>🍱</p>
+                                <p>사각형</p>
+                            </button>
+                            <button type="button" onclick="selectOverlay('POLYGON')">
+                                <p>🍰</p>
+                                <p>다각형</p>
+                            </button>
+                            <button type="button" onclick="selectOverlay('ELLIPSE')">
+                                <p>🍪</p>
+                                <p>타원</p>
+                            </button>
+                            <button type="button" onclick="selectOverlay('ARROW')">
+                                <p>👉</p>
+                                <p>화살표</p>
+                            </button>
+                            <button type="button" id="undo" onclick="undoAction()" disabled>
+                                <p>↺</p>
+                                <p>동작취소</p>
+                            </button>
+                            <button type="button" id="redo" onclick="redoAction()" disabled>
+                                <p>↻</p>
+                                <p>되돌리기</p>
+                            </button>
+                            <button type="button" class="TILAST" data-toggle="modal" data-target="#searchPlaceModal">
+                                <p>🍳</p>
+                                <p>장소검색</p>
+                            </button>
+                        </div>
+                        <div class="map_wrap">
+                            <div id="drawingMap"></div>
+                        </div>
+                    </div>
+
+                    <div class="travelRouteItem-Right">
+                        <div id="travelCost_wrap">
+                            <div class="modal-cost">
+                                <div class="modal-cost-area">
+                                    <div class="cost-header" id="costHeader">
+                                        <div class="chTitle1"><span class="chTitle">전체 경비</span></div>
+                                        <div class="chTitle2"><span class="chBody">💰 0</span></div>
+                                    </div>
+                                    <div class="cost-body" id="costBody">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 중앙 영역 2 -->
+            <div class="taArea">
+                <div class="form-group">
+                    <asp:TextBox ID="article" runat="server" TextMode="MultiLine" type="text" name="article"></asp:TextBox>
+                </div>
+            </div>
+
+            <!-- 메인페이지 영역 -->
+            <div class="mainImgArea">
+                <div class="mainImg_wrap">
+                    <div class="mainImg_AlignLeft">
+                        <div class="mainImg_Label">게시글의 메인이미지를 첨부하세요.</div>
+                        <div class="mainImg_Input">
+                            <asp:FileUpload ID="main_img" runat="server" />
+                        </div>
+                    </div>
+                    <div class="mainImg_AlignRight">
+                        <img src="./img/%EC%A0%9C%EC%A3%BC%EB%8F%84.jpg" alt="userMainImage" id="mainImgItem" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- 해쉬태그 영역 -->
+            <div class="hashArea">
+                <asp:TextBox ID="hashtag" runat="server" type="text" placeholder="해쉬태그를 입력하세요. (ex : #여행 #추억) (스페이스바로 구분지어 주세요.)" class="hashAreaItem" />
+            </div>
+
+            <!-- 하단부 영역 -->
+            <div class="btnArea">
+                <!-- 임시 저장 버튼 -->
+                <div class="tempSaveBtn">
+                    <div onclick="tmpSave()" class="btnAreaItem">임시 저장</div>
+                </div>
+                <!-- 다음 일로 이동 -->
+                <div class="nextPageBtn">
+                    <div onclick="nextDay()" class="btnAreaItem">다음 일 입력</div>
+                </div>
+                <!-- 글 작성 완료 버튼 -->
+                <div class="finishBtn">
+                    <div onclick="endWrite()" class="btnAreaItem">글 작성 완료</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 장소 검색 Modal 영역 -->
+        <div class="modal fade" id="searchPlaceModal" tabindex="-1" role="dialog" aria-labelledby="searchPlaceModalTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered " role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="searchPlaceModalTitle">장소 검색</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="menu_wrap" class="bg_white">
+                            <div class="option">
+                                <div>
+                                    키워드 :
+                                    <input id="keyword" value="이태원 맛집" type="text" />
+                                    <button onclick="searchPlaces();">검색하기</button>
+                                </div>
+                            </div>
+                            <hr />
+                            <ul id="placesList"></ul>
+                            <div id="pagination"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </form>
+
+
+
+
+
+
+
+
+
+    <!-- KAKAO -->
+
+    <script src="toourshared/javascript/write.js"></script>
+
+
+    <script>
+        //------------------------------------
+        //----------Post START
+        //------------------------------------
+        var form = document.createElement("form");
+
+
+        // 다음페이지로 markers, polyline, rect, circle, polygon 보내는 기능
+        function addDataAtForm() {
+
+            var title = document.getElementById("title");
+            var article = document.getElementById("article");
+            var hashtag = document.getElementById("hashtag");
+            title.setAttribute('type', "hidden");
+            article.setAttribute('type', "hidden");
+            hashtag.setAttribute('type', "hidden");
+
+
+
+            //// Form submission canceled because the form is not connected 해결
+            document.body.appendChild(form);
+            form.setAttribute('method', "post");
+
+            form.appendChild(title);
+            form.appendChild(article);
+            form.appendChild(hashtag);
+
+
+            var mapData = document.createElement("input"); // input 엘리멘트 생성
+            mapData.setAttribute("type", "hidden"); // type 속성을 hidden으로 설정
+            mapData.setAttribute("name", "mapData"); // name 속성을 'stadium'으로 설정
+            mapData.setAttribute("value", JSON.stringify(getMapData())); // value 속성을 삽입
+            form.appendChild(mapData);
+
+            var TravelRouteListData = document.createElement("input"); // input 엘리멘트 생성
+            TravelRouteListData.setAttribute("type", "hidden"); // type 속성을 hidden으로 설정
+            TravelRouteListData.setAttribute("name", "mapRoute"); // name 속성을 'stadium'으로 설정
+            TravelRouteListData.setAttribute("value", JSON.stringify(getTravelRouteData())); // value 속성을 삽입
+            form.appendChild(TravelRouteListData);
+
+            var CostItemListData = document.createElement("input"); // input 엘리멘트 생성
+            CostItemListData.setAttribute("type", "hidden"); // type 속성을 hidden으로 설정
+            CostItemListData.setAttribute("name", "mapCost"); // name 속성을 'stadium'으로 설정
+            CostItemListData.setAttribute("value", JSON.stringify(getCostData())); // value 속성을 삽입
+            form.appendChild(CostItemListData);
+
+
+
+
+        }
+
+
+
+        function tmpSave() {
+            addDataAtForm();
+            form.setAttribute('action', "Write_tmpSave.aspx");
+            form.submit(); // 전송
+        }
+
+        function nextDay() {
+            addDataAtForm();
+            form.setAttribute('action', "Write_nextDay.aspx");
+            form.submit(); // 전송
+        }
+
+        function endWrite() {
+            addDataAtForm();
+            form.setAttribute('action', "Write_get_endWrite.aspx");
+            form.submit(); // 전송
+        }
+
+        //------------------------------------
+        //----------Post END
+        //------------------------------------
+        overlays = [];
+
+        function setMap(mapData) {
+            // Drawing Manager에서 그려진 데이터 정보를 가져옵니다 
+            var data = mapData;
+            console.info(data);
+
+            // 아래 지도에 그려진 도형이 있다면 모두 지웁니다
+            removeOverlays();
+
+            console.info(data["marker"]);
+            console.info(data["polyline"]);
+            console.info(data["rectangle"]);
+            console.info(data["circle"]);
+            console.info(data["polygon"]);
+            console.info(data["ellipse"]);
+            console.info(data["arrow"]);
+            // 지도에 가져온 데이터로 도형들을 그립니다
+            drawMarker(data["marker"]);
+            drawPolyline(data["polyline"]);
+            drawRectangle(data["rectangle"]);
+            drawCircle(data["circle"]);
+            drawPolygon(data["polygon"]);
+            drawEllipse(data["ellipse"]);
+            //drawPolygon(data["arrow"]);
+
+
+
+
+        }
+
+        // 아래 지도에 그려진 도형이 있다면 모두 지웁니다
+        function removeOverlays() {
+            var len = overlays.length,
+                i = 0;
+
+            for (; i < len; i++) {
+                overlays[i].setMap(null);
+            }
+
+            overlays = [];
+        }
+
+        function drawArrow(arrow) {
+            var len = arrow.length,
+                i = 0;
+
+            for (; i < len; i++) {
+                var path = pointsToPath(arrow[i].points);
+                var style = arrow[i].options;
+                var polyline = new kakao.maps.Arrow({
+                    map: drawingMap,
+                    endArrow: style.endArrow,
+                    path: path,
+                    strokeColor: style.strokeColor,
+                    strokeOpacity: style.strokeOpacity,
+                    strokeStyle: style.strokeStyle,
+                    strokeWeight: style.strokeWeight
+                });
+
+                overlays.push(polyline);
+            }
+        }
+
+        function drawEllipse(ellipse) {
+            var len = ellipse.length,
+                i = 0;
+
+            for (; i < len; i++) {
+                var style = ellipse[i].options;
+                var circle = new kakao.maps.Ellipse({
+                    map: drawingMap,
+                    center: new kakao.maps.LatLng(ellipse[i].center.x, ellipse[i].center.y),
+                    ePoint: new kakao.maps.LatLng(ellipse[i].ePoint.x, ellipse[i].ePoint.y),
+                    strokeWeight: style.strokeWeight,
+                    strokeColor: style.strokeColor,
+                    strokeOpacity: style.strokeOpacity,
+                    strokeStyle: style.strokeStyle,
+                    fillColor: style.fillColor,
+                    fillOpacity: style.fillOpacity
+                });
+                overlays.push(ellipse);
+            }
+        } // Drawing Manager에서 가져온 데이터 중 마커를 아래 지도에 표시하는 함수입니다
+        function drawMarker(markers) {
+            var len = markers.length,
+                i = 0;
+
+            for (; i < len; i++) {
+                var marker = new kakao.maps.Marker({
+                    map: drawingMap,
+                    position: new kakao.maps.LatLng(markers[i].y, markers[i].x),
+                    zIndex: markers[i].zIndex
+                });
+
+                overlays.push(marker);
+            }
+        }
+
+        // Drawing Manager에서 가져온 데이터 중 선을 아래 지도에 표시하는 함수입니다
+        function drawPolyline(lines) {
+            var len = lines.length,
+                i = 0;
+
+            for (; i < len; i++) {
+                var path = pointsToPath(lines[i].points);
+                var style = lines[i].options;
+                var polyline = new kakao.maps.Polyline({
+                    map: drawingMap,
+                    path: path,
+                    strokeColor: style.strokeColor,
+                    strokeOpacity: style.strokeOpacity,
+                    strokeStyle: style.strokeStyle,
+                    strokeWeight: style.strokeWeight
+                });
+
+                overlays.push(polyline);
+            }
+        }
+
+        // Drawing Manager에서 가져온 데이터 중 사각형을 아래 지도에 표시하는 함수입니다
+        function drawRectangle(rects) {
+            var len = rects.length,
+                i = 0;
+
+            for (; i < len; i++) {
+                var style = rects[i].options;
+                var rect = new kakao.maps.Rectangle({
+                    map: drawingMap,
+                    bounds: new kakao.maps.LatLngBounds(
+                        new kakao.maps.LatLng(rects[i].sPoint.y, rects[i].sPoint.x),
+                        new kakao.maps.LatLng(rects[i].ePoint.y, rects[i].ePoint.x)
+                    ),
+                    strokeColor: style.strokeColor,
+                    strokeOpacity: style.strokeOpacity,
+                    strokeStyle: style.strokeStyle,
+                    strokeWeight: style.strokeWeight,
+                    fillColor: style.fillColor,
+                    fillOpacity: style.fillOpacity
+                });
+
+                overlays.push(rect);
+            }
+        }
+
+        // Drawing Manager에서 가져온 데이터 중 원을 아래 지도에 표시하는 함수입니다
+        function drawCircle(circles) {
+            var len = circles.length,
+                i = 0;
+
+            for (; i < len; i++) {
+                var style = circles[i].options;
+                var circle = new kakao.maps.Circle({
+                    map: drawingMap,
+                    center: new kakao.maps.LatLng(circles[i].center.y, circles[i].center.x),
+                    radius: circles[i].radius,
+                    strokeColor: style.strokeColor,
+                    strokeOpacity: style.strokeOpacity,
+                    strokeStyle: style.strokeStyle,
+                    strokeWeight: style.strokeWeight,
+                    fillColor: style.fillColor,
+                    fillOpacity: style.fillOpacity
+                });
+
+                overlays.push(circle);
+            }
+        }
+
+        // Drawing Manager에서 가져온 데이터 중 다각형을 아래 지도에 표시하는 함수입니다
+        function drawPolygon(polygons) {
+            var len = polygons.length,
+                i = 0;
+
+            for (; i < len; i++) {
+                var path = pointsToPath(polygons[i].points);
+                var style = polygons[i].options;
+                var polygon = new kakao.maps.Polygon({
+                    map: drawingMap,
+                    path: path,
+                    strokeColor: style.strokeColor,
+                    strokeOpacity: style.strokeOpacity,
+                    strokeStyle: style.strokeStyle,
+                    strokeWeight: style.strokeWeight,
+                    fillColor: style.fillColor,
+                    fillOpacity: style.fillOpacity
+                });
+
+                overlays.push(polygon);
+            }
+        }
+
+        // Drawing Manager에서 가져온 데이터 중 
+        // 선과 다각형의 꼭지점 정보를 kakao.maps.LatLng객체로 생성하고 배열로 반환하는 함수입니다 
+        function pointsToPath(points) {
+            var len = points.length,
+                path = [],
+                i = 0;
+
+            for (; i < len; i++) {
+                var latlng = new kakao.maps.LatLng(points[i].y, points[i].x);
+                path.push(latlng);
+            }
+
+            return path;
+        }
+
+
+        //------------------------------------
+        //----------DataBind End
+        //------------------------------------
+        var inputMapData = {
+            "arrow": [{
+                "type": "arrow",
+                "points": [{
+                    "x": 126.99377676357814,
+                    "y": 37.539832069591135
+                }, {
+                    "x": 126.99658296625977,
+                    "y": 37.53788602373955
+                }, {
+                    "x": 126.9976012304238,
+                    "y": 37.539670029199755
+                }, {
+                    "x": 126.99789557208233,
+                    "y": 37.53422799194333
+                }, {
+                    "x": 126.99986422042659,
+                    "y": 37.539760153490136
+                }, {
+                    "x": 126.99918529961954,
+                    "y": 37.541868490486024
+                }],
+                "coordinate": "wgs84",
+                "options": {
+                    "strokeColor": "#39f",
+                    "strokeWeight": 3,
+                    "strokeStyle": "solid",
+                    "strokeOpacity": 0.8,
+                    "endArrow": true
+                }
+            }, {
+                "type": "arrow",
+                "points": [{
+                    "x": 126.99703540725547,
+                    "y": 37.541580136165
+                }, {
+                    "x": 127.00122204733536,
+                    "y": 37.5416702670308
+                }, {
+                    "x": 126.99703534517859,
+                    "y": 37.54314787554832
+                }, {
+                    "x": 126.99488555976507,
+                    "y": 37.5408772827642
+                }, {
+                    "x": 126.99780489319937,
+                    "y": 37.539886273171284
+                }, {
+                    "x": 127.00067886895069,
+                    "y": 37.536570610593756
+                }],
+                "coordinate": "wgs84",
+                "options": {
+                    "strokeColor": "#39f",
+                    "strokeWeight": 3,
+                    "strokeStyle": "solid",
+                    "strokeOpacity": 0.8,
+                    "endArrow": true
+                }
+            }],
+            "circle": [],
+            "ellipse": [{
+                "type": "ellipse",
+                "sPoint": {
+                    "x": 126.98464585214572,
+                    "y": 37.53849775519889
+                },
+                "ePoint": {
+                    "x": 126.98964659830446,
+                    "y": 37.54127337958021
+                },
+                "center": {
+                    "x": 126.98714617887826,
+                    "y": 37.53988559401537
+                },
+                "coordinate": "wgs84",
+                "options": {
+                    "strokeColor": "#39f",
+                    "strokeWeight": 2,
+                    "strokeStyle": "solid",
+                    "strokeOpacity": 0.8,
+                    "fillColor": "#39f",
+                    "fillOpacity": 0.3
+                },
+                "rx": 221,
+                "ry": 154
+            }, {
+                "type": "ellipse",
+                "sPoint": {
+                    "x": 126.9875546503258,
+                    "y": 37.53307407367793
+                },
+                "ePoint": {
+                    "x": 126.99217031784524,
+                    "y": 37.53714699329869
+                },
+                "center": {
+                    "x": 126.98986242133111,
+                    "y": 37.5351105563813
+                },
+                "coordinate": "wgs84",
+                "options": {
+                    "strokeColor": "#39f",
+                    "strokeWeight": 2,
+                    "strokeStyle": "solid",
+                    "strokeOpacity": 0.8,
+                    "fillColor": "#39f",
+                    "fillOpacity": 0.3
+                },
+                "rx": 204,
+                "ry": 226
+            }, {
+                "type": "ellipse",
+                "sPoint": {
+                    "x": 126.99344901080258,
+                    "y": 37.535471210092105
+                },
+                "ePoint": {
+                    "x": 126.99623217487328,
+                    "y": 37.53860681328915
+                },
+                "center": {
+                    "x": 126.99484056370473,
+                    "y": 37.53703902009618
+                },
+                "coordinate": "wgs84",
+                "options": {
+                    "strokeColor": "#39f",
+                    "strokeWeight": 2,
+                    "strokeStyle": "solid",
+                    "strokeOpacity": 0.8,
+                    "fillColor": "#39f",
+                    "fillOpacity": 0.3
+                },
+                "rx": 123,
+                "ry": 174
+            }],
+            "marker": [],
+            "polyline": [],
+            "polygon": [],
+            "rectangle": []
+        };
+        if (inputMapData != "" && inputMapData != []) {
+            setMap(inputMapData);
+            closeCusOverlay();
+            refreshOverlayListener();
+        }
+
+
+        TravelRouteList = document.getElementById("mapRoute").value;
+        if (TravelRouteList != "" && TravelRouteList != [] && TravelRouteList != null) {
+            refreashTravelRoute();
+        }
+
+        CostItemList = document.getElementById("mapCost").value;
+        if (CostItemList != "" && CostItemList != [] && TravelRouteList != null) {
+            refreashCostItem();
+        }
+    </script>
+
+</body>
+
+</html>
