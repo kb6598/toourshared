@@ -109,7 +109,7 @@ public class Travel_DayDao
                 return result;
 
             }
-
+            rd.Close();
             con.Close();
 
         }

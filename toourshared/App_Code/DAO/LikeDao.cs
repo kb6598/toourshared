@@ -100,7 +100,7 @@ public class LikeDao
                 return result;
 
             }
-
+            rd.Close();
             con.Close();
 
         }

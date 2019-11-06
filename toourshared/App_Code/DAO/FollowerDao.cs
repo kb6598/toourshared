@@ -98,7 +98,7 @@ public class FollowerDao
                 return result;
 
             }
-
+            rd.Close();
             con.Close();
 
         }
@@ -146,7 +146,7 @@ public class FollowerDao
                 resultList.Add(result);
 
             }
-
+            rd.Close();
             con.Close();
 
 

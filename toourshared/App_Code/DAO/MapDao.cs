@@ -130,7 +130,7 @@ public class MapDao
                 return result;
 
             }
-
+            rd.Close();
             con.Close();
 
         }
@@ -178,7 +178,7 @@ public class MapDao
                 return result;
 
             }
-
+            rd.Close();
             con.Close();
 
         }

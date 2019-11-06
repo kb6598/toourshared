@@ -109,7 +109,7 @@ public class ImageDao
                 return result;
 
             }
-
+            rd.Close();
             con.Close();
 
         }

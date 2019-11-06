@@ -111,7 +111,7 @@ public class VideoDao
                 return result;
 
             }
-
+            rd.Close();
             con.Close();
 
         }

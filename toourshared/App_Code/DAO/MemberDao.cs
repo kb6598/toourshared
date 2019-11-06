@@ -157,7 +157,7 @@ namespace tooushared.DAO
                         return resultMember;
 
                 }
-
+                rd.Close();
                 con.Close();
 
 
@@ -276,6 +276,7 @@ namespace tooushared.DAO
                     return FindID;
 
                 }
+                rd.Close();
                 con.Close();
             }
             catch (Exception ex)
@@ -321,6 +322,7 @@ namespace tooushared.DAO
                     return FindPW;
 
                 }
+                rd.Close();
                 con.Close();
             }
             catch (Exception ex)
