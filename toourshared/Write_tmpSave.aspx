@@ -86,15 +86,12 @@
 </head>
 <body>
     <form id="form1" runat="server" method="post" action="write.aspx">
-        <asp:HiddenField ID="mapData" runat="server" />
-        <asp:HiddenField ID="mapRoute" runat="server" />
-        <asp:HiddenField ID="mapCost" runat="server" />
+        <asp:TextBox ID="mapData" runat="server" />
+        <asp:TextBox ID="mapRoute" runat="server" />
+        <asp:TextBox ID="mapCost" runat="server" />
+        <input id="Submit1" type="submit" value="submit" />
     </form>
-     <script>
-         form = document.getElementById("form1");
-         form.submit(); // 전송
 
-     </script>
 </body>
    
 </html>
