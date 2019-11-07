@@ -52,7 +52,7 @@ public class Member_BlockDao
         //계정활동이 정지상태인 회원 조회
         //string sql = "Select mem_blo_no, mem_id, mem_blo_date, mem_blo_length From toourshared.member_block";
         string sql = "Select member_block.mem_blo_no, member_block.mem_id, member_block.mem_blo_date, member_block.mem_blo_length " +
-            "From member_block member where member.mem_id = 1";
+            "From member_block, member where member.mem_state = 1";
         MySqlCommand cmd = new MySqlCommand(sql, con); // 커맨드(sql문을 con에서 수행하기 위한 명령문) 생성 DB에서 수행시킬 명령 생성   
 
         MySqlDataAdapter ad = new MySqlDataAdapter();
@@ -80,9 +80,10 @@ public class Member_BlockDao
 
             MySqlCommand cmd = new MySqlCommand(Sql, con);
 
-            cmd.Parameters.AddWithValue("@mem_bol_no", member_Block.Mem_blo_no);
+            cmd.Parameters.AddWithValue("@mem_blo_no", member_Block.Mem_blo_no);
 
             con.Open();
+
             MySqlDataReader rd = cmd.ExecuteReader();
 
             if (rd.HasRows)
@@ -93,18 +94,16 @@ public class Member_BlockDao
                 result.Mem_blo_date = rd["mem_blo_date"].ToString();
                 result.Mem_blo_length = rd["mem_blo_length"].ToString();
                 result.Mem_id = rd["mem_content"].ToString();
-             
-
 
                 //lstMember.Add(tmpMemberPointer);
 
                 return result;
-
             }
 
             con.Close();
 
         }
+
         catch (Exception ex)
         {
             Console.Write(ex.ToString());

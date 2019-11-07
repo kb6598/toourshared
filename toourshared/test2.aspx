@@ -75,7 +75,7 @@
         }
         else if (rdbFollower.Checked == true)
         {
-            
+
         }
         else if (rdbHot.Checked == true)
         {
@@ -117,7 +117,7 @@
                 star = "☆☆☆☆☆";
             }
 
-            
+
             Literal1.Text +=
                   "      <div class=\"boardArea\">                                                                                          " +
                   "          <div class=\"boardAlign\">                                                                                     " +
@@ -160,6 +160,31 @@
                   "              </div>                                                                                                     " +
                   "          </div>                                                                                                         " +
                   "      </div>";
+
+
+            int pageNo = 1;
+            int countList = 5; // 한 화면에 출력될 게시글 수
+            int countPage = 10; // 한 화면에 출력될 페이지 수
+            int totalCount = travelList.Count; // 전체 count수
+            int totalPage = totalCount / countList; // 전체 페이지 수
+
+            int startPage = (totalPage / 10) * 10 + 1;
+            if (totalPage % 10 == 0) startPage -= 10;
+            int targetPage = totalPage;
+            if(startPage != 1)
+            {
+                Response.Write($"<a href = \"test2.aspx?totalPage={startPage - 1}\">[이전]</a>");
+            }
+            else
+            {
+
+            }
+            for(int z = startPage; z < totalPage; z++)
+            {
+                Response.Write($"<a href = \"test2.aspx?totalPage={z}\">{z}</a>");
+            }
+
+
         }
     }
 </script>
