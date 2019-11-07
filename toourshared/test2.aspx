@@ -64,7 +64,7 @@
         string tag = "'%" + travel.Trv_tag + "%'";
         string date = "";
         string orderBy = "";
-         
+
         if (rdbRecent.Checked == true)
         {
             orderBy = " order by trv_create_time desc ";
@@ -75,7 +75,7 @@
         }
         else if (rdbFollower.Checked == true)
         {
-
+            
         }
         else if (rdbHot.Checked == true)
         {
@@ -86,9 +86,38 @@
         travelList = tra.selectAll(travel,date, loc, title, tag, orderBy);
 
 
-
+        Literal1.Text = "";
         for (int i = 0; i < travelList.Count; i++)
         {
+            int j = int.Parse(travelList[i].Trv_tot_rate);
+            int count = travelList.Count;
+            string star = "";
+            if(j >= 5)
+            {
+                star = "★★★★★";
+            }
+            else if(j>=4 && j<5)
+            {
+                star = "★★★★☆";
+            }
+            else if(j>=3 && j<4)
+            {
+                star = "★★★☆☆";
+            }
+            else if(j>=2 && j<3)
+            {
+                star = "★★☆☆☆";
+            }
+            else if(j>=1 && j<2)
+            {
+                star = "★☆☆☆☆";
+            }
+            else if(j>=0 && j<1)
+            {
+                star = "☆☆☆☆☆";
+            }
+
+            
             Literal1.Text +=
                   "      <div class=\"boardArea\">                                                                                          " +
                   "          <div class=\"boardAlign\">                                                                                     " +
@@ -96,15 +125,14 @@
                   "                  <div class=\"article1\">                                                                               " +
                   "                      <div class=\"boardImage\">                                                                         " +
                   "                          <a href=\"#\" data-toggle=\"modal\" data-target=\"#myModal\">                                  " +
-                  "                              <img src=\"./img/areaImage.jpg\" alt=\"ㅁㄴㅇㅇㅁㅁㄴ \" class=\"boardImageItem\">         " +
+                  "                              <img src = \"" + travelList[i].Trv_main_img + "\" alt=\"ㅁㄴㅇㅇㅁㅁㄴ \" class=\"boardImageItem\">         " +
                   "                          </a>                                                                                           " +
                   "                      </div>                                                                                             " +
                   "                      <div class=\"boardContent\">                                                                       " +
                   "                          <a href=\"#\" data-toggle=\"modal\" data-target=\"#myModal\">                                  " +
                   "                              <div class=\"boardTitle\">                                                                 " +
-                  "                                  <span>"+ travelList[i].Trv_title +"</span>                                                     " +
+                  "                                  <span>"+ travelList[i].Trv_title +"</span>                                             " +
                   "                              </div>                                                                                     " +
-
                   "                          </a>                                                                                           " +
                   "                      </div>                                                                                             " +
                   "                  </div>                                                                                                 " +
@@ -117,16 +145,15 @@
                   "                          </div>                                                                                         " +
                   "                          <div class=\"boardUserId\">                                                                    " +
                   "                              <a href=\"#\">                                                                             " +
-                  "                                  <span>milk9503</span>                                                                  " +
+                  "                                  <span>"+ travelList[i].Mem_id +"</span>                                                " +
                   "                              </a>                                                                                       " +
                   "                              <div class=\"boardUserTime\">                                                              " +
-                  "                                  <span style=\"cursor: default;\">2019-10-15 00:06</span>                               " +
+                  "                                  <span style=\"cursor: default;\">"+ travelList[i].Trv_create_time +"</span>            " +
                   "                              </div>                                                                                     " +
                   "                          </div>                                                                                         " +
                   "                          <div class=\"boardScore\" style=\"cursor: default;\">                                          " +
-                  "                              <span class=\"Score1\">★★★</span>                                                       " +
-                  "                              <span class=\"Score2\">☆☆</span>                                                         " +
-                  "                              <span class=\"Score3\">(3.8)</span>                                                        " +
+                  "                              <span class=\"Score1\">"+star+"</span>                                                       " +
+                  "                              <span class=\"Score3\">("+ travelList[i].Trv_tot_rate +")</span>                           " +
                   "                          </div>                                                                                         " +
                   "                      </div>                                                                                             " +
                   "                  </div>                                                                                                 " +
@@ -1234,6 +1261,7 @@
             </div>
                 <div class="sideBarBtn" id="sideBarBtn">
                 <input type="button" id="sideBarBtnItem" onClick="sidebarSwitch()" value="▲" />
+
             </div>
         </div>
     </form>
