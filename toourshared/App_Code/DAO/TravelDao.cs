@@ -32,9 +32,6 @@ public class TravelDao
             string Sql = "INSERT INTO toourshared.travel (trv_secret, trv_views, trv_tot_rate, trv_main_img, trv_title, trv_tag, trv_create_time, loc_name, mem_id) " +
                 "VALUES (@trv_secret, @trv_views, @trv_tot_rate, @trv_main_img, @trv_title, @trv_tag, @trv_create_time, @loc_name, @mem_id)";
 
-
-
-
             MySqlCommand cmd = new MySqlCommand(Sql, con);
 
             cmd.Parameters.AddWithValue("@trv_secret", travel.Trv_secret);
@@ -127,14 +124,10 @@ public class TravelDao
 
 
                 //lstMember.Add(tmpMemberPointer);
-
-                return result;
-
             }
 
+            rd.Close();
             con.Close();
-
-
         }
         catch (Exception ex)
         {
@@ -177,12 +170,11 @@ public class TravelDao
 
 
                 //lstMember.Add(tmpMemberPointer);
-
-                return result;
-
             }
 
+            rd.Close();
             con.Close();
+            return result;
 
 
         }
@@ -272,6 +264,7 @@ public class TravelDao
 
             }
 
+            rd.Close();
             con.Close();
 
 
@@ -371,6 +364,7 @@ public class TravelDao
 
             }
 
+            rd.Close();
             con.Close();
 
 
@@ -431,6 +425,7 @@ public class TravelDao
 
             }
 
+            rd.Close();
             con.Close();
 
 
@@ -445,7 +440,7 @@ public class TravelDao
         return resultList;
     }
 
-    public List<Travel> selectAll(Travel travel,string date, string loc, string title, string tag, string orderBy)
+    public List<Travel> selectAll(Travel travel, string date, string loc, string title, string tag, string orderBy)
     {
         MyDB mydb = new MyDB();
 
@@ -456,10 +451,8 @@ public class TravelDao
         try
         {
             con = mydb.GetCon();
+            string Sql = "SELECT * FROM toourshared.travel where " + date + "loc_name LIKE" + loc + "or trv_title LIKE " + title + "or trv_tag LIKE " + tag + " " + orderBy;
 
-            string Sql = "SELECT * FROM toourshared.travel where "+ date + "loc_name LIKE" + loc + "or trv_title LIKE " + title + "or trv_tag LIKE " + tag + " " + orderBy;
-
-            
             MySqlCommand cmd = new MySqlCommand(Sql, con);
             con.Open();
             MySqlDataReader rd = cmd.ExecuteReader();
@@ -468,6 +461,7 @@ public class TravelDao
             {
 
                 result = new Travel();
+
                 result.Trv_no = rd["trv_no"].ToString();
                 result.Trv_secret = rd["trv_secret"].ToString();
                 result.Trv_views = rd["trv_views"].ToString();
@@ -485,6 +479,7 @@ public class TravelDao
                 
 
             }
+
             rd.Close();
             con.Close();
 
@@ -500,19 +495,18 @@ public class TravelDao
         return resultList;
     }
 
-    public List<Travel> test(Travel travel)
+    public int travel_count(Travel travel)
     {
         MyDB mydb = new MyDB();
 
-        List<Travel> resultList = new List<Travel>();
-        Travel result;
+        int count =1;
         MySqlConnection con;
 
         try
         {
             con = mydb.GetCon();
 
-            string Sql = "SELECT * FROM toourshared.travel where ";
+            string Sql = "SELECT count(*) FROM toourshared.travel where ";
 
 
             MySqlCommand cmd = new MySqlCommand(Sql, con);
@@ -521,16 +515,6 @@ public class TravelDao
 
             while (rd.Read())
             {
-
-                result = new Travel();
-                result.Trv_no = rd["trv_no"].ToString();
-                result.Trv_title = rd["trv_title"].ToString();
-                result.Trv_timestamp = rd["trv_timestamp"].ToString();
-
-
-                //lstMember.Add(tmpMemberPointer);
-
-                resultList.Add(result);
 
             }
 
@@ -546,7 +530,7 @@ public class TravelDao
 
 
 
-        return resultList;
+        return count;
     }
 }
 
