@@ -71,10 +71,40 @@ public class Travel_DayDao
         return ds;
     }
 
+    public List<Travel> selectTravelDayListTrvNo(Travel_Day travel_day)
+    {
+        MyDB mydb = new MyDB();
+        List<Travel> returnList = new List<Travel>();
+
+        Travel_Day result = new Travel_Day();
+        MySqlConnection con;
+
+        try
+        {
+            con = mydb.GetCon();
+            string Sql = "SELECT * FROM toourshared.travel_day WHERE trv_no = @trv_no order by trv_day_no asc";
+            // 게시글 번호에 해당하는 데이터 여러개를 긁어오는 SQL
+
+            MySqlCommand cmd = new MySqlCommand(Sql, con);
+            cmd.Parameters.AddWithValue("@trv_no", travel_day.Trv_no);
+
+            con.Open();
+            MySqlDataReader reader = cmd.ExecuteReader();
+
+            while (reader.Read())
+            {
+                returnList.
+            }
+        }
+        catch (Exception e) {;}
+
+        return returnList;
+    }
+
     public Travel_Day selectTravelDayByTrvNo(Travel_Day travel_day)
     {
         MyDB mydb = new MyDB();
-        Travel_Day result = new Travel_Day();
+        Travel_Day result;
         MySqlConnection con;
 
         try

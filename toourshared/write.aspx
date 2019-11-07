@@ -9,19 +9,19 @@
     protected void btnLogout_Click(object sender, EventArgs e)
     {
         Session.Abandon();
-        Response.Redirect("/index.aspx");
+        Response.Redirect("./index.aspx");
     }
     protected void btnMypage_Click(object sender, EventArgs e)
     {
-        Response.Redirect("/MyPage.aspx");
+        Response.Redirect("./MyPage.aspx");
     }
     protected void btnJoin_Click(object sender, EventArgs e)
     {
-        Response.Redirect("/join.aspx");
+        Response.Redirect("./join.aspx");
     }
     protected void btnFindIDPW_Click(object sender, EventArgs e)
     {
-        Response.Redirect("/find_idpw.aspx");
+        Response.Redirect("./find_idpw.aspx");
     }
 
 
@@ -46,6 +46,7 @@
         //세션 status가 비어있다면 새로운 status 생성
         if (HttpContext.Current.Session["write_status"] == null)
         {
+
 
 
             // 비어있는 travel을 삽입하고 trv_no(pk) 값을 가져옴
@@ -85,7 +86,7 @@
 
 
 
-            Session.Timeout = SESSION_TIME_OUT_MIN;
+
 
         }
         Dictionary<string, string> readWriteStatus = SessionLib.getWriteStatus();
@@ -97,6 +98,7 @@
     }
     protected void BindTables()
     {
+        
 
         Dictionary<string, string> readWriteStatus = SessionLib.getWriteStatus();
         if (readWriteStatus != null)
@@ -229,7 +231,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bs4-summernote@0.8.10/dist/summernote-bs4.min.js"></script>
 
-    <link rel="stylesheet" href="/css/write.css">
+    <link rel="stylesheet" href="./css/write.css">
 
 
     <script>
@@ -550,7 +552,7 @@
 
         <!-- KAKAO -->
 
- <script src="javascript/write.js"></script>
+ <script src="./javascript/write.js"></script>
     
           
 <script>

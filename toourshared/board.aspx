@@ -2,6 +2,114 @@
 
 <!DOCTYPE html>
 
+<script runat="server">
+
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        if(Session["trv_no"] == null)
+        {
+            MessageBox.Show("게시글이 존재하지 않습니다.", this.Page);
+            Response.Redirect("/index.aspx");
+        }
+    }
+
+    protected List<String> getTravelByTrvNo()
+    {
+        int trv_no = int.Parse(Session["trv_no"].ToString()); // 게시글 번호 받기
+
+        Travel travel = new Travel();                        // travel 객체 생성
+        List<String> returnList = new List<String>();   // return할 List 생성
+        travel.Trv_no = trv_no.ToString();                  // travel 객체에 게시글 번호 넣고
+
+        TravelDao travelDao = new TravelDao();        // TravelDao 객체 생성
+        travel = travelDao.selectTravelBytrv_no(travel); // travelDao에서 trv_no를 토대로 데이터 몽땅 긁어온 travel 객체로 바꿔치기
+
+        returnList.Add(travel.Trv_no);
+        returnList.Add(travel.Trv_secret);
+        returnList.Add(travel.Trv_views);
+
+        double d_totRate = double.Parse(travel.Trv_tot_rate);
+        int i_totRate = (int)d_totRate;
+        String returnRate = d_totRate.ToString() + "-" + i_totRate.ToString(); // ex: 3.4-3
+
+        returnList.Add(returnRate);
+        returnList.Add(travel.Trv_main_img);
+        returnList.Add(travel.Trv_title);
+        returnList.Add(travel.Trv_tag);
+        returnList.Add(travel.Trv_timestamp);
+        returnList.Add(travel.Trv_create_time);
+        returnList.Add(travel.Loc_name);
+        returnList.Add(travel.Mem_id);
+
+        return returnList;
+    }
+
+    protected String getTravelDayContentByTrvNo()
+    {
+        int trv_no = int.Parse(Session["trv_no"].ToString()); // 게시글 번호 받기
+
+        Travel_Day travelDay = new Travel_Day();                         // travel_day 객체 생성
+        travelDay.Trv_no = trv_no.ToString();                               // travel_no 집어 넣기
+        Travel_DayDao travelDayDao = new Travel_DayDao();         // travel_day DAO 객체 생성
+
+        travelDay = travelDayDao.selectTravelDayByTrvNo(travelDay); // 데이터 가져오고
+        string returnStr = travelDay.Trv_day_content.ToString(); // 넣고
+
+        return returnStr; // 뿌리고
+    }
+
+    protected int getLikeCountByTrvNo()
+    {
+        int returnInt = 0;
+        int trv_no = int.Parse(Session["trv_no"].ToString()); // 게시글 번호 받고
+
+        Like like = new Like();                   // like 객체 생성
+        like.Trv_no = trv_no.ToString();        // like 객채에 데이터 집어넣기
+        LikeDao likeDao = new LikeDao();   // likeDao 객체 생성
+
+        returnInt = likeDao.selectLikeCountByTrvNo(like); // 데이터 가져오고
+        return returnInt;
+    }
+
+    protected List<String> getMemberByTrvNo()
+    {
+        List<String> returnList = new List<String>();
+        int trv_no = int.Parse(Session["trv_no"].ToString()); // 게시글 번호 받고
+
+        Travel travel = new Travel();
+        TravelDao travelDao = new TravelDao();
+
+        travel.Trv_no = trv_no.ToString(); // travel 객채에 게시글 번호 삽입
+        travel = travelDao.selectTravelBytrv_no(travel); // 바꾸고
+        String MemberID = travel.Mem_id.ToString(); // 게시글 번호의 작성자를 구해오고
+
+        Member member = new Member(); // member 객체 생성하고
+        member.Mem_id = MemberID; // 객체에 작성자 아이디 삽입하고
+        MemberDao memberDao = new MemberDao(); // DAO 생성해서
+        member = memberDao.selectMemberByMem_id(member); // 바꾸고
+
+        returnList.Add(member.Mem_id);
+        returnList.Add(member.Mem_state);
+        returnList.Add(member.Mem_phone);
+        returnList.Add(member.Mem_pw);
+        returnList.Add(member.Mem_name);
+        returnList.Add(member.Mem_sex);
+        returnList.Add(member.Mem_ques);
+        returnList.Add(member.Mem_answer);
+        returnList.Add(member.Mem_email);
+        returnList.Add(member.Mem_reg_datetime);
+        returnList.Add(member.Mem_timestmap);
+
+        String imgUrl = member.Mem_img_url;
+        if (imgUrl == "noImage")
+            returnList.Add("./img/noImage.png");
+        else
+            returnList.Add(imgUrl);
+        return returnList;
+    }
+
+</script>
+
 <head>
     <title> To Our Shared : milk9503 님의 글 </title>
 
@@ -773,35 +881,51 @@
                 </li>
             </ul>
         </div>
+        <%
+            // ============== Data Init ================
 
+            List<String> TravelList = getTravelByTrvNo();                     // 해당 게시글의 데이터
+            List<String> MemberList = getMemberByTrvNo();              // 해당 게시글 작성자의 데이터
+            String TravelDay_Content = getTravelDayContentByTrvNo();  // 해당 게시글의 내용
+
+            int goodCnt = getLikeCountByTrvNo();                             // 추천 수
+            string[] totRateArr = TravelList[3].Split(new char[] { '-' });       // 해당 게시글 평점(0.0-0) 형식이라 Split작업
+            int starCount = int.Parse(totRateArr[1]);                            // 해당 게시글의 평점(별 수)
+            string starScore = totRateArr[0];                                       // 해당 게시글의 평점(소수)
+            string starText = "";
+
+            for(int i = 0; i < starCount; i++) // 별 수만큼 for문 반복해서 starText 변수에 ⭐ 삽입
+                starText += "⭐";
+
+            // ======================================
+        %>
         <div id="main">
-           
             <div class="board">
                 <div class="board-header">
-                    <div class = "header-item">저는 제목 입니다.</div>
+                    <div class = "header-item"><%Response.Write(TravelList[5].ToString());%></div>
                     <div class = "good-item">
                         <button class = "goodBtn">👍</button>
                     </div>
-                    <div class = "good-cnt">3</div>
+                    <div class = "good-cnt"><%Response.Write(goodCnt);%></div>
                 </div>
                 <div class="board-writer">
                     <div class="writer-Image">
                         <a href="#">
-                            <img src="./img/areaImage.jpg" alt="writerImage" class="writer-ImageItem" />
+                            <img src="<%Response.Write(MemberList[12].ToString());%>" alt="writerImage" class="writer-ImageItem" />
                         </a>
                     </div>
                     <div class="writer-Text">
                         <div class="writerID">
                             <a href="#">
-                                milk9503
+                                <%Response.Write(MemberList[0].ToString());%>
                             </a>
                         </div>
-                        <div class="writerTime">2019-11-04 22:00</div>
+                        <div class="writerTime"><%Response.Write(TravelList[8].ToString());%></div>
                     </div>
                 </div>
                 <div class="board-score">
-                    <span class="star">⭐⭐⭐</span>
-                    <span class="score">(3.3)</span>
+                    <span class="star"><%Response.Write(starText);%></span>
+                    <span class="score">(<%Response.Write(starScore.ToString());%>)</span>
                 </div>
                 <div class="board-content">
                     <div class="board-map">지도 넣을 곳<br />지도 넣을 때 style 가셔서<br />display, align-items, justify-content 지워주세요</div>
