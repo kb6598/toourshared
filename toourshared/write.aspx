@@ -82,7 +82,7 @@
 
             };
             Session["write_status"] = newWriteStatus;
-            
+
             Session.Timeout = SESSION_TIME_OUT_MIN;
 
         }
@@ -101,7 +101,7 @@
             Travel_Day outputTravel_day = new Travel_Day();
             Travel_DayDao Travel_daydao = new Travel_DayDao();
 
-            inputTravel_day.Trv_day_no = readWriteStatus["cur_day"];
+            inputTravel_day.Trv_day_no = readWriteStatus["cur_trv_day_no"];
             outputTravel_day = Travel_daydao.selectTrvel_DayBytrv_day_no(inputTravel_day);
 
             article.Text = outputTravel_day.Trv_day_content;
@@ -116,7 +116,7 @@
             // 바인드
             title.Text = outputTravel.Trv_title;
             hashtag.Text = outputTravel.Trv_tag;
-            article.Text = outputTravel_day.Trv_day_content;
+
 
 
 
@@ -124,6 +124,9 @@
         }
 
     }
+
+
+
 
     protected void BindDropDownList()
     {
@@ -180,6 +183,14 @@
         BindDropDownList();
         Bind_otherData();
         BindTables();
+    }
+
+    protected void Button1_Click(object sender, EventArgs e)
+    {
+        if (HttpContext.Current.Session["write_status"] != null)
+        {
+            HttpContext.Current.Session.Abandon();
+        }
     }
 </script>
 
@@ -519,7 +530,7 @@
             </div>
         </div>
 
-   
+        <asp:Button ID="Button1" runat="server" Text="Button" OnClick="Button1_Click" />
     </form>
 
  
