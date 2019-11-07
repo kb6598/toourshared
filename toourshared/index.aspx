@@ -41,6 +41,9 @@
         {
             userMainImage = dao.selectUserMainImage(resultList[i].Mem_id);  // 게시글 작성자의 메인 프로필 이미지를 구해온다.
 
+            if (userMainImage == "noImage")
+                userMainImage = "./img/noImage.png";
+
             travelDay_List = dao.selectTravelDay(int.Parse(resultList[i].Trv_no)); // 게시글 번호에 해당하는 게시글 내용을 구해온다.
 
             // 게시글 공개범위 여부를 체크해야 한다.
