@@ -72,12 +72,12 @@ public class Member_BlockDao
         {
             con = mydb.GetCon();
 
-            string Sql = "SELECT * FROM toourshared.member_block where member_block=@mem_blo_no";
+            string Sql = "SELECT * FROM toourshared.member_block where mem_blo_no=@mem_blo_no";
 
 
             MySqlCommand cmd = new MySqlCommand(Sql, con);
 
-            cmd.Parameters.AddWithValue("@mem_bol_no", member_Block.Mem_blo_no);
+            cmd.Parameters.AddWithValue("@mem_blo_no", member_Block.Mem_blo_no);
 
             con.Open();
             MySqlDataReader rd = cmd.ExecuteReader();

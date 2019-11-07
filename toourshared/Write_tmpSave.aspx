@@ -92,7 +92,7 @@
     </form>
   <script>
          form = document.getElementById("form1");
-         //form.submit(); // 전송
+         form.submit(); // 전송
 
      </script>
 

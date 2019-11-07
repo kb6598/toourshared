@@ -84,7 +84,7 @@ public class VideoDao
         {
             con = mydb.GetCon();
 
-            string Sql = "SELECT * FROM toourshared.video where video=@vid_no";
+            string Sql = "SELECT * FROM toourshared.video where vid_no=@vid_no";
 
 
             MySqlCommand cmd = new MySqlCommand(Sql, con);
