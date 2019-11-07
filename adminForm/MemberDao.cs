@@ -24,9 +24,6 @@ namespace tooushared.DAO
 
         public string InsertMember(Member member)
         {
-
-
-
             string result = "";
             if (member.Mem_id == "" && member.Mem_pw == "" && member.Mem_name == "")
             {
@@ -38,9 +35,6 @@ namespace tooushared.DAO
             {
                 MyDB myDB = new MyDB();
                 MySqlConnection con = myDB.GetCon();
-
-
-
 
                 string Sql = "INSERT INTO toourshared.member (mem_id, mem_state, mem_phone, mem_pw, mem_name, mem_sex, mem_ques, mem_answer, mem_birth, mem_email, mem_reg_datetime, mem_timestmap, mem_img_url)" +
                     " VALUES (@mem_id, @mem_state, @mem_phone, @mem_pw, @mem_name, @mem_sex, @mem_ques, @mem_answer, @mem_birth, @mem_email, @mem_reg_datetime, @mem_timestmap, @mem_img_url)";
@@ -61,26 +55,20 @@ namespace tooushared.DAO
                 cmd.Parameters.AddWithValue("@mem_timestmap", member.Mem_timestmap);
                 cmd.Parameters.AddWithValue("@mem_img_url", member.Mem_img_url);
 
-
-
-
                 con.Open();
                 cmd.ExecuteNonQuery();
 
                  result = cmd.LastInsertedId.ToString();
 
-                con.Close();
-              
+                con.Close();             
 
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.StackTrace);
-                //-1 이면 오류
-              
+                //-1 이면 오류              
 
             }
-
 
             return result;
 
@@ -330,23 +318,24 @@ namespace tooushared.DAO
             MyDB myDB = new MyDB();
             MySqlConnection con2 = myDB.GetCon();
 
-            string sql = "Select travel.mem_id as id from travel, member where member.mem_state= 1 and travel.trv_secret = 3";
+            string sql = "Select travel.mem_id from toourshared.travel, toourshared.member" +
+                "   where member.mem_state= 1 and travel.trv_secret = 3";
             string userID = "";
 
             MySqlCommand cmd2 = new MySqlCommand(sql, con2);
             con2.Open();
 
-            MySqlDataReader reader = cmd2.ExecuteReader();
-            while (reader.Read())
+            MySqlDataReader rd = cmd2.ExecuteReader();
+            while (rd.Read())
             {
-                userID = reader["id"].ToString();
+                userID = rd["mem_id"].ToString();
             }
 
-            reader.Close();
+            rd.Close();
             con2.Close();
 
             string sql2 = "select member_block.mem_blo_no, member_block.mem_id, member_block.mem_blo_date, member_block.mem_blo_length" +
-                "from member_block where member_block.mem_id = " + userID;
+                "from member_block where toourshared.member_block.mem_id = " + userID;
 
             cmd2 = new MySqlCommand(sql2, con2);
             MySqlDataAdapter ad = new MySqlDataAdapter();
@@ -355,46 +344,6 @@ namespace tooushared.DAO
             DataSet ds2 = new DataSet();
             ad.Fill(ds2);
             return ds2;
-
-
-
-//인터넷 소스 ...?
-/*
-            MyDB myDB = new MyDB();
-            MySqlConnection con = new MySqlConnection();
-
-            String sql = "SELECT * FROM toourshared.member_block where member_block=@mem_blo_no";
-
-            MySqlCommand cmd = new MySqlCommand(sql, con);
-            cmd.Parameters.AddWithValue("@mem_blo_no", member_block.Mem_blo_no);
-            MySqlDataReader read_rd;
-
-            string SUM;
-
-            try
-            {
-                con.Open();
-                read_rd = cmd.ExecuteReader();
-
-                if (read_rd.HasRows)
-                {
-                    while (read_rd.Read())
-                    {
-                        SUM = read_rd.GetString(0);
-                    }
-                }
-
-                read_rd.Close();
-                con.Close();
-            }
-
-            catch (Exception)
-            {
-                if (con.State == ConnectionState.Open)
-                    con.Close();
-            }
-
-            return null;*/
         }
     }
 }
