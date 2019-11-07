@@ -42,7 +42,6 @@
             Session["mem_id"] = "billip";
         }
 
-
         //status -> 편집 페이지 정보
         //세션 status가 비어있다면 새로운 status 생성
         if (HttpContext.Current.Session["write_status"] == null)
@@ -83,10 +82,10 @@
 
             };
             Session["write_status"] = newWriteStatus;
+            
             Session.Timeout = SESSION_TIME_OUT_MIN;
 
         }
-
 
     }
     protected void BindTables()
@@ -104,6 +103,9 @@
 
             inputTravel_day.Trv_day_no = readWriteStatus["cur_day"];
             outputTravel_day = Travel_daydao.selectTrvel_DayBytrv_day_no(inputTravel_day);
+
+            article.Text = outputTravel_day.Trv_day_content;
+
 
             Travel inputTravel = new Travel();
             Travel outputTravel = new Travel();
@@ -155,7 +157,7 @@
     }
     protected void Bind_otherData()
     {
-                if (Request.Form["mapCost"] != null)
+        if (Request.Form["mapCost"] != null)
         {
             mapCost.Value = Request.Form["mapCost"];
 
@@ -177,6 +179,7 @@
         WriteSessionProcess();
         BindDropDownList();
         Bind_otherData();
+        BindTables();
     }
 </script>
 
@@ -500,8 +503,8 @@
                             <div class="option">
                                 <div>
                                     키워드 :
-                                <input id="keyword" value="이태원 맛집" type="text" />
-                                    <button onclick="searchPlaces();">검색하기</button>
+                                <input id="keyword" value="" type="text" />
+                                    <div class="btn btn-secondary" onclick="searchPlaces();">검색하기</div>
                                 </div>
                             </div>
                             <hr />
@@ -510,7 +513,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <div class="btn btn-secondary" data-dismiss="modal">Close</div>
                     </div>
                 </div>
             </div>
