@@ -441,6 +441,7 @@ public class TravelDao
     }
 
     public List<Travel> selectAll(Travel travel,string date, string loc, string title, string tag, string orderBy)
+    public List<Travel> selectAll(Travel travel, string date, string loc, string title, string tag, string orderBy)
     {
         MyDB mydb = new MyDB();
 
@@ -453,8 +454,8 @@ public class TravelDao
             con = mydb.GetCon();
 
             string Sql = "SELECT * FROM toourshared.travel where "+ date + "loc_name LIKE" + loc + "or trv_title LIKE " + title + "or trv_tag LIKE " + tag + " " + orderBy;
+            string Sql = "SELECT * FROM toourshared.travel where " + date + "loc_name LIKE" + loc + "or trv_title LIKE " + title + "or trv_tag LIKE " + tag + " " + orderBy;
 
-            
             MySqlCommand cmd = new MySqlCommand(Sql, con);
             con.Open();
             MySqlDataReader rd = cmd.ExecuteReader();
@@ -463,6 +464,8 @@ public class TravelDao
             {
 
                 result = new Travel();
+
+                resultList.Add(result);
                 result.Trv_no = rd["trv_no"].ToString();
                 result.Trv_secret = rd["trv_secret"].ToString();
                 result.Trv_views = rd["trv_views"].ToString();
@@ -496,18 +499,18 @@ public class TravelDao
         return resultList;
     }
 
-    public List<Travel> test(Travel travel)
+    public int travel_count(Travel travel)
     {
         MyDB mydb = new MyDB();
 
-        List<Travel> resultList = new List<Travel>();
-        Travel result;
+        int count =1;
         MySqlConnection con;
 
         try
         {
             con = mydb.GetCon();
 
+            string Sql = "SELECT count(*) FROM toourshared.travel where ";
             string Sql = "SELECT * FROM toourshared.travel where ";
 
 
@@ -517,16 +520,6 @@ public class TravelDao
 
             while (rd.Read())
             {
-
-                result = new Travel();
-                result.Trv_no = rd["trv_no"].ToString();
-                result.Trv_title = rd["trv_title"].ToString();
-                result.Trv_timestamp = rd["trv_timestamp"].ToString();
-
-
-                //lstMember.Add(tmpMemberPointer);
-
-                resultList.Add(result);
 
             }
 
@@ -542,7 +535,7 @@ public class TravelDao
 
 
 
-        return resultList;
+        return count;
     }
 }
 
