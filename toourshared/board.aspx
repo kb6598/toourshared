@@ -254,6 +254,29 @@
             font-family: 'Noto Sans KR', sans-serif;
         }
 
+        .good-item{
+            font-size: 25px;
+            padding-left: 30px;
+        }
+        
+        .goodBtn{
+            width: 30px;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            border: none;
+            outline: none;
+            background-color: transparent;
+        }
+        
+        .good-cnt{
+            cursor: default;
+            color: orangered;
+            font-size: 30px;
+            font-weight: 700;
+            margin-top: 3px;
+        }
+
         .board-writer {
             width: 100%;
             height: 60px;
@@ -653,6 +676,21 @@
         .hashtag:hover{
             background-color: rgba(0, 0, 0, .8);
         }
+
+        .reply-star-input{
+            margin-right: 30px;
+            height: 30px;
+        }
+        
+        .reply-star-input .reply-star{
+            width: 50px;
+            font-size: 13px;
+            padding: 5px;
+            outline: none;
+            color: dimgray;
+            border: .5px solid rgba(0, 0, 0, .1);
+            text-align-last: center;
+        }
         
     </style>
 
@@ -739,7 +777,13 @@
         <div id="main">
            
             <div class="board">
-                <div class="board-header">저는 제목 입니다.</div>
+                <div class="board-header">
+                    <div class = "header-item">저는 제목 입니다.</div>
+                    <div class = "good-item">
+                        <button class = "goodBtn">👍</button>
+                    </div>
+                    <div class = "good-cnt">3</div>
+                </div>
                 <div class="board-writer">
                     <div class="writer-Image">
                         <a href="#">
@@ -1094,6 +1138,16 @@
                         <textarea id="reply-write-text"></textarea>
                     </div>
                     <div class = "reply-write-item">
+                        <span class="star" style="font-size: 18px; padding-right: 3px; padding-bottom: 3px;">⭐</span>
+                        <div class = "reply-star-input">
+                            <select class = "reply-star">
+                                <option value="5">5</option>
+                                <option value="4">4</option>
+                                <option value="3" selected>3</option>
+                                <option value="2">2</option>
+                                <option value="1">1</option>
+                            </select>
+                        </div>
                         <div class = "reply-write-limit">
                             <span id = "limitText">(0 / 200)</span>
                         </div>
