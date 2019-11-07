@@ -15,9 +15,6 @@ namespace tooushared.DAO
 {
     public class MemberDao
     {
-
-
-
         public MemberDao()
         {
             //
@@ -333,14 +330,14 @@ namespace tooushared.DAO
             MyDB myDB = new MyDB();
             MySqlConnection con2 = myDB.GetCon();
 
-            String sql = "Select member.mem_id as id from member, travel where member.mem_state = 1 and travel.trv_secret = 3";
-            String userID = "";
+            string sql = "Select travel.mem_id as id from travel, member where member.mem_state= 1 and travel.trv_secret = 3";
+            string userID = "";
 
             MySqlCommand cmd2 = new MySqlCommand(sql, con2);
             con2.Open();
 
             MySqlDataReader reader = cmd2.ExecuteReader();
-            while(reader.Read())
+            while (reader.Read())
             {
                 userID = reader["id"].ToString();
             }
@@ -348,16 +345,56 @@ namespace tooushared.DAO
             reader.Close();
             con2.Close();
 
-            string sql2 = "select mem_blo_no, mem_id, mem_blo_date, mem_blo_length from member_block where mem_id = " + userID;
-            
+            string sql2 = "select member_block.mem_blo_no, member_block.mem_id, member_block.mem_blo_date, member_block.mem_blo_length" +
+                "from member_block where member_block.mem_id = " + userID;
 
-            cmd2 = new MySqlCommand(sql, con2);
+            cmd2 = new MySqlCommand(sql2, con2);
             MySqlDataAdapter ad = new MySqlDataAdapter();
             ad.SelectCommand = cmd2;
 
             DataSet ds2 = new DataSet();
             ad.Fill(ds2);
             return ds2;
+
+
+
+//인터넷 소스 ...?
+/*
+            MyDB myDB = new MyDB();
+            MySqlConnection con = new MySqlConnection();
+
+            String sql = "SELECT * FROM toourshared.member_block where member_block=@mem_blo_no";
+
+            MySqlCommand cmd = new MySqlCommand(sql, con);
+            cmd.Parameters.AddWithValue("@mem_blo_no", member_block.Mem_blo_no);
+            MySqlDataReader read_rd;
+
+            string SUM;
+
+            try
+            {
+                con.Open();
+                read_rd = cmd.ExecuteReader();
+
+                if (read_rd.HasRows)
+                {
+                    while (read_rd.Read())
+                    {
+                        SUM = read_rd.GetString(0);
+                    }
+                }
+
+                read_rd.Close();
+                con.Close();
+            }
+
+            catch (Exception)
+            {
+                if (con.State == ConnectionState.Open)
+                    con.Close();
+            }
+
+            return null;*/
         }
     }
 }
