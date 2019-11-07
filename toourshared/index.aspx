@@ -1,4 +1,5 @@
 ﻿<%@ Page Language="C#" %>
+<%@ Import Namespace="System.Data" %>
 
 <!DOCTYPE html>
 
@@ -24,6 +25,95 @@
     {
         Response.Redirect("/find_idpw.aspx");
     }
+
+    protected string orderByTime()
+    {
+        String userMainImage = ""; // user 메인이미지 Path 담을 변수
+        List<Travel> resultList = getOrderbyTimeList(); // 최신 순으로 게시글 받을 함수. 반환형식은 List<Travel>
+        List<String> travelDay_List; // travel_day 컬럼 데이터 받을 List. 반환형식은 List<String>
+        IndexDao dao = new IndexDao(); // DB 접근하기 위한 Dao
+        int trCount = 0; // tr 주기 위한 Count
+        String returnStr = "                                <div class = \"SlideBody\">\n" +
+                                "                                    <table>\n" +
+                                "                                        <tr>\n";
+
+        for(int i = 0; i < resultList.Count; i++)
+        {
+            userMainImage = dao.selectUserMainImage(resultList[i].Mem_id);  // 게시글 작성자의 메인 프로필 이미지를 구해온다.
+
+            travelDay_List = dao.selectTravelDay(int.Parse(resultList[i].Trv_no)); // 게시글 번호에 해당하는 게시글 내용을 구해온다.
+
+            // 게시글 공개범위 여부를 체크해야 한다.
+
+            returnStr += "                                            <td>\n" +
+                             "                                                <div class=\"tableContainer\">\n" +
+                             "                                                    <img src=" + resultList[i].Trv_main_img + " alt=" + resultList[i].Mem_id + ">\n" +
+                             "                                                    <div class=\"tableOverlay\">\n" +
+                             "                                                        <div class=\"tableText\">\n" +
+                             "                                                            <div class=\"tableInfo\">\n" +
+                             "                                                               <div class = \"tableImage\">\n" +
+                             "                                                                   <a href = \"MyPage.aspx?mem_id=" + resultList[i].Mem_id + "\"><img src = \"" + userMainImage + "\" alt=\"" + resultList[i].Mem_id + " MainImage \"/ style=\"width: 40px; height: 40px; border-radius: 100%; border:none;\"></a>\n" +
+                             "                                                               </div>\n" +
+                             "                                                               <div class=\"tableUserInfo\">\n" +
+                             "                                                                    <div class=\"tableUserName\">\n" +
+                             "                                                                        <a href = \"MyPage.aspx?mem_id=" + resultList[i].Mem_id + "\">" + resultList[i].Mem_id + "</a>\n" +
+                             "                                                                    </div>\n" +
+                             "                                                                    <div class=\"tableTime\">" + resultList[i].Trv_create_time + "</div>\n" +
+                             "                                                               </div>\n" +
+                             "                                                               <div class = \"tableGoUrl\">\n" +
+                             "                                                                  <a href = \"#\" class=\"goUrlItem\"><i class='far fa-arrow-alt-circle-right'></i></a>\n" +
+                             "                                                               </div>\n" +
+                             "                                                            </div>\n" +
+                             "                                                            <div class=\"tableData\">\n" +
+                             "                                                                <div class=\"tableBody\">" + travelDay_List[1].ToString() + "</div>\n" +
+                             "                                                            </div>\n" +
+                             "                                                        </div>\n" +
+                             "                                                    </div>\n" +
+                             "                                                </div>\n" +
+                             "                                            </td>\n";
+            trCount++;
+            if(trCount >= 3)
+            {
+                trCount = 0;
+                returnStr += "" +
+                            "                                        </tr>" +
+                            "                                        <tr>";
+            }
+        }
+
+        returnStr += "                                        </tr>";
+        returnStr += "                                    </table>";
+        returnStr += "                                </div>";
+        return returnStr;
+    }
+
+    protected List<Travel> getOrderbyTimeList()
+    {
+        List<Travel> resultList = new List<Travel>();
+        IndexDao dao = new IndexDao();
+
+        return dao.selectOrderByTime();
+    }
+
+    protected string localCodeToName()
+    {
+        if (Request.QueryString["loc"] != null)
+        {
+            string[] strArray = new string[] { "전", "서울", "경기", "인천", "충청", "강원", "전라", "경상", "제주" };
+            int code = int.Parse(Request.QueryString["loc"].ToString());
+            string returnStr = "<span style=\"color: orange;\">";
+            returnStr += strArray[code] + " 지역 ";
+            returnStr += "</span>";
+
+            return returnStr;
+        }
+        else
+        {
+            string returnStr = "<span style=\"color: orange;\">전 지역 </span>";
+            return returnStr;
+        }
+    }
+
 </script>
 
 <html>
@@ -35,6 +125,9 @@
 
     <!-- Font -->
     <link href="https://fonts.googleapis.com/css?family=Mansalva|Nanum+Gothic|Nanum+Myeongjo|Noto+Sans+KR|Lora|Jua&display=swap" rel="stylesheet">
+
+    <!-- Icon -->
+    <script src='https://kit.fontawesome.com/a076d05399.js'></script>
 
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -222,6 +315,27 @@
             margin-top: 8px;
             color: white;
             background-color: transparent;
+        }
+
+        .navJoinBtn{
+            border: none;
+            outline: none;
+            background-color: transparent;
+            color: white;
+            font-size: 14px;
+            padding-bottom: 20px;
+        }
+
+        .navFindBtn:hover, .navJoinBtn:hover{
+            font-weight: bold;
+        }
+
+        .navFindBtn{
+            border: none;
+            outline: none;
+            background-color: transparent;
+            color: white;
+            font-size: 14px;
         }
 
         /* 창 크기 조절 시 nav display none 설정 */
@@ -532,7 +646,7 @@
         }
 
         .SlideTitle label {
-            font-size: 30px;
+            font-size: 16px;
             font-weight: 700;
             width: 150px;
             height: 50px;
@@ -584,11 +698,24 @@
         }
 
         .tableInfo {
-            display: block;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            padding-left: 5px;
             height: 50px;
 
             /* 사진과 영역의 가로를 같게 */
             width: 300px;
+        }
+
+        .tableGoUrl{
+            display: flex;
+            height: 50px;
+            width: 300px;
+            padding-right: 10px;
+            font-size: 30px;
+            align-items: center;
+            justify-content: flex-end;
         }
 
         .tableInfo .tableUserName {
@@ -773,7 +900,7 @@
             <li class="topnavLi">
                 <a>Intro</a>
                 <ul>
-                    <li><a href="#">TOUPLE</a></li>
+                    <li><a href="#relAndTOU">TOUPLE</a></li>
                 </ul>
             </li>
             <li class="topnavLi">
@@ -809,8 +936,8 @@
                 </div>
                 <ul>
                     <br />
-                    <li><asp:Button ID="btnJoin" runat="server" Text="회원가입" OnClick="btnJoin_Click" /></li>
-                    <li><asp:Button ID="btnFindIDPW" runat="server" Text="계정찾기" OnClick="btnFindIDPW_Click" /></li>
+                    <li><asp:Button ID="btnJoin" runat="server" Text="회원가입" OnClick="btnJoin_Click" class ="navJoinBtn"/></li>
+                    <li><asp:Button ID="btnFindIDPW" runat="server" Text="계정찾기" OnClick="btnFindIDPW_Click" class ="navFindBtn" /></li>
                 </ul>
             </li>
         <%  
@@ -890,7 +1017,7 @@
                                         <!-- The slideshow -->
                                         <div class="carousel-inner">
                                             <div class="carousel-item active">
-                                                <a href="#">
+                                                <a href="<%Response.Write(HttpContext.Current.Request.Url.AbsolutePath);%>?loc=0">
                                                     <div class="carousel-detail">
                                                         <div class="carousel-img">
                                                             <img src="./img/전체.png" alt="전 지역" class="carousel-img-sty">
@@ -903,7 +1030,7 @@
                                                 </a>
                                             </div>
                                             <div class="carousel-item">
-                                                <a href="#">
+                                                <a href="<%Response.Write(HttpContext.Current.Request.Url.AbsolutePath);%>?loc=1">
                                                     <div class="carousel-detail">
                                                         <div class="carousel-img">
                                                             <img src="./img/서울.jpg" alt="서울" class="carousel-img-sty">
@@ -916,7 +1043,7 @@
                                                 </a>
                                             </div>
                                             <div class="carousel-item">
-                                                <a href="#">
+                                                <a href="<%Response.Write(HttpContext.Current.Request.Url.AbsolutePath);%>?loc=2">
                                                     <div class="carousel-detail">
                                                         <div class="carousel-img">
                                                             <img src="./img/경기도.jpg" alt="경기도" class="carousel-img-sty">
@@ -929,7 +1056,7 @@
                                                 </a>
                                             </div>
                                             <div class="carousel-item">
-                                                <a href="#">
+                                                <a href="<%Response.Write(HttpContext.Current.Request.Url.AbsolutePath);%>?loc=3">
                                                     <div class="carousel-detail">
                                                         <div class="carousel-img">
                                                             <img src="./img/인천.jpg" alt="인천" class="carousel-img-sty">
@@ -942,7 +1069,7 @@
                                                 </a>
                                             </div>
                                             <div class="carousel-item">
-                                                <a href="#">
+                                                <a href="">
                                                     <div class="carousel-detail">
                                                         <div class="carousel-img">
                                                             <img src="./img/충청도.jpg" alt="충청도" class="carousel-img-sty">
@@ -955,7 +1082,7 @@
                                                 </a>
                                             </div>
                                             <div class="carousel-item">
-                                                <a href="#">
+                                                <a href="<%Response.Write(HttpContext.Current.Request.Url.AbsolutePath);%>?loc=5">
                                                     <div class="carousel-detail">
                                                         <div class="carousel-img">
                                                             <img src="./img/강원도.jpg" alt="강원도" class="carousel-img-sty">
@@ -968,7 +1095,7 @@
                                                 </a>
                                             </div>
                                             <div class="carousel-item">
-                                                <a href="#">
+                                                <a href="<%Response.Write(HttpContext.Current.Request.Url.AbsolutePath);%>?loc=6">
                                                     <div class="carousel-detail">
                                                         <div class="carousel-img">
                                                             <img src="./img/전라도.jpg" alt="전라도" class="carousel-img-sty">
@@ -981,7 +1108,7 @@
                                                 </a>
                                             </div>
                                             <div class="carousel-item">
-                                                <a href="#">
+                                                <a href="<%Response.Write(HttpContext.Current.Request.Url.AbsolutePath);%>?loc=7">
                                                     <div class="carousel-detail">
                                                         <div class="carousel-img">
                                                             <img src="./img/경상도.jpg" alt="경상도" class="carousel-img-sty">
@@ -994,7 +1121,7 @@
                                                 </a>
                                             </div>
                                             <div class="carousel-item">
-                                                <a href="#">
+                                                <a href="<%Response.Write(HttpContext.Current.Request.Url.AbsolutePath);%>?loc=8">
                                                     <div class="carousel-detail">
                                                         <div class="carousel-img">
                                                             <img src="./img/제주도.jpg" alt="제주도" class="carousel-img-sty">
@@ -1048,118 +1175,19 @@
                         </div>
 
                         <div class="carousel-inner">
+
+                            <!-- 최신 순-->
                             <div class="carousel-item active">
                                 <div class="SlideTitle">
-                                    <label>최신 순</label>
+                                    <label><%Response.Write(localCodeToName());%>최신 순</label>
                                 </div>
-                                <div class="SlideBody">
-                                    <table>
-                                        <tr>
-                                            <td>
-                                                <div class="tableContainer">
-                                                    <img src="./img/background02.jpg" alt="milk9503">
-                                                    <div class="tableOverlay">
-                                                        <div class="tableText">
-                                                            <div class="tableInfo">
-                                                                <div class="tableUserName">milk9503</div>
-                                                                <div class="tableTime">3초 전</div>
-                                                            </div>
-                                                            <div class="tableData">
-                                                                <div class="tableBody">ㅋㅋ</div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="tableContainer">
-                                                    <img src="./img/background02.jpg" alt="milk9503">
-                                                    <div class="tableOverlay">
-                                                        <div class="tableText">
-                                                            <div class="tableInfo">
-                                                                <div class="tableUserName">milk9503</div>
-                                                                <div class="tableTime">3초 전</div>
-                                                            </div>
-                                                            <div class="tableData">
-                                                                <div class="tableBody">가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하</div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="tableContainer">
-                                                    <img src="./img/background02.jpg" alt="milk9503">
-                                                    <div class="tableOverlay">
-                                                        <div class="tableText">
-                                                            <div class="tableInfo">
-                                                                <div class="tableUserName">milk9503</div>
-                                                                <div class="tableTime">3초 전</div>
-                                                            </div>
-                                                            <div class="tableData">
-                                                                <div class="tableBody">ㅋㅋ</div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="tableContainer">
-                                                    <img src="./img/background02.jpg" alt="milk9503">
-                                                    <div class="tableOverlay">
-                                                        <div class="tableText">
-                                                            <div class="tableInfo">
-                                                                <div class="tableUserName">milk9503</div>
-                                                                <div class="tableTime">3초 전</div>
-                                                            </div>
-                                                            <div class="tableData">
-                                                                <div class="tableBody">ㅋㅋ</div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="tableContainer">
-                                                    <img src="./img/background02.jpg" alt="milk9503">
-                                                    <div class="tableOverlay">
-                                                        <div class="tableText">
-                                                            <div class="tableInfo">
-                                                                <div class="tableUserName">milk9503</div>
-                                                                <div class="tableTime">3초 전</div>
-                                                            </div>
-                                                            <div class="tableData">
-                                                                <div class="tableBody">ㅋㅋ</div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="tableContainer">
-                                                    <img src="./img/background02.jpg" alt="milk9503">
-                                                    <div class="tableOverlay">
-                                                        <div class="tableText">
-                                                            <div class="tableInfo">
-                                                                <div class="tableUserName">milk9503</div>
-                                                                <div class="tableTime">3초 전</div>
-                                                            </div>
-                                                            <div class="tableData">
-                                                                <div class="tableBody">ㅋㅋ</div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </div>
+                                <% Response.Write(orderByTime()); %>
                             </div>
+
+                            <!-- 추천 순 -->
                             <div class="carousel-item">
                                 <div class="SlideTitle">
-                                    <label>추천 순</label>
+                                    <label><%Response.Write(localCodeToName());%>추천 순</label>
                                 </div>
                                 <div class="SlideBody">
                                     <table>
@@ -1266,9 +1294,10 @@
                                     </table>
                                 </div>
                             </div>
+                            <!-- 구독자 순 -->
                             <div class="carousel-item">
                                 <div class="SlideTitle">
-                                    <label>구독자 순</label>
+                                    <label><%Response.Write(localCodeToName());%>구독자 순</label>
                                 </div>
                                 <div class="SlideBody">
                                     <table>
@@ -1382,7 +1411,7 @@
         </div>
 
         <!-- 소개 영역 -->
-        <div class="section03">
+        <div class="section03" id="relAndTOU">
 
             <!-- 관계도 및 TOUPLE 영역 -->
             <div class="relAndTou">
