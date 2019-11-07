@@ -32,9 +32,6 @@ public class TravelDao
             string Sql = "INSERT INTO toourshared.travel (trv_secret, trv_views, trv_tot_rate, trv_main_img, trv_title, trv_tag, trv_create_time, loc_name, mem_id) " +
                 "VALUES (@trv_secret, @trv_views, @trv_tot_rate, @trv_main_img, @trv_title, @trv_tag, @trv_create_time, @loc_name, @mem_id)";
 
-
-
-
             MySqlCommand cmd = new MySqlCommand(Sql, con);
 
             cmd.Parameters.AddWithValue("@trv_secret", travel.Trv_secret);
@@ -127,14 +124,10 @@ public class TravelDao
 
 
                 //lstMember.Add(tmpMemberPointer);
-
-                return result;
-
             }
 
+            rd.Close();
             con.Close();
-
-
         }
         catch (Exception ex)
         {
@@ -177,12 +170,11 @@ public class TravelDao
 
 
                 //lstMember.Add(tmpMemberPointer);
-
-                return result;
-
             }
 
+            rd.Close();
             con.Close();
+            return result;
 
 
         }
@@ -272,6 +264,7 @@ public class TravelDao
 
             }
 
+            rd.Close();
             con.Close();
 
 
@@ -371,6 +364,7 @@ public class TravelDao
 
             }
 
+            rd.Close();
             con.Close();
 
 
@@ -431,6 +425,7 @@ public class TravelDao
 
             }
 
+            rd.Close();
             con.Close();
 
 
@@ -485,6 +480,7 @@ public class TravelDao
                 
 
             }
+
             rd.Close();
             con.Close();
 
