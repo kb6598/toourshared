@@ -83,9 +83,16 @@
             };
             Session["write_status"] = newWriteStatus;
 
+
+
             Session.Timeout = SESSION_TIME_OUT_MIN;
 
         }
+        Dictionary<string, string> readWriteStatus = SessionLib.getWriteStatus();
+                    foreach(var item in readWriteStatus)
+            {
+                Response.Write(item.Key+" : "+item.Value+"<br/>");
+            }
 
     }
     protected void BindTables()
