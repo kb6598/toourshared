@@ -96,7 +96,7 @@ public class TravelDao
 
             con = mydb.GetCon();
 
-            string Sql = "SELECT trv_no, trv_secret, trv_views, trv_tot_rate, trv_main_img, trv_title, trv_tag, trv_timestamp, trv_create_time, loc_name, mem_id FROM toourshared.travel where trv_no=@trv_no";
+            string Sql = "SELECT trv_no, trv_secret, trv_views, trv_tot_rate, trv_main_img, trv_title, trv_tag, trv_timestamp, trv_create_time, loc_name, mem_id FROM toourshared.travel where trv_no=@trv_no and trv_tot_rate is not null";
 
 
             MySqlCommand cmd = new MySqlCommand(Sql, con);
