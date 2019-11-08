@@ -28,19 +28,22 @@
         returnList.Add(travel.Trv_secret);
         returnList.Add(travel.Trv_views);
 
-        double d_totRate = double.Parse(travel.Trv_tot_rate);
-        int i_totRate = (int)d_totRate;
-        String returnRate = d_totRate.ToString() + "-" + i_totRate.ToString(); // ex: 3.4-3
+        try
+        {
+            double d_totRate = double.Parse(travel.Trv_tot_rate);
+            int i_totRate = (int)d_totRate;
+            String returnRate = d_totRate.ToString() + "-" + i_totRate.ToString(); // ex: 3.4-3
 
-        returnList.Add(returnRate);
-        returnList.Add(travel.Trv_main_img);
-        returnList.Add(travel.Trv_title);
-        returnList.Add(travel.Trv_tag);
-        returnList.Add(travel.Trv_timestamp);
-        returnList.Add(travel.Trv_create_time);
-        returnList.Add(travel.Loc_name);
-        returnList.Add(travel.Mem_id);
-
+            returnList.Add(returnRate);
+            returnList.Add(travel.Trv_main_img);
+            returnList.Add(travel.Trv_title);
+            returnList.Add(travel.Trv_tag);
+            returnList.Add(travel.Trv_timestamp);
+            returnList.Add(travel.Trv_create_time);
+            returnList.Add(travel.Loc_name);
+            returnList.Add(travel.Mem_id);
+        }
+        catch(Exception e) {;}
         return returnList;
     }
 
@@ -596,7 +599,6 @@
         .board-part{
             width: 1500px;
             height: auto;
-            margin-top: 100px;
             display: flex;
             flex-direction: column;
         }
@@ -675,13 +677,12 @@
             height: 680px;
             background-color: #eee;
             border: 0.5px solid rgba(0, 0, 0, .2);
-            border-top: 4px dashed rgba(0, 0, 0, .5);
+            border-top: .5px solid rgba(0, 0, 0, .2);
             overflow: auto;
             padding: 10px;
         }
         
         .board-hashtag{
-            margin-top: 100px;
             width: 1500px;
             height: 100px;
             background-color: #eee;
@@ -691,7 +692,7 @@
         }
         
         .board-reply{
-            margin-top: 10px;
+            margin-top: 100px;
             width: 1500px;
             height: 700px;
             background-color: #eee;
