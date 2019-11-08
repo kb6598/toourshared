@@ -332,5 +332,25 @@ namespace tooushared.DAO
             }
             catch (Exception e) {; }
         }
+
+        public void MemberBlock_Unlock(Member member, int State)
+        {
+            MyDB mydb = new MyDB();
+            MySqlConnection con;
+
+            try
+            {
+                con = mydb.GetCon();
+                String Sql = "UPDATE toourshared.member SET mem_state = " + State + " Where mem_id = @mem_id";
+
+                MySqlCommand cmd = new MySqlCommand(Sql, con);
+                cmd.Parameters.AddWithValue("@mem_id", member.Mem_id);
+
+                con.Open();
+                cmd.ExecuteNonQuery();
+                con.Close();
+            }
+            catch (Exception e) {; }
+        }
     }
 }

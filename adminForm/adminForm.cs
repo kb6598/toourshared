@@ -58,19 +58,10 @@ namespace adminForm
             dataGridView2.Columns[3].HeaderCell.Value = "계정정지 기간";            
         }
 
-        //신고글의 계정 목록 조회 기능(함수)
-        public void Report_MemberList()
+        //계정정지 해제 기능(함수)
+        public void MemberBlock_Unlock()
         {
-            Member_BlockDao memberDao = new Member_BlockDao();
-            Member member = new Member();
 
-            DataSet ds = memberDao.Select_MemberID();
-            dataGridView2.DataSource = ds.Tables[0];
-
-            dataGridView2.Columns[0].HeaderCell.Value = "정지 번호";
-            dataGridView2.Columns[1].HeaderCell.Value = "해당 계정";
-            dataGridView2.Columns[2].HeaderCell.Value = "정지 일자";
-            dataGridView2.Columns[3].HeaderCell.Value = "정지 기간";
         }
 
         //신고목록조회 버튼
@@ -230,16 +221,19 @@ namespace adminForm
             Member_BlockList();
         }
 
-        //신고글의 계정목록 조회버튼
+        //계정정지 해제버튼
         private void button5_Click(object sender, EventArgs e)
         {
-            Report_MemberList();
-        }
+            Member member = new Member();
+            MemberDao memberDao = new MemberDao();
 
-        //기능 의 조회버튼
-        private void button6_Click(object sender, EventArgs e)
-        {
+            int selectedCellCount = dataGridView1.GetCellCount(DataGridViewElementStates.Selected);
+            MessageBox.Show(dataGridView1.SelectedColumns.Count.ToString, "zz", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            return;
 
+            member.Mem_id = dataGridView1.Rows[dataGridView1.SelectedCells[1].RowIndex].Cells[1].Value.ToString();
+
+            memberDao.MemberBlock_Unlock(member, 0);
         }
     }
 }
