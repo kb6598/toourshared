@@ -198,19 +198,13 @@
 
     protected void Page_Load(object sender, EventArgs e)
     {
+        BindTables();
         WriteSessionProcess();
         BindDropDownList();
         Bind_otherData();
-        BindTables();
+        
     }
 
-    protected void Button1_Click(object sender, EventArgs e)
-    {
-        if (HttpContext.Current.Session["write_status"] != null)
-        {
-            HttpContext.Current.Session.Abandon();
-        }
-    }
 </script>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -264,7 +258,7 @@
         /* TextArea Summernote */
         $(document).ready(function () {
             $('#article').summernote({
-                height: 300, //set editable area's height
+                height: 600, //set editable area's height
             });
         });
 
@@ -549,7 +543,7 @@
             </div>
         </div>
 
-        <asp:Button ID="Button1" runat="server" Text="Button" OnClick="Button1_Click" />
+
     </form>
 
  
