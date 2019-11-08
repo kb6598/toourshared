@@ -150,17 +150,19 @@ namespace tooushared.DAO
                         resultMember.Mem_email = rd["mem_email"].ToString();
                         resultMember.Mem_reg_datetime = rd["mem_reg_datetime"].ToString();
                         resultMember.Mem_timestmap = rd["mem_timestmap"].ToString();
-                        resultMember.Mem_img_url = rd["mem_img_url"].ToString();
 
-                        //lstMember.Add(tmpMemberPointer);
+                        string mainImg = rd["mem_img_url"].ToString();
+                    if (mainImg == "noImage")
+                        mainImg = "UserNoneImage.png";
 
-                        return resultMember;
+                    resultMember.Mem_img_url = mainImg;
+
+                    //lstMember.Add(tmpMemberPointer);
+                    rd.Close();
+                    con.Close();
+                    return resultMember;
 
                 }
-                rd.Close();
-                con.Close();
-
-
             }
             catch (Exception ex)
             {
