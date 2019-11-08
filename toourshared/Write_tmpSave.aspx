@@ -29,18 +29,14 @@
         Dictionary<string, string> WriteStatus = SessionLib.getWriteStatus();
         if (WriteStatus != null)
         {
-
-            //-----------------------------------
-            //
-            TravelDao travelDao = new TravelDao();
-            Travel inTravel = new Travel();
-            inTravel.Trv_no = WriteStatus["trv_no"];
-            Travel curTravel = travelDao.selectTravelBytrv_no(inTravel);
-
             //update Travel
-            //loc_name을 가져와야함
-            //curTravel.Loc_name = Request.Form["loc_name"];
-            //curTravel.Trv_main_img = Request.Form["main_img"];
+            Travel inTravel = new Travel();            
+            TravelDao travelDao = new TravelDao();
+
+            inTravel.Trv_no = WriteStatus["trv_no"];
+            Travel curTravel = travelDao.selectTravelBytrv_no(inTravel);            
+            
+
             curTravel.Trv_no = WriteStatus["trv_no"];
             curTravel.Trv_secret = Request.Form["trv_secret"];
             curTravel.Trv_tag = Request.Form["hashtag"];
@@ -48,30 +44,36 @@
             curTravel.Trv_title = Request.Form["title"];
             travelDao.UpdatetTravel(curTravel);
 
+
+
+
             //update Travel_day
-            Travel_DayDao travelDayDao = new Travel_DayDao();
             Travel_Day inTravelDay = new Travel_Day();
+            Travel_DayDao travelDayDao = new Travel_DayDao();            
             inTravelDay.Trv_day_no = WriteStatus[WriteStatus["cur_day"]];
             inTravelDay.Trv_no = WriteStatus["trv_no"];
             inTravelDay.Trv_day_content = Request.Form["article"];
             travelDayDao.UpdatetTravel_Day(inTravelDay);
 
-            //insert map
+
+            //update map
             Map inMap = new Map();
             MapDao mapDao = new MapDao();
             inMap.Map_cost = Request.Form["mapCost"];
             inMap.Map_data = Request.Form["mapData"];
             inMap.Map_route = Request.Form["mapRoute"];
-            inMap.Trv_day_no = WriteStatus[WriteStatus["cur_day"]];
+            inMap.Trv_day_no = WriteStatus["cur_trv_day_no"];
 
-            mapDao.UpdateMap(inMap);
+            mapDao.UpdateMapByTrvDayNo(inMap);
+
+
+
+
+  
         }
         // 지도는 정보를 이전 폼에서 주어야 한다.
 
-            mapCost.Value = Request.Form["mapCost"];
-            mapData.Value = Request.Form["mapData"];
-            mapRoute.Value = Request.Form["mapRoute"];
-        
+
 
 
 
@@ -87,9 +89,7 @@
 <body>
     <form id="form1" runat="server" method="post" action="write.aspx">
         저장중.....
-        <asp:HiddenField ID="mapData" runat="server" />
-        <asp:HiddenField ID="mapRoute" runat="server" />
-        <asp:HiddenField ID="mapCost" runat="server" />
+
     </form>
   <script>
          form = document.getElementById("form1");

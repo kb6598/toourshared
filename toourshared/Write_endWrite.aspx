@@ -56,15 +56,15 @@
             inTravelDay.Trv_day_content = Request.Form["article"];
             travelDayDao.UpdatetTravel_Day(inTravelDay);
 
-            //insert map
+            //update map
             Map inMap = new Map();
             MapDao mapDao = new MapDao();
             inMap.Map_cost = Request.Form["mapCost"];
             inMap.Map_data = Request.Form["mapData"];
             inMap.Map_route = Request.Form["mapRoute"];
-            inMap.Trv_day_no = WriteStatus[WriteStatus["cur_day"]];
+            inMap.Trv_day_no = WriteStatus["cur_trv_day_no"];
 
-            mapDao.UpdateMap(inMap);
+            mapDao.UpdateMapByTrvDayNo(inMap);
         }
         Session.Remove("write_status");
         Response.Redirect("./MyPage.aspx");

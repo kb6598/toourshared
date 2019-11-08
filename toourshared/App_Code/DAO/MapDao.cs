@@ -74,6 +74,37 @@ public class MapDao
         return result;
     }
 
+    public int UpdateMapByTrvDayNo(Map map)
+    {
+        int result;
+
+        MyDB myDB = new MyDB();
+        MySqlConnection con = myDB.GetCon();
+
+
+        string Sql = "UPDATE toourshared.map SET  map_data = @map_data, map_route = @map_route, map_cost = @map_cost  WHERE trv_day_no = @trv_day_no";
+
+
+        MySqlCommand cmd = new MySqlCommand(Sql, con);
+
+        cmd.Parameters.AddWithValue("@map_cost", map.Map_cost);
+        cmd.Parameters.AddWithValue("@map_data", map.Map_data);
+        cmd.Parameters.AddWithValue("@map_route", map.Map_route);
+        cmd.Parameters.AddWithValue("@trv_day_no", map.Trv_day_no);
+
+        con.Open();
+
+        result = cmd.ExecuteNonQuery();
+
+
+        con.Close();
+
+
+        return result;
+    }
+
+
+
     public DataSet SelectMap()
     {
         MyDB myDB = new MyDB();
@@ -136,7 +167,7 @@ public class MapDao
         }
         catch (Exception ex)
         {
-            Console.Write(ex.ToString());
+            System.Diagnostics.Debug.WriteLine(ex.ToString());
         }
         return result;
     }
@@ -162,7 +193,7 @@ public class MapDao
             con.Open();
             MySqlDataReader rd = cmd.ExecuteReader();
 
-            if (rd.HasRows)
+            if (rd.Read())
             {
 
 
@@ -184,7 +215,8 @@ public class MapDao
         }
         catch (Exception ex)
         {
-            Console.Write(ex.ToString());
+            System.Diagnostics.Debug.WriteLine(ex.ToString());
+
         }
         return result;
     }

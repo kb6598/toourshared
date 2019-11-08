@@ -162,7 +162,7 @@ public class CommentDao
         }
         catch (Exception ex)
         {
-            Console.Write(ex.ToString());
+            System.Diagnostics.Debug.WriteLine(ex.ToString());
         }
         return result;
     }
@@ -279,7 +279,7 @@ public class CommentDao
         }
         catch (Exception ex)
         {
-            Console.Write(ex.ToString());
+            System.Diagnostics.Debug.WriteLine(ex.ToString());
         }
 
 

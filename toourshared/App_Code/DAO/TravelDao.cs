@@ -131,7 +131,7 @@ public class TravelDao
         }
         catch (Exception ex)
         {
-            Console.Write(ex.ToString());
+            System.Diagnostics.Debug.WriteLine(ex.ToString());
         }
 
 
@@ -180,7 +180,7 @@ public class TravelDao
         }
         catch (Exception ex)
         {
-            Console.Write(ex.ToString());
+            System.Diagnostics.Debug.WriteLine(ex.ToString());
         }
 
 
@@ -271,7 +271,7 @@ public class TravelDao
         }
         catch (Exception ex)
         {
-            Console.Write(ex.ToString());
+            System.Diagnostics.Debug.WriteLine(ex.ToString());
         }
 
 
@@ -371,7 +371,7 @@ public class TravelDao
         }
         catch (Exception ex)
         {
-            Console.Write(ex.ToString());
+            System.Diagnostics.Debug.WriteLine(ex.ToString());
         }
 
 
@@ -432,7 +432,7 @@ public class TravelDao
         }
         catch (Exception ex)
         {
-            Console.Write(ex.ToString());
+            System.Diagnostics.Debug.WriteLine(ex.ToString());
         }
 
 
@@ -487,7 +487,7 @@ public class TravelDao
         }
         catch (Exception ex)
         {
-            Console.Write(ex.ToString());
+            System.Diagnostics.Debug.WriteLine(ex.ToString());
         }
 
 
@@ -530,7 +530,7 @@ public class TravelDao
         }
         catch (Exception ex)
         {
-            Console.Write(ex.ToString());
+            System.Diagnostics.Debug.WriteLine(ex.ToString());
         }
 
 

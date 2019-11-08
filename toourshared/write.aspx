@@ -135,6 +135,17 @@
             title.Text = outputTravel.Trv_title;
             hashtag.Text = outputTravel.Trv_tag;
 
+            //Map 가져오기
+            Map inputMap = new Map();
+            Map outputMap = new Map();
+            MapDao daoMap = new MapDao();
+            inputMap.Trv_day_no = outputTravel_day.Trv_day_no;
+            outputMap = daoMap.selectMapByTrv_day_no(inputMap);
+            mapData.Value = outputMap.Map_data;
+            mapCost.Value = outputMap.Map_cost;
+            mapRoute.Value = outputMap.Map_route;
+
+
 
 
 
@@ -187,31 +198,14 @@
         }
 
     }
-    protected void Bind_otherData()
-    {
-        if (Request.Form["mapCost"] != null)
-        {
-            mapCost.Value = Request.Form["mapCost"];
 
-        }
-
-        if (Request.Form["mapData"] != null)
-        {
-            mapData.Value = Request.Form["mapData"];
-        }
-
-        if (Request.Form["mapRoute"] != null)
-        {
-            mapRoute.Value = Request.Form["mapRoute"];
-        }
-    }
 
     protected void Page_Load(object sender, EventArgs e)
     {
 
         WriteSessionProcess();
         BindDropDownList();
-        Bind_otherData();
+
         BindTables();
     }
 
@@ -651,7 +645,7 @@
     function addDay() {
         addDataAtForm();
         form.setAttribute('action', "Write_addDay.aspx");
-        form.submit(); // 전송
+       form.submit(); // 전송
     }
     function endWrite() {
         addDataAtForm();

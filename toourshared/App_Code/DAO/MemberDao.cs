@@ -166,7 +166,7 @@ namespace tooushared.DAO
             }
             catch (Exception ex)
             {
-                Console.Write(ex.ToString());
+                System.Diagnostics.Debug.WriteLine(ex.ToString());
             }
 
 
@@ -282,7 +282,7 @@ namespace tooushared.DAO
             }
             catch (Exception ex)
             {
-                Console.Write(ex.ToString());
+                System.Diagnostics.Debug.WriteLine(ex.ToString());
             }
             return FindID;
         }
@@ -328,7 +328,7 @@ namespace tooushared.DAO
             }
             catch (Exception ex)
             {
-                Console.Write(ex.ToString());
+                System.Diagnostics.Debug.WriteLine(ex.ToString());
             }
             return FindPW;
 

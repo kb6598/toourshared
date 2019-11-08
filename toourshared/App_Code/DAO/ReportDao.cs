@@ -107,7 +107,7 @@ public class ReportDao
         }
         catch (Exception ex)
         {
-            Console.Write(ex.ToString());
+            System.Diagnostics.Debug.WriteLine(ex.ToString());
         }
         return result;
     }
