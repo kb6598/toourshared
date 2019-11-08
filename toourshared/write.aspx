@@ -98,9 +98,9 @@
 
         }
         Dictionary<string, string> readWriteStatus = SessionLib.getWriteStatus();
-        foreach(var item in readWriteStatus)
+        foreach (var item in readWriteStatus)
         {
-            Response.Write(item.Key+" : "+item.Value+"<br/>");
+            Response.Write(item.Key + " : " + item.Value + "<br/>");
         }
 
     }
@@ -208,7 +208,7 @@
 
     protected void Page_Load(object sender, EventArgs e)
     {
-        
+
         WriteSessionProcess();
         BindDropDownList();
         Bind_otherData();
@@ -387,20 +387,23 @@
         <asp:HiddenField ID="mapData" runat="server" />
         <asp:HiddenField ID="mapRoute" runat="server" />
         <asp:HiddenField ID="mapCost" runat="server" />
-                    <asp:TextBox ID="title"  runat="server" type="text" placeholder="게시글의 제목을 정해주세요." />
+                    <asp:TextBox ID="title"  runat="server" type="text" placeholder="게시글의 제목을 정해주세요." autocomplete="off"/>
                 </div>
                 <div class="TitleSub">
                     <div class="SubItem">
                         <span>
-                            <asp:Literal ID="Literal_day" runat="server"></asp:Literal>일 차 작성 중...</span>
+                            <asp:Literal ID="Literal_day" runat="server"></asp:Literal>일 차 작성 중...
+                        </span>
                     </div>
                     <div class="SubItem">
-
-                    <select name="goDay" id="goDay" class="goDay" onchange="gotoDay()">
-                        <asp:Literal ID="Literal_goDay" runat="server"></asp:Literal>
-
-                    </select>
-
+                        <select name="goDay" id="goDay" class="goDay" onchange="gotoDay()">
+                            <asp:Literal ID="Literal_goDay" runat="server"></asp:Literal>
+                        </select>
+                    </div>
+                    <div class="SubItem">
+                        <div  class="nextPageBtn">
+                            <div onclick ="addDay()" class="subAddItem">일 추가 (+)</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -514,10 +517,6 @@
                 <!-- 임시 저장 버튼 -->
                 <div class="tempSaveBtn">
                     <div onclick ="tmpSave()" class="btnAreaItem">임시 저장</div>
-                </div>
-                <!-- 다음 일로 이동 -->
-                <div  class="nextPageBtn">
-                    <div onclick ="addDay()" class="btnAreaItem">다음 일 입력</div>
                 </div>
                 <!-- 글 작성 완료 버튼 -->
                 <div class="finishBtn">
