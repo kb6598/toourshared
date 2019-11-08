@@ -56,7 +56,7 @@
             inTravelDay.Trv_day_content = Request.Form["article"];
             travelDayDao.UpdatetTravel_Day(inTravelDay);
 
-            //insert map
+            //update map
             Map inMap = new Map();
             MapDao mapDao = new MapDao();
             inMap.Map_cost = Request.Form["mapCost"];
@@ -65,12 +65,22 @@
             inMap.Trv_day_no = WriteStatus[WriteStatus["cur_day"]];
 
             mapDao.UpdateMap(inMap);
-        }
-        // 지도는 정보를 이전 폼에서 주어야 한다.
+            WriteStatus["cur_day"] = Request.Form["targetDay"];
+            WriteStatus["cur_day_no"] = WriteStatus[WriteStatus["cur_day"]];
+
+            Session["write_status"] = WriteStatus;
+
+                    // 지도는 정보를 이전 폼에서 주어야 한다.
+
+
 
             mapCost.Value = Request.Form["mapCost"];
             mapData.Value = Request.Form["mapData"];
             mapRoute.Value = Request.Form["mapRoute"];
+            
+
+        }
+
         
 
 

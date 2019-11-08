@@ -71,12 +71,12 @@ public class Travel_DayDao
         return ds;
     }
 
-    public List<Travel> selectTravelDayListTrvNo(Travel_Day travel_day)
+    public List<Travel_Day> selectTravelDayListByTrvNo(Travel_Day travel_day)
     {
         MyDB mydb = new MyDB();
-        List<Travel> returnList = new List<Travel>();
+        List<Travel_Day> returnList = new List<Travel_Day>();
 
-        Travel_Day result = new Travel_Day();
+        Travel_Day result;
         MySqlConnection con;
 
         try
@@ -93,7 +93,11 @@ public class Travel_DayDao
 
             while (reader.Read())
             {
-              
+                result = new Travel_Day();
+                result.Trv_day_no = reader["trv_day_no"].ToString();
+                result.Trv_day_content = reader["trv_day_content"].ToString();
+                result.Trv_no = reader["trv_day_content"].ToString();
+                returnList.Add(result);
             }
         }
         catch (Exception e) {;}
@@ -144,7 +148,7 @@ public class Travel_DayDao
         {
             con = mydb.GetCon();
 
-            string Sql = "SELECT * FROM toourshared.travel_day where travel=@trv_day_no";
+            string Sql = "SELECT * FROM toourshared.travel_day where trv_day_no=@trv_day_no";
 
 
             MySqlCommand cmd = new MySqlCommand(Sql, con);
