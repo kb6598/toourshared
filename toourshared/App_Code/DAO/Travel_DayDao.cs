@@ -71,7 +71,7 @@ public class Travel_DayDao
         return ds;
     }
 
-    public List<Travel_Day> selectTravelDayListTrvNo(Travel_Day travel_day)
+    public List<Travel_Day> selectTravelDayListByTrvNo(Travel_Day travel_day)
     {
         MyDB mydb = new MyDB();
         List<Travel_Day> returnList = new List<Travel_Day>();
@@ -125,9 +125,7 @@ public class Travel_DayDao
 
             while(reader.Read())
             {
-                result.Trv_day_no = reader["trv_day_no"].ToString();
-                result.Trv_day_content = reader["trv_day_content"].ToString();
-                result.Trv_no = reader["trv_no"].ToString();
+                
             }
 
             reader.Close();

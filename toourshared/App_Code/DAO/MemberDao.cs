@@ -272,12 +272,11 @@ namespace tooushared.DAO
                     rd.Read();
 
                     FindID.Mem_id = rd["mem_id"].ToString();
-
+                    rd.Close();
+                    con.Close();
                     return FindID;
 
                 }
-                rd.Close();
-                con.Close();
             }
             catch (Exception ex)
             {
@@ -319,11 +318,11 @@ namespace tooushared.DAO
 
                     FindPW.Mem_pw = rd["mem_pw"].ToString();
 
+                    rd.Close();
+                    con.Close();
                     return FindPW;
 
                 }
-                rd.Close();
-                con.Close();
             }
             catch (Exception ex)
             {
