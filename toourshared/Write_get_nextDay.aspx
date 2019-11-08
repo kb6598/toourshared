@@ -19,6 +19,16 @@
         //        {"trv_day_cnt","1" },
         //        {"1",trv_day_no }
         //    };
+
+        //2일차 추가시
+
+         //        {"status","first" },
+        //        { "trv_no", trv_no},
+        //        { "cur_trv_day_no",trv_day_no},
+        //        { "cur_day","2"},
+        //        {"trv_day_cnt","2" },
+        //        {"1",trv_day_no-1},
+        //        {"2",trv_day_no-2 }
         //post로 날아오는 값
         //title
         //article
@@ -36,7 +46,7 @@
             Travel inTravel = new Travel();
             inTravel.Trv_no = WriteStatus["trv_no"];
             Travel curTravel = travelDao.selectTravelBytrv_no(inTravel);
-
+           // WriteStatus.Add(WriteStatus["trv_day_cnt"]+1, trv_day_nopk값)
           
             //loc_name을 가져와야함
             curTravel.Loc_name = Request.Form["loc_name"];
