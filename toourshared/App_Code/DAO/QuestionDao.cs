@@ -73,7 +73,7 @@ public class QuestionDao
         {
             con = mydb.GetCon();
 
-            string Sql = "SELECT * FROM toourshared.question where question=@qus_no";
+            string Sql = "SELECT * FROM toourshared.question where qus_no=@qus_no";
 
 
             MySqlCommand cmd = new MySqlCommand(Sql, con);
@@ -100,7 +100,7 @@ public class QuestionDao
                 return result;
 
             }
-
+            rd.Close();
             con.Close();
 
         }
@@ -143,7 +143,7 @@ public class QuestionDao
                 resultList.Add(result);
 
             }
-
+            rd.Close();
             con.Close();
 
 

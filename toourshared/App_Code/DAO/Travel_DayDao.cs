@@ -71,6 +71,71 @@ public class Travel_DayDao
         return ds;
     }
 
+    public List<Travel_Day> selectTravelDayListByTrvNo(Travel_Day travel_day)
+    {
+        MyDB mydb = new MyDB();
+        List<Travel_Day> returnList = new List<Travel_Day>();
+
+        Travel_Day result;
+        MySqlConnection con;
+
+        try
+        {
+            con = mydb.GetCon();
+            string Sql = "SELECT * FROM toourshared.travel_day WHERE trv_no = @trv_no order by trv_day_no asc";
+            // 게시글 번호에 해당하는 데이터 여러개를 긁어오는 SQL
+
+            MySqlCommand cmd = new MySqlCommand(Sql, con);
+            cmd.Parameters.AddWithValue("@trv_no", travel_day.Trv_no);
+
+            con.Open();
+            MySqlDataReader reader = cmd.ExecuteReader();
+
+            while (reader.Read())
+            {
+                result = new Travel_Day();
+                result.Trv_day_no = reader["trv_day_no"].ToString();
+                result.Trv_day_content = reader["trv_day_content"].ToString();
+                result.Trv_no = reader["trv_day_content"].ToString();
+                returnList.Add(result);
+            }
+        }
+        catch (Exception e) {;}
+
+        return returnList;
+    }
+
+    public Travel_Day selectTravelDayByTrvNo(Travel_Day travel_day)
+    {
+        MyDB mydb = new MyDB();
+        Travel_Day result = new Travel_Day();
+        MySqlConnection con;
+
+        try
+        {
+            con = mydb.GetCon();
+            string Sql = "SELECT * FROM toourshared.travel_day where trv_no = @trv_no";
+            // 게시글 번호에 해당하는 데이터 긁어오는 SQL
+
+            MySqlCommand cmd = new MySqlCommand(Sql, con);
+            cmd.Parameters.AddWithValue("@trv_no", travel_day.Trv_no);
+
+            con.Open();
+            MySqlDataReader reader = cmd.ExecuteReader();
+
+            while(reader.Read())
+            {
+                
+            }
+
+            reader.Close();
+            con.Close();
+        }
+        catch (Exception e) {;}
+
+        return result;
+    }
+
     public Travel_Day selectTrvel_DayBytrv_day_no(Travel_Day travel_Day)
     {
 
@@ -83,7 +148,7 @@ public class Travel_DayDao
         {
             con = mydb.GetCon();
 
-            string Sql = "SELECT * FROM toourshared.travel_day where travel=@trv_day_no";
+            string Sql = "SELECT * FROM toourshared.travel_day where trv_day_no=@trv_day_no";
 
 
             MySqlCommand cmd = new MySqlCommand(Sql, con);
@@ -93,30 +158,18 @@ public class Travel_DayDao
             con.Open();
             MySqlDataReader rd = cmd.ExecuteReader();
 
-            if (rd.HasRows)
+            if (rd.Read())
             {
-                rd.Read();
-
                 result.Trv_day_no = rd["trv_day_no"].ToString();
-                result.Trv_day_content = rd["trv_dat_content"].ToString();
+                result.Trv_day_content = rd["trv_day_content"].ToString();
                 result.Trv_no = rd["trv_no"].ToString();
-               
-
-
-
-                //lstMember.Add(tmpMemberPointer);
-
-                return result;
-
             }
 
+            rd.Close();
             con.Close();
+        }
+        catch (Exception e) {;}
 
-        }
-        catch (Exception ex)
-        {
-            Console.Write(ex.ToString());
-        }
         return result;
     }
 

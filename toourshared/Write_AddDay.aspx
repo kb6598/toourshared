@@ -56,22 +56,76 @@
             inTravelDay.Trv_day_content = Request.Form["article"];
             travelDayDao.UpdatetTravel_Day(inTravelDay);
 
+
+
+
+            //    {
+            //        { "trv_no", trv_no},
+            //        { "cur_trv_day_no",trv_day_no},
+            //        { "cur_day","1"},
+            //        {"1",trv_day_no }
+            //    };
+
+            // insert new travel_day at last
+            //
+            //travel_day도 생성 하여 trv_day_no를 가지고 있음
+            Travel_Day travel_Day = new Travel_Day();
+            travel_Day.Trv_no =WriteStatus["trv_no"] ;
+            Travel_DayDao travel_DayDao = new Travel_DayDao();
+            string new_trv_day_no = travel_DayDao.InsertTravel_Day(travel_Day);
+
+
+            
             //insert map
             Map inMap = new Map();
             MapDao mapDao = new MapDao();
             inMap.Map_cost = Request.Form["mapCost"];
             inMap.Map_data = Request.Form["mapData"];
             inMap.Map_route = Request.Form["mapRoute"];
-            inMap.Trv_day_no = WriteStatus[WriteStatus["cur_day"]];
+            inMap.Trv_day_no = new_trv_day_no;
 
-            mapDao.UpdateMap(inMap);
+            mapDao.InsertMap(inMap);
+
+            //find insert point
+            int insertPoint = 1;
+            while (true)            {
+                
+                if (!WriteStatus.ContainsKey(insertPoint.ToString()) ) break;
+                insertPoint++;
+            }
+            WriteStatus.Add(insertPoint.ToString(), new_trv_day_no);
+
+            // 바뀐 cur_day의 지도 데이터를 넘겨준다.
+
+ 
+            Map targetMap = new Map();
+            // 현재 cur_day_no 는 이전단계에서 이미 target day으로 바꾸었기때문에 가져다 쓰면 된다. 
+            targetMap.Trv_day_no = WriteStatus["cur_trv_day_no"].ToString();
+            Map outMap = new Map();
+            outMap = mapDao.selectMapByTrv_day_no(targetMap);
+
+
+
+            mapCost.Value = outMap.Map_cost;
+            mapData.Value = outMap.Map_data;
+            mapRoute.Value = outMap.Map_route;
+
+
+            
+
+
+
         }
-        // 지도는 정보를 이전 폼에서 주어야 한다.
+
+                // 지도는 정보를 이전 폼에서 주어야 한다.
 
             mapCost.Value = Request.Form["mapCost"];
             mapData.Value = Request.Form["mapData"];
             mapRoute.Value = Request.Form["mapRoute"];
         
+
+
+
 
 
 
@@ -92,10 +146,13 @@
         <asp:HiddenField ID="mapCost" runat="server" />
     </form>
   <script>
-         form = document.getElementById("form1");
-         form.submit(); // 전송
 
+         form = document.getElementById("form1");
+          form.submit(); // 전송
+ 
      </script>
+
+
 
 </body>
 

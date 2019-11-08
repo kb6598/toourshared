@@ -44,7 +44,6 @@ public class LikeDao
         return result;
     }
     //public void DeleteCommentBy(mem_id)
-    //public void DeleteCommentBy(mem_id)
     public DataSet SelectLike()
     {
         MyDB myDB = new MyDB();
@@ -62,9 +61,38 @@ public class LikeDao
         return ds;
     }
 
+    public int selectLikeCountByTrvNo(Like like)
+    {
+        MyDB mydb = new MyDB();
+        int result = 0;
+        MySqlConnection con;
+
+        try
+        {
+            con = mydb.GetCon();
+            string Sql = "SELECT COUNT(*) as cnt FROM toourshared.like Where trv_no = @trv_no";
+
+            MySqlCommand cmd = new MySqlCommand(Sql, con);
+            cmd.Parameters.AddWithValue("@trv_no", like.Trv_no);
+
+            con.Open();
+            MySqlDataReader reader = cmd.ExecuteReader();
+
+            if(reader.Read())
+            {
+                result = int.Parse(reader["cnt"].ToString());
+            }
+
+            reader.Close();
+            con.Close();
+        }
+        catch(Exception e) {;}
+
+        return result;
+    }
+
     public Like selectLikeBylik_no(Like like)
     {
-
         MyDB mydb = new MyDB();
 
         Like result = new Like();
@@ -84,23 +112,16 @@ public class LikeDao
             con.Open();
             MySqlDataReader rd = cmd.ExecuteReader();
 
-            if (rd.HasRows)
+            if (rd.Read())
             {
-                rd.Read();
-
                 result.lik_no = rd["lik_no"].ToString();
                 result.Like_type = rd["like_type"].ToString();
                 result.Mem_id = rd["mem_id"].ToString();
                 result.Trv_no = rd["trv_no"].ToString();
-   
-
-
-                //lstMember.Add(tmpMemberPointer);
-
-                return result;
 
             }
 
+            rd.Close();
             con.Close();
 
         }
@@ -108,6 +129,7 @@ public class LikeDao
         {
             Console.Write(ex.ToString());
         }
+
         return result;
     }
 

@@ -1,4 +1,5 @@
-﻿<%@ Page Language="C#" %>
+﻿<%@ Page Language="C#"  EnableEventValidation="false" ValidateRequest="false"%>
+
 
 <!DOCTYPE html>
 
@@ -8,19 +9,19 @@
     protected void btnLogout_Click(object sender, EventArgs e)
     {
         Session.Abandon();
-        Response.Redirect("/index.aspx");
+        Response.Redirect("./index.aspx");
     }
     protected void btnMypage_Click(object sender, EventArgs e)
     {
-        Response.Redirect("/MyPage.aspx");
+        Response.Redirect("./MyPage.aspx");
     }
     protected void btnJoin_Click(object sender, EventArgs e)
     {
-        Response.Redirect("/join.aspx");
+        Response.Redirect("./join.aspx");
     }
     protected void btnFindIDPW_Click(object sender, EventArgs e)
     {
-        Response.Redirect("/find_idpw.aspx");
+        Response.Redirect("./find_idpw.aspx");
     }
 
 
@@ -41,14 +42,14 @@
             Session["mem_id"] = "billip";
         }
 
-
         //status -> 편집 페이지 정보
         //세션 status가 비어있다면 새로운 status 생성
         if (HttpContext.Current.Session["write_status"] == null)
         {
 
 
-            // 비어있는 travel을 삽입하고 trv_no(pk) 값을 가져옴
+
+            // create Travel
             Travel inTravel = new Travel();
             inTravel.Mem_id = HttpContext.Current.Session["mem_id"].ToString();
             inTravel.Trv_create_time = TimeLib.GetTimeStamp();
@@ -58,52 +59,72 @@
             inTravel.Trv_tot_rate = 0.ToString();
             inTravel.Trv_views = 0.ToString();
 
-
-
+            // insert new travel
             TravelDao travelDao = new TravelDao();
             string trv_no = travelDao.InsertTravel(inTravel);
 
-            //travel_day도 생성
+
+
+            //create travel_day
             Travel_Day travel_Day = new Travel_Day();
+
             travel_Day.Trv_no = trv_no;
-
-
             Travel_DayDao travel_DayDao = new Travel_DayDao();
+            //insert new travel_day
             string trv_day_no = travel_DayDao.InsertTravel_Day(travel_Day);
+
+
+            //create map
+            Map inMap = new Map();
+            MapDao mapDao = new MapDao();
+            // insert new map
+            inMap.Trv_day_no = trv_day_no;
+            mapDao.InsertMap(inMap);
+
             // 현재폼 정보를 저장할 딕셔너리 생성 나중에 세션에 넘겨줌
             Dictionary<string, string> newWriteStatus = new Dictionary<string, string>()
             {
-                {"status","first" },
                 { "trv_no", trv_no},
                 { "cur_trv_day_no",trv_day_no},
                 { "cur_day","1"},
-                {"trv_day_cnt","1" },
                 {"1",trv_day_no }
 
             };
             Session["write_status"] = newWriteStatus;
-            Session.Timeout = SESSION_TIME_OUT_MIN;
+
+
+
+
 
         }
-
+        Dictionary<string, string> readWriteStatus = SessionLib.getWriteStatus();
+        foreach(var item in readWriteStatus)
+        {
+            Response.Write(item.Key+" : "+item.Value+"<br/>");
+        }
 
     }
     protected void BindTables()
     {
 
+
         Dictionary<string, string> readWriteStatus = SessionLib.getWriteStatus();
         if (readWriteStatus != null)
         {
-
+            // 일차수 표시
             Literal_day.Text = readWriteStatus["cur_day"];
 
+            //Travel Day 가져오기
             Travel_Day inputTravel_day = new Travel_Day();
             Travel_Day outputTravel_day = new Travel_Day();
             Travel_DayDao Travel_daydao = new Travel_DayDao();
 
-            inputTravel_day.Trv_day_no = readWriteStatus["cur_day"];
+            inputTravel_day.Trv_day_no = readWriteStatus["cur_trv_day_no"];
             outputTravel_day = Travel_daydao.selectTrvel_DayBytrv_day_no(inputTravel_day);
 
+            article.Text = outputTravel_day.Trv_day_content;
+
+            //Travel 가져오기
             Travel inputTravel = new Travel();
             Travel outputTravel = new Travel();
             TravelDao daoTravel = new TravelDao();
@@ -113,7 +134,9 @@
             // 바인드
             title.Text = outputTravel.Trv_title;
             hashtag.Text = outputTravel.Trv_tag;
-            article.Text = outputTravel_day.Trv_day_content;
+
+
+
 
 
 
@@ -122,18 +145,30 @@
 
     }
 
+
+
+
     protected void BindDropDownList()
     {
         Dictionary<string, string> readWriteStatus = SessionLib.getWriteStatus();
         if (readWriteStatus != null)
         {
             int i = 1;
-            ListItem lst;
+            string option = "";
+
             while (true)
             {
                 if (!readWriteStatus.ContainsKey(i.ToString())) break;
-                lst = new ListItem(i + "일차", i.ToString());
-                goDay.Items.Add(lst);
+                // 들어가는 값이 현재일과 같을경우 option을 selected 요소로 추가
+                if(i.ToString().Equals(readWriteStatus["cur_day"]))
+                {
+                    Literal_goDay.Text += "<option value='"+i.ToString()+"' selected>"+i.ToString()+" 일차</option>";
+                }
+                else
+                {
+                    Literal_goDay.Text += "<option value='"+i.ToString()+"'>"+i.ToString()+" 일차</option>";
+                }
+
                 i++;
             }
         }
@@ -152,12 +187,34 @@
         }
 
     }
+    protected void Bind_otherData()
+    {
+        if (Request.Form["mapCost"] != null)
+        {
+            mapCost.Value = Request.Form["mapCost"];
+
+        }
+
+        if (Request.Form["mapData"] != null)
+        {
+            mapData.Value = Request.Form["mapData"];
+        }
+
+        if (Request.Form["mapRoute"] != null)
+        {
+            mapRoute.Value = Request.Form["mapRoute"];
+        }
+    }
 
     protected void Page_Load(object sender, EventArgs e)
     {
+        
         WriteSessionProcess();
         BindDropDownList();
+        Bind_otherData();
+        BindTables();
     }
+
 </script>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -188,7 +245,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bs4-summernote@0.8.10/dist/summernote-bs4.min.js"></script>
 
-    <link rel="stylesheet" href="/css/write.css">
+    <link rel="stylesheet" href="./css/write.css">
 
 
     <script>
@@ -210,8 +267,8 @@
 
         /* TextArea Summernote */
         $(document).ready(function () {
-            $('textarea').summernote({
-                height: 300, //set editable area's height
+            $('#article').summernote({
+                height: 600, //set editable area's height
             });
         });
 
@@ -243,6 +300,8 @@
                 image.src = originalFileName;
             });
         });
+
+
 
     </script>
 </head>
@@ -325,6 +384,9 @@
             <!-- 메인 상단 영역 -->
             <div class="TitleArea">
                 <div class="TitleAlign">
+        <asp:HiddenField ID="mapData" runat="server" />
+        <asp:HiddenField ID="mapRoute" runat="server" />
+        <asp:HiddenField ID="mapCost" runat="server" />
                     <asp:TextBox ID="title"  runat="server" type="text" placeholder="게시글의 제목을 정해주세요." />
                 </div>
                 <div class="TitleSub">
@@ -334,8 +396,10 @@
                     </div>
                     <div class="SubItem">
 
-                        <asp:DropDownList ID="goDay" runat="server" OnSelectedIndexChanged="DropDownList_goDay_SelectedIndexChanged">
-                        </asp:DropDownList>
+                    <select name="goDay" id="goDay" class="goDay" onchange="gotoDay()">
+                        <asp:Literal ID="Literal_goDay" runat="server"></asp:Literal>
+
+                    </select>
 
                     </div>
                 </div>
@@ -453,7 +517,7 @@
                 </div>
                 <!-- 다음 일로 이동 -->
                 <div  class="nextPageBtn">
-                    <div onclick ="nextDay()" class="btnAreaItem">다음 일 입력</div>
+                    <div onclick ="addDay()" class="btnAreaItem">다음 일 입력</div>
                 </div>
                 <!-- 글 작성 완료 버튼 -->
                 <div class="finishBtn">
@@ -477,8 +541,8 @@
                             <div class="option">
                                 <div>
                                     키워드 :
-                                <input id="keyword" value="이태원 맛집" type="text" />
-                                    <button onclick="searchPlaces();">검색하기</button>
+                                <input id="keyword" value="" type="text" />
+                                    <div class="btn btn-secondary" onclick="searchPlaces();">검색하기</div>
                                 </div>
                             </div>
                             <hr />
@@ -487,13 +551,13 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <div class="btn btn-secondary" data-dismiss="modal">Close</div>
                     </div>
                 </div>
             </div>
         </div>
 
-   
+
     </form>
 
  
@@ -506,16 +570,20 @@
 
         <!-- KAKAO -->
 
- <script src="javascript/write.js"></script>
+ <script src="./javascript/write.js"></script>
     
           
 <script>
+
+
+
+
       //------------------------------------
         //----------Post START
         //------------------------------------
     var form = document.createElement("form");
 
-    overlays = [];
+
      // 다음페이지로 markers, polyline, rect, circle, polygon 보내는 기능
     function addDataAtForm() {
 
@@ -558,8 +626,22 @@
 
      
             
-        }
+    }
 
+    function gotoDay() {
+        addDataAtForm();
+
+        var targetDay = document.getElementById("goDay").value;
+        var targetDayData = document.createElement("input"); // input 엘리멘트 생성
+        targetDayData.setAttribute("type", "hidden"); // type 속성을 hidden으로 설정
+        targetDayData.setAttribute("name", "targetDay"); // name 속성을 'stadium'으로 설정
+        targetDayData.setAttribute("value", targetDay); // value 속성을 삽입
+        form.appendChild(targetDayData);
+
+
+        form.setAttribute('action', "Write_goDay.aspx");
+        form.submit(); // 전송
+    }
 
     
     function tmpSave() {
@@ -567,202 +649,258 @@
         form.setAttribute('action', "Write_tmpSave.aspx");
         form.submit(); // 전송
     }
-    function nextDay() {
+    function addDay() {
         addDataAtForm();
-        form.setAttribute('action', "Write_nextDay.aspx");
+        form.setAttribute('action', "Write_addDay.aspx");
         form.submit(); // 전송
     }
     function endWrite() {
         addDataAtForm();
-        form.setAttribute('action', "Write_get_endWrite.aspx");
+        form.setAttribute('action', "Write_endWrite.aspx");
         form.submit(); // 전송
     }
 
         //------------------------------------
         //----------Post END
         //------------------------------------
-    function getDataFromDrawingMap(mapData) {
-    // Drawing Manager에서 그려진 데이터 정보를 가져옵니다 
-    var data = mapData;
 
-    // 아래 지도에 그려진 도형이 있다면 모두 지웁니다
-    removeOverlays();
 
-    // 지도에 가져온 데이터로 도형들을 그립니다
-    drawMarker(data[kakao.maps.drawing.OverlayType.MARKER]);
-    drawPolyline(data[kakao.maps.drawing.OverlayType.POLYLINE]);
-    drawRectangle(data[kakao.maps.drawing.OverlayType.RECTANGLE]);
-    drawCircle(data[kakao.maps.drawing.OverlayType.CIRCLE]);
-    drawPolygon(data[kakao.maps.drawing.OverlayType.POLYGON]);
-}
 
-// 아래 지도에 그려진 도형이 있다면 모두 지웁니다
-function removeOverlays() {
-    var len = overlays.length, i = 0;
 
-    for (; i < len; i++) {
-        overlays[i].setMap(null);
+    //------------------------------------
+    //----------Post START
+    //------------------------------------
+    var form = document.createElement("form");
+
+
+    // 다음페이지로 markers, polyline, rect, circle, polygon 보내는 기능
+    function addDataAtForm() {
+
+        var title = document.getElementById("title");
+        var article = document.getElementById("article");
+        var hashtag = document.getElementById("hashtag");
+        title.setAttribute('type', "hidden");
+        article.setAttribute('type', "hidden");
+        hashtag.setAttribute('type', "hidden");
+
+
+
+        //// Form submission canceled because the form is not connected 해결
+        document.body.appendChild(form);
+        form.setAttribute('method', "post");
+
+        form.appendChild(title);
+        form.appendChild(article);
+        form.appendChild(hashtag);
+
+
+        var mapData = document.createElement("input"); // input 엘리멘트 생성
+        mapData.setAttribute("type", "hidden"); // type 속성을 hidden으로 설정
+        mapData.setAttribute("name", "mapData"); // name 속성을 'stadium'으로 설정
+        mapData.setAttribute("value", JSON.stringify(getMapData())); // value 속성을 삽입
+        form.appendChild(mapData);
+
+        var TravelRouteListData = document.createElement("input"); // input 엘리멘트 생성
+        TravelRouteListData.setAttribute("type", "hidden"); // type 속성을 hidden으로 설정
+        TravelRouteListData.setAttribute("name", "mapRoute"); // name 속성을 'stadium'으로 설정
+        TravelRouteListData.setAttribute("value", JSON.stringify(getTravelRouteData())); // value 속성을 삽입
+        form.appendChild(TravelRouteListData);
+
+        var CostItemListData = document.createElement("input"); // input 엘리멘트 생성
+        CostItemListData.setAttribute("type", "hidden"); // type 속성을 hidden으로 설정
+        CostItemListData.setAttribute("name", "mapCost"); // name 속성을 'stadium'으로 설정
+        CostItemListData.setAttribute("value", JSON.stringify(getCostData())); // value 속성을 삽입
+        form.appendChild(CostItemListData);
+
+
+
+
     }
 
-    overlays = [];
-}
 
-// Drawing Manager에서 가져온 데이터 중 마커를 아래 지도에 표시하는 함수입니다
-function drawMarker(markers) {
-    var len = markers.length, i = 0;
 
-    for (; i < len; i++) {
-        var marker = new kakao.maps.Marker({
-            map: map,
-            position: new kakao.maps.LatLng(markers[i].y, markers[i].x),
-            zIndex: markers[i].zIndex
-        });
 
-        overlays.push(marker);
+
+    //------------------------------------
+    //----------Post END
+    //------------------------------------
+    //------------------------------------
+    //----------drawingMap DataBind Start Not Map
+    //-------------------------------
+
+
+
+
+
+
+
+
+    function setDrawingMapData(mapData) {
+        // Drawing Manager에서 그려진 데이터 정보를 가져옵니다 
+        var data = mapData;
+        console.info(data);
+
+        // 아래 지도에 그려진 도형이 있다면 모두 지웁니다
+        removeOverlays();
+
+        console.info(data["marker"]);
+        console.info(data["polyline"]);
+        console.info(data["rectangle"]);
+        console.info(data["circle"]);
+        console.info(data["polygon"]);
+        console.info(data["ellipse"]);
+        console.info(data["arrow"]);
+        // 지도에 가져온 데이터로 도형들을 그립니다
+        drawMarker(data["marker"]);
+        drawPolyline(data["polyline"]);
+        drawRectangle(data["rectangle"]);
+        drawCircle(data["circle"]);
+        drawPolygon(data["polygon"]);
+        drawEllipse(data["ellipse"]);
+        drawArrow(data["arrow"]);
+
+
+
+
     }
-}
 
-// Drawing Manager에서 가져온 데이터 중 선을 아래 지도에 표시하는 함수입니다
-function drawPolyline(lines) {
-    var len = lines.length, i = 0;
 
-    for (; i < len; i++) {
-        var path = pointsToPath(lines[i].points);
-        var style = lines[i].options;
-        var polyline = new kakao.maps.Polyline({
-            map: map,
-            path: path,
-            strokeColor: style.strokeColor,
-            strokeOpacity: style.strokeOpacity,
-            strokeStyle: style.strokeStyle,
-            strokeWeight: style.strokeWeight
-        });
+    function drawArrow(arrow) {
+        var len = arrow.length,
+            i = 0;
 
-        overlays.push(polyline);
+        for (; i < len; i++) {
+            var path = pointsToPath(arrow[i].points);
+            manager.put(kakao.maps.drawing.OverlayType.ARROW, path);
+        }
     }
-}
 
-// Drawing Manager에서 가져온 데이터 중 사각형을 아래 지도에 표시하는 함수입니다
-function drawRectangle(rects) {
-    var len = rects.length, i = 0;
+    function drawEllipse(ellipse) {
+        var len = ellipse.length,
+            i = 0;
 
-    for (; i < len; i++) {
-        var style = rects[i].options;
-        var rect = new kakao.maps.Rectangle({
-            map: map,
-            bounds: new kakao.maps.LatLngBounds(
+        for (; i < len; i++) {
+            var style = ellipse[i].options;
+            bounds = new kakao.maps.LatLngBounds(
+                new kakao.maps.LatLng(ellipse[i].sPoint.y, ellipse[i].sPoint.x),
+                new kakao.maps.LatLng(ellipse[i].ePoint.y, ellipse[i].ePoint.x)
+            );
+            manager.put(kakao.maps.drawing.OverlayType.ELLIPSE, bounds);
+        }
+    } // Drawing Manager에서 가져온 데이터 중 마커를 아래 지도에 표시하는 함수입니다
+    function drawMarker(markers) {
+
+        var len = markers.length,
+            i = 0;
+
+        for (; i < len; i++) {
+            manager.put(kakao.maps.drawing.OverlayType.MARKER, new kakao.maps.LatLng(markers[i].y, markers[i].x), 2);
+        }
+    }
+
+    // Drawing Manager에서 가져온 데이터 중 선을 아래 지도에 표시하는 함수입니다
+    function drawPolyline(lines) {
+        var len = lines.length,
+            i = 0;
+
+        for (; i < len; i++) {
+            var path = pointsToPath(lines[i].points);
+            manager.put(kakao.maps.drawing.OverlayType.POLYLINE, path);
+            
+
+        }
+    }
+
+    // Drawing Manager에서 가져온 데이터 중 사각형을 아래 지도에 표시하는 함수입니다
+    function drawRectangle(rects) {
+        var len = rects.length,
+            i = 0;
+
+        for (; i < len; i++) {
+            var style = rects[i].options;
+            bounds = new kakao.maps.LatLngBounds(
                 new kakao.maps.LatLng(rects[i].sPoint.y, rects[i].sPoint.x),
                 new kakao.maps.LatLng(rects[i].ePoint.y, rects[i].ePoint.x)
-            ),
-            strokeColor: style.strokeColor,
-            strokeOpacity: style.strokeOpacity,
-            strokeStyle: style.strokeStyle,
-            strokeWeight: style.strokeWeight,
-            fillColor: style.fillColor,
-            fillOpacity: style.fillOpacity
-        });
+            );
+            manager.put(kakao.maps.drawing.OverlayType.RECTANGLE, bounds);
 
-        overlays.push(rect);
-    }
-}
+           
 
-// Drawing Manager에서 가져온 데이터 중 원을 아래 지도에 표시하는 함수입니다
-function drawCircle(circles) {
-    var len = circles.length, i = 0;
-
-    for (; i < len; i++) {
-        var style = circles[i].options;
-        var circle = new kakao.maps.Circle({
-            map: map,
-            center: new kakao.maps.LatLng(circles[i].center.y, circles[i].center.x),
-            radius: circles[i].radius,
-            strokeColor: style.strokeColor,
-            strokeOpacity: style.strokeOpacity,
-            strokeStyle: style.strokeStyle,
-            strokeWeight: style.strokeWeight,
-            fillColor: style.fillColor,
-            fillOpacity: style.fillOpacity
-        });
-
-        overlays.push(circle);
-    }
-}
-
-// Drawing Manager에서 가져온 데이터 중 다각형을 아래 지도에 표시하는 함수입니다
-function drawPolygon(polygons) {
-    var len = polygons.length, i = 0;
-
-    for (; i < len; i++) {
-        var path = pointsToPath(polygons[i].points);
-        var style = polygons[i].options;
-        var polygon = new kakao.maps.Polygon({
-            map: map,
-            path: path,
-            strokeColor: style.strokeColor,
-            strokeOpacity: style.strokeOpacity,
-            strokeStyle: style.strokeStyle,
-            strokeWeight: style.strokeWeight,
-            fillColor: style.fillColor,
-            fillOpacity: style.fillOpacity
-        });
-
-        overlays.push(polygon);
-    }
-}
-
-// Drawing Manager에서 가져온 데이터 중 
-// 선과 다각형의 꼭지점 정보를 kakao.maps.LatLng객체로 생성하고 배열로 반환하는 함수입니다 
-function pointsToPath(points) {
-    var len = points.length,
-        path = [],
-        i = 0;
-
-    for (; i < len; i++) {
-        var latlng = new kakao.maps.LatLng(points[i].y, points[i].x);
-        path.push(latlng);
+        }
     }
 
-    return path;
+    // Drawing Manager에서 가져온 데이터 중 원을 아래 지도에 표시하는 함수입니다
+    function drawCircle(circles) {
+        var len = circles.length,
+            i = 0;
+
+        for (; i < len; i++) {
+
+            manager.put(kakao.maps.drawing.OverlayType.CIRCLE, new kakao.maps.LatLng(circles[i].center.y, circles[i].center.x), circles[i].radius);
+            
+        }
     }
+
+    // Drawing Manager에서 가져온 데이터 중 다각형을 아래 지도에 표시하는 함수입니다
+    function drawPolygon(polygons) {
+        var len = polygons.length,
+            i = 0;
+
+        for (; i < len; i++) {
+            
+            var path = pointsToPath(polygons[i].points);
+            manager.put(kakao.maps.drawing.OverlayType.POLYGON, path);
+           
+        }
+    }
+
+    // Drawing Manager에서 가져온 데이터 중 
+    // 선과 다각형의 꼭지점 정보를 kakao.maps.LatLng객체로 생성하고 배열로 반환하는 함수입니다 
+    function pointsToPath(points) {
+        var len = points.length,
+            path = [],
+            i = 0;
+
+        for (; i < len; i++) {
+            var latlng = new kakao.maps.LatLng(points[i].y, points[i].x);
+            path.push(latlng);
+        }
+
+        return path;
+    }
+    //------------------------------------
+    //----------DrawingMap DataBind  END  Not Map
+    //------------------------------------
+
+
+   
+
 
 
         //------------------------------------
-        //----------DataBind End
+        //----------From Post START
+        //------------------------------------
+    var inputMapData = JSON.parse(document.getElementById("mapData").value);    
+    if (inputMapData != "" && inputMapData != [] && inputMapData != null && inputMapData != '""') {
+        setDrawingMapData(inputMapData);
+        closeCusOverlay();
+        refreshOverlayListener();
+    }
+
+
+    TravelRouteList = JSON.parse(document.getElementById("mapRoute").value);
+    if (TravelRouteList != "" && TravelRouteList != [] && TravelRouteList != null && TravelRouteList != '""') {
+        refreashTravelRoute();
+    }
+
+    CostItemList = JSON.parse(document.getElementById("mapCost").value);
+    if (CostItemList != "" && CostItemList != [] && CostItemList != null && CostItemList != '""') {
+        refreashCostItem();
+    }
+         //------------------------------------
+        //----------From Post END
         //------------------------------------
 
-        
-
-
-
-         //-----placeList 데이터 가져오기
-
-        <%
-        if(Request["mapRoute"] != null)
-        {
-           Response.Write("TravelRouteList ="+Request["mapRoute"]+";");
-           Response.Write("refreashTravelRoute();");
-        }
-        %>
-        //-----costList 가져오기
-        <%
-        if(Request["mapCost"] != null)
-        {
-            Response.Write("CostItemList="+Request["mapCost"]+";");
-            Response.Write("refreashCostItem();");
-
-        }
-        %>
-
-        //------MapDato 가져오기
-        <%
-        if(Request["mapData"] != null)
-        {
-            Response.Write("getDataFromDrawingMap("+Request["mapData"]+");");
-            Response.Write("closeCusOverlay();");            
-            Response.Write("refreshOverlayListener();");
-
-        }
-        %>
 
 
 </script>

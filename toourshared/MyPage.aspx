@@ -140,6 +140,7 @@
 
         return resultList;
     }
+
     protected string getTrv_Main_Img(string trv_no)
     {
         string result;
@@ -154,6 +155,7 @@
 
         return result;
     }
+
     protected void Bind_Table_MyReviews()
     {
         List<Comment> resultList = getReviewsList("billip");
@@ -166,8 +168,6 @@
 
         for (int i = 0; i < resultList.Count - 1; i++)
         {
-
-
             tmpTableCell_article1 = new TableCell();
             tmpTableCell_article1.Text = "<a href = \"#\" alt = \"bg2\">" +
                                             "<div class = \"tableContainer\" >" +
@@ -258,16 +258,7 @@
             tmpTableRow_article.Cells.Add(tmpTableCell_article3);
             Table_MyReviews.Rows.Add(tmpTableRow_article);
         }
-
-
-
-
-
-
     }
-
-
-
 
     protected List<Travel> getFollowersTravelList(string mem_id ,int start, int count)
     {
@@ -276,136 +267,75 @@
         MyPageDao dao = new MyPageDao();
         input.Mem_id = mem_id;
 
-        resultList = dao.selectMembersFollowersTravelLimitOrderByTimestampLimit(input, start, count);
-
+        resultList = dao.Test();
 
         return resultList;
     }
 
-
-    protected void BInd_Table_FollowingTouple()
+    protected string testing()
     {
+        int start = 0, count = 7;
+        List < Travel >  resultList = getFollowersTravelList("milk9503",start, count);
 
-        int start = 0, count = 10;
+        int indexCount = 0;
+        int trCount = 0;
+        String returnStr = "<table>\n   <tr>\n";
 
-        List < Travel >  resultList = getFollowersTravelList("billip",start, count);
-        TableRow tmpTableRow_article;
-        TableCell tmpTableCell_article1;
-        TableCell tmpTableCell_article2;
-        TableCell tmpTableCell_article3;
+        Boolean debugTest = false;
 
-
-        for (int i = 0; i < resultList.Count - 1; i++)
+        for (int i = 0; i < resultList.Count; i++)
         {
+            returnStr += "      <td>\n" +
+                    "           <a href = \"#\" alt = \"bg2\">\n" +
+            "           <div class = \"tableContainer\" >\n";
 
-
-            tmpTableCell_article1 = new TableCell();
-            tmpTableCell_article1.Text = "<a href = \"#\" alt = \"bg2\">" +
-                                            "<div class = \"tableContainer\" >" +
-                                            "<img src = \"" + resultList[i].Trv_main_img + "\" alt= \""+ resultList[i].Trv_title + "\" >" +
-                                                "<div class = \"tableOverlay\" >" +
-                                                    "<div class = \"tableText\" >" +
-                                                        "<div class = \"tableAlign\">" +
-                                                            "<div class = \"star\">" +
-                                                                "<span>☆</span>" + resultList[i].Trv_tot_rate +
-                                                            "</div>" +
-                                                            "<div class = \"good\">" +
-                                                                "<span><i class= \"far fa-thumbs-up\" ></i></span> x3" +
-                                                            "</div>" +
-                                                            "<div class = \"reply\">" +
-                                                                "<span><i class= \"fa fa-comment-o\" ></i></span> x5" +
-                                                            "</div>" +
-                                                        "</div>" +
-                                                    "</div>" +
-                                                "</div>" +
-                                            "</div>" +
-                                        "</a>";
-            i++;
-            if (i == resultList.Count)
+            if(resultList[indexCount].Trv_main_img == "noImage")
             {
-                tmpTableRow_article = new TableRow();
-                tmpTableRow_article.Cells.Add(tmpTableCell_article1);
-
-                Table_travel.Rows.Add(tmpTableRow_article);
-                break;
+                returnStr += "               " + resultList[indexCount].Trv_main_img.ToString() + " " + System.IO.File.Exists(resultList[indexCount].Trv_main_img) + " <br/><img src = \"./img/noImage.png\" alt= \"" + resultList[indexCount].Trv_title + "\" >\n";
             }
-            tmpTableCell_article2 = new TableCell();
-            tmpTableCell_article2.Text = "<a href = \"#\" alt = \"bg2\">" +
-                                            "<div class = \"tableContainer\" >" +
-                                            "<img src = \"" + resultList[i].Trv_main_img + "\" alt= \""+ resultList[i].Trv_title + "\" >" +
-                                                "<div class = \"tableOverlay\" >" +
-                                                    "<div class = \"tableText\" >" +
-                                                        "<div class = \"tableAlign\">" +
-                                                            "<div class = \"star\">" +
-                                                                "<span>☆</span>" + resultList[i].Trv_tot_rate +
-                                                            "</div>" +
-                                                            "<div class = \"good\">" +
-                                                                "<span><i class= \"far fa-thumbs-up\" ></i></span> x3" +
-                                                            "</div>" +
-                                                            "<div class = \"reply\">" +
-                                                                "<span><i class= \"fa fa-comment-o\" ></i></span> x5" +
-                                                            "</div>" +
-                                                        "</div>" +
-                                                    "</div>" +
-                                                "</div>" +
-                                            "</div>" +
-                                        "</a>";
-            i++;
-            if (i == resultList.Count)
+            else
             {
-                tmpTableRow_article = new TableRow();
-                tmpTableRow_article.Cells.Add(tmpTableCell_article1);
-                tmpTableRow_article.Cells.Add(tmpTableCell_article2);
-
-                Table_travel.Rows.Add(tmpTableRow_article);
-                break;
+                returnStr += "               " + resultList[indexCount].Trv_main_img.ToString() + "<br/><img src = \"" + resultList[indexCount].Trv_main_img + "\" alt= \"" + resultList[indexCount].Trv_title + "\" >\n";
             }
-            tmpTableCell_article3 = new TableCell();
-            tmpTableCell_article3.Text = "<a href = \"#\" alt = \"bg2\">" +
-                                            "<div class = \"tableContainer\" >" +
-                                            "<img src = \"" + resultList[i].Trv_main_img + "\" alt= \""+ resultList[i].Trv_title + "\" >" +
-                                                "<div class = \"tableOverlay\" >" +
-                                                    "<div class = \"tableText\" >" +
-                                                        "<div class = \"tableAlign\">" +
-                                                            "<div class = \"star\">" +
-                                                                "<span>☆</span>" + resultList[i].Trv_tot_rate +
-                                                            "</div>" +
-                                                            "<div class = \"good\">" +
-                                                                "<span><i class= \"far fa-thumbs-up\" ></i></span> x3" +
-                                                            "</div>" +
-                                                            "<div class = \"reply\">" +
-                                                                "<span><i class= \"fa fa-comment-o\" ></i></span> x5" +
-                                                            "</div>" +
-                                                        "</div>" +
-                                                    "</div>" +
-                                                "</div>" +
-                                            "</div>" +
-                                        "</a>";
 
+            returnStr += "                   <div class = \"tableOverlay\" >\n" +
+            "                       <div class = \"tableText\" >\n" +
+            "                           <div class = \"tableAlign\">\n" +
+            "                               <div class = \"star\">\n" +
+            "                                   <span>☆</span>" + resultList[indexCount++].Trv_tot_rate + "\n" +
+            "                               </div>\n" +
+            "                               <div class = \"good\">\n" +
+            "                                   <span><i class= \"far fa-thumbs-up\" ></i></span> x3\n" +
+            "                               </div>\n" +
+            "                               <div class = \"reply\">\n" +
+            "                                   <span><i class= \"fa fa-comment-o\" ></i></span> x5\n" +
+            "                               </div>\n" +
+            "                       </div>\n" +
+            "                   </div>\n" +
+            "                   </div>\n" +
+            "               </div>\n" +
+            "           </a>\n" +
+            "       </td>\n";
 
-            tmpTableRow_article = new TableRow();
-            tmpTableRow_article.Cells.Add(tmpTableCell_article1);
-            tmpTableRow_article.Cells.Add(tmpTableCell_article2);
-            tmpTableRow_article.Cells.Add(tmpTableCell_article3);
-            Table_travel.Rows.Add(tmpTableRow_article);
+            trCount++;
+            if (trCount == 3)
+            {
+                trCount = 0;
+                returnStr += "  </tr>\n <tr>\n";
+            }
         }
 
-
-
-
+        returnStr += "  </tr>\n</table>";
+        return returnStr;
 
     }
-
 
     protected void Page_Load(object sender, EventArgs e)
     {
-
         Bind_Table_Travel();
         Bind_Table_MyReviews();
-        BInd_Table_FollowingTouple();
-
-
     }
+
 </script>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -1027,8 +957,7 @@
                         </asp:Table>
                 </div>
                 <div id="FollowingTouple" class="boardItem">
-                        <asp:Table ID="Table_FollowingTouple" runat="server">
-                        </asp:Table>
+                    <% Response.Write(testing()); %>
                 </div>
             </div>
         </div>

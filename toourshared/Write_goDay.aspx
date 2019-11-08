@@ -27,7 +27,7 @@
         //mapRoute
         //mapCost
         Dictionary<string, string> WriteStatus = SessionLib.getWriteStatus();
-        if (WriteStatus != null)
+        if (WriteStatus != null && Request.Form["targetDay"] != null)
         {
 
             //-----------------------------------
@@ -56,7 +56,7 @@
             inTravelDay.Trv_day_content = Request.Form["article"];
             travelDayDao.UpdatetTravel_Day(inTravelDay);
 
-            //insert map
+            //update map
             Map inMap = new Map();
             MapDao mapDao = new MapDao();
             inMap.Map_cost = Request.Form["mapCost"];
@@ -65,13 +65,36 @@
             inMap.Trv_day_no = WriteStatus[WriteStatus["cur_day"]];
 
             mapDao.UpdateMap(inMap);
-        }
-        // 지도는 정보를 이전 폼에서 주어야 한다.
 
-            mapCost.Value = Request.Form["mapCost"];
-            mapData.Value = Request.Form["mapData"];
-            mapRoute.Value = Request.Form["mapRoute"];
-        
+            //cur_day를 바꾸어서 넘겨준다
+            WriteStatus["cur_day"] = Request.Form["targetDay"];
+            WriteStatus["cur_trv_day_no"] = WriteStatus[WriteStatus["cur_day"]];
+
+
+
+            // 바뀐 cur_day의 지도 데이터를 넘겨준다.
+
+ 
+            Map targetMap = new Map();
+            // 현재 cur_day_no 는 이전단계에서 이미 target day으로 바꾸었기때문에 가져다 쓰면 된다. 
+            targetMap.Trv_day_no = WriteStatus["cur_trv_day_no"].ToString();
+            Map outMap = new Map();
+            outMap = mapDao.selectMapByTrv_day_no(targetMap);
+
+
+
+            mapCost.Value = outMap.Map_cost;
+            mapData.Value = outMap.Map_data;
+            mapRoute.Value = outMap.Map_route;
+
+
+
+
+            Session["write_status"] = WriteStatus;
+
+        }
+
+
 
 
 

@@ -2,6 +2,158 @@
 
 <!DOCTYPE html>
 
+<script runat="server">
+
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        if(Request.QueryString["trv_no"] == null)
+        {
+            System.Diagnostics.Debug.WriteLine("지금 되는건가용?");
+            Response.Redirect("/index.aspx");
+        }
+    }
+
+    protected List<String> getTravelByTrvNo()
+    {
+        int trv_no = int.Parse(Request.QueryString["trv_no"].ToString()); // 게시글 번호 받기
+
+        Travel travel = new Travel();                        // travel 객체 생성
+        List<String> returnList = new List<String>();   // return할 List 생성
+        travel.Trv_no = trv_no.ToString();                  // travel 객체에 게시글 번호 넣고
+
+        TravelDao travelDao = new TravelDao();        // TravelDao 객체 생성
+        travel = travelDao.selectTravelBytrv_no(travel); // travelDao에서 trv_no를 토대로 데이터 몽땅 긁어온 travel 객체로 바꿔치기
+
+        returnList.Add(travel.Trv_no);
+        returnList.Add(travel.Trv_secret);
+        returnList.Add(travel.Trv_views);
+
+        try
+        {
+            double d_totRate = double.Parse(travel.Trv_tot_rate);
+            int i_totRate = (int)d_totRate;
+            String returnRate = d_totRate.ToString() + "-" + i_totRate.ToString(); // ex: 3.4-3
+
+            returnList.Add(returnRate);
+            returnList.Add(travel.Trv_main_img);
+            returnList.Add(travel.Trv_title);
+            returnList.Add(travel.Trv_tag);
+            returnList.Add(travel.Trv_timestamp);
+            returnList.Add(travel.Trv_create_time);
+            returnList.Add(travel.Loc_name);
+            returnList.Add(travel.Mem_id);
+        }
+        catch(Exception e) {;}
+        return returnList;
+    }
+
+    public List<String> getTravelDayListByTrvNo()
+    {
+        int trv_no = int.Parse(Request.QueryString["trv_no"].ToString()); // 게시글 번호 받기
+
+        Travel_Day travelDay = new Travel_Day();                         // travel_day 객체 생성
+        travelDay.Trv_no = trv_no.ToString();                               // travel_no 집어 넣기
+        Travel_DayDao travelDayDao = new Travel_DayDao();         // travel_day DAO 객체 생성
+
+        List<Travel_Day> travelDayList = travelDayDao.selectTravelDayListByTrvNo(travelDay);
+        // 게시글 번호에 해당하는 그 게시글의 모든 게시글 내용들(N일 차) 오름차순으로 구해온다.
+
+        List<String> returnList = new List<String>();
+        for(int i = 0; i < travelDayList.Count; i++)
+        {
+            returnList.Add(travelDayList[i].Trv_day_content); // 게시글들을 구해온다.
+        }
+
+        return returnList;
+    }
+
+    protected int getLikeCountByTrvNo()
+    {
+        int returnInt = 0;
+        int trv_no = int.Parse(Request.QueryString["trv_no"].ToString()); // 게시글 번호 받고
+
+        Like like = new Like();                   // like 객체 생성
+        like.Trv_no = trv_no.ToString();        // like 객채에 데이터 집어넣기
+        LikeDao likeDao = new LikeDao();   // likeDao 객체 생성
+
+        returnInt = likeDao.selectLikeCountByTrvNo(like); // 데이터 가져오고
+        return returnInt;
+    }
+
+    protected List<String> getMemberByTrvNo()
+    {
+        List<String> returnList = new List<String>();
+        int trv_no = int.Parse(Request.QueryString["trv_no"].ToString()); // 게시글 번호 받고
+
+        Travel travel = new Travel();
+        TravelDao travelDao = new TravelDao();
+
+        travel.Trv_no = trv_no.ToString(); // travel 객채에 게시글 번호 삽입
+        travel = travelDao.selectTravelBytrv_no(travel); // 바꾸고
+        String MemberID = travel.Mem_id.ToString(); // 게시글 번호의 작성자를 구해오고
+
+        Member member = new Member(); // member 객체 생성하고
+        member.Mem_id = MemberID; // 객체에 작성자 아이디 삽입하고
+        MemberDao memberDao = new MemberDao(); // DAO 생성해서
+        member = memberDao.selectMemberByMem_id(member); // 바꾸고
+
+        returnList.Add(member.Mem_id);
+        returnList.Add(member.Mem_state);
+        returnList.Add(member.Mem_phone);
+        returnList.Add(member.Mem_pw);
+        returnList.Add(member.Mem_name);
+        returnList.Add(member.Mem_sex);
+        returnList.Add(member.Mem_ques);
+        returnList.Add(member.Mem_answer);
+        returnList.Add(member.Mem_birth);
+        returnList.Add(member.Mem_email);
+        returnList.Add(member.Mem_reg_datetime);
+        returnList.Add(member.Mem_timestmap);
+
+        String imgUrl = member.Mem_img_url;
+        if (imgUrl == "noImage")
+            returnList.Add("./img/noImage.png");
+        else
+            returnList.Add(imgUrl);
+        return returnList;
+    }
+
+    protected List<String> getHashTagList()
+    {
+        List<String> TravelList = getTravelByTrvNo(); // 해당 게시글의 데이터
+        return HashTag.Split(TravelList[6].ToString());
+    }
+
+    protected List<Comment> getCommentListByTrvNo()
+    {
+        List<Comment> returnList = new List<Comment>();
+        int trv_no = int.Parse(Request.QueryString["trv_no"].ToString()); // 게시글 번호 받고
+
+        Travel travel = new Travel(); // Travel 객체 생성 및
+        travel.Trv_no = trv_no.ToString(); // 게시글 번호 삽입
+
+        CommentDao commentDao = new CommentDao(); // cmtDao 생성
+        returnList = commentDao.selectCommentListByTrvNo(travel); // List받아오고
+
+        return returnList;
+    }
+
+    protected int getCommentByTrvNo()
+    {
+        int returnInt = 0;
+        int trv_no = int.Parse(Request.QueryString["trv_no"].ToString()); // 게시글 번호 받고
+
+        Travel travel = new Travel(); // Travel 객체 생성 및
+        travel.Trv_no = trv_no.ToString(); // 게시글 번호 삽입
+
+        CommentDao commentDao = new CommentDao(); // cmtDao 생성
+        returnInt = commentDao.selectCommentCountByTrvNo(travel);
+
+        return returnInt;
+    }
+
+</script>
+
 <head>
     <title> To Our Shared : milk9503 님의 글 </title>
 
@@ -254,6 +406,29 @@
             font-family: 'Noto Sans KR', sans-serif;
         }
 
+        .good-item{
+            font-size: 25px;
+            padding-left: 30px;
+        }
+        
+        .goodBtn{
+            width: 30px;
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            border: none;
+            outline: none;
+            background-color: transparent;
+        }
+        
+        .good-cnt{
+            cursor: default;
+            color: orangered;
+            font-size: 30px;
+            font-weight: 700;
+            margin-top: 3px;
+        }
+
         .board-writer {
             width: 100%;
             height: 60px;
@@ -424,7 +599,6 @@
         .board-part{
             width: 1500px;
             height: auto;
-            margin-top: 100px;
             display: flex;
             flex-direction: column;
         }
@@ -503,13 +677,12 @@
             height: 680px;
             background-color: #eee;
             border: 0.5px solid rgba(0, 0, 0, .2);
-            border-top: 4px dashed rgba(0, 0, 0, .5);
+            border-top: .5px solid rgba(0, 0, 0, .2);
             overflow: auto;
             padding: 10px;
         }
         
         .board-hashtag{
-            margin-top: 100px;
             width: 1500px;
             height: 100px;
             background-color: #eee;
@@ -519,7 +692,7 @@
         }
         
         .board-reply{
-            margin-top: 10px;
+            margin-top: 100px;
             width: 1500px;
             height: 700px;
             background-color: #eee;
@@ -584,6 +757,10 @@
             padding: 10px;
             justify-content: center;
             align-items: center;
+        }
+
+        .reply-score .star{
+            font-size: 16px;
         }
         
         .reply-write{
@@ -652,6 +829,21 @@
         
         .hashtag:hover{
             background-color: rgba(0, 0, 0, .8);
+        }
+
+        .reply-star-input{
+            margin-right: 30px;
+            height: 30px;
+        }
+        
+        .reply-star-input .reply-star{
+            width: 50px;
+            font-size: 13px;
+            padding: 5px;
+            outline: none;
+            color: dimgray;
+            border: .5px solid rgba(0, 0, 0, .1);
+            text-align-last: center;
         }
         
     </style>
@@ -735,29 +927,54 @@
                 </li>
             </ul>
         </div>
+        <%
+            // ============== Data Init ================
 
+            List<String> TravelList = getTravelByTrvNo();                        // 해당 게시글의 데이터
+            List<String> MemberList = getMemberByTrvNo();                 // 해당 게시글의 작성자의 데이터
+            List<String> TravelDayContents = getTravelDayListByTrvNo();  // 해당 게시글의 내용 데이터
+            List<Comment> CommentList = getCommentListByTrvNo();    // 해당 게시글의 댓글 데이터
+
+            int day = 0;                                                                // 일 차
+            int goodCnt = getLikeCountByTrvNo();                             // 추천 수
+            string[] totRateArr = TravelList[3].Split(new char[] { '-' });       // 해당 게시글 평점(0.0-0) 형식이라 Split작업
+            int starCount = int.Parse(totRateArr[1]);                            // 해당 게시글의 평점(별 수)
+            string starScore = totRateArr[0];                                     // 해당 게시글의 평점(소수)
+            string starText = "";
+            int replyCount = getCommentByTrvNo();                          // 해당 게시글의 댓글 수
+
+            for(int i = 0; i < starCount; i++) // 별 수만큼 for문 반복해서 starText 변수에 ⭐ 삽입
+                starText += "⭐";
+
+            // ======================================
+        %>
         <div id="main">
-           
             <div class="board">
-                <div class="board-header">저는 제목 입니다.</div>
+                <div class="board-header">
+                    <div class = "header-item"><%Response.Write(TravelList[5].ToString());%></div>
+                    <div class = "good-item">
+                        <button class = "goodBtn">👍</button>
+                    </div>
+                    <div class = "good-cnt"><%Response.Write(goodCnt);%></div>
+                </div>
                 <div class="board-writer">
                     <div class="writer-Image">
                         <a href="#">
-                            <img src="./img/areaImage.jpg" alt="writerImage" class="writer-ImageItem" />
+                            <img src="<%Response.Write(MemberList[12].ToString());%>" alt="writerImage" class="writer-ImageItem" />
                         </a>
                     </div>
                     <div class="writer-Text">
                         <div class="writerID">
                             <a href="#">
-                                milk9503
+                                <%Response.Write(MemberList[0].ToString());%>
                             </a>
                         </div>
-                        <div class="writerTime">2019-11-04 22:00</div>
+                        <div class="writerTime"><%Response.Write(TravelList[8].ToString());%></div>
                     </div>
                 </div>
                 <div class="board-score">
-                    <span class="star">⭐⭐⭐</span>
-                    <span class="score">(3.3)</span>
+                    <span class="star"><%Response.Write(starText);%></span>
+                    <span class="score">(<%Response.Write(starScore.ToString());%>)</span>
                 </div>
                 <div class="board-content">
                     <div class="board-map">지도 넣을 곳<br />지도 넣을 때 style 가셔서<br />display, align-items, justify-content 지워주세요</div>
@@ -766,24 +983,6 @@
                             <rootitem>
                                 <root-header>여행 간 경로</root-header>
                                 <root-content>
-                                    <content-item>
-                                        <content-header>1일 차</content-header>
-                                        <content-body>
-                                            <ul class = "content-ul">
-                                                <li class = "content-li">서울</li>
-                                                <li class = "content-li">서울</li>
-                                            </ul>
-                                        </content-body>
-                                    </content-item>
-                                    <content-item>
-                                        <content-header>2일 차</content-header>
-                                        <content-body>
-                                            <ul class = "content-ul">
-                                                <li class = "content-li">서울</li>
-                                                <li class = "content-li">서울</li>
-                                            </ul>
-                                        </content-body>
-                                    </content-item>
                                 </root-content>
                             </rootitem>
                         </div>
@@ -791,24 +990,6 @@
                             <costitem>
                                 <cost-header>여행 간 경비</cost-header>
                                 <cost-content>
-                                    <content-item>
-                                        <content-header>1일 차</content-header>
-                                        <content-body>
-                                            <ul class="content-ul">
-                                                <li class="content-li">식비 5000원 (햄버거)</li>
-                                                <li class="content-li">교통비 2500원 (버스)</li>
-                                            </ul>
-                                        </content-body>
-                                    </content-item>
-                                    <content-item>
-                                        <content-header>2일 차</content-header>
-                                        <content-body>
-                                            <ul class="content-ul">
-                                                <li class="content-li">식비 5000원 (햄버거)</li>
-                                                <li class="content-li">교통비 2500원 (버스)</li>
-                                            </ul>
-                                        </content-body>
-                                    </content-item>
                                 </cost-content>
                             </costitem>
                         </div>
@@ -816,284 +997,130 @@
                 </div>
             </div>
             
-            <div class = "board-part">
-                <div class = "part-board-header">1일 차</div>
-                <div class = "part-board-content">
-                    <div class = "part-board-map">지도 넣을 곳<br />지도 넣을 때 style 가셔서<br />display, align-items, justify-content 지워주세요</div>
-                    <div class = "part-board-travel">
-                        <div class = "part-travel-root">
-                            <rootitem>
-                                <root-header>여행 간 경로</root-header>
-                                <root-content>
-                                    <content-item>
-                                        <content-header>여행 경로</content-header>
-                                        <content-body>
-                                            <ul class = "part-content-ul">
-                                                <li class = "part-content-li">서울</li>
-                                                <li class = "part-content-li">서울</li>
-                                            </ul>
-                                        </content-body>
-                                    </content-item>
-                                </root-content>
-                            </rootitem>
-                        </div>
-                        <div class = "part-travel-cost">
-                            <costitem>
-                                <cost-header>여행 간 경비</cost-header>
-                                <cost-content>
-                                    <content-item>
-                                        <content-header>여행 경비</content-header>
-                                        <content-body>
-                                            <ul class = "part-content-ul">
-                                                <li class = "part-content-li">식비 5000원 (햄버거)</li>
-                                                <li class = "part-content-li">교통비 2500원 (버스)</li>
-                                            </ul>
-                                        </content-body>
-                                    </content-item>
-                                </cost-content>
-                            </costitem>
-                        </div>
-                    </div>
-                </div>
-                <div class = "part-board-story">
-                    <div class = "part-story">
-                        재밌는 이야기<br/><br/>
-                        <img src = "https://source.unsplash.com/category/nature/300x300" style="width: 300px; height: 300px;"><br/><br/>
-                        재밌는 이야기<br/><br/>
-                        <img src = "https://source.unsplash.com/category/nature/300x300" style="width: 300px; height: 300px;"><br/><br/>
-                        재밌는 이야기<br/><br/>
-                        <img src = "https://source.unsplash.com/category/nature/300x300" style="width: 300px; height: 300px;"><br/><br/>
-                        재밌는 이야기<br/><br/>
-                        <img src = "https://source.unsplash.com/category/nature/300x300" style="width: 300px; height: 300px;"><br/><br/>
-                    </div>
-                </div>
-            </div>
-            <div class = "board-part">
-                <div class = "part-board-header">2일 차</div>
-                <div class = "part-board-content">
-                    <div class = "part-board-map">지도 넣을 곳<br />지도 넣을 때 style 가셔서<br />display, align-items, justify-content 지워주세요</div>
-                    <div class = "part-board-travel">
-                        <div class = "part-travel-root">
-                            <rootitem>
-                                <root-header>여행 간 경로</root-header>
-                                <root-content>
-                                    <content-item>
-                                        <content-header>여행 경로</content-header>
-                                        <content-body>
-                                            <ul class = "part-content-ul">
-                                                <li class = "part-content-li">서울</li>
-                                                <li class = "part-content-li">서울</li>
-                                            </ul>
-                                        </content-body>
-                                    </content-item>
-                                    <content-item>
-                                        <content-header>여행 경로</content-header>
-                                        <content-body>
-                                            <ul class = "part-content-ul">
-                                                <li class = "part-content-li">서울</li>
-                                                <li class = "part-content-li">서울</li>
-                                            </ul>
-                                        </content-body>
-                                    </content-item>
-                                    <content-item>
-                                        <content-header>여행 경로</content-header>
-                                        <content-body>
-                                            <ul class = "part-content-ul">
-                                                <li class = "part-content-li">서울</li>
-                                                <li class = "part-content-li">서울</li>
-                                            </ul>
-                                        </content-body>
-                                    </content-item>
-                                    <content-item>
-                                        <content-header>여행 경로</content-header>
-                                        <content-body>
-                                            <ul class = "part-content-ul">
-                                                <li class = "part-content-li">서울</li>
-                                                <li class = "part-content-li">서울</li>
-                                            </ul>
-                                        </content-body>
-                                    </content-item>
-                                    <content-item>
-                                        <content-header>여행 경로</content-header>
-                                        <content-body>
-                                            <ul class = "part-content-ul">
-                                                <li class = "part-content-li">서울</li>
-                                                <li class = "part-content-li">서울</li>
-                                            </ul>
-                                        </content-body>
-                                    </content-item>
-                                </root-content>
-                            </rootitem>
-                        </div>
-                        <div class = "part-travel-cost">
-                            <costitem>
-                                <cost-header>여행 간 경비</cost-header>
-                                <cost-content>
-                                    <content-item>
-                                        <content-header>여행 경비</content-header>
-                                        <content-body>
-                                            <ul class = "part-content-ul">
-                                                <li class = "part-content-li">식비 5000원 (햄버거)</li>
-                                                <li class = "part-content-li">교통비 2500원 (버스)</li>
-                                            </ul>
-                                        </content-body>
-                                    </content-item>
-                                </cost-content>
-                            </costitem>
-                        </div>
-                    </div>
-                </div>
-                <div class = "part-board-story">
-                    <div class = "part-story">
-                        재밌는 이야기<br/><br/>
-                        <img src = "https://source.unsplash.com/category/nature/300x300" style="width: 300px; height: 300px;"><br/><br/>
-                        재밌는 이야기<br/><br/>
-                        <img src = "https://source.unsplash.com/category/nature/300x300" style="width: 300px; height: 300px;"><br/><br/>
-                        재밌는 이야기<br/><br/>
-                        <img src = "https://source.unsplash.com/category/nature/300x300" style="width: 300px; height: 300px;"><br/><br/>
-                        재밌는 이야기<br/><br/>
-                        <img src = "https://source.unsplash.com/category/nature/300x300" style="width: 300px; height: 300px;"><br/><br/>
-                    </div>
-                </div>
-            </div>
+            <%
+                for (int i = 0; i < TravelDayContents.Count; i++)
+                {
+                    Response.Write("" +
+                    "<div class = \"board-part\">\n" +
+                        "<div class = \"part-board-header\">" + (day + 1) + "일 차</div>\n" +
+                        "<div class = \"part-board-content\">\n" +
+                            "<div class = \"part-board-map\">지도 넣을 곳<br />지도 넣을 때 style 가셔서<br />display, align-items, justify-content 지워주세요</div>\n" +
+                            "<div class = \"part-board-travel\">\n" +
+                                "<div class = \"part-travel-root\">\n" +
+                                    "<rootitem>\n" +
+                                        "<root-header>여행 간 경로</root-header>\n" +
+                                        "<root-content>\n" +
+                                            "<content-item>\n" +
+                                                "<content-header>여행 경로</content-header>\n" +
+                                                "<content-body>\n" +
+                                                "</content-body>\n" +
+                                            "</content-item>\n" +
+                                        "</root-content>\n" +
+                                    "</rootitem>\n" +
+                                "</div>\n" +
+                                "<div class = \"part-travel-cost\">\n" +
+                                    "<costitem>\n" +
+                                        "<cost-header>여행 간 경비</cost-header>\n" +
+                                        "<cost-content>\n" +
+                                            "<content-item>\n" +
+                                                "<content-header>여행 경비</content-header>\n" +
+                                                "<content-body>\n" +
+                                                "</content-body>\n" +
+                                            "</content-item>\n" +
+                                        "</cost-content>\n" +
+                                    "</costitem>\n" +
+                                "</div>\n" +
+                            "</div>\n" +
+                        "</div>\n" +
+                        "<div class = \"part-board-story\">\n" +
+                            "<div class = \"part-story\">\n" +
+                                TravelDayContents[day++] + "\n" +
+                            "</div>\n" +
+                        "</div>\n" +
+                    "</div>\n");
+                }
+            %>
             
             <div class = "board-hashtag">
-                <a href = "#"><div class = "hashtag">#여행</div></a>
-                <a href = "#"><div class = "hashtag">#아랄라라라랄</div></a>
-                <a href = "#"><div class = "hashtag">#테스트</div></a>
+<%
+                // hashtag 누르면 search.aspx?hashtag=○○○○ 로 이동
+                List<String> hashtagList = getHashTagList();
+                for(int i = 0; i < hashtagList.Count; i++)
+                {
+                    Response.Write("<a href = \"search.aspx?hashtag=" + hashtagList[i].ToString() + "\"><div class = \"hashtag\">" + hashtagList[i].ToString() + "</div></a>\n");
+                }
+%>
             </div>
+
             <div class = "board-reply">
                 <div class = "reply-header">
                     <span class="replyText">댓글</span>&nbsp;
-                    <span class="replyCount">5</span>
+                    <span class="replyCount"><%Response.Write(replyCount);%></span>
                 </div>
                 <div class = "reply-contents">
-                    <div class = "replyItem">
-                        <div class = "reply-writer">
-                            <div class="writer-Image">
-                                <a href="#">
-                                    <img src="./img/areaImage.jpg" alt="writerImage" class="writer-ImageItem" />
-                                </a>
-                            </div>
-                            <div class="writer-Text">
-                                <div class="writerID">
-                                    <a href="#">
-                                        milk9503
-                                    </a>
-                                </div>
-                                <div class="writerTime">2019-11-04 22:00</div>
-                            </div>
-                        </div>
-                        <div class = "reply-content">
-                            멋지네용
-                        </div>
-                        <div class = "reply-score">
-                            <span class="star">⭐⭐⭐</span>
-                            <span class="score">(3.3)</span>
-                        </div>
-                    </div>
-                    <div class = "replyItem">
-                        <div class = "reply-writer">
-                            <div class="writer-Image">
-                                <a href="#">
-                                    <img src="./img/areaImage.jpg" alt="writerImage" class="writer-ImageItem" />
-                                </a>
-                            </div>
-                            <div class="writer-Text">
-                                <div class="writerID">
-                                    <a href="#">
-                                        milk9503
-                                    </a>
-                                </div>
-                                <div class="writerTime">2019-11-04 22:00</div>
-                            </div>
-                        </div>
-                        <div class = "reply-content">
-                            멋지네용
-                        </div>
-                        <div class = "reply-score">
-                            <span class="star">⭐⭐⭐</span>
-                            <span class="score">(3.3)</span>
-                        </div>
-                    </div>
-                    <div class = "replyItem">
-                        <div class = "reply-writer">
-                            <div class="writer-Image">
-                                <a href="#">
-                                    <img src="./img/areaImage.jpg" alt="writerImage" class="writer-ImageItem" />
-                                </a>
-                            </div>
-                            <div class="writer-Text">
-                                <div class="writerID">
-                                    <a href="#">
-                                        milk9503
-                                    </a>
-                                </div>
-                                <div class="writerTime">2019-11-04 22:00</div>
-                            </div>
-                        </div>
-                        <div class = "reply-content">
-                            멋지네용
-                        </div>
-                        <div class = "reply-score">
-                            <span class="star">⭐⭐⭐</span>
-                            <span class="score">(3.3)</span>
-                        </div>
-                    </div>
-                    <div class = "replyItem">
-                        <div class = "reply-writer">
-                            <div class="writer-Image">
-                                <a href="#">
-                                    <img src="./img/areaImage.jpg" alt="writerImage" class="writer-ImageItem" />
-                                </a>
-                            </div>
-                            <div class="writer-Text">
-                                <div class="writerID">
-                                    <a href="#">
-                                        milk9503
-                                    </a>
-                                </div>
-                                <div class="writerTime">2019-11-04 22:00</div>
-                            </div>
-                        </div>
-                        <div class = "reply-content">
-                            멋지네용
-                        </div>
-                        <div class = "reply-score">
-                            <span class="star">⭐⭐⭐</span>
-                            <span class="score">(3.3)</span>
-                        </div>
-                    </div>
-                    <div class = "replyItem">
-                        <div class = "reply-writer">
-                            <div class="writer-Image">
-                                <a href="#">
-                                    <img src="./img/areaImage.jpg" alt="writerImage" class="writer-ImageItem" />
-                                </a>
-                            </div>
-                            <div class="writer-Text">
-                                <div class="writerID">
-                                    <a href="#">
-                                        milk9503
-                                    </a>
-                                </div>
-                                <div class="writerTime">2019-11-04 22:00</div>
-                            </div>
-                        </div>
-                        <div class = "reply-content">
-                            멋지네용
-                        </div>
-                        <div class = "reply-score">
-                            <span class="star">⭐⭐⭐</span>
-                            <span class="score">(3.3)</span>
-                        </div>
-                    </div>
+<%
+    for (int k = 0; k < CommentList.Count; k++)
+    {
+        Member member = new Member();
+        MemberDao memberDao = new MemberDao();
+
+        member.Mem_id = CommentList[k].Mem_id;
+        member = memberDao.selectMemberByMem_id(member); // 메인 이미지 찾기 작업
+
+        string memMainImg = member.Mem_img_url;
+        if (memMainImg == "noImage")
+            memMainImg = "./img/noImage.png";
+
+        double d_replyStarCount = double.Parse(CommentList[k].Cmt_rate.ToString()); // 소수 출력
+        int i_replyStarCount = (int)d_replyStarCount; // 별 갯수
+        string s_replyStarCount = "";
+
+        for(int l = 0; l < i_replyStarCount; l++)
+            s_replyStarCount += "⭐";
+
+        Response.Write("" +
+                           "<div class = \"replyItem\">\n" +
+                                "<div class = \"reply-writer\">\n" +
+                                    "<div class=\"writer-Image\">\n" +
+                                        "<a href=\"#\">\n" +
+                                            "<img src=\"" + memMainImg + "\" alt=\"" + CommentList[k].Mem_id + "\" class=\"writer-ImageItem\" />\n" +
+                                        "</a>\n" +
+                                    "</div>\n" +
+                                    "<div class=\"writer-Text\">\n" +
+                                        "<div class=\"writerID\">\n" +
+                                            "<a href=\"#\">\n" +
+                                                CommentList[k].Mem_id + "\n" +
+                                            "</a>\n" +
+                                        "</div>\n" +
+                                        "<div class=\"writerTime\">" + CommentList[k].Cmt_timestamp + "</div>\n" +
+                                    "</div>\n" +
+                                "</div>\n" +
+                                "<div class = \"reply-content\">\n" +
+                                    CommentList[k].Cmt_content + "\n" +
+                                "</div>\n" +
+                                "<div class = \"reply-score\">\n" +
+                                    "<span class=\"star\">" + s_replyStarCount + "</span>\n" +
+                                    "<span class=\"score\">(" + d_replyStarCount + ")</span>\n" +
+                                "</div>\n" +
+                            "</div>\n");
+    }
+%>
                 </div>
                 <div class = "reply-write">
                     <div class = "reply-write-input">
                         <textarea id="reply-write-text"></textarea>
                     </div>
                     <div class = "reply-write-item">
+                        <span class="star" style="font-size: 18px; padding-right: 3px; padding-bottom: 3px;">⭐</span>
+                        <div class = "reply-star-input">
+                            <select class = "reply-star">
+                                <option value="5">5</option>
+                                <option value="4">4</option>
+                                <option value="3" selected>3</option>
+                                <option value="2">2</option>
+                                <option value="1">1</option>
+                            </select>
+                        </div>
                         <div class = "reply-write-limit">
                             <span id = "limitText">(0 / 200)</span>
                         </div>

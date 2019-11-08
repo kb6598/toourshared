@@ -74,7 +74,7 @@ public class ReportDao
         {
             con = mydb.GetCon();
 
-            string Sql = "SELECT * FROM toourshared.report where report=@rep_no";
+            string Sql = "SELECT * FROM toourshared.report where rep_no=@rep_no";
 
 
             MySqlCommand cmd = new MySqlCommand(Sql, con);
@@ -101,7 +101,7 @@ public class ReportDao
                 return result;
 
             }
-
+            rd.Close();
             con.Close();
 
         }
