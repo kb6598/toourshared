@@ -110,4 +110,25 @@ public class Member_BlockDao
         }
         return result;
     }
+
+    public DataSet Select_MemberID()
+    {
+        MyDB myDB = new MyDB();
+        MySqlConnection con = myDB.GetCon();
+
+        string sql = "select mem_blo_no, mem_id, mem_blo_date, mem_blo_length from member_block" 
+        + " where mem_id in (Select distinct travel.mem_id from toourshared.travel, toourshared.member where member.mem_state = 1 and travel.trv_secret = 3)";
+
+        MySqlCommand cmd = new MySqlCommand(sql, con);
+
+        MySqlDataAdapter ad = new MySqlDataAdapter();
+
+        ad.SelectCommand = cmd;
+
+        DataSet ds = new DataSet();
+
+        ad.Fill(ds);
+
+        return ds;
+    }
 }

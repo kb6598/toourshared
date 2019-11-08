@@ -312,38 +312,5 @@ namespace tooushared.DAO
             return FindPW;
 
         }
-
-        public DataSet Select_MemberID()
-        {
-            MyDB myDB = new MyDB();
-            MySqlConnection con2 = myDB.GetCon();
-
-            string sql = "Select travel.mem_id from toourshared.travel, toourshared.member" +
-                "   where member.mem_state= 1 and travel.trv_secret = 3";
-            string userID = "";
-
-            MySqlCommand cmd2 = new MySqlCommand(sql, con2);
-            con2.Open();
-
-            MySqlDataReader rd = cmd2.ExecuteReader();
-            while (rd.Read())
-            {
-                userID = rd["mem_id"].ToString();
-            }
-
-            rd.Close();
-            con2.Close();
-
-            string sql2 = "select member_block.mem_blo_no, member_block.mem_id, member_block.mem_blo_date, member_block.mem_blo_length" +
-                "from member_block where toourshared.member_block.mem_id = " + userID;
-
-            cmd2 = new MySqlCommand(sql2, con2);
-            MySqlDataAdapter ad = new MySqlDataAdapter();
-            ad.SelectCommand = cmd2;
-
-            DataSet ds2 = new DataSet();
-            ad.Fill(ds2);
-            return ds2;
-        }
     }
 }

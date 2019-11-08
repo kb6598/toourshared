@@ -42,8 +42,8 @@ namespace adminForm
             dataGridView1.Columns[4].HeaderCell.Value = "신고 사유";
         }
 
-        //신고글 계정 조회 기능(함수)
-        public void Member_Bind()
+        //계정정지 목록 조회 기능(함수)
+        public void Member_BlockList()
         {
             Member_Block memberBlock = new Member_Block();
             Member_BlockDao memberBlockDao = new Member_BlockDao();
@@ -58,18 +58,19 @@ namespace adminForm
             dataGridView2.Columns[3].HeaderCell.Value = "계정정지 기간";            
         }
 
-        public void ABC()
+        //신고글의 계정 목록 조회 기능(함수)
+        public void Report_MemberList()
         {
-            MemberDao memberDao = new MemberDao();
+            Member_BlockDao memberDao = new Member_BlockDao();
             Member member = new Member();
 
             DataSet ds = memberDao.Select_MemberID();
             dataGridView2.DataSource = ds.Tables[0];
 
-            dataGridView2.Columns[0].HeaderCell.Value = "해당 ID";
+            dataGridView2.Columns[0].HeaderCell.Value = "정지 번호";
             dataGridView2.Columns[1].HeaderCell.Value = "해당 계정";
-            dataGridView2.Columns[2].HeaderCell.Value = "해당 일정";
-            dataGridView2.Columns[3].HeaderCell.Value = "해당 시간";
+            dataGridView2.Columns[2].HeaderCell.Value = "정지 일자";
+            dataGridView2.Columns[3].HeaderCell.Value = "정지 기간";
         }
 
         //신고목록조회 버튼
@@ -105,6 +106,7 @@ namespace adminForm
 
             Travel inputTravel = new Travel();
             Travel outputTravel = new Travel();
+            Member inputMember = new Member();
             TravelDao travelDao = new TravelDao();
             Report delete = new Report();
 
@@ -222,15 +224,16 @@ namespace adminForm
         //계정정지 목록 조회버튼
         private void button4_Click(object sender, EventArgs e)
         {
-            Member_Bind();
+            Member_BlockList();
         }
 
-        //계정정지 목록 조회버튼
+        //신고글의 계정목록 조회버튼
         private void button5_Click(object sender, EventArgs e)
         {
-            ABC();
+            Report_MemberList();
         }
 
+        //기능 의 조회버튼
         private void button6_Click(object sender, EventArgs e)
         {
 
