@@ -207,7 +207,7 @@ public class CommentDao
         try
         {
             con = mydb.GetCon();
-            string Sql = "SELECT * FROM toourshared.comment where trv_no = @trv_no";
+            string Sql = "SELECT * FROM toourshared.comment where trv_no = @trv_no order by cmt_timestamp desc";
 
             MySqlCommand cmd = new MySqlCommand(Sql, con);
             cmd.Parameters.AddWithValue("@trv_no", travel.Trv_no);
