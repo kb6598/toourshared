@@ -38,9 +38,6 @@
             Travel curTravel = travelDao.selectTravelBytrv_no(inTravel);
 
             //update Travel
-            //loc_name을 가져와야함
-            //curTravel.Loc_name = Request.Form["loc_name"];
-            //curTravel.Trv_main_img = Request.Form["main_img"];
             curTravel.Trv_no = WriteStatus["trv_no"];
             curTravel.Trv_secret = Request.Form["trv_secret"];
             curTravel.Trv_tag = Request.Form["hashtag"];
@@ -62,12 +59,13 @@
             inMap.Map_cost = Request.Form["mapCost"];
             inMap.Map_data = Request.Form["mapData"];
             inMap.Map_route = Request.Form["mapRoute"];
-            inMap.Trv_day_no = WriteStatus["cur_trv_day_no"];
+            inMap.Trv_day_no = inTravelDay.Trv_day_no;
 
             mapDao.UpdateMapByTrvDayNo(inMap);
-        }
-        Session.Remove("write_status");
+            Session.Remove("write_status");
         Response.Redirect("./MyPage.aspx");
+        }
+        
 
 
 

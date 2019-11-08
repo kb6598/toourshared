@@ -65,11 +65,13 @@
             Map inMap = new Map();
             MapDao mapDao = new MapDao();
             inMap.Map_cost = Request.Form["mapCost"];
-            inMap.Map_data = Request.Form["mapData"];
+            inMap.Map_data = Request.Form["mapData"]; 
             inMap.Map_route = Request.Form["mapRoute"];
-            inMap.Trv_day_no = WriteStatus["cur_trv_day_no"];
+            inMap.Trv_day_no = inTravelDay.Trv_day_no;
 
             mapDao.UpdateMapByTrvDayNo(inMap);
+
+
 
             //cur_day를 바꾸어서 넘겨준다
             WriteStatus["cur_day"] = Request.Form["targetDay"];
@@ -77,7 +79,7 @@
 
 
 
-   
+
 
 
             Session["write_status"] = WriteStatus;
