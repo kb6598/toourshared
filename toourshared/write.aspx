@@ -59,6 +59,7 @@
             inTravel.Trv_tot_rate = 0.ToString();
             inTravel.Trv_views = 0.ToString();
 
+            // insert new travel
             TravelDao travelDao = new TravelDao();
             string trv_no = travelDao.InsertTravel(inTravel);
 
@@ -66,17 +67,17 @@
 
             //create travel_day
             Travel_Day travel_Day = new Travel_Day();
-            
-            travel_Day.Trv_no = trv_no;              
-            Travel_DayDao travel_DayDao = new Travel_DayDao();
 
+            travel_Day.Trv_no = trv_no;
+            Travel_DayDao travel_DayDao = new Travel_DayDao();
+            //insert new travel_day
             string trv_day_no = travel_DayDao.InsertTravel_Day(travel_Day);
 
 
-             //create map
+            //create map
             Map inMap = new Map();
             MapDao mapDao = new MapDao();
-
+            // insert new map
             inMap.Trv_day_no = trv_day_no;
             mapDao.InsertMap(inMap);
 
@@ -97,15 +98,15 @@
 
         }
         Dictionary<string, string> readWriteStatus = SessionLib.getWriteStatus();
-                    foreach(var item in readWriteStatus)
-            {
-                Response.Write(item.Key+" : "+item.Value+"<br/>");
-            }
+        foreach(var item in readWriteStatus)
+        {
+            Response.Write(item.Key+" : "+item.Value+"<br/>");
+        }
 
     }
     protected void BindTables()
     {
-        
+
 
         Dictionary<string, string> readWriteStatus = SessionLib.getWriteStatus();
         if (readWriteStatus != null)
@@ -153,12 +154,21 @@
         if (readWriteStatus != null)
         {
             int i = 1;
-            ListItem lst;
+            string option = "";
+
             while (true)
             {
                 if (!readWriteStatus.ContainsKey(i.ToString())) break;
-                lst = new ListItem(i + "일차", i.ToString());
-                goDay.Items.Add(lst);
+                // 들어가는 값이 현재일과 같을경우 option을 selected 요소로 추가
+                if(i.ToString().Equals(readWriteStatus["cur_day"]))
+                {
+                    Literal_goDay.Text += "<option value='"+i.ToString()+"' selected>"+i.ToString()+" 일차</option>";
+                }
+                else
+                {
+                    Literal_goDay.Text += "<option value='"+i.ToString()+"'>"+i.ToString()+" 일차</option>";
+                }
+
                 i++;
             }
         }
@@ -198,11 +208,11 @@
 
     protected void Page_Load(object sender, EventArgs e)
     {
-        BindTables();
+        
         WriteSessionProcess();
         BindDropDownList();
         Bind_otherData();
-        
+        BindTables();
     }
 
 </script>
@@ -291,6 +301,8 @@
             });
         });
 
+
+
     </script>
 </head>
 <body>
@@ -372,7 +384,7 @@
             <!-- 메인 상단 영역 -->
             <div class="TitleArea">
                 <div class="TitleAlign">
-                            <asp:HiddenField ID="mapData" runat="server" />
+        <asp:HiddenField ID="mapData" runat="server" />
         <asp:HiddenField ID="mapRoute" runat="server" />
         <asp:HiddenField ID="mapCost" runat="server" />
                     <asp:TextBox ID="title"  runat="server" type="text" placeholder="게시글의 제목을 정해주세요." />
@@ -384,8 +396,10 @@
                     </div>
                     <div class="SubItem">
 
-                        <asp:DropDownList ID="goDay" runat="server" onchange="goDay()">
-                        </asp:DropDownList>
+                    <select name="goDay" id="goDay" class="goDay" onchange="gotoDay()">
+                        <asp:Literal ID="Literal_goDay" runat="server"></asp:Literal>
+
+                    </select>
 
                     </div>
                 </div>
@@ -613,15 +627,16 @@
      
             
     }
-    function goDay() {
+
+    function gotoDay() {
         addDataAtForm();
 
         var targetDay = document.getElementById("goDay").value;
-            var targetDayData = document.createElement("input"); // input 엘리멘트 생성
-            targetDayData.setAttribute("type", "hidden"); // type 속성을 hidden으로 설정
-            targetDayData.setAttribute("name", "targetDay"); // name 속성을 'stadium'으로 설정
-            targetDayData.setAttribute("value", targetDay); // value 속성을 삽입
-            form.appendChild(targetDayData);
+        var targetDayData = document.createElement("input"); // input 엘리멘트 생성
+        targetDayData.setAttribute("type", "hidden"); // type 속성을 hidden으로 설정
+        targetDayData.setAttribute("name", "targetDay"); // name 속성을 'stadium'으로 설정
+        targetDayData.setAttribute("value", targetDay); // value 속성을 삽입
+        form.appendChild(targetDayData);
 
 
         form.setAttribute('action', "Write_goDay.aspx");
@@ -634,14 +649,14 @@
         form.setAttribute('action', "Write_tmpSave.aspx");
         form.submit(); // 전송
     }
-    function nextDay() {
+    function addDay() {
         addDataAtForm();
-        form.setAttribute('action', "Write_nextDay.aspx");
+        form.setAttribute('action', "Write_addDay.aspx");
         form.submit(); // 전송
     }
     function endWrite() {
         addDataAtForm();
-        form.setAttribute('action', "Write_get_endWrite.aspx");
+        form.setAttribute('action', "Write_endWrite.aspx");
         form.submit(); // 전송
     }
 
@@ -704,21 +719,7 @@
 
 
 
-    function tmpSave() {
-        addDataAtForm();
-        form.setAttribute('action', "Write_tmpSave.aspx");
-        form.submit(); // 전송
-    }
-    function addDay() {
-        addDataAtForm();
-        form.setAttribute('action', "Write_AddDay.aspx");
-        form.submit(); // 전송
-    }
-    function endWrite() {
-        addDataAtForm();
-        form.setAttribute('action', "Write_get_endWrite.aspx");
-        form.submit(); // 전송
-    }
+
 
     //------------------------------------
     //----------Post END
@@ -848,7 +849,7 @@
         for (; i < len; i++) {
             
             var path = pointsToPath(polygons[i].points);
-            manager.put(kakao.maps.drawing.OverlayType.POLYLINE, path);
+            manager.put(kakao.maps.drawing.OverlayType.POLYGON, path);
            
         }
     }
