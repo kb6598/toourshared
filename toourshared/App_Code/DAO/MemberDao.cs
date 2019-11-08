@@ -333,5 +333,82 @@ namespace tooushared.DAO
             return FindPW;
 
         }
+
+        /*public void UpdateMemberStateByMemId(Member member, int State)
+        {
+            MyDB mydb = new MyDB();
+            MySqlConnection con;
+
+            try
+            {
+                con = mydb.GetCon();
+                String Sql = "UPDATE toourshared.member SET mem_state = " + State + " WHERE mem_id = @mem_id";
+
+                MySqlCommand cmd = new MySqlCommand(Sql, con);
+                cmd.Parameters.AddWithValue("@mem_id", member.Mem_id);
+
+                con.Open();
+                cmd.ExecuteNonQuery();
+                con.Close();
+            }
+            catch (Exception e) {;}
+        }*/
+
+        public Member selectMemberBytrv_no(Member member)
+        {
+
+            MyDB mydb = new MyDB();
+
+            Member result = new Member();
+            MySqlConnection con;
+
+            try
+            {
+
+                con = mydb.GetCon();
+
+                string Sql = "Select mem_id,mem_state, mem_phone, mem_pw, mem_name, mem_sex, mem_ques, mem_answer, mem_birth, mem_email, " +
+                    "mem_reg_date, mem_timestmap, mem_img_url From toourshared.member, toourshared.travel where travel.mem_id = @mem_id and member.mem_id = travel.mem_id";
+
+
+                MySqlCommand cmd = new MySqlCommand(Sql, con);
+
+                cmd.Parameters.AddWithValue("@mem_id", member.Mem_id);
+
+                con.Open();
+                MySqlDataReader rd = cmd.ExecuteReader();
+
+                if (rd.HasRows)
+                {
+                    rd.Read();
+
+                    result.Mem_id = rd["mem_id"].ToString();
+                    result.Mem_state = rd["mem_state"].ToString();
+                    result.Mem_phone = rd["mem_phone"].ToString();
+                    result.Mem_pw = rd["mem_pw"].ToString();
+                    result.Mem_name = rd["mem_name"].ToString();
+                    result.Mem_sex = rd["mem_sex"].ToString();
+                    result.Mem_ques = rd["mem_ques"].ToString();
+                    result.Mem_answer = rd["mem_answer"].ToString();
+                    result.Mem_birth = rd["mem_birth"].ToString();
+                    result.Mem_email = rd["mem_email"].ToString();
+                    result.Mem_reg_datetime = rd["mem_reg_datetime"].ToString();
+                    result.Mem_timestmap = rd["mem_timestamp"].ToString();
+                    result.Mem_img_url = rd["mem_img_url"].ToString();
+
+                    return result;
+                }
+
+                con.Close();
+
+            }
+
+            catch (Exception ex)
+            {
+                Console.Write(ex.ToString());
+            }
+
+            return result;
+        }
     }
 }

@@ -313,37 +313,44 @@ namespace tooushared.DAO
 
         }
 
-        public DataSet Select_MemberID()
+        public void UpdateMemberStateByMemId(Member member, int State)
         {
-            MyDB myDB = new MyDB();
-            MySqlConnection con2 = myDB.GetCon();
+            MyDB mydb = new MyDB();
+            MySqlConnection con;
 
-            string sql = "Select travel.mem_id from toourshared.travel, toourshared.member" +
-                "   where member.mem_state= 1 and travel.trv_secret = 3";
-            string userID = "";
-
-            MySqlCommand cmd2 = new MySqlCommand(sql, con2);
-            con2.Open();
-
-            MySqlDataReader rd = cmd2.ExecuteReader();
-            while (rd.Read())
+            try
             {
-                userID = rd["mem_id"].ToString();
+                con = mydb.GetCon();
+                String Sql = "UPDATE toourshared.member SET mem_state = " + State + " WHERE mem_id = @mem_id";
+
+                MySqlCommand cmd = new MySqlCommand(Sql, con);
+                cmd.Parameters.AddWithValue("@mem_id", member.Mem_id);
+
+                con.Open();
+                cmd.ExecuteNonQuery();
+                con.Close();
             }
+            catch (Exception e) {; }
+        }
 
-            rd.Close();
-            con2.Close();
+        public void MemberBlock_Unlock(Member member, int State)
+        {
+            MyDB mydb = new MyDB();
+            MySqlConnection con;
 
-            string sql2 = "select member_block.mem_blo_no, member_block.mem_id, member_block.mem_blo_date, member_block.mem_blo_length" +
-                "from member_block where toourshared.member_block.mem_id = " + userID;
+            try
+            {
+                con = mydb.GetCon();
+                String Sql = "UPDATE toourshared.member SET mem_state = " + State + " Where mem_id = @mem_id";
 
-            cmd2 = new MySqlCommand(sql2, con2);
-            MySqlDataAdapter ad = new MySqlDataAdapter();
-            ad.SelectCommand = cmd2;
+                MySqlCommand cmd = new MySqlCommand(Sql, con);
+                cmd.Parameters.AddWithValue("@mem_id", member.Mem_id);
 
-            DataSet ds2 = new DataSet();
-            ad.Fill(ds2);
-            return ds2;
+                con.Open();
+                cmd.ExecuteNonQuery();
+                con.Close();
+            }
+            catch (Exception e) {; }
         }
     }
 }

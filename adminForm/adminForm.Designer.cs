@@ -37,7 +37,6 @@
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.button6 = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
             this.dataGridView2 = new System.Windows.Forms.DataGridView();
             this.mySqlCommand1 = new MySql.Data.MySqlClient.MySqlCommand();
             this.tabControl1.SuspendLayout();
@@ -115,7 +114,6 @@
             // 
             this.tabPage2.Controls.Add(this.button6);
             this.tabPage2.Controls.Add(this.button5);
-            this.tabPage2.Controls.Add(this.button4);
             this.tabPage2.Controls.Add(this.dataGridView2);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
@@ -127,7 +125,7 @@
             // 
             // button6
             // 
-            this.button6.Location = new System.Drawing.Point(313, 6);
+            this.button6.Location = new System.Drawing.Point(394, 6);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(90, 23);
             this.button6.TabIndex = 10;
@@ -137,23 +135,13 @@
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(409, 6);
+            this.button5.Location = new System.Drawing.Point(490, 6);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(90, 23);
             this.button5.TabIndex = 9;
-            this.button5.Text = "신고글의 계정";
+            this.button5.Text = "계정정지 해제";
             this.button5.UseVisualStyleBackColor = true;
             this.button5.Click += new System.EventHandler(this.button5_Click);
-            // 
-            // button4
-            // 
-            this.button4.Location = new System.Drawing.Point(505, 6);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(75, 23);
-            this.button4.TabIndex = 8;
-            this.button4.Text = "해제";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button6_Click);
             // 
             // dataGridView2
             // 
@@ -198,7 +186,6 @@
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.Button button5;
-        private System.Windows.Forms.Button button4;
         private System.Windows.Forms.DataGridView dataGridView2;
         private MySql.Data.MySqlClient.MySqlCommand mySqlCommand1;
     }

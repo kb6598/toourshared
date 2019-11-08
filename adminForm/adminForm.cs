@@ -42,8 +42,8 @@ namespace adminForm
             dataGridView1.Columns[4].HeaderCell.Value = "신고 사유";
         }
 
-        //신고글 계정 조회 기능(함수)
-        public void Member_Bind()
+        //계정정지 목록 조회 기능(함수)
+        public void Member_BlockList()
         {
             Member_Block memberBlock = new Member_Block();
             Member_BlockDao memberBlockDao = new Member_BlockDao();
@@ -58,18 +58,10 @@ namespace adminForm
             dataGridView2.Columns[3].HeaderCell.Value = "계정정지 기간";            
         }
 
-        public void ABC()
+        //계정정지 해제 기능(함수)
+        public void MemberBlock_Unlock()
         {
-            MemberDao memberDao = new MemberDao();
-            Member member = new Member();
 
-            DataSet ds = memberDao.Select_MemberID();
-            dataGridView2.DataSource = ds.Tables[0];
-
-            dataGridView2.Columns[0].HeaderCell.Value = "해당 ID";
-            dataGridView2.Columns[1].HeaderCell.Value = "해당 계정";
-            dataGridView2.Columns[2].HeaderCell.Value = "해당 일정";
-            dataGridView2.Columns[3].HeaderCell.Value = "해당 시간";
         }
 
         //신고목록조회 버튼
@@ -103,9 +95,10 @@ namespace adminForm
             //}
 
 
-            Travel inputTravel = new Travel();
-            Travel outputTravel = new Travel();
+            Travel travel = new Travel();
+            Member member = new Member();
             TravelDao travelDao = new TravelDao();
+            MemberDao memberDao = new MemberDao();
             Report delete = new Report();
 
 
@@ -113,14 +106,17 @@ namespace adminForm
 
             for (int i = 0; i < selectedCellCount; i++)
             {
+                // trvNo를 받아와서 그 Travel의 mem_id를 가지고 그 mem_id의 state를 바꾼다.
+
                 //선택한 셀들의 행을 구해오고 그행의 두번째열 trv_no의 값을 가져온다.
-                inputTravel.Trv_no = dataGridView1.Rows[dataGridView1.SelectedCells[i].RowIndex].Cells[1].Value.ToString();
+                travel.Trv_no = dataGridView1.Rows[dataGridView1.SelectedCells[i].RowIndex].Cells[1].Value.ToString();
 
-                outputTravel = travelDao.selectTravelBytrv_no(inputTravel);
+                travel = travelDao.selectTravelBytrv_no(travel); // 바꿔치기
+                member.Mem_id = travel.Mem_id;
+                memberDao.UpdateMemberStateByMemId(member, 1); // 멤버 상태 바꾸고
+                travel.Trv_secret = "3"; // travel 객체 secret 속성 데이터 바꾸고
 
-                outputTravel.Trv_secret = "3";
-
-                travelDao.UpdatetTravel(outputTravel);
+                travelDao.UpdatetTravel(travel); // travelDao로 DB 업데이트 
 
                 //선택 행의 첫번째 rep_no 가져오기
                 delete.Rep_no = dataGridView1.Rows[dataGridView1.SelectedCells[i].RowIndex].Cells[0].Value.ToString();
@@ -222,18 +218,22 @@ namespace adminForm
         //계정정지 목록 조회버튼
         private void button4_Click(object sender, EventArgs e)
         {
-            Member_Bind();
+            Member_BlockList();
         }
 
-        //계정정지 목록 조회버튼
+        //계정정지 해제버튼
         private void button5_Click(object sender, EventArgs e)
         {
-            ABC();
-        }
+            Member member = new Member();
+            MemberDao memberDao = new MemberDao();
 
-        private void button6_Click(object sender, EventArgs e)
-        {
+            int selectedCellCount = dataGridView1.GetCellCount(DataGridViewElementStates.Selected);
+            MessageBox.Show(dataGridView1.SelectedColumns.Count.ToString, "zz", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            return;
 
+            member.Mem_id = dataGridView1.Rows[dataGridView1.SelectedCells[1].RowIndex].Cells[1].Value.ToString();
+
+            memberDao.MemberBlock_Unlock(member, 0);
         }
     }
 }

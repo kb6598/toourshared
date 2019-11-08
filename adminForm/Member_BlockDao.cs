@@ -51,8 +51,8 @@ public class Member_BlockDao
 
         //계정활동이 정지상태인 회원 조회
         //string sql = "Select mem_blo_no, mem_id, mem_blo_date, mem_blo_length From toourshared.member_block";
-        string sql = "Select member_block.mem_blo_no, member_block.mem_id, member_block.mem_blo_date, member_block.mem_blo_length " +
-            "From member_block, member where member.mem_state = 1";
+        string sql = "Select distinct member_block.mem_blo_no, member_block.mem_id, member_block.mem_blo_date, member_block.mem_blo_length " +
+            "From member_block, member where member.mem_state = 1 order by member_block.mem_blo_no";
         MySqlCommand cmd = new MySqlCommand(sql, con); // 커맨드(sql문을 con에서 수행하기 위한 명령문) 생성 DB에서 수행시킬 명령 생성   
 
         MySqlDataAdapter ad = new MySqlDataAdapter();
@@ -110,4 +110,5 @@ public class Member_BlockDao
         }
         return result;
     }
+
 }
