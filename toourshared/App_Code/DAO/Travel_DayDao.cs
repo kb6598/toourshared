@@ -150,7 +150,7 @@ public class Travel_DayDao
         {
             con = mydb.GetCon();
 
-            string Sql = "SELECT * FROM toourshared.travel_day where travel=@trv_day_no";
+            string Sql = "SELECT * FROM toourshared.travel_day where trv_day_no=@trv_day_no";
 
 
             MySqlCommand cmd = new MySqlCommand(Sql, con);

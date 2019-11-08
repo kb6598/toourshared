@@ -49,7 +49,7 @@
 
 
 
-            // 비어있는 travel을 삽입하고 trv_no(pk) 값을 가져옴
+            // create Travel
             Travel inTravel = new Travel();
             inTravel.Mem_id = HttpContext.Current.Session["mem_id"].ToString();
             inTravel.Trv_create_time = TimeLib.GetTimeStamp();
@@ -59,26 +59,33 @@
             inTravel.Trv_tot_rate = 0.ToString();
             inTravel.Trv_views = 0.ToString();
 
-
-
             TravelDao travelDao = new TravelDao();
             string trv_no = travelDao.InsertTravel(inTravel);
 
-            //travel_day도 생성
+
+
+            //create travel_day
             Travel_Day travel_Day = new Travel_Day();
-            travel_Day.Trv_no = trv_no;
-
-
+            
+            travel_Day.Trv_no = trv_no;              
             Travel_DayDao travel_DayDao = new Travel_DayDao();
+
             string trv_day_no = travel_DayDao.InsertTravel_Day(travel_Day);
+
+
+             //create map
+            Map inMap = new Map();
+            MapDao mapDao = new MapDao();
+
+            inMap.Trv_day_no = trv_day_no;
+            mapDao.InsertMap(inMap);
+
             // 현재폼 정보를 저장할 딕셔너리 생성 나중에 세션에 넘겨줌
             Dictionary<string, string> newWriteStatus = new Dictionary<string, string>()
             {
-                {"status","first" },
                 { "trv_no", trv_no},
                 { "cur_trv_day_no",trv_day_no},
                 { "cur_day","1"},
-                {"trv_day_cnt","1" },
                 {"1",trv_day_no }
 
             };
@@ -103,9 +110,10 @@
         Dictionary<string, string> readWriteStatus = SessionLib.getWriteStatus();
         if (readWriteStatus != null)
         {
-
+            // 일차수 표시
             Literal_day.Text = readWriteStatus["cur_day"];
 
+            //Travel Day 가져오기
             Travel_Day inputTravel_day = new Travel_Day();
             Travel_Day outputTravel_day = new Travel_Day();
             Travel_DayDao Travel_daydao = new Travel_DayDao();
@@ -115,7 +123,7 @@
 
             article.Text = outputTravel_day.Trv_day_content;
 
-
+            //Travel 가져오기
             Travel inputTravel = new Travel();
             Travel outputTravel = new Travel();
             TravelDao daoTravel = new TravelDao();
@@ -125,6 +133,8 @@
             // 바인드
             title.Text = outputTravel.Trv_title;
             hashtag.Text = outputTravel.Trv_tag;
+
+
 
 
 
@@ -188,19 +198,13 @@
 
     protected void Page_Load(object sender, EventArgs e)
     {
+        BindTables();
         WriteSessionProcess();
         BindDropDownList();
         Bind_otherData();
-        BindTables();
+        
     }
 
-    protected void Button1_Click(object sender, EventArgs e)
-    {
-        if (HttpContext.Current.Session["write_status"] != null)
-        {
-            HttpContext.Current.Session.Abandon();
-        }
-    }
 </script>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -254,7 +258,7 @@
         /* TextArea Summernote */
         $(document).ready(function () {
             $('#article').summernote({
-                height: 300, //set editable area's height
+                height: 600, //set editable area's height
             });
         });
 
@@ -380,7 +384,7 @@
                     </div>
                     <div class="SubItem">
 
-                        <asp:DropDownList ID="goDay" runat="server" OnSelectedIndexChanged="DropDownList_goDay_SelectedIndexChanged">
+                        <asp:DropDownList ID="goDay" runat="server" onchange="goDay()">
                         </asp:DropDownList>
 
                     </div>
@@ -499,7 +503,7 @@
                 </div>
                 <!-- 다음 일로 이동 -->
                 <div  class="nextPageBtn">
-                    <div onclick ="nextDay()" class="btnAreaItem">다음 일 입력</div>
+                    <div onclick ="addDay()" class="btnAreaItem">다음 일 입력</div>
                 </div>
                 <!-- 글 작성 완료 버튼 -->
                 <div class="finishBtn">
@@ -539,7 +543,7 @@
             </div>
         </div>
 
-        <asp:Button ID="Button1" runat="server" Text="Button" OnClick="Button1_Click" />
+
     </form>
 
  
@@ -608,8 +612,21 @@
 
      
             
-        }
+    }
+    function goDay() {
+        addDataAtForm();
 
+        var targetDay = document.getElementById("goDay").value;
+            var targetDayData = document.createElement("input"); // input 엘리멘트 생성
+            targetDayData.setAttribute("type", "hidden"); // type 속성을 hidden으로 설정
+            targetDayData.setAttribute("name", "targetDay"); // name 속성을 'stadium'으로 설정
+            targetDayData.setAttribute("value", targetDay); // value 속성을 삽입
+            form.appendChild(targetDayData);
+
+
+        form.setAttribute('action', "Write_goDay.aspx");
+        form.submit(); // 전송
+    }
 
     
     function tmpSave() {
@@ -692,9 +709,9 @@
         form.setAttribute('action', "Write_tmpSave.aspx");
         form.submit(); // 전송
     }
-    function nextDay() {
+    function addDay() {
         addDataAtForm();
-        form.setAttribute('action', "Write_nextDay.aspx");
+        form.setAttribute('action', "Write_AddDay.aspx");
         form.submit(); // 전송
     }
     function endWrite() {

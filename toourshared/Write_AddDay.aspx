@@ -64,14 +64,48 @@
             inMap.Map_route = Request.Form["mapRoute"];
             inMap.Trv_day_no = WriteStatus[WriteStatus["cur_day"]];
 
-            mapDao.UpdateMap(inMap);
-        }
-        // 지도는 정보를 이전 폼에서 주어야 한다.
+            mapDao.InsertMap(inMap);
 
-            mapCost.Value = Request.Form["mapCost"];
-            mapData.Value = Request.Form["mapData"];
-            mapRoute.Value = Request.Form["mapRoute"];
-        
+
+            //    {
+            //        { "trv_no", trv_no},
+            //        { "cur_trv_day_no",trv_day_no},
+            //        { "cur_day","1"},
+            //        {"1",trv_day_no }
+            //    };
+
+            // insert new travel_day at last
+            //
+            //travel_day도 생성 하여 trv_day_no를 가지고 있음
+            Travel_Day travel_Day = new Travel_Day();
+            travel_Day.Trv_no =WriteStatus["trv_no"] ;
+            Travel_DayDao travel_DayDao = new Travel_DayDao();
+            string new_trv_day_no = travel_DayDao.InsertTravel_Day(travel_Day);
+
+            //find insert point
+            int insertPoint = 1;
+            while (true)            {
+                
+                if (!WriteStatus.ContainsKey(insertPoint.ToString()) ) break;
+                insertPoint++;
+            }
+            WriteStatus.Add(insertPoint.ToString(), new_trv_day_no);
+
+
+
+
+
+
+
+            Session["write_status"] = WriteStatus;
+            Response.Redirect("./write.aspx");
+
+
+
+        }
+
+
+
 
 
 
@@ -87,13 +121,9 @@
 <body>
     <form id="form1" runat="server" method="post" action="write.aspx">
         저장중.....
-        <asp:HiddenField ID="mapData" runat="server" />
-        <asp:HiddenField ID="mapRoute" runat="server" />
-        <asp:HiddenField ID="mapCost" runat="server" />
+
     </form>
   <script>
-         form = document.getElementById("form1");
-         form.submit(); // 전송
 
      </script>
 

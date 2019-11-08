@@ -66,12 +66,9 @@
 
             mapDao.UpdateMap(inMap);
         }
-        // 지도는 정보를 이전 폼에서 주어야 한다.
+        Session.Remove("write_status");
+        Response.Redirect("./MyPage.aspx");
 
-            mapCost.Value = Request.Form["mapCost"];
-            mapData.Value = Request.Form["mapData"];
-            mapRoute.Value = Request.Form["mapRoute"];
-        
 
 
 
