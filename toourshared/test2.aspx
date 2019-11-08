@@ -161,31 +161,46 @@
                   "          </div>                                                                                                         " +
                   "      </div>";
 
+            int pageSize = 5; // 화면에 게시글 몇개
+            int pageBlock = 10; // 1~10 11~20 이런식으로 몇개 할건지
+            int clickPage = Request["pageNum"] != null ? int.Parse(Request["pageNum"]) : 1; // 현재 페이지 값 가져오기 null 값이면 1이다
+            int total = travelList.Count; // 모든 게시글의 수
+            int totalPage = ((total - 1) / pageSize) + 1;
+            int endNo = pageSize * clickPage; // 마지막 페이지 숫자 번호
+            int startNo = endNo - pageSize; // 페이지 시작 번호
+            int preBlock = (((clickPage - 1) / pageBlock) * pageBlock); // 이전 페이지 
+            int nextBlock = preBlock + pageBlock + 1; // 다음페이지
 
-            int pageNo = 1;
-            int countList = 5; // 한 화면에 출력될 게시글 수
-            int countPage = 10; // 한 화면에 출력될 페이지 수
-            int totalCount = travelList.Count; // 전체 count수
-            int totalPage = totalCount / countList; // 전체 페이지 수
+            Response.Write("클릭페이지"+clickPage + "<br>모든게시글수 " + total + "<br>출력해야할 총 페이지 수" + totalPage + "<br> 마지막페이지숫자번호" + endNo + "<br> 페이지 시작번호" + startNo + "<br> 이전 페이지" + preBlock + "<br> 다음페이지" + nextBlock+"<br>");
 
-            int startPage = (totalPage / 10) * 10 + 1;
-            if (totalPage % 10 == 0) startPage -= 10;
-            int targetPage = totalPage;
-            if(startPage != 1)
-            {
-                Response.Write($"<a href = \"test2.aspx?totalPage={startPage - 1}\">[이전]</a>");
-            }
-            else
-            {
 
-            }
-            for(int z = startPage; z < totalPage; z++)
+
+            if(preBlock > 0)
             {
-                Response.Write($"<a href = \"test2.aspx?totalPage={z}\">{z}</a>");
+                Response.Write("<a href = \"test2.aspx?pageNum=" + preBlock + "\">[이전]</a>");
             }
 
+            for(int z = 1 + preBlock; z < nextBlock && z <= totalPage; z++)
+            {
+                if(z == clickPage)
+                {
+                    Response.Write("[" + z + "]");
+                }
+                else
+                {
+                    Response.Write("<a href = \"test2.aspx?pageNum=" + z + "\">["+z+"]</a>");
+                }
+
+            }
+            if(totalPage >= nextBlock)
+            {
+                Response.Write("<a href = \"test2.aspx?pageNum=" + nextBlock + "\">[다음]</a>");
+            }
+
+            break;
 
         }
+
     }
 </script>
 

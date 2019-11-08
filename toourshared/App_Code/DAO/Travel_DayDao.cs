@@ -93,7 +93,7 @@ public class Travel_DayDao
 
             while (reader.Read())
             {
-                returnList.
+              
             }
         }
         catch (Exception e) {;}
@@ -104,7 +104,7 @@ public class Travel_DayDao
     public Travel_Day selectTravelDayByTrvNo(Travel_Day travel_day)
     {
         MyDB mydb = new MyDB();
-        Travel_Day result;
+        Travel_Day result = new Travel_Day();
         MySqlConnection con;
 
         try
@@ -121,9 +121,7 @@ public class Travel_DayDao
 
             while(reader.Read())
             {
-                result.Trv_day_no = reader["trv_day_no"].ToString();
-                result.Trv_day_content = reader["trv_day_content"].ToString();
-                result.Trv_no = reader["trv_no"].ToString();
+                
             }
 
             reader.Close();
