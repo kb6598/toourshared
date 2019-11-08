@@ -13,6 +13,8 @@
         }
     }
 
+
+
     protected List<String> getTravelByTrvNo()
     {
         int trv_no = int.Parse(Request.QueryString["trv_no"].ToString()); // 게시글 번호 받기
@@ -66,6 +68,22 @@
 
         return returnList;
     }
+    
+        protected List<Map> getMapListByTrvDayNo()
+    {
+        List<Map> resultList = new List<Map>();
+        Map inMap = new Map();
+        Map outMap = new Map();
+
+        MapDao mapDao = new MapDao();
+
+
+
+
+
+        return resultList;
+    }
+
 
     protected int getLikeCountByTrvNo()
     {
@@ -151,6 +169,7 @@
 
         return returnInt;
     }
+
 
 </script>
 
@@ -1004,7 +1023,7 @@
                     "<div class = \"board-part\">\n" +
                         "<div class = \"part-board-header\">" + (day + 1) + "일 차</div>\n" +
                         "<div class = \"part-board-content\">\n" +
-                            "<div class = \"part-board-map\">지도 넣을 곳<br />지도 넣을 때 style 가셔서<br />display, align-items, justify-content 지워주세요</div>\n" +
+                            "<div class = \"part-board-map\"><div class='map_"+i+"'></div></div>\n" +
                             "<div class = \"part-board-travel\">\n" +
                                 "<div class = \"part-travel-root\">\n" +
                                     "<rootitem>\n" +

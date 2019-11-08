@@ -228,7 +228,7 @@ namespace adminForm
             MemberDao memberDao = new MemberDao();
 
             int selectedCellCount = dataGridView1.GetCellCount(DataGridViewElementStates.Selected);
-            MessageBox.Show(dataGridView1.SelectedColumns.Count.ToString, "zz", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            MessageBox.Show(dataGridView1.SelectedColumns.Count.ToString(), "zz", MessageBoxButtons.OK, MessageBoxIcon.Error);
             return;
 
             member.Mem_id = dataGridView1.Rows[dataGridView1.SelectedCells[1].RowIndex].Cells[1].Value.ToString();
