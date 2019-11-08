@@ -249,8 +249,22 @@ a {
         background-color: #2e2e2e;
         font-size: 13px;
         padding: 10px;
+        cursor: pointer;
         border-radius: 5px;
     }
+
+.subAddItem {
+    font-size: 13px;
+    width: 130px;
+    height: 40px;
+    color: #eee;
+    border-radius: 5px;
+    background-color: #2e2e2e;
+    display: flex;
+    cursor: pointer;
+    justify-content: center;
+    align-items: center;
+}
 
 /* 글 작성 영역 外 */
 .MapArea {
@@ -463,21 +477,6 @@ a {
     .btnArea > div {
         padding: 0 30px;
     }
-
-.btnAreaItem {
-    width: 200px;
-    height: 40px;
-    outline: none;
-    border: none;
-    font-size: 13px;
-    color: white;
-    background-color: #D81159;
-    transition-duration: .5s;
-    padding: 12px;
-    text-align: center
-}
-
-
 
 .mainImgArea {
     width: 100%;
@@ -706,7 +705,7 @@ a {
     }
 
 
-< !-- 커스텀 오버레이 스타일-- >
+/* 커스텀 오버레이 스타일 */
 .card-cus {
     border: 1px outset rgba(0, 0, 0, .19);
     width: 300px;
@@ -796,10 +795,13 @@ a {
         background-color: darkorange;
     }
 
-< !-- modal-cost and TravelRoute-- > < !-- modal-cost and TravelRoute-- >
 .modal-cost {
     display: flex;
     flex-direction: row-reverse;
+    width: 100%;
+}
+
+.modal-cost-area {
     width: 100%;
 }
 
@@ -829,7 +831,7 @@ a {
     font-size: 12px;
 }
 
-< !--bootstrap customize-- >
+/* bootstrap customize */
 .row {
     width: 100%;
 }
