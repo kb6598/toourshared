@@ -167,6 +167,73 @@ public class CommentDao
         return result;
     }
 
+    public int selectCommentCountByTrvNo(Travel travel)
+    {
+        MyDB mydb = new MyDB();
+        int returnInt = 0;
+        MySqlConnection con;
+
+        try
+        {
+            con = mydb.GetCon();
+            string Sql = "SELECT count(*) as cnt FROM toourshared.comment where trv_no = @trv_no";
+
+            MySqlCommand cmd = new MySqlCommand(Sql, con);
+            cmd.Parameters.AddWithValue("@trv_no", travel.Trv_no);
+
+            con.Open();
+            MySqlDataReader reader = cmd.ExecuteReader();
+
+            if (reader.Read())
+            {
+                returnInt = int.Parse(reader["cnt"].ToString());
+            }
+
+            reader.Close();
+            con.Close();
+        }
+        catch (Exception e) {;}
+
+        return returnInt;
+    }
+
+    public List<Comment> selectCommentListByTrvNo(Travel travel)
+    {
+        MyDB mydb = new MyDB();
+        List<Comment> returnList = new List<Comment>();
+        Comment result;
+        MySqlConnection con;
+
+        try
+        {
+            con = mydb.GetCon();
+            string Sql = "SELECT * FROM toourshared.comment where trv_no = @trv_no";
+
+            MySqlCommand cmd = new MySqlCommand(Sql, con);
+            cmd.Parameters.AddWithValue("@trv_no", travel.Trv_no);
+
+            con.Open();
+            MySqlDataReader reader = cmd.ExecuteReader();
+
+            while (reader.Read())
+            {
+                result = new Comment();
+                result.Cmt_content = reader["cmt_content"].ToString();
+                result.Cmt_no = reader["cmt_no"].ToString();
+                result.Cmt_rate = reader["cmt_rate"].ToString();
+                result.Cmt_timestamp = reader["cmt_timestamp"].ToString();
+                result.Mem_id = reader["mem_id"].ToString();
+                result.Trv_no = reader["trv_no"].ToString();
+                returnList.Add(result);
+            }
+
+            reader.Close();
+            con.Close();
+        }
+        catch (Exception e) {;}
+
+        return returnList;
+    }
 
     public List<Comment> selectCommentListByMem_id(Comment travel)
     {
