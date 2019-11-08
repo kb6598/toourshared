@@ -104,10 +104,10 @@ namespace adminForm
             //}
 
 
-            Travel inputTravel = new Travel();
-            Travel outputTravel = new Travel();
-            Member inputMember = new Member();
+            Travel travel = new Travel();
+            Member member = new Member();
             TravelDao travelDao = new TravelDao();
+            MemberDao memberDao = new MemberDao();
             Report delete = new Report();
 
 
@@ -115,14 +115,17 @@ namespace adminForm
 
             for (int i = 0; i < selectedCellCount; i++)
             {
+                // trvNo를 받아와서 그 Travel의 mem_id를 가지고 그 mem_id의 state를 바꾼다.
+
                 //선택한 셀들의 행을 구해오고 그행의 두번째열 trv_no의 값을 가져온다.
-                inputTravel.Trv_no = dataGridView1.Rows[dataGridView1.SelectedCells[i].RowIndex].Cells[1].Value.ToString();
+                travel.Trv_no = dataGridView1.Rows[dataGridView1.SelectedCells[i].RowIndex].Cells[1].Value.ToString();
 
-                outputTravel = travelDao.selectTravelBytrv_no(inputTravel);
+                travel = travelDao.selectTravelBytrv_no(travel); // 바꿔치기
+                member.Mem_id = travel.Mem_id;
+                memberDao.UpdateMemberStateByMemId(member, 1); // 멤버 상태 바꾸고
+                travel.Trv_secret = "3"; // travel 객체 secret 속성 데이터 바꾸고
 
-                outputTravel.Trv_secret = "3";
-
-                travelDao.UpdatetTravel(outputTravel);
+                travelDao.UpdatetTravel(travel); // travelDao로 DB 업데이트 
 
                 //선택 행의 첫번째 rep_no 가져오기
                 delete.Rep_no = dataGridView1.Rows[dataGridView1.SelectedCells[i].RowIndex].Cells[0].Value.ToString();
