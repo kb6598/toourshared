@@ -125,9 +125,7 @@ public class Travel_DayDao
 
             while(reader.Read())
             {
-                result.Trv_day_no = reader["trv_day_no"].ToString();
-                result.Trv_day_content = reader["trv_day_content"].ToString();
-                result.Trv_no = reader["trv_no"].ToString();
+                
             }
 
             reader.Close();

@@ -451,7 +451,7 @@ public class TravelDao
         try
         {
             con = mydb.GetCon();
-            string Sql = "SELECT * FROM toourshared.travel where " + date + "loc_name LIKE" + loc + "or trv_title LIKE " + title + "or trv_tag LIKE " + tag + " " + orderBy;
+            string Sql = "SELECT * FROM toourshared.travel where " + date + " loc_name LIKE" + loc + " or trv_title LIKE " + title + " or trv_tag LIKE " + tag + " " + orderBy;
 
             MySqlCommand cmd = new MySqlCommand(Sql, con);
             con.Open();
@@ -495,18 +495,19 @@ public class TravelDao
         return resultList;
     }
 
-    public int travel_count(Travel travel)
+    public List<Travel> travel_count(Travel travel, string date, string loc, string title, string tag, string orderBy)
     {
         MyDB mydb = new MyDB();
-
-        int count =1;
+        List<Travel> resultList = new List<Travel>();
+        Travel result;
+        
         MySqlConnection con;
 
         try
         {
             con = mydb.GetCon();
 
-            string Sql = "SELECT count(*) FROM toourshared.travel where ";
+            string Sql = "SELECT count(*) FROM toourshared.travel where " + date + "loc_name LIKE" + loc + "or trv_title LIKE " + title + "or trv_tag LIKE " + tag + " " + orderBy ;
 
 
             MySqlCommand cmd = new MySqlCommand(Sql, con);
@@ -515,7 +516,11 @@ public class TravelDao
 
             while (rd.Read())
             {
+                result = new Travel();
 
+                result.Trv_no = rd["trv_no"].ToString();
+
+                resultList.Add(result);
             }
 
             rd.Close();
@@ -530,7 +535,7 @@ public class TravelDao
 
 
 
-        return count;
+        return resultList;
     }
 }
 
