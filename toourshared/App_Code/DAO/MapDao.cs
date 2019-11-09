@@ -219,11 +219,7 @@ public class MapDao
             System.Diagnostics.Debug.WriteLine(ex.ToString());
 
         }
-        finally
-        {
-            rd.Close();
-            con.Close();
-        }
+
         
         return result;
     }
