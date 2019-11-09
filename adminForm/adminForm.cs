@@ -228,6 +228,7 @@ namespace adminForm
             Member_BlockDao mem = new Member_BlockDao();
 
             int selectedCellCount = dataGridView1.GetCellCount(DataGridViewElementStates.Selected);
+<<<<<<< HEAD
             //MessageBox.Show(dataGridView2.CurrentCell.Value.ToString(), "zz", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
             if(dataGridView2.CurrentRow.Selected == true)
@@ -246,6 +247,10 @@ namespace adminForm
                 }
 
             }
+=======
+            MessageBox.Show(dataGridView1.SelectedColumns.Count.ToString(), "zz", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            return;
+>>>>>>> e4a994166647d9079c230e0f669ed79d0c6b55f1
 
             //member.Mem_id = dataGridView1.Rows[dataGridView1.SelectedCells[1].RowIndex].Cells[1].Value.ToString();
 

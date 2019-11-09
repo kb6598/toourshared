@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 
 <script runat="server">
-
+    //http://localhost:6118/board.aspx?trv_no=175
     protected void Page_Load(object sender, EventArgs e)
     {
         if(Request.QueryString["trv_no"] == null)
@@ -11,7 +11,10 @@
             System.Diagnostics.Debug.WriteLine("지금 되는건가용?");
             Response.Redirect("/index.aspx");
         }
+        bindMapData();
     }
+
+
 
     protected List<String> getTravelByTrvNo()
     {
@@ -66,6 +69,22 @@
 
         return returnList;
     }
+
+    protected List<Map> getMapListByTrvDayNo()
+    {
+        List<Map> resultList = new List<Map>();
+        Map inMap = new Map();
+        Map outMap = new Map();
+
+        MapDao mapDao = new MapDao();
+
+
+
+
+
+        return resultList;
+    }
+
 
     protected int getLikeCountByTrvNo()
     {
@@ -152,6 +171,46 @@
         return returnInt;
     }
 
+
+    protected List<Map> getMapByTrvDayNo()
+    {
+        List<Map> mapList = new List<Map>();
+        int trv_no = int.Parse(Request.QueryString["trv_no"].ToString()); // 게시글 번호 받기
+
+        Travel_Day travelDay = new Travel_Day();                         // travel_day 객체 생성
+        travelDay.Trv_no = trv_no.ToString();                               // travel_no 집어 넣기
+        Travel_DayDao travelDayDao = new Travel_DayDao();         // travel_day DAO 객체 생성
+
+        List<Travel_Day> travelDayList = travelDayDao.selectTravelDayListByTrvNo(travelDay);
+        // 게시글 번호에 해당하는 그 게시글의 모든 게시글 내용들(N일 차) 오름차순으로 구해온다.
+
+        Map inMap = new Map() ;
+        Map tmpMap;
+        MapDao mapDao = new MapDao();
+        foreach(var item in travelDayList)
+        {
+            inMap.Trv_day_no = item.Trv_day_no;
+            tmpMap = new Map();
+            tmpMap = mapDao.selectMapByTrv_day_no(inMap);
+            mapList.Add(tmpMap);
+        }
+        return mapList;
+    }
+
+    protected void bindMapData()
+    {
+        List<Map> mapList  = getMapByTrvDayNo();
+        int index = 0;
+        foreach(var map in mapList)
+        {
+            Literal_mapData.Text += "<input type='hidden' id='mapData_"+index+"' value='"+map.Map_data+"'/>";
+            index++;
+        }
+        
+
+
+    }
+
 </script>
 
 <head>
@@ -171,6 +230,8 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+   <!--KAKAO-->
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=ebcd0c1accbe0ff4bbb47bd777ef2fcf&libraries=service&libraries=services,clusterer,drawing"></script>
     <style>
         body,
         form {
@@ -508,9 +569,7 @@
             width: 1100px;
             height: 780px;
             border: .5px solid rgba(0, 0, 0, .2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+
         }
 
         .board-travel {
@@ -934,6 +993,8 @@
             List<String> MemberList = getMemberByTrvNo();                 // 해당 게시글의 작성자의 데이터
             List<String> TravelDayContents = getTravelDayListByTrvNo();  // 해당 게시글의 내용 데이터
             List<Comment> CommentList = getCommentListByTrvNo();    // 해당 게시글의 댓글 데이터
+            List<Map> MapList  = getMapByTrvDayNo();
+
 
             int day = 0;                                                                // 일 차
             int goodCnt = getLikeCountByTrvNo();                             // 추천 수
@@ -1004,7 +1065,7 @@
                     "<div class = \"board-part\">\n" +
                         "<div class = \"part-board-header\">" + (day + 1) + "일 차</div>\n" +
                         "<div class = \"part-board-content\">\n" +
-                            "<div class = \"part-board-map\">지도 넣을 곳<br />지도 넣을 때 style 가셔서<br />display, align-items, justify-content 지워주세요</div>\n" +
+                            "<div class = \"part-board-map\"id='map_"+i+"'></div>\n" +
                             "<div class = \"part-board-travel\">\n" +
                                 "<div class = \"part-travel-root\">\n" +
                                     "<rootitem>\n" +
@@ -1134,6 +1195,154 @@
         <div id="footer">
             
         </div>
+        <asp:Literal ID="Literal_mapData" runat="server"></asp:Literal>
     </form>
+
+    <script>
+        
+
+
+
+
+
+
+        // input (맵객체id, 중심좌표, 지도 데이터를 포함한 hiddenfiled , inStrokeColor,inFillColor)
+// return -> {생성한 지도객체, 생성한 manager, }
+function makeMapOption(mapId, mapCenter, mapLevel, mapDataInputId, inStrokeColor, inFillColor) {
+    
+    var drawingMapContainer = document.getElementById(mapId),
+    drawingMap = {
+        center: mapCenter, // 지도의 중심좌표
+        level: mapLevel // 지도의 확대 레벨
+    };
+    
+    var drawingMap = new daum.maps.Map(drawingMapContainer, drawingMap);
+    
+    var options = { // Drawing Manager를 생성할 때 사용할 옵션입니다
+        map: drawingMap, // Drawing Manager로 그리기 요소를 그릴 map 객체입니다
+        drawingMode: [ // Drawing Manager로 제공할 그리기 요소 모드입니다
+        daum.maps.drawing.OverlayType.ARROW,
+        daum.maps.drawing.OverlayType.CIRCLE,
+        daum.maps.drawing.OverlayType.ELLIPSE,
+        daum.maps.drawing.OverlayType.MARKER,
+        daum.maps.drawing.OverlayType.POLYLINE,
+        daum.maps.drawing.OverlayType.POLYGON,
+        daum.maps.drawing.OverlayType.RECTANGLE
+    ],
+
+        arrowOptions: {
+            draggable: false,
+            removable: false,
+            editable: false,
+            strokeWeight: 3,
+            strokeOpacity: 0.8,
+            strokeColor: inStrokeColor,
+            strokeStyle: 'solid',
+            hintStrokeStyle: 'dashdot',
+            hintStrokeOpacity: 0.3,
+            startArrow: false
+        },
+        circleOptions: {
+            draggable: false,
+            removable: false,
+            editable: true,
+            strokeColor: inStrokeColor,
+            fillColor: inFillColor,
+            fillOpacity: 0.5
+        },
+        ellipseOptions: {
+            draggable: false,
+            removable: false,
+            editable: false,
+            strokeWeight: 2,
+            strokeOpacity: 0.8,
+            strokeColor: inStrokeColor,
+            strokeStyle: 'solid',
+            fillColor: inFillColor,
+            fillOpacity: 0.3
+        },
+        markerOptions: { // 마커 옵션입니다
+            draggable: false, // 마커를 그리고 나서 드래그 가능하게 합니다
+            removable: false, // 마커를 삭제 할 수 있도록 x 버튼이 표시됩니다
+            markerImages: [
+        null, // API에서 제공하는 기본 마커 이미지
+                {
+                    src: 'http://t1.daumcdn.net/localimg/localimages/07/2009/map/icon/ico_mn_13.png',
+                    width: 31,
+                    height: 35,
+                    shape: 'rect',
+                    coords: '0,0,31,35',
+                    hoverImage: {
+                        src: 'http://t1.daumcdn.net/localimg/localimages/07/2012/img/marker_normal.png',
+                        width: 33,
+                        height: 36,
+                        offsetX: 12,
+                        offsetY: 36,
+                        spriteWidth: 644,
+                        spriteHeight: 946,
+                        spriteOriginX: 10,
+                        spriteOriginY: 10
+                    },
+                    dragImage: {
+                        src: 'http://t1.daumcdn.net/localimg/localimages/07/2012/attach/pc_img/ico_comm.png',
+                        width: 20, // 마커 크기
+                        height: 20, // 마커 크기
+                        offsetX: 10, // 지도에 고정시킬 이미지 내 위치 좌표
+                        offsetY: 20, // 지도에 고정시킬 이미지 내 위치 좌표
+                        spriteWidth: 118, // 이미지 전체 크기
+                        spriteHeight: 111, // 이미지 전체 크기
+                        spriteOriginX: 0, // 이미지 중 마커로 사용할 위치
+                        spriteOriginY: 90 // 이미지 중 마커로 사용할 위치
+                    }
+}
+]
+        },
+        polylineOptions: { // 선 옵션입니다
+            draggable: false, // 그린 후 드래그가 가능하도록 설정합니다
+            removable: false, // 그린 후 삭제 할 수 있도록 x 버튼이 표시됩니다
+            editable: false, // 그린 후 수정할 수 있도록 설정합니다
+            strokeColor: inStrokeColor, // 선 색
+            hintStrokeStyle: 'dash', // 그리중 마우스를 따라다니는 보조선의 선 스타일
+            hintStrokeOpacity: 0.5 // 그리중 마우스를 따라다니는 보조선의 투명도
+        },
+        polygonOptions: {
+            draggable: false,
+            removable: false,
+            editable: false,
+            strokeColor: inStrokeColor,
+            fillColor: inFillColor,
+            fillOpacity: 0.5,
+            hintStrokeStyle: 'dash',
+            hintStrokeOpacity: 0.5
+        },
+        rectangleOptions: {
+            draggable: false,
+            removable: false,
+            editable: false,
+            strokeColor: inStrokeColor, // 외곽선 색
+            fillColor: inFillColor, // 채우기 색
+            fillOpacity: 0.5 // 채우기색 투명도
+        }
+
+    };
+    var resultManager = new daum.maps.drawing.DrawingManager(options);
+    
+    return {map: drawingMap, manager: resultManager};
+
+}
+<%
+
+        int index = 0;
+        foreach(var map in MapList)
+        { Response.Write("makeMapOption('map_"+index+"', new daum.maps.LatLng(33.450701, 126.570667), 3, 'mapData_"+index+"', '#39f', '#39f') ;");
+            
+            index++;
+        }
+
+
+        %>
+
+
+    </script>
 </body>
 </html>

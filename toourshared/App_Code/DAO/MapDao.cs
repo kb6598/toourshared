@@ -205,7 +205,8 @@ public class MapDao
 
 
                 //lstMember.Add(tmpMemberPointer);
-
+                rd.Close();
+                con.Close();
                 return result;
 
             }
@@ -218,6 +219,8 @@ public class MapDao
             System.Diagnostics.Debug.WriteLine(ex.ToString());
 
         }
+
+        
         return result;
     }
 

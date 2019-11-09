@@ -50,25 +50,14 @@
 
             //update Travel_day
             Travel_DayDao travelDayDao = new Travel_DayDao();
-            Travel_Day inTravelDay = new Travel_Day();
-            inTravelDay.Trv_day_no = WriteStatus[WriteStatus["cur_day"]];
-            inTravelDay.Trv_no = WriteStatus["trv_no"];
-            inTravelDay.Trv_day_content = Request.Form["article"];
-            travelDayDao.UpdatetTravel_Day(inTravelDay);
+            Travel_Day curTravelDay = new Travel_Day();
+            curTravelDay.Trv_day_no = WriteStatus[WriteStatus["cur_day"]];
+            curTravelDay.Trv_no = WriteStatus["trv_no"];
+            curTravelDay.Trv_day_content = Request.Form["article"];
+            travelDayDao.UpdatetTravel_Day(curTravelDay);
 
 
-
-
-            //    {
-            //        { "trv_no", trv_no},
-            //        { "cur_trv_day_no",trv_day_no},
-            //        { "cur_day","1"},
-            //        {"1",trv_day_no }
-            //    };
-
-            // insert new travel_day at last
-            //
-            //travel_day도 생성 하여 trv_day_no를 가지고 있음
+            //isnert travel day
             Travel_Day travel_Day = new Travel_Day();
             travel_Day.Trv_no =WriteStatus["trv_no"] ;
             Travel_DayDao travel_DayDao = new Travel_DayDao();
@@ -76,15 +65,22 @@
 
 
             
-            //insert map
-            Map inMap = new Map();
+            //update map
+            Map curMap = new Map();
             MapDao mapDao = new MapDao();
-            inMap.Map_cost = Request.Form["mapCost"];
-            inMap.Map_data = Request.Form["mapData"];
-            inMap.Map_route = Request.Form["mapRoute"];
-            inMap.Trv_day_no = new_trv_day_no;
+            curMap.Map_cost = Request.Form["mapCost"];
+            curMap.Map_data = Request.Form["mapData"];
+            curMap.Map_route = Request.Form["mapRoute"];            
+            curMap.Trv_day_no = curTravelDay.Trv_day_no;
 
-            mapDao.InsertMap(inMap);
+            mapDao.UpdateMapByTrvDayNo(curMap);
+
+
+            //insert map
+            Map newMap = new Map();
+            newMap.Trv_day_no = new_trv_day_no;
+            mapDao.InsertMap(newMap);
+
 
             //find insert point
             int insertPoint = 1;
