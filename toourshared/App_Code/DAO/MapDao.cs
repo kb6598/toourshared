@@ -23,13 +23,14 @@ public class MapDao
         MyDB myDB = new MyDB();
         MySqlConnection con = myDB.GetCon();
 
-        string Sql = "INSERT INTO toourshared.map ( trv_day_no, map_data, map_route, map_cost) VALUES (@trv_day_no, @map_data, @map_route, @map_cost)";
+        string Sql = "INSERT INTO toourshared.map ( trv_day_no, map_data, map_route, map_cost, map_center) VALUES (@trv_day_no, @map_data, @map_route, @map_cost)";
         MySqlCommand cmd = new MySqlCommand(Sql, con);
 
         cmd.Parameters.AddWithValue("@map_cost", map.Map_cost);
         cmd.Parameters.AddWithValue("@map_data", map.Map_data);
         cmd.Parameters.AddWithValue("@map_route", map.Map_route);
         cmd.Parameters.AddWithValue("@trv_day_no", map.Trv_day_no);
+        cmd.Parameters.AddWithValue("@map_center", map.Map_center);
 
 
         con.Open();
@@ -52,7 +53,7 @@ public class MapDao
         MySqlConnection con = myDB.GetCon();
 
 
-        string Sql = "UPDATE toourshared.map SET trv_day_no = @trv_day_no, map_data = @map_data, map_route = @map_route, map_cost = @map_cost  WHERE map_no = @map_no";
+        string Sql = "UPDATE toourshared.map SET trv_day_no = @trv_day_no, map_data = @map_data, map_route = @map_route, map_cost = @map_cost, map_center=@map_center WHERE map_no = @map_no";
 
 
         MySqlCommand cmd = new MySqlCommand(Sql, con);
@@ -61,6 +62,7 @@ public class MapDao
         cmd.Parameters.AddWithValue("@map_cost", map.Map_cost);
         cmd.Parameters.AddWithValue("@map_data", map.Map_data);
         cmd.Parameters.AddWithValue("@map_route", map.Map_route);
+        cmd.Parameters.AddWithValue("@map_center", map.Map_center);
         cmd.Parameters.AddWithValue("@trv_day_no", map.Trv_day_no);
 
         con.Open();
@@ -82,7 +84,7 @@ public class MapDao
         MySqlConnection con = myDB.GetCon();
 
 
-        string Sql = "UPDATE toourshared.map SET  map_data = @map_data, map_route = @map_route, map_cost = @map_cost  WHERE trv_day_no = @trv_day_no";
+        string Sql = "UPDATE toourshared.map SET  map_data = @map_data, map_route = @map_route, map_cost = @map_cost, map_center=@map_center  WHERE trv_day_no = @trv_day_no";
 
 
         MySqlCommand cmd = new MySqlCommand(Sql, con);
@@ -90,6 +92,7 @@ public class MapDao
         cmd.Parameters.AddWithValue("@map_cost", map.Map_cost);
         cmd.Parameters.AddWithValue("@map_data", map.Map_data);
         cmd.Parameters.AddWithValue("@map_route", map.Map_route);
+        cmd.Parameters.AddWithValue("@map_center", map.Map_center);
         cmd.Parameters.AddWithValue("@trv_day_no", map.Trv_day_no);
 
         con.Open();
@@ -153,6 +156,7 @@ public class MapDao
                 result.Map_cost = rd["map_cost"].ToString();
                 result.Map_data = rd["map_data"].ToString();
                 result.Map_route = rd["map_route"].ToString();
+                result.Map_center = rd["map_center"].ToString();
                 result.Trv_day_no = rd["trv_day_no"].ToString();
                
 
@@ -201,6 +205,7 @@ public class MapDao
                 result.Map_cost = rd["map_cost"].ToString();
                 result.Map_data = rd["map_data"].ToString();
                 result.Map_route = rd["map_route"].ToString();
+                result.Map_center = rd["map_center"].ToString();
                 result.Trv_day_no = rd["trv_day_no"].ToString();
 
 
