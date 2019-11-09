@@ -6,7 +6,7 @@
     //http://localhost:6118/board.aspx?trv_no=175
     protected void Page_Load(object sender, EventArgs e)
     {
-        if(Request.QueryString["trv_no"] == null)
+        if (Request.QueryString["trv_no"] == null)
         {
             System.Diagnostics.Debug.WriteLine("지금 되는건가용?");
             Response.Redirect("/index.aspx");
@@ -46,7 +46,7 @@
             returnList.Add(travel.Loc_name);
             returnList.Add(travel.Mem_id);
         }
-        catch(Exception e) {;}
+        catch (Exception e) {; }
         return returnList;
     }
 
@@ -62,7 +62,7 @@
         // 게시글 번호에 해당하는 그 게시글의 모든 게시글 내용들(N일 차) 오름차순으로 구해온다.
 
         List<String> returnList = new List<String>();
-        for(int i = 0; i < travelDayList.Count; i++)
+        for (int i = 0; i < travelDayList.Count; i++)
         {
             returnList.Add(travelDayList[i].Trv_day_content); // 게시글들을 구해온다.
         }
@@ -184,10 +184,10 @@
         List<Travel_Day> travelDayList = travelDayDao.selectTravelDayListByTrvNo(travelDay);
         // 게시글 번호에 해당하는 그 게시글의 모든 게시글 내용들(N일 차) 오름차순으로 구해온다.
 
-        Map inMap = new Map() ;
+        Map inMap = new Map();
         Map tmpMap;
         MapDao mapDao = new MapDao();
-        foreach(var item in travelDayList)
+        foreach (var item in travelDayList)
         {
             inMap.Trv_day_no = item.Trv_day_no;
             tmpMap = new Map();
@@ -199,14 +199,20 @@
 
     protected void bindMapData()
     {
-        List<Map> mapList  = getMapByTrvDayNo();
+        List<Map> mapList = getMapByTrvDayNo();
+
+        HtmlInputHidden tmpHidden;
         int index = 0;
-        foreach(var map in mapList)
+        foreach (var map in mapList)
         {
-            Literal_mapData.Text += "<input type='hidden' id='mapData_"+index+"' value='"+map.Map_data+"'/>";
+            tmpHidden = new HtmlInputHidden();
+            tmpHidden.Name = "mapData_"+index;
+            tmpHidden.ID = "mapData_"+index; // set the id
+            tmpHidden.Value = map.Map_data;
+            PlaceHolder_hidden.Controls.Add(tmpHidden);
             index++;
         }
-        
+
 
 
     }
@@ -214,7 +220,7 @@
 </script>
 
 <head>
-    <title> To Our Shared : milk9503 님의 글 </title>
+    <title>To Our Shared : milk9503 님의 글 </title>
 
     <!-- Font -->
     <link href="https://fonts.googleapis.com/css?family=Mansalva|Nanum+Gothic|Nanum+Myeongjo|Noto+Sans+KR|Lora|East+Sea+Dokdo|Jua&display=swap" rel="stylesheet">
@@ -225,12 +231,12 @@
 
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    
+
     <!-- JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-   <!--KAKAO-->
+    <!--KAKAO-->
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=ebcd0c1accbe0ff4bbb47bd777ef2fcf&libraries=service&libraries=services,clusterer,drawing"></script>
     <style>
         body,
@@ -241,9 +247,7 @@
             min-width: 100%;
             min-height: 100%;
             display: flex;
-
             line-height: 1;
-
             /* 전체 배경색 */
             background-color: #00b9f1;
             background-repeat: no-repeat;
@@ -253,18 +257,16 @@
             color: #000;
         }
 
-        a:hover {
-            color: #000;
-            text-decoration: none;
-        }
+            a:hover {
+                color: #000;
+                text-decoration: none;
+            }
 
         .topnavUl {
             margin: 0;
             padding: 0;
-
             list-style: none;
             text-decoration: none;
-
             font-size: 20px;
             font-family: '맑은고딕';
         }
@@ -272,21 +274,19 @@
         .topnavLi {
             margin: 0;
             padding: 0;
-
             list-style: none;
             text-decoration: none;
-
             font-size: 20px;
             font-family: '맑은고딕';
         }
 
-        .topnavLi ul,
-        li {
-            list-style: none;
-            text-decoration: none;
-            padding: 0;
-            margin: 0;
-        }
+            .topnavLi ul,
+            li {
+                list-style: none;
+                text-decoration: none;
+                padding: 0;
+                margin: 0;
+            }
 
         .topnavLiItem {
             cursor: default;
@@ -302,84 +302,76 @@
             /* absolute는 부피를 못잡으니까 width 100% */
             overflow: hidden;
             font-size: 25px;
-
             transition-duration: 0.5s;
-
         }
 
-        #nav:hover {
-            height: 250px;
-            transition: background .5s;
-            background-color: rgba(249, 192, 12, 0.95);
-        }
+            #nav:hover {
+                height: 250px;
+                transition: background .5s;
+                background-color: rgba(249, 192, 12, 0.95);
+            }
 
-        #nav>ul {
-            text-align: center;
-            font-family: 'Mansalva', cursive;
-            font-size: 25px;
-        }
+            #nav > ul {
+                text-align: center;
+                font-family: 'Mansalva', cursive;
+                font-size: 25px;
+            }
 
-        #nav>ul>li {
-            display: inline-block;
-            position: relative;
+                #nav > ul > li {
+                    display: inline-block;
+                    position: relative;
+                    padding: 0px 50px;
+                }
 
-            padding: 0px 50px;
-        }
+                    #nav > ul > li > a {
+                        display: block;
+                        padding: 30px 15px 20px;
+                        line-height: 30px;
+                        transition: color 0.9s;
+                        transition: background 0.4s;
+                        /* 부트스트랩 적용 후 nav 효과 적용이 되는걸 방지하기 위해 */
+                        text-decoration: none;
+                        /* 상단 메뉴 글씨 색 */
+                        color: white;
+                    }
 
-        #nav>ul>li>a {
-            display: block;
-            padding: 30px 15px 20px;
-            line-height: 30px;
-            transition: color 0.9s;
-            transition: background 0.4s;
+                    #nav > ul > li:hover > a {
+                        /* 메뉴에 마우스 올렸을 때 발생할 스타일(1Depth) */
+                        transition: border .5s;
+                        border-bottom: 3px solid #ff7473;
+                    }
 
-            /* 부트스트랩 적용 후 nav 효과 적용이 되는걸 방지하기 위해 */
-            text-decoration: none;
+            #nav ul ul {
+                /*display: none;*/
+                position: absolute;
+                width: 100%;
+                /* absolute는 부피를 가질 수 없다 */
+                margin: 0px -50px;
+            }
 
+                #nav ul ul a {
+                    /* 2Depth li Style */
+                    display: block;
+                    line-height: 40px;
+                    font-size: 14px;
+                    color: white;
+                }
 
-            /* 상단 메뉴 글씨 색 */
-            color: white;
-        }
+                    #nav ul ul a:hover {
+                        /* SubMenu 마우스 올렸을 때 발생할 스타일 */
+                        font-weight: bold;
+                        /* 부트스트랩 적용 후 nav 효과 적용이 되는걸 방지하기 위해 */
+                        text-decoration: none;
+                    }
 
-        #nav>ul>li:hover>a {
-            /* 메뉴에 마우스 올렸을 때 발생할 스타일(1Depth) */
-            transition: border .5s;
-            border-bottom: 3px solid #ff7473;
+            #nav li:hover ul {
+                display: block;
+            }
 
-        }
-
-        #nav ul ul {
-            /*display: none;*/
-            position: absolute;
-            width: 100%;
-            /* absolute는 부피를 가질 수 없다 */
-            margin: 0px -50px;
-        }
-
-        #nav ul ul a {
-            /* 2Depth li Style */
-            display: block;
-            line-height: 40px;
-            font-size: 14px;
-            color: white;
-        }
-
-        #nav ul ul a:hover {
-            /* SubMenu 마우스 올렸을 때 발생할 스타일 */
-            font-weight: bold;
-
-            /* 부트스트랩 적용 후 nav 효과 적용이 되는걸 방지하기 위해 */
-            text-decoration: none;
-        }
-
-        #nav li:hover ul {
-            display: block;
-        }
-
-        #nav li:nth-child(1) ul {
-            left: 0;
-            width: 100%;
-        }
+            #nav li:nth-child(1) ul {
+                left: 0;
+                width: 100%;
+            }
 
         .nav-logo {
             /* 웹 사이트 좌측 상단에 위치한 로고 div style */
@@ -394,26 +386,22 @@
             text-decoration: none;
         }
 
-        .nav-logo-item:hover {
-            transition: font .5s;
-            font-size: 27.5px;
-            color: white;
-
-            /* 부트스트랩 적용 후 텍스트에 적용되는 효과 방지를 위해 */
-            text-decoration: none;
-        }
+            .nav-logo-item:hover {
+                transition: font .5s;
+                font-size: 27.5px;
+                color: white;
+                /* 부트스트랩 적용 후 텍스트에 적용되는 효과 방지를 위해 */
+                text-decoration: none;
+            }
 
         .nav-log-area {
             /* 로그인, 로그아웃 영역 */
             width: 150px;
             height: 40px;
-
             padding-bottom: 5px;
             border: 2px solid white;
             border-radius: 15px;
-
             transition: .5s;
-
         }
 
         .nav-log-item {
@@ -421,7 +409,6 @@
             border: none;
             outline: none;
             cursor: pointer;
-
             margin-top: 8px;
             color: white;
             background-color: transparent;
@@ -433,10 +420,10 @@
                 display: none;
             }
 
-            .topnav>ul>li>.nav-logo>.nav-logo-item {
-                float: left;
-                display: block;
-            }
+                .topnav > ul > li > .nav-logo > .nav-logo-item {
+                    float: left;
+                    display: block;
+                }
         }
 
         #main {
@@ -467,12 +454,12 @@
             font-family: 'Noto Sans KR', sans-serif;
         }
 
-        .good-item{
+        .good-item {
             font-size: 25px;
             padding-left: 30px;
         }
-        
-        .goodBtn{
+
+        .goodBtn {
             width: 30px;
             height: 30px;
             display: flex;
@@ -481,8 +468,8 @@
             outline: none;
             background-color: transparent;
         }
-        
-        .good-cnt{
+
+        .good-cnt {
             cursor: default;
             color: orangered;
             font-size: 30px;
@@ -545,9 +532,9 @@
             transition-duration: .5s;
         }
 
-        .star:hover {
-            text-shadow: 0 0 15px yellow;
-        }
+            .star:hover {
+                text-shadow: 0 0 15px yellow;
+            }
 
         .score {
             cursor: default;
@@ -569,7 +556,6 @@
             width: 1100px;
             height: 780px;
             border: .5px solid rgba(0, 0, 0, .2);
-
         }
 
         .board-travel {
@@ -593,15 +579,15 @@
             flex-direction: column;
             background-color: #eee;
         }
-        
-        rootitem, costitem{
+
+        rootitem, costitem {
             width: 100%;
             height: auto;
             display: flex;
             flex-direction: column;
         }
-        
-        root-header, cost-header{
+
+        root-header, cost-header {
             width: 100%;
             height: 50px;
             display: flex;
@@ -610,8 +596,8 @@
             background-color: #e2e2e2;
             border: .5px solid rgba(0, 0, 0, .2);
         }
-        
-        root-content, cost-content{
+
+        root-content, cost-content {
             width: 100%;
             height: 340px;
             background-color: #eee;
@@ -621,8 +607,8 @@
             border-right: .5px solid rgba(0, 0, 0, .2);
             border-bottom: .5px solid rgba(0, 0, 0, .2);
         }
-        
-        content-item{
+
+        content-item {
             width: 100%;
             height: auto;
             display: flex;
@@ -630,15 +616,16 @@
             padding-bottom: 15px;
             flex-direction: column;
         }
-        
-        content-header{
+
+        content-header {
             width: 100%;
             font-size: 15px;
             padding-left: 5px;
             border-left: 4px solid firebrick;
             font-family: 'Noto Sans KR', sans-serif;
         }
-        content-body{
+
+        content-body {
             width: 100%;
             padding-top: 10px;
             padding-left: 10px;
@@ -646,23 +633,25 @@
             font-size: 13px;
             font-family: 'Noto Sans KR', sans-serif;
         }
-        .content-ul{
+
+        .content-ul {
             margin: 0;
             padding-left: 15px;
         }
-        .content-li{
+
+        .content-li {
             list-style: decimal;
             padding-top: 5px;
         }
-        
-        .board-part{
+
+        .board-part {
             width: 1500px;
             height: auto;
             display: flex;
             flex-direction: column;
         }
-        
-        .part-board-header{
+
+        .part-board-header {
             width: 100%;
             height: 130px;
             font-size: 50px;
@@ -673,7 +662,7 @@
             border-bottom: .5px solid rgba(0, 0, 0, .2);
             font-family: 'Noto Sans KR', sans-serif;
         }
-        
+
         .part-board-content {
             width: 100%;
             height: 800px;
@@ -713,25 +702,25 @@
             flex-direction: column;
             background-color: #eee;
         }
-        
-        .part-content-ul{
+
+        .part-content-ul {
             margin: 0;
             padding-left: 15px;
         }
-        
-        .part-content-li{
+
+        .part-content-li {
             list-style: decimal;
             padding-top: 5px;
         }
-        
-        .part-board-story{
+
+        .part-board-story {
             width: 100%;
             height: 700px;
             background-color: #eee;
             padding: 10px;
         }
-        
-        .part-story{
+
+        .part-story {
             width: 100%;
             height: 680px;
             background-color: #eee;
@@ -740,8 +729,8 @@
             overflow: auto;
             padding: 10px;
         }
-        
-        .board-hashtag{
+
+        .board-hashtag {
             width: 1500px;
             height: 100px;
             background-color: #eee;
@@ -749,8 +738,8 @@
             flex-direction: row;
             padding: 35px;
         }
-        
-        .board-reply{
+
+        .board-reply {
             margin-top: 100px;
             width: 1500px;
             height: 700px;
@@ -758,8 +747,8 @@
             display: flex;
             flex-direction: column;
         }
-        
-        .reply-header{
+
+        .reply-header {
             width: 100%;
             height: 80px;
             display: flex;
@@ -771,22 +760,22 @@
             box-shadow: 0px 0px 10px rgba(0, 0, 0, .19);
         }
 
-        .reply-header > span{
-            cursor: default;
-        }
-        
-        .reply-header > .replyCount{
-            color: orangered;
-        }
-        
-        .reply-contents{
+            .reply-header > span {
+                cursor: default;
+            }
+
+            .reply-header > .replyCount {
+                color: orangered;
+            }
+
+        .reply-contents {
             width: 100%;
             height: 400px;
             overflow: auto;
             border-bottom: .5px solid rgba(0, 0, 0, .5);
         }
-        
-        .replyItem{
+
+        .replyItem {
             width: 100%;
             height: 90px;
             display: flex;
@@ -794,39 +783,39 @@
             align-items: center;
             border-bottom: .5px solid rgba(0, 0, 0, .2);
         }
-        
-        .reply-writer{
+
+        .reply-writer {
             width: 200px;
             display: flex;
             padding: 0px 10px;
             flex-direction: row;
             align-items: center;
         }
-        
-        .reply-content{
+
+        .reply-content {
             width: 1130px;
             display: flex;
             padding: 0px 10px;
             align-items: center;
             justify-content: center;
         }
-        
-        .reply-score{
+
+        .reply-score {
             width: 170px;
             padding: 10px;
             justify-content: center;
             align-items: center;
         }
 
-        .reply-score .star{
-            font-size: 16px;
-        }
-        
-        .reply-write{
+            .reply-score .star {
+                font-size: 16px;
+            }
+
+        .reply-write {
             padding: 20px 10px 10px;
         }
-        
-        #reply-write-text{
+
+        #reply-write-text {
             width: 1475px;
             height: 150px;
             padding: 10px;
@@ -836,8 +825,8 @@
             font-size: 25px;
             font-family: 'Noto Sans KR', sans-serif;
         }
-        
-        .reply-write-item{
+
+        .reply-write-item {
             width: 100%;
             display: flex;
             flex-direction: row;
@@ -845,18 +834,18 @@
             align-items: center;
             padding: 10px 7px 10px 10px;
         }
-        
-        .reply-write-limit{
+
+        .reply-write-limit {
             padding-right: 10px;
         }
-        
-        #limitText{
+
+        #limitText {
             cursor: default;
             font-size: 18px;
             font-family: 'Noto Sans KR', sans-serif;
         }
-        
-        .replyButton{
+
+        .replyButton {
             width: 100px;
             height: 30px;
             outline: none;
@@ -868,12 +857,12 @@
             transition-duration: .5s;
             font-family: 'Noto Sans KR', sans-serif;
         }
-        
-        .replyButton:hover{
-            background-color: darkorange;
-        }
-        
-        .hashtag{
+
+            .replyButton:hover {
+                background-color: darkorange;
+            }
+
+        .hashtag {
             cursor: pointer;
             width: auto;
             padding: 7px;
@@ -885,31 +874,30 @@
             transition-duration: .5s;
             margin-right: 10px;
         }
-        
-        .hashtag:hover{
-            background-color: rgba(0, 0, 0, .8);
-        }
 
-        .reply-star-input{
+            .hashtag:hover {
+                background-color: rgba(0, 0, 0, .8);
+            }
+
+        .reply-star-input {
             margin-right: 30px;
             height: 30px;
         }
-        
-        .reply-star-input .reply-star{
-            width: 50px;
-            font-size: 13px;
-            padding: 5px;
-            outline: none;
-            color: dimgray;
-            border: .5px solid rgba(0, 0, 0, .1);
-            text-align-last: center;
-        }
-        
+
+            .reply-star-input .reply-star {
+                width: 50px;
+                font-size: 13px;
+                padding: 5px;
+                outline: none;
+                color: dimgray;
+                border: .5px solid rgba(0, 0, 0, .1);
+                text-align-last: center;
+            }
     </style>
 
     <script>
         /* scroll할 때 발생할 이벤트 */
-        window.onscroll = function() {
+        window.onscroll = function () {
             scrollFunction();
         }
 
@@ -923,9 +911,9 @@
                 document.getElementById("nav").style.background = "";
             }
         }
-        
-        $(function() {
-            $('#reply-write-text').keyup(function(e) {
+
+        $(function () {
+            $('#reply-write-text').keyup(function (e) {
                 var content = $(this).val();
                 $('#limitText').html("(" + content.length + " / 200)");
 
@@ -974,15 +962,17 @@
                     </ul>
                 </li>
                 <li class="topnavLi">
-                 <% if (Session["mem_id"] != null)
-                     {%>
-				<a href = "#" ><% string id = Session["mem_id"].ToString(); Response.Write(id); %></a>
-                <ul>
-                    <li><asp:Button ID="btnMypage" runat="server" Text="마이페이지"  /></li>
-                    <li><asp:Button ID="btnLogout" runat="server" Text="로그아웃" /></li>
+                    <% if (Session["mem_id"] != null)
+                        {%>
+                    <a href="#"><% string id = Session["mem_id"].ToString(); Response.Write(id); %></a>
+                    <ul>
+                        <li>
+                            <asp:Button ID="btnMypage" runat="server" Text="마이페이지" /></li>
+                        <li>
+                            <asp:Button ID="btnLogout" runat="server" Text="로그아웃" /></li>
 
-                </ul>
-                 <%} %>
+                    </ul>
+                    <%} %>
                 </li>
             </ul>
         </div>
@@ -993,7 +983,7 @@
             List<String> MemberList = getMemberByTrvNo();                 // 해당 게시글의 작성자의 데이터
             List<String> TravelDayContents = getTravelDayListByTrvNo();  // 해당 게시글의 내용 데이터
             List<Comment> CommentList = getCommentListByTrvNo();    // 해당 게시글의 댓글 데이터
-            List<Map> MapList  = getMapByTrvDayNo();
+            List<Map> MapList = getMapByTrvDayNo();
 
 
             int day = 0;                                                                // 일 차
@@ -1004,7 +994,7 @@
             string starText = "";
             int replyCount = getCommentByTrvNo();                          // 해당 게시글의 댓글 수
 
-            for(int i = 0; i < starCount; i++) // 별 수만큼 for문 반복해서 starText 변수에 ⭐ 삽입
+            for (int i = 0; i < starCount; i++) // 별 수만큼 for문 반복해서 starText 변수에 ⭐ 삽입
                 starText += "⭐";
 
             // ======================================
@@ -1012,11 +1002,11 @@
         <div id="main">
             <div class="board">
                 <div class="board-header">
-                    <div class = "header-item"><%Response.Write(TravelList[5].ToString());%></div>
-                    <div class = "good-item">
-                        <button class = "goodBtn">👍</button>
+                    <div class="header-item"><%Response.Write(TravelList[5].ToString());%></div>
+                    <div class="good-item">
+                        <button class="goodBtn">👍</button>
                     </div>
-                    <div class = "good-cnt"><%Response.Write(goodCnt);%></div>
+                    <div class="good-cnt"><%Response.Write(goodCnt);%></div>
                 </div>
                 <div class="board-writer">
                     <div class="writer-Image">
@@ -1038,7 +1028,9 @@
                     <span class="score">(<%Response.Write(starScore.ToString());%>)</span>
                 </div>
                 <div class="board-content">
-                    <div class="board-map">지도 넣을 곳<br />지도 넣을 때 style 가셔서<br />display, align-items, justify-content 지워주세요</div>
+                    <div class="board-map">지도 넣을 곳<br />
+                        지도 넣을 때 style 가셔서<br />
+                        display, align-items, justify-content 지워주세요</div>
                     <div class="board-travel">
                         <div class="travel-root">
                             <rootitem>
@@ -1057,7 +1049,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <%
                 for (int i = 0; i < TravelDayContents.Count; i++)
                 {
@@ -1065,7 +1057,7 @@
                     "<div class = \"board-part\">\n" +
                         "<div class = \"part-board-header\">" + (day + 1) + "일 차</div>\n" +
                         "<div class = \"part-board-content\">\n" +
-                            "<div class = \"part-board-map\"id='map_"+i+"'></div>\n" +
+                            "<div class = \"part-board-map\"id='map_" + i + "'></div>\n" +
                             "<div class = \"part-board-travel\">\n" +
                                 "<div class = \"part-travel-root\">\n" +
                                     "<rootitem>\n" +
@@ -1101,80 +1093,80 @@
                     "</div>\n");
                 }
             %>
-            
-            <div class = "board-hashtag">
-<%
-                // hashtag 누르면 search.aspx?hashtag=○○○○ 로 이동
-                List<String> hashtagList = getHashTagList();
-                for(int i = 0; i < hashtagList.Count; i++)
-                {
-                    Response.Write("<a href = \"search.aspx?hashtag=" + hashtagList[i].ToString() + "\"><div class = \"hashtag\">" + hashtagList[i].ToString() + "</div></a>\n");
-                }
-%>
+
+            <div class="board-hashtag">
+                <%
+                    // hashtag 누르면 search.aspx?hashtag=○○○○ 로 이동
+                    List<String> hashtagList = getHashTagList();
+                    for (int i = 0; i < hashtagList.Count; i++)
+                    {
+                        Response.Write("<a href = \"search.aspx?hashtag=" + hashtagList[i].ToString() + "\"><div class = \"hashtag\">" + hashtagList[i].ToString() + "</div></a>\n");
+                    }
+                %>
             </div>
 
-            <div class = "board-reply">
-                <div class = "reply-header">
+            <div class="board-reply">
+                <div class="reply-header">
                     <span class="replyText">댓글</span>&nbsp;
                     <span class="replyCount"><%Response.Write(replyCount);%></span>
                 </div>
-                <div class = "reply-contents">
-<%
-    for (int k = 0; k < CommentList.Count; k++)
-    {
-        Member member = new Member();
-        MemberDao memberDao = new MemberDao();
+                <div class="reply-contents">
+                    <%
+                        for (int k = 0; k < CommentList.Count; k++)
+                        {
+                            Member member = new Member();
+                            MemberDao memberDao = new MemberDao();
 
-        member.Mem_id = CommentList[k].Mem_id;
-        member = memberDao.selectMemberByMem_id(member); // 메인 이미지 찾기 작업
+                            member.Mem_id = CommentList[k].Mem_id;
+                            member = memberDao.selectMemberByMem_id(member); // 메인 이미지 찾기 작업
 
-        string memMainImg = member.Mem_img_url;
-        if (memMainImg == "noImage")
-            memMainImg = "./img/noImage.png";
+                            string memMainImg = member.Mem_img_url;
+                            if (memMainImg == "noImage")
+                                memMainImg = "./img/noImage.png";
 
-        double d_replyStarCount = double.Parse(CommentList[k].Cmt_rate.ToString()); // 소수 출력
-        int i_replyStarCount = (int)d_replyStarCount; // 별 갯수
-        string s_replyStarCount = "";
+                            double d_replyStarCount = double.Parse(CommentList[k].Cmt_rate.ToString()); // 소수 출력
+                            int i_replyStarCount = (int)d_replyStarCount; // 별 갯수
+                            string s_replyStarCount = "";
 
-        for(int l = 0; l < i_replyStarCount; l++)
-            s_replyStarCount += "⭐";
+                            for (int l = 0; l < i_replyStarCount; l++)
+                                s_replyStarCount += "⭐";
 
-        Response.Write("" +
-                           "<div class = \"replyItem\">\n" +
-                                "<div class = \"reply-writer\">\n" +
-                                    "<div class=\"writer-Image\">\n" +
-                                        "<a href=\"#\">\n" +
-                                            "<img src=\"" + memMainImg + "\" alt=\"" + CommentList[k].Mem_id + "\" class=\"writer-ImageItem\" />\n" +
-                                        "</a>\n" +
-                                    "</div>\n" +
-                                    "<div class=\"writer-Text\">\n" +
-                                        "<div class=\"writerID\">\n" +
-                                            "<a href=\"#\">\n" +
-                                                CommentList[k].Mem_id + "\n" +
-                                            "</a>\n" +
-                                        "</div>\n" +
-                                        "<div class=\"writerTime\">" + CommentList[k].Cmt_timestamp + "</div>\n" +
-                                    "</div>\n" +
-                                "</div>\n" +
-                                "<div class = \"reply-content\">\n" +
-                                    CommentList[k].Cmt_content + "\n" +
-                                "</div>\n" +
-                                "<div class = \"reply-score\">\n" +
-                                    "<span class=\"star\">" + s_replyStarCount + "</span>\n" +
-                                    "<span class=\"score\">(" + d_replyStarCount + ")</span>\n" +
-                                "</div>\n" +
-                            "</div>\n");
-    }
-%>
+                            Response.Write("" +
+                                               "<div class = \"replyItem\">\n" +
+                                                    "<div class = \"reply-writer\">\n" +
+                                                        "<div class=\"writer-Image\">\n" +
+                                                            "<a href=\"#\">\n" +
+                                                                "<img src=\"" + memMainImg + "\" alt=\"" + CommentList[k].Mem_id + "\" class=\"writer-ImageItem\" />\n" +
+                                                            "</a>\n" +
+                                                        "</div>\n" +
+                                                        "<div class=\"writer-Text\">\n" +
+                                                            "<div class=\"writerID\">\n" +
+                                                                "<a href=\"#\">\n" +
+                                                                    CommentList[k].Mem_id + "\n" +
+                                                                "</a>\n" +
+                                                            "</div>\n" +
+                                                            "<div class=\"writerTime\">" + CommentList[k].Cmt_timestamp + "</div>\n" +
+                                                        "</div>\n" +
+                                                    "</div>\n" +
+                                                    "<div class = \"reply-content\">\n" +
+                                                        CommentList[k].Cmt_content + "\n" +
+                                                    "</div>\n" +
+                                                    "<div class = \"reply-score\">\n" +
+                                                        "<span class=\"star\">" + s_replyStarCount + "</span>\n" +
+                                                        "<span class=\"score\">(" + d_replyStarCount + ")</span>\n" +
+                                                    "</div>\n" +
+                                                "</div>\n");
+                        }
+                    %>
                 </div>
-                <div class = "reply-write">
-                    <div class = "reply-write-input">
+                <div class="reply-write">
+                    <div class="reply-write-input">
                         <textarea id="reply-write-text"></textarea>
                     </div>
-                    <div class = "reply-write-item">
+                    <div class="reply-write-item">
                         <span class="star" style="font-size: 18px; padding-right: 3px; padding-bottom: 3px;">⭐</span>
-                        <div class = "reply-star-input">
-                            <select class = "reply-star">
+                        <div class="reply-star-input">
+                            <select class="reply-star">
                                 <option value="5">5</option>
                                 <option value="4">4</option>
                                 <option value="3" selected>3</option>
@@ -1182,24 +1174,23 @@
                                 <option value="1">1</option>
                             </select>
                         </div>
-                        <div class = "reply-write-limit">
-                            <span id = "limitText">(0 / 200)</span>
+                        <div class="reply-write-limit">
+                            <span id="limitText">(0 / 200)</span>
                         </div>
-                        <div class = "reply-write-btn"></div>
-                            <button class="replyButton">등록</button>
+                        <div class="reply-write-btn"></div>
+                        <button class="replyButton">등록</button>
                     </div>
                 </div>
             </div>
-            
+
         </div>
         <div id="footer">
-            
         </div>
-        <asp:Literal ID="Literal_mapData" runat="server"></asp:Literal>
+        <asp:PlaceHolder ID="PlaceHolder_hidden" runat="server"></asp:PlaceHolder>
     </form>
 
     <script>
-        
+
 
 
 
@@ -1207,135 +1198,286 @@
 
 
         // input (맵객체id, 중심좌표, 지도 데이터를 포함한 hiddenfiled , inStrokeColor,inFillColor)
-// return -> {생성한 지도객체, 생성한 manager, }
-function makeMapOption(mapId, mapCenter, mapLevel, mapDataInputId, inStrokeColor, inFillColor) {
-    
-    var drawingMapContainer = document.getElementById(mapId),
-    drawingMap = {
-        center: mapCenter, // 지도의 중심좌표
-        level: mapLevel // 지도의 확대 레벨
-    };
-    
-    var drawingMap = new daum.maps.Map(drawingMapContainer, drawingMap);
-    
-    var options = { // Drawing Manager를 생성할 때 사용할 옵션입니다
-        map: drawingMap, // Drawing Manager로 그리기 요소를 그릴 map 객체입니다
-        drawingMode: [ // Drawing Manager로 제공할 그리기 요소 모드입니다
-        daum.maps.drawing.OverlayType.ARROW,
-        daum.maps.drawing.OverlayType.CIRCLE,
-        daum.maps.drawing.OverlayType.ELLIPSE,
-        daum.maps.drawing.OverlayType.MARKER,
-        daum.maps.drawing.OverlayType.POLYLINE,
-        daum.maps.drawing.OverlayType.POLYGON,
-        daum.maps.drawing.OverlayType.RECTANGLE
-    ],
+        // return -> {생성한 지도객체, 생성한 manager, }
+        function makeMapOption(mapId, mapCenter, mapLevel, mapDataInputId, inStrokeColor, inFillColor) {
 
-        arrowOptions: {
-            draggable: false,
-            removable: false,
-            editable: false,
-            strokeWeight: 3,
-            strokeOpacity: 0.8,
-            strokeColor: inStrokeColor,
-            strokeStyle: 'solid',
-            hintStrokeStyle: 'dashdot',
-            hintStrokeOpacity: 0.3,
-            startArrow: false
-        },
-        circleOptions: {
-            draggable: false,
-            removable: false,
-            editable: true,
-            strokeColor: inStrokeColor,
-            fillColor: inFillColor,
-            fillOpacity: 0.5
-        },
-        ellipseOptions: {
-            draggable: false,
-            removable: false,
-            editable: false,
-            strokeWeight: 2,
-            strokeOpacity: 0.8,
-            strokeColor: inStrokeColor,
-            strokeStyle: 'solid',
-            fillColor: inFillColor,
-            fillOpacity: 0.3
-        },
-        markerOptions: { // 마커 옵션입니다
-            draggable: false, // 마커를 그리고 나서 드래그 가능하게 합니다
-            removable: false, // 마커를 삭제 할 수 있도록 x 버튼이 표시됩니다
-            markerImages: [
-        null, // API에서 제공하는 기본 마커 이미지
-                {
-                    src: 'http://t1.daumcdn.net/localimg/localimages/07/2009/map/icon/ico_mn_13.png',
-                    width: 31,
-                    height: 35,
-                    shape: 'rect',
-                    coords: '0,0,31,35',
-                    hoverImage: {
-                        src: 'http://t1.daumcdn.net/localimg/localimages/07/2012/img/marker_normal.png',
-                        width: 33,
-                        height: 36,
-                        offsetX: 12,
-                        offsetY: 36,
-                        spriteWidth: 644,
-                        spriteHeight: 946,
-                        spriteOriginX: 10,
-                        spriteOriginY: 10
-                    },
-                    dragImage: {
-                        src: 'http://t1.daumcdn.net/localimg/localimages/07/2012/attach/pc_img/ico_comm.png',
-                        width: 20, // 마커 크기
-                        height: 20, // 마커 크기
-                        offsetX: 10, // 지도에 고정시킬 이미지 내 위치 좌표
-                        offsetY: 20, // 지도에 고정시킬 이미지 내 위치 좌표
-                        spriteWidth: 118, // 이미지 전체 크기
-                        spriteHeight: 111, // 이미지 전체 크기
-                        spriteOriginX: 0, // 이미지 중 마커로 사용할 위치
-                        spriteOriginY: 90 // 이미지 중 마커로 사용할 위치
-                    }
-}
-]
-        },
-        polylineOptions: { // 선 옵션입니다
-            draggable: false, // 그린 후 드래그가 가능하도록 설정합니다
-            removable: false, // 그린 후 삭제 할 수 있도록 x 버튼이 표시됩니다
-            editable: false, // 그린 후 수정할 수 있도록 설정합니다
-            strokeColor: inStrokeColor, // 선 색
-            hintStrokeStyle: 'dash', // 그리중 마우스를 따라다니는 보조선의 선 스타일
-            hintStrokeOpacity: 0.5 // 그리중 마우스를 따라다니는 보조선의 투명도
-        },
-        polygonOptions: {
-            draggable: false,
-            removable: false,
-            editable: false,
-            strokeColor: inStrokeColor,
-            fillColor: inFillColor,
-            fillOpacity: 0.5,
-            hintStrokeStyle: 'dash',
-            hintStrokeOpacity: 0.5
-        },
-        rectangleOptions: {
-            draggable: false,
-            removable: false,
-            editable: false,
-            strokeColor: inStrokeColor, // 외곽선 색
-            fillColor: inFillColor, // 채우기 색
-            fillOpacity: 0.5 // 채우기색 투명도
+            var drawingMapContainer = document.getElementById(mapId),
+                drawingMap = {
+                    center: mapCenter, // 지도의 중심좌표
+                    level: mapLevel // 지도의 확대 레벨
+                };
+
+            var drawingMap = new daum.maps.Map(drawingMapContainer, drawingMap);
+
+            var options = { // Drawing Manager를 생성할 때 사용할 옵션입니다
+                map: drawingMap, // Drawing Manager로 그리기 요소를 그릴 map 객체입니다
+                drawingMode: [ // Drawing Manager로 제공할 그리기 요소 모드입니다
+                    daum.maps.drawing.OverlayType.ARROW,
+                    daum.maps.drawing.OverlayType.CIRCLE,
+                    daum.maps.drawing.OverlayType.ELLIPSE,
+                    daum.maps.drawing.OverlayType.MARKER,
+                    daum.maps.drawing.OverlayType.POLYLINE,
+                    daum.maps.drawing.OverlayType.POLYGON,
+                    daum.maps.drawing.OverlayType.RECTANGLE
+                ],
+
+                arrowOptions: {
+                    draggable: false,
+                    removable: false,
+                    editable: false,
+                    strokeWeight: 3,
+                    strokeOpacity: 0.8,
+                    strokeColor: inStrokeColor,
+                    strokeStyle: 'solid',
+                    hintStrokeStyle: 'dashdot',
+                    hintStrokeOpacity: 0.3,
+                    startArrow: false
+                },
+                circleOptions: {
+                    draggable: false,
+                    removable: false,
+                    editable: true,
+                    strokeColor: inStrokeColor,
+                    fillColor: inFillColor,
+                    fillOpacity: 0.5
+                },
+                ellipseOptions: {
+                    draggable: false,
+                    removable: false,
+                    editable: false,
+                    strokeWeight: 2,
+                    strokeOpacity: 0.8,
+                    strokeColor: inStrokeColor,
+                    strokeStyle: 'solid',
+                    fillColor: inFillColor,
+                    fillOpacity: 0.3
+                },
+                markerOptions: { // 마커 옵션입니다
+                    draggable: false, // 마커를 그리고 나서 드래그 가능하게 합니다
+                    removable: false, // 마커를 삭제 할 수 있도록 x 버튼이 표시됩니다
+                    markerImages: [
+                        null, // API에서 제공하는 기본 마커 이미지
+                        {
+                            src: 'http://t1.daumcdn.net/localimg/localimages/07/2009/map/icon/ico_mn_13.png',
+                            width: 31,
+                            height: 35,
+                            shape: 'rect',
+                            coords: '0,0,31,35',
+                            hoverImage: {
+                                src: 'http://t1.daumcdn.net/localimg/localimages/07/2012/img/marker_normal.png',
+                                width: 33,
+                                height: 36,
+                                offsetX: 12,
+                                offsetY: 36,
+                                spriteWidth: 644,
+                                spriteHeight: 946,
+                                spriteOriginX: 10,
+                                spriteOriginY: 10
+                            },
+                            dragImage: {
+                                src: 'http://t1.daumcdn.net/localimg/localimages/07/2012/attach/pc_img/ico_comm.png',
+                                width: 20, // 마커 크기
+                                height: 20, // 마커 크기
+                                offsetX: 10, // 지도에 고정시킬 이미지 내 위치 좌표
+                                offsetY: 20, // 지도에 고정시킬 이미지 내 위치 좌표
+                                spriteWidth: 118, // 이미지 전체 크기
+                                spriteHeight: 111, // 이미지 전체 크기
+                                spriteOriginX: 0, // 이미지 중 마커로 사용할 위치
+                                spriteOriginY: 90 // 이미지 중 마커로 사용할 위치
+                            }
+                        }
+                    ]
+                },
+                polylineOptions: { // 선 옵션입니다
+                    draggable: false, // 그린 후 드래그가 가능하도록 설정합니다
+                    removable: false, // 그린 후 삭제 할 수 있도록 x 버튼이 표시됩니다
+                    editable: false, // 그린 후 수정할 수 있도록 설정합니다
+                    strokeColor: inStrokeColor, // 선 색
+                    hintStrokeStyle: 'dash', // 그리중 마우스를 따라다니는 보조선의 선 스타일
+                    hintStrokeOpacity: 0.5 // 그리중 마우스를 따라다니는 보조선의 투명도
+                },
+                polygonOptions: {
+                    draggable: false,
+                    removable: false,
+                    editable: false,
+                    strokeColor: inStrokeColor,
+                    fillColor: inFillColor,
+                    fillOpacity: 0.5,
+                    hintStrokeStyle: 'dash',
+                    hintStrokeOpacity: 0.5
+                },
+                rectangleOptions: {
+                    draggable: false,
+                    removable: false,
+                    editable: false,
+                    strokeColor: inStrokeColor, // 외곽선 색
+                    fillColor: inFillColor, // 채우기 색
+                    fillOpacity: 0.5 // 채우기색 투명도
+                }
+
+            };
+            var resultManager = new daum.maps.drawing.DrawingManager(options);
+
+            return { map: drawingMap, manager: resultManager };
+
+        }
+        //------------------------------------
+        //----------drawingMap DataBind Start Not Map
+        //-------------------------------
+
+
+
+
+
+
+
+
+        function setDrawingMapDataByManagerMapId(inManager, mapId) {
+            // Drawing Manager에서 그려진 데이터 정보를 가져옵니다 
+            var data = JSON.parse(document.getElementById(mapId).value);
+            console.info(data);
+
+            // 아래 지도에 그려진 도형이 있다면 모두 지웁니다
+
+
+            console.info(data["marker"]);
+            console.info(data["polyline"]);
+            console.info(data["rectangle"]);
+            console.info(data["circle"]);
+            console.info(data["polygon"]);
+            console.info(data["ellipse"]);
+            console.info(data["arrow"]);
+            // 지도에 가져온 데이터로 도형들을 그립니다
+            drawMarker(inManager, data["marker"]);
+            drawPolyline(inManager, data["polyline"]);
+            drawRectangle(inManager, data["rectangle"]);
+            drawCircle(inManager, data["circle"]);
+            drawPolygon(inManager, data["polygon"]);
+            drawEllipse(inManager, data["ellipse"]);
+            drawArrow(inManager, data["arrow"]);
+
+
+
+
         }
 
-    };
-    var resultManager = new daum.maps.drawing.DrawingManager(options);
-    
-    return {map: drawingMap, manager: resultManager};
 
-}
-<%
+        function drawArrow(inManager, arrow) {
+            var len = arrow.length,
+                i = 0;
+
+            for (; i < len; i++) {
+                var path = pointsToPath(arrow[i].points);
+                inManager.put(kakao.maps.drawing.OverlayType.ARROW, path);
+            }
+        }
+
+        function drawEllipse(inManager, ellipse) {
+            var len = ellipse.length,
+                i = 0;
+
+            for (; i < len; i++) {
+                var style = ellipse[i].options;
+                bounds = new kakao.maps.LatLngBounds(
+                    new kakao.maps.LatLng(ellipse[i].sPoint.y, ellipse[i].sPoint.x),
+                    new kakao.maps.LatLng(ellipse[i].ePoint.y, ellipse[i].ePoint.x)
+                );
+                inManager.put(kakao.maps.drawing.OverlayType.ELLIPSE, bounds);
+            }
+        } // Drawing Manager에서 가져온 데이터 중 마커를 아래 지도에 표시하는 함수입니다
+        function drawMarker(inManager, markers) {
+
+            var len = markers.length,
+                i = 0;
+
+            for (; i < len; i++) {
+                inManager.put(kakao.maps.drawing.OverlayType.MARKER, new kakao.maps.LatLng(markers[i].y, markers[i].x), 2);
+            }
+        }
+
+        // Drawing Manager에서 가져온 데이터 중 선을 아래 지도에 표시하는 함수입니다
+        function drawPolyline(inManager, lines) {
+            var len = lines.length,
+                i = 0;
+
+            for (; i < len; i++) {
+                var path = pointsToPath(lines[i].points);
+                inManager.put(kakao.maps.drawing.OverlayType.POLYLINE, path);
+
+
+            }
+        }
+
+        // Drawing Manager에서 가져온 데이터 중 사각형을 아래 지도에 표시하는 함수입니다
+        function drawRectangle(inManager, rects) {
+            var len = rects.length,
+                i = 0;
+
+            for (; i < len; i++) {
+                var style = rects[i].options;
+                bounds = new kakao.maps.LatLngBounds(
+                    new kakao.maps.LatLng(rects[i].sPoint.y, rects[i].sPoint.x),
+                    new kakao.maps.LatLng(rects[i].ePoint.y, rects[i].ePoint.x)
+                );
+                inManager.put(kakao.maps.drawing.OverlayType.RECTANGLE, bounds);
+
+
+
+            }
+        }
+
+        // Drawing Manager에서 가져온 데이터 중 원을 아래 지도에 표시하는 함수입니다
+        function drawCircle(inManager, circles) {
+            var len = circles.length,
+                i = 0;
+
+            for (; i < len; i++) {
+
+                inManager.put(kakao.maps.drawing.OverlayType.CIRCLE, new kakao.maps.LatLng(circles[i].center.y, circles[i].center.x), circles[i].radius);
+
+            }
+        }
+
+        // Drawing Manager에서 가져온 데이터 중 다각형을 아래 지도에 표시하는 함수입니다
+        function drawPolygon(inManager, polygons) {
+            var len = polygons.length,
+                i = 0;
+
+            for (; i < len; i++) {
+
+                var path = pointsToPath(polygons[i].points);
+                inManager.put(kakao.maps.drawing.OverlayType.POLYGON, path);
+
+            }
+        }
+
+        // Drawing Manager에서 가져온 데이터 중 
+        // 선과 다각형의 꼭지점 정보를 kakao.maps.LatLng객체로 생성하고 배열로 반환하는 함수입니다 
+        function pointsToPath( points) {
+            var len = points.length,
+                path = [],
+                i = 0;
+
+            for (; i < len; i++) {
+                var latlng = new kakao.maps.LatLng(points[i].y, points[i].x);
+                path.push(latlng);
+            }
+
+            return path;
+        }
+    //------------------------------------
+    //----------DrawingMap DataBind  END  Not Map
+    //------------------------------------
+
+
+
+        <%
 
         int index = 0;
-        foreach(var map in MapList)
-        { Response.Write("makeMapOption('map_"+index+"', new daum.maps.LatLng(33.450701, 126.570667), 3, 'mapData_"+index+"', '#39f', '#39f') ;");
-            
+        foreach (var map in MapList)
+        {
+            Response.Write("var map_"+index+" = makeMapOption('map_" + index + "', new daum.maps.LatLng(33.450701, 126.570667), 3, 'mapData_" + index + "', '#39f', '#39f') ;");
+            Response.Write("setDrawingMapDataByManagerMapId(map_"+index+".manager, 'mapData_"+index+"');");
             index++;
         }
 
@@ -1343,6 +1485,6 @@ function makeMapOption(mapId, mapCenter, mapLevel, mapDataInputId, inStrokeColor
         %>
 
 
-    </script>
+</script>
 </body>
 </html>
