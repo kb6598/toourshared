@@ -6,12 +6,20 @@
 
     protected void Page_Load(object sender, EventArgs e)
     {
-        /*if(Session["mem_id"] == null)
+        if (Session["mem_id"] == null)
         {
             MessageBox.Show("접근 할 수 없습니다.", this.Page);
             Response.Redirect("/index.aspx");
         }
         else
+        {
+            selectMyInfo();
+        }
+    }
+
+    protected void selectMyInfo()
+    {
+        if(Session["mem_id"] != null)
         {
             MemberDao member = new MemberDao();
 
@@ -23,9 +31,8 @@
 
             mem_id.Text = resultMem.Mem_id;
             mem_name.Text = resultMem.Mem_name;
-
-        
-        }*/
+            mem_img.Value = resultMem.Mem_img_url;
+        }
     }
     protected void btnLogout_Click(object sender, EventArgs e)
     {
@@ -725,6 +732,26 @@
 			border-radius: 100%;
 		}
 		
+        .navJoinBtn{
+            border: none;
+            outline: none;
+            background-color: transparent;
+            color: white;
+            font-size: 14px;
+            padding-bottom: 20px;
+        }
+
+        .navFindBtn:hover, .navJoinBtn:hover{
+            font-weight: bold;
+        }
+
+        .navFindBtn{
+            border: none;
+            outline: none;
+            background-color: transparent;
+            color: white;
+            font-size: 14px;
+        }
 	</style>
     <title></title>
 </head>
@@ -781,7 +808,9 @@
 				
 				var image = document.getElementById("fileUploadImage");
 				image.alt = filename;
-				image.src = originalFileName;
+                image.src = originalFileName;
+
+                
 			});
 		});
 		
@@ -826,8 +855,8 @@
                      {%>
 				<a href = "#" ><% string id = Session["mem_id"].ToString(); Response.Write(id); %></a>
                 <ul>
-                    <li><asp:Button ID="btnMypage" runat="server" Text="마이페이지" OnClick="btnMypage_Click" /></li>
-                    <li><asp:Button ID="btnLogout" runat="server" Text="로그아웃" OnClick="btnLogout_Click" /></li>
+                    <li><asp:Button ID="btnMypage" runat="server" Text="마이페이지" OnClick="btnMypage_Click" class="navJoinBtn"/></li>
+                    <li><asp:Button ID="btnLogout" runat="server" Text="로그아웃" OnClick="btnLogout_Click" class="navFindBtn"/></li>
 
                 </ul>
                  <%} %>
@@ -842,7 +871,7 @@
 				<div class = "profileHeader">
 					<div class = "profileItem1">
 						<div class = "profileImage">
-							<img src = "./img/UserNoneImage.png" alt = "프로필 사진">
+							<img src = "<%Response.Write(mem_img.Value);%>" alt = "프로필 사진">
 						</div>
 						<div class = "profileID">
 							<div class = "ID">
@@ -943,13 +972,14 @@
 					<div class = "fileUpload">
 						<input class="upload-name" disabled="disabled" id="filePath">
 						<label for ="fileStyle">사진 첨부</label>
-						<input type = "file" id="fileStyle" class = "upload-hidden">
+						<input type = "file" id="fileStyle" class = "upload-hidden" >
 					</div>
 					<div class = "fileUploadButton" id="fileUploadBtn">
 						<div class = "fileUploadArea">
 							<img id = "fileUploadImage" alt="">
 						</div>
 						<input type = "button" value = "적용" data-dismiss="modal">
+                        
 					</div>
       			</div>
 
@@ -962,6 +992,7 @@
     		</div>
   		</div>
 	</div>
+        <asp:HiddenField ID="mem_img" runat="server" />
         </form>
 </body>
 	

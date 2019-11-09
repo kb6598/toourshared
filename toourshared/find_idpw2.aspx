@@ -392,7 +392,26 @@
             align-items: center;
             background-color: #272625;
         }
-        
+        .navJoinBtn{
+            border: none;
+            outline: none;
+            background-color: transparent;
+            color: white;
+            font-size: 14px;
+            padding-bottom: 20px;
+        }
+
+        .navFindBtn:hover, .navJoinBtn:hover{
+            font-weight: bold;
+        }
+
+        .navFindBtn{
+            border: none;
+            outline: none;
+            background-color: transparent;
+            color: white;
+            font-size: 14px;
+        }
     </style>
 
     <script>
@@ -464,8 +483,8 @@
                 </div>
                 <ul>
                     <br />
-                    <li><asp:Button ID="btnJoin" runat="server" Text="회원가입" OnClick="btnJoin_Click" /></li>
-                    <li><asp:Button ID="btnFindIDPW" runat="server" Text="계정찾기" OnClick="btnFindIDPW_Click" /></li>
+                    <li><asp:Button ID="btnJoin" runat="server" Text="회원가입" OnClick="btnJoin_Click" class="navJoinBtn"/></li>
+                    <li><asp:Button ID="btnFindIDPW" runat="server" Text="계정찾기" OnClick="btnFindIDPW_Click" class="navFindBtn"/></li>
                 </ul>
             </li>
         <%  
@@ -476,8 +495,8 @@
             <li class = "topnavLi" >
 				<a href = "#" ><% string id = Session["mem_id"].ToString(); Response.Write(id); %></a>
                 <ul>
-                    <li><asp:Button ID="btnMypage" runat="server" Text="마이페이지" OnClick="btnMypage_Click" /></li>
-                    <li><asp:Button ID="btnLogout" runat="server" Text="로그아웃" OnClick="btnLogout_Click" /></li>
+                    <li><asp:Button ID="btnMypage" runat="server" Text="마이페이지" OnClick="btnMypage_Click" class="navJoinBtn"/></li>
+                    <li><asp:Button ID="btnLogout" runat="server" Text="로그아웃" OnClick="btnLogout_Click" class="navFindBtn"/></li>
 
                 </ul>
             </li>
@@ -546,7 +565,7 @@
                         <asp:Button ID="btnBack" runat="server" Text="이전으로" PostBackUrl="~/find_idpw.aspx"/>
                     </div>
                     <div class = "go Home">
-                        <asp:Button ID="btnHome" runat="server" Text="메인으로" PostBackUrl="~/index_old.aspx"/>
+                        <asp:Button ID="btnHome" runat="server" Text="메인으로" PostBackUrl="~/index.aspx"/>
                     </div>
                 </div>
             </div>

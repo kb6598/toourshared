@@ -6,7 +6,7 @@
 
 <script runat="server">
     // 내가 작성한글, 내가 팔로일하는 사람의 글, 나를 팔로우 하는 사람의 글
-     protected void btnLogout_Click(object sender, EventArgs e)
+    protected void btnLogout_Click(object sender, EventArgs e)
     {
         Session.Abandon();
         Response.Redirect("/index.aspx");
@@ -354,6 +354,29 @@
     {
         Bind_Table_Travel();
         Bind_Table_MyReviews();
+        selectMyInfo();
+    }
+
+    protected void selectMyInfo()
+    {
+        Member member = new Member();
+        MemberDao mem = new MemberDao();
+        if(Session["mem_id"] != null)
+        {
+            member.Mem_id = Session["mem_id"].ToString();
+            member = mem.selectMemberByMem_id(member);
+
+            string id = member.Mem_id.ToString();
+            string name = member.Mem_name.ToString();
+
+            mem_id.Text = id;
+            mem_name.Text = name;
+        }
+        else
+        {
+
+        }
+
     }
 
 </script>
@@ -809,6 +832,26 @@
         align-items: center;
         position: absolute;
     }
+    .navJoinBtn{
+            border: none;
+            outline: none;
+            background-color: transparent;
+            color: white;
+            font-size: 14px;
+            padding-bottom: 20px;
+        }
+
+        .navFindBtn:hover, .navJoinBtn:hover{
+            font-weight: bold;
+        }
+
+        .navFindBtn{
+            border: none;
+            outline: none;
+            background-color: transparent;
+            color: white;
+            font-size: 14px;
+        }
 </style>
 <script>
     /* scroll할 때 발생할 이벤트 */
@@ -905,8 +948,8 @@
             <li class = "topnavLi" >
 				<a href = "#" ><% string id = Session["mem_id"].ToString(); Response.Write(id); %></a>
                 <ul>
-                    <li><asp:Button ID="btnMypage" runat="server" Text="마이페이지" OnClick="btnMypage_Click" /></li>
-                    <li><asp:Button ID="btnLogout" runat="server" Text="로그아웃" OnClick="btnLogout_Click" /></li>
+                    <li><asp:Button ID="btnMypage" runat="server" Text="마이페이지" OnClick="btnMypage_Click" class="navJoinBtn"/></li>
+                    <li><asp:Button ID="btnLogout" runat="server" Text="로그아웃" OnClick="btnLogout_Click" class="navFindBtn"/></li>
 
                 </ul>
             </li>
@@ -934,10 +977,11 @@
                     <div class="userDataAlign">
                         <div class="idAndSetting">
                             <div class="ID">
-                                <h1>milk9503</h1>
+                                <h1>
+                                    <asp:Label ID="mem_id" runat="server" Text="Label"></asp:Label></h1>
                             </div>
                             <div class="Setting">
-                                <input type="button" value="프로필 편집" class="settingButton" />
+                                <input type="button" value="프로필 편집" class="settingButton" onclick="location.href = '/edit.aspx' "/>
                             </div>
                         </div>
                         <div class="data">
@@ -952,7 +996,8 @@
                             </div>
                         </div>
                         <div class="name">
-                            <span>홍길동</span>
+                            <span>
+                                <asp:Label ID="mem_name" runat="server" Text="Label"></asp:Label></span>
                         </div>
                     </div>
                 </div>
