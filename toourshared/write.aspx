@@ -136,6 +136,8 @@
             // 바인드
             title.Text = outputTravel.Trv_title;
             hashtag.Text = outputTravel.Trv_tag;
+            mainImgItem.ImageUrl = outputTravel.Trv_main_img;
+            main_img.Value = outputTravel.Trv_main_img;
 
             //Map 가져오기
             Map inputMap = new Map();
@@ -214,47 +216,6 @@
 
 
 
-    protected void Button_main_img_Click(object sender, EventArgs e)
-    {
-        
-        string saveDir = @"\Upload\"+Session["mem_id"].ToString()+@"\";
-
-
-        // Get the physical file system path for the currently
-        // executing application.
-        string savePath = saveDir; //기본 file저장폴더는 Template
-        string fileName =  FileUpload_main_img.FileName;    //fileUpload control에서 파일명을 가져온다
-
-        //동명의 파일이 존재시 Template안에 새폴더 생성 ->
-        //동명의 파일을 업로드 하여도 Template안에저장가능
-        string baseUri = HttpContext.Current.Server.MapPath("~/upload/") +@"\"
-                  + Guid.NewGuid().ToString()+@"\";
-
-
-        if (FileUpload_main_img.HasFile)  {
-
-
-
-            //string savePath = Server.MapPath(saveDir + Server.HtmlEncode(FileUpload_main_img.FileName));
-
-
-            if (File.Exists(Path.Combine(savePath, Server.HtmlEncode(FileUpload_main_img.FileName)))) //Template에 동명의 파일이 존재할 경우
-            {
-                Directory.CreateDirectory(baseUri);         //Template에 새로운 폴더 생성
-                savePath = baseUri;                       //생성된 폴더를 현재 저장할 경로로 지정
-            }
-
-
-
-            //출처: https://kmj1107.tistory.com/entry/ASPNET-새로운-폴더-생성 [토순이네집]
-            //main_img.Value = "/Upload/"+Session["mem_id"]+"/"+Server.HtmlEncode(FileUpload_main_img.FileName);
-
-            FileUpload_main_img.SaveAs(savePath + fileName);
-            main_img.Value = savePath + fileName;
-
-            Label_mainImg.Text = "메인 이미지 등록 완료";
-        }
-    }
 </script>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -285,7 +246,9 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bs4-summernote@0.8.10/dist/summernote-bs4.min.js"></script>
 
-    <link rel="stylesheet" href="./css/write.css">
+    <!--파일 업로드
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+-->    <link rel="stylesheet" href="./css/write.css">
     <style>
 
 
@@ -316,35 +279,7 @@
             });
         });
 
-        /* FileUpload (경로 없이 무조건 파일명만 뜨게) */
-        $(document).ready(function () {
-            var fileTarget = $('.fileItem');
-            var originalFileName;
-            fileTarget.on('change', function () { // 값이 변경되면
-                if (window.FileReader) { // modern browser
-                    originalFileName = $(this)[0].files[0].name;
-
-                    var filename = $(this)[0].files;
-                    var filename = $(this)[0].files[0].name;
-                }
-                else { // old IE
-                    originalFileName = $(this).val();
-                    var filename = $(this).val().split('/').pop().split('\\').pop(); // 파일명만 추출
-                }
-
-                // 추출한 파일명 삽입
-                $(this).siblings('.fileItem').val(filename);
-
-                // modalBody 부분 높이 조절 및 업로드 버튼 나타내기
-                document.getElementById("mainImgItem").style.width = "150px";
-                document.getElementById("mainImgItem").style.height = "150px";
-
-                var image = document.getElementById("mainImgItem");
-                image.alt = filename;
-                image.src = originalFileName;
-            });
-        });
-
+      
 
 
     </script>
@@ -532,17 +467,21 @@
             <div class="mainImgArea">
                 <div class="mainImg_wrap">
                     <div class="mainImg_AlignLeft">
-                        <asp:Label CssClass="mainImg_Label" ID="Label_mainImg" runat="server" Text="게시글의 메인이미지를 첨부하세요."></asp:Label>
+                        <div class="mainImg_Label" >게시글의 메인이미지를 첨부하세요.</div>
                         <div class="mainImg_Input">
-                            <asp:FileUpload ID="FileUpload_main_img" runat="server" AllowMultiple="false" accept="image/*" />
-                            <asp:HiddenField ID="main_img" runat="server" />
-                            <asp:Button CssClass="btn-secondary" ID="Button_main_img" runat="server" Text="이미지 저장" OnClick="Button_main_img_Click" />
-                            <!-- 미리보기 공간 -->
+                            <!-- 이미지 업로드 -->
+                            <input type="file" class="upload"  id="FileUpload_main_img" accept="image/*" multiple="false"/>
+                            <asp:HiddenField ID="main_img" runat="server" Value="noImage"/>
+
+                            
+                            <!-- 이미지 업로드 -->
 
                         </div>
                     </div>
                     <div class="mainImg_AlignRight">
-                        <img src="./img/%EC%A0%9C%EC%A3%BC%EB%8F%84.jpg" alt="userMainImage" id="mainImgItem" />
+                        <!-- 이미지 미리보기 부분-->
+                        <asp:Image ID="mainImgItem" runat="server" ImageUrl="./img/%EC%A0%9C%EC%A3%BC%EB%8F%84.jpg" alt="userMainImage" />
+                        <!-- 이미지 미리보기 부분-->
                     </div>
                 </div>
             </div>
@@ -610,47 +549,49 @@
         <!-- KAKAO -->
 
  <script src="./javascript/write.js"></script>
+  
     <script>
-        <!-- 이미지 미리보기 -->
-
-        var upload = document.querySelector('#FileUpload_main_img');
-        var previw = document.querySelector('#mainImgItem');
-
-
- 
-    upload.addEventListener('change',function (e) {
-        var get_file = e.target.files;
- 
-        
- 
-        /* FileReader 객체 생성 */
-        var reader = new FileReader();
- 
-        /* reader 시작시 함수 구현 */
-        reader.onload = (function (imgSrc) {
-            console.log(1);
- 
-            return function (e) {
-                console.log(3);
-                /* base64 인코딩 된 스트링 데이터 */
-                console.info(e.target.result);
-                previw.src = e.target.result
+          //이미지 업로드 AJAX
+        function sendFile(file) {
+            
+    var formData = new FormData();
+    formData.append('file', $('#FileUpload_main_img')[0].files[0]);
+    $.ajax({
+        type: 'post',
+        url: 'imageUploader.ashx',
+        data: formData,
+        success: function (status) {
+            if (status != 'error') {
+                var my_path = status;
+                $("#mainImgItem").attr("src", my_path);
+                $("#main_img").attr("value", my_path);
             }
-        })()
-
- 
-        if(get_file){
-            /* 
-                get_file[0] 을 읽어서 read 행위가 종료되면 loadend 이벤트가 트리거 되고 
-                onload 에 설정했던 return 으로 넘어간다.
-                이와 함게 base64 인코딩 된 스트링 데이터가 result 속성에 담겨진다.
-            */
-            reader.readAsDataURL(get_file[0]);
-            console.log(2);
+        },
+        processData: false,
+        contentType: false,
+        error: function () {
+            alert("Whoops something went wrong!");
         }
-        
-       
-    })
+    });
+        }
+
+        var _URL = window.URL || window.webkitURL;
+$("#FileUpload_main_img").on('change', function () {
+
+    var file, img;
+    if ((file = this.files[0])) {
+        img = new Image();
+        img.onload = function () {
+            sendFile(file);
+        };
+        img.onerror = function () {
+            alert("Not a valid file:" + file.type);
+        };
+        img.src = _URL.createObjectURL(file);
+    }
+
+});
+
 
 </script>
 
@@ -671,20 +612,42 @@
 
             var title = document.getElementById("title");
             var article = document.getElementById("article");
-            var hashtag = document.getElementById("hashtag");
-            title.setAttribute('type', "hidden");
-            article.setAttribute('type', "hidden");
-            hashtag.setAttribute('type', "hidden");
+        var hashtag = document.getElementById("hashtag");
+        var main_img = document.getElementById("main_img");
 
+            var titleData = document.createElement("input");
+            var articleData = document.createElement("input");
+        var hashtagData = document.createElement("input");
+        var main_imgData = document.createElement("input");
+
+
+        titleData.value = title.value;
+        articleData.value = article.value;
+        hashtagData.value = hashtag.value;
+        main_imgData.value = main_img.value;
+
+
+
+
+            titleData.setAttribute('type', "hidden");
+            articleData.setAttribute('type', "hidden");
+            hashtagData.setAttribute('type', "hidden");
+        main_imgData.setAttribute('type', "hidden");
+
+             titleData.setAttribute('name', "title");
+            articleData.setAttribute('name', "article");
+            hashtagData.setAttribute('name', "hashtag");
+             main_imgData.setAttribute('name', "main_img");
 
             
             //// Form submission canceled because the form is not connected 해결
             document.body.appendChild(form);
             form.setAttribute('method', "post");
 
-            form.appendChild(title);
-            form.appendChild(article);
-            form.appendChild(hashtag);
+            form.appendChild(titleData);
+            form.appendChild(articleData);
+            form.appendChild(hashtagData);
+            form.appendChild(main_imgData);
 
 
             var mapData = document.createElement("input"); // input 엘리멘트 생성
@@ -727,9 +690,29 @@
 
     
     function tmpSave() {
+
+  
+
         addDataAtForm();
         form.setAttribute('action', "Write_tmpSave.aspx");
-        form.submit(); // 전송
+        //form.submit(); // 전송
+        var data = new FormData(form);
+
+        $.ajax({
+        type: 'post',
+        url: 'Write_tmpSave.aspx',
+        data: data,
+        success: function (status) {
+            if (status != 'error') {
+                alert("저장되었습니다.");
+            }
+        },
+        processData: false,
+        contentType: false,
+        error: function () {
+            alert("Whoops something went wrong!");
+        }
+    });
     }
     function addDay() {
         addDataAtForm();
@@ -758,13 +741,26 @@
     // 다음페이지로 markers, polyline, rect, circle, polygon 보내는 기능
     function addDataAtForm() {
 
-        var title = document.getElementById("title");
-        var article = document.getElementById("article");
-        var hashtag = document.getElementById("hashtag");
+        //var title = document.getElementById("title").value;
+        //var article = document.getElementById("article").value;
+        //var hashtag = document.getElementById("hashtag").value;
+        //var main_img = document.getElementById("main_img").value;
+
+        var title = document.getElementById("title").cloneNode();
+        var article = document.getElementById("article").cloneNode();
+        var hashtag = document.getElementById("hashtag").cloneNode();
+        var main_img = document.getElementById("main_img").cloneNode();
+
+
+
+
+
+
+
         title.setAttribute('type', "hidden");
         article.setAttribute('type', "hidden");
         hashtag.setAttribute('type', "hidden");
-
+        main_img.setAttribute('type', "hidden");
 
 
         //// Form submission canceled because the form is not connected 해결
@@ -774,6 +770,7 @@
         form.appendChild(title);
         form.appendChild(article);
         form.appendChild(hashtag);
+        form.appendChild(main_img);
 
 
         var mapData = document.createElement("input"); // input 엘리멘트 생성

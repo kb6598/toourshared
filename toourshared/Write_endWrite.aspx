@@ -38,6 +38,7 @@
             Travel curTravel = travelDao.selectTravelBytrv_no(inTravel);
 
             //update Travel
+                        curTravel.Trv_secret = "0";
             curTravel.Trv_main_img = Request.Form["main_img"];
             curTravel.Trv_no = WriteStatus["trv_no"];
             curTravel.Trv_secret = Request.Form["trv_secret"];

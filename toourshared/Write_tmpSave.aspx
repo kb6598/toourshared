@@ -30,15 +30,14 @@
         if (WriteStatus != null)
         {
             //update Travel
-            Travel inTravel = new Travel();            
+            Travel inTravel = new Travel();
             TravelDao travelDao = new TravelDao();
 
             inTravel.Trv_no = WriteStatus["trv_no"];
-            Travel curTravel = travelDao.selectTravelBytrv_no(inTravel);            
-            
+            Travel curTravel = travelDao.selectTravelBytrv_no(inTravel);
+            curTravel.Trv_secret = "0";
             curTravel.Trv_main_img = Request.Form["main_img"];
             curTravel.Trv_no = WriteStatus["trv_no"];
-            curTravel.Trv_secret = Request.Form["trv_secret"];
             curTravel.Trv_tag = Request.Form["hashtag"];
             curTravel.Trv_timestamp = TimeLib.GetTimeStamp();
             curTravel.Trv_title = Request.Form["title"];
@@ -49,7 +48,7 @@
 
             //update Travel_day
             Travel_Day inTravelDay = new Travel_Day();
-            Travel_DayDao travelDayDao = new Travel_DayDao();            
+            Travel_DayDao travelDayDao = new Travel_DayDao();
             inTravelDay.Trv_day_no = WriteStatus[WriteStatus["cur_day"]];
             inTravelDay.Trv_no = WriteStatus["trv_no"];
             inTravelDay.Trv_day_content = Request.Form["article"];
@@ -69,7 +68,7 @@
 
 
 
-  
+
         }
         // 지도는 정보를 이전 폼에서 주어야 한다.
 

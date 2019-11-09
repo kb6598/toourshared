@@ -40,6 +40,7 @@
             //update Travel
             //loc_name을 가져와야함
             //curTravel.Loc_name = Request.Form["loc_name"];
+                        curTravel.Trv_secret = "0";
             curTravel.Trv_main_img = Request.Form["main_img"];
             curTravel.Trv_no = WriteStatus["trv_no"];
             curTravel.Trv_secret = Request.Form["trv_secret"];
