@@ -352,9 +352,17 @@
 
     protected void Page_Load(object sender, EventArgs e)
     {
+         // 테스트 코드 이미지 업로드가 session["mem_id"]에 종속됨
+        if(HttpContext.Current.Session["mem_id"] == null)
+        {
+            Session["mem_id"] = "billip";
+        }
+
         Bind_Table_Travel();
         Bind_Table_MyReviews();
         selectMyInfo();
+
+
     }
 
     protected void selectMyInfo()
@@ -402,6 +410,9 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+       <!--파일 업로드-->   
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
 
 <style>
@@ -968,7 +979,15 @@
                     <div class="userImageAlign">
                         <div class="userImageItem">
                             <a href="#">
-                                <img class="userImageStyle" src="./img/UserNoneImage.png" alt="프로	필 사진 편집">
+                             <!-- 이미지 업로드 -->
+                            <input type="file" class="upload"  id="FileUpload_main_img" accept="image/*" multiple="false" style="display:none;"/>
+                            <asp:HiddenField ID="main_img" runat="server" Value="noImage"/>
+                                 <!-- 이미지 미리보기 부분-->
+                                <!-- 이미지 미리보기 부분-->
+                        <asp:Image ID="mainImgItem" runat="server" ImageUrl="./img/UserNoneImage.png" alt="프로	필 사진 편집" CssClass="userImageStyle" onclick="document.getElementById('FileUpload_main_img').click();"/>
+                        
+
+                 
                             </a>
                         </div>
                     </div>
@@ -1052,5 +1071,53 @@
             </div>
         </div>
     </form>
+
+
+        <script>
+            //이미지 업로드 AJAX
+             // 이미지 업로드가 session["mem_id"]에 종속됨 없으면 업로드 불가
+            function sendFile(file) {
+
+                var formData = new FormData();
+                formData.append('file', $('#FileUpload_main_img')[0].files[0]);
+                $.ajax({
+                    type: 'post',
+                    url: 'imageUploader.ashx',
+                    data: formData,
+                    success: function (status) {
+                        if (status != 'error') {
+                            var my_path = status;
+                            $("#mainImgItem").attr("src", my_path);
+                            $("#main_img").attr("value", my_path);
+                        }
+                    },
+                    processData: false,
+                    contentType: false,
+                    error: function () {
+                        alert("Whoops something went wrong!");
+                    }
+                });
+            }
+
+            var _URL = window.URL || window.webkitURL;
+            $("#FileUpload_main_img").on('change', function () {
+
+                var file, img;
+                if ((file = this.files[0])) {
+                    img = new Image();
+                    img.onload = function () {
+                        sendFile(file);
+                    };
+                    img.onerror = function () {
+                        alert("Not a valid file:" + file.type);
+                    };
+                    img.src = _URL.createObjectURL(file);
+                }
+
+            });
+
+
+        </script>
+
 </body>
 </html>
