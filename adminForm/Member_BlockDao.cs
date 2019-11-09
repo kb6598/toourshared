@@ -111,4 +111,67 @@ public class Member_BlockDao
         return result;
     }
 
+    public int updateMemberBlock(string mem_id)
+    {
+        MyDB mydb = new MyDB();
+
+        MySqlConnection con;
+
+        int result = 0;
+
+        try
+        {
+            con = mydb.GetCon();
+
+            string sql = "update toourshared.member set mem_state = 0 where mem_id = @mem_id";
+            MySqlCommand cmd = new MySqlCommand(sql, con);
+            cmd.Parameters.AddWithValue("@mem_id", mem_id);
+
+            con.Open();
+            cmd.ExecuteNonQuery();
+            con.Close();
+
+            result = 1;
+
+            return result;
+        }
+        catch(Exception e)
+        {
+            result = 0;
+        }
+
+        return result;
+    }
+
+    public int deleteMemberBlock(string mem_id)
+    {
+        MyDB mydb = new MyDB();
+
+        MySqlConnection con;
+
+        int result = 0;
+
+        try
+        {
+            con = mydb.GetCon();
+
+            string sql = "delete from toourshared.member_block where mem_id = @mem_id";
+            MySqlCommand cmd = new MySqlCommand(sql, con);
+            cmd.Parameters.AddWithValue("@mem_id", mem_id);
+
+            con.Open();
+            cmd.ExecuteNonQuery();
+            con.Close();
+
+            result = 1;
+
+            return result;
+        }
+        catch (Exception e)
+        {
+            result = 0;
+        }
+
+        return result;
+    }
 }
