@@ -1,5 +1,7 @@
 ﻿<%@ Page Language="C#"  EnableEventValidation="false" ValidateRequest="false"%>
 
+<%@ Import Namespace="System.IO" %>  
+
 
 <!DOCTYPE html>
 
@@ -209,6 +211,50 @@
         BindTables();
     }
 
+
+
+
+    protected void Button_main_img_Click(object sender, EventArgs e)
+    {
+        
+        string saveDir = @"\Upload\"+Session["mem_id"].ToString()+@"\";
+
+
+        // Get the physical file system path for the currently
+        // executing application.
+        string savePath = saveDir; //기본 file저장폴더는 Template
+        string fileName =  FileUpload_main_img.FileName;    //fileUpload control에서 파일명을 가져온다
+
+        //동명의 파일이 존재시 Template안에 새폴더 생성 ->
+        //동명의 파일을 업로드 하여도 Template안에저장가능
+        string baseUri = HttpContext.Current.Server.MapPath("~/upload/") +@"\"
+                  + Guid.NewGuid().ToString()+@"\";
+
+
+        if (FileUpload_main_img.HasFile)  {
+
+
+
+            //string savePath = Server.MapPath(saveDir + Server.HtmlEncode(FileUpload_main_img.FileName));
+
+
+            if (File.Exists(Path.Combine(savePath, Server.HtmlEncode(FileUpload_main_img.FileName)))) //Template에 동명의 파일이 존재할 경우
+            {
+                Directory.CreateDirectory(baseUri);         //Template에 새로운 폴더 생성
+                savePath = baseUri;                       //생성된 폴더를 현재 저장할 경로로 지정
+            }
+
+
+
+            //출처: https://kmj1107.tistory.com/entry/ASPNET-새로운-폴더-생성 [토순이네집]
+            //main_img.Value = "/Upload/"+Session["mem_id"]+"/"+Server.HtmlEncode(FileUpload_main_img.FileName);
+
+            FileUpload_main_img.SaveAs(savePath + fileName);
+            main_img.Value = savePath + fileName;
+
+            Label_mainImg.Text = "메인 이미지 등록 완료";
+        }
+    }
 </script>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -240,6 +286,10 @@
     <script src="https://cdn.jsdelivr.net/npm/bs4-summernote@0.8.10/dist/summernote-bs4.min.js"></script>
 
     <link rel="stylesheet" href="./css/write.css">
+    <style>
+
+
+    </style>
 
 
     <script>
@@ -444,14 +494,6 @@
                                 <p>👉</p>
                                 <p>화살표</p>
                             </button>
-                            <button type="button" id="undo" onclick="undoAction()" disabled>
-                                <p>↺</p>
-                                <p>동작취소</p>
-                            </button>
-                            <button type="button" id="redo" onclick="redoAction()" disabled>
-                                <p>↻</p>
-                                <p>되돌리기</p>
-                            </button>
                             <button type="button" class="TILAST" data-toggle="modal" data-target="#searchPlaceModal">
                                 <p>🍳</p>
                                 <p>장소검색</p>
@@ -490,9 +532,13 @@
             <div class="mainImgArea">
                 <div class="mainImg_wrap">
                     <div class="mainImg_AlignLeft">
-                        <div class="mainImg_Label">게시글의 메인이미지를 첨부하세요.</div>
+                        <asp:Label CssClass="mainImg_Label" ID="Label_mainImg" runat="server" Text="게시글의 메인이미지를 첨부하세요."></asp:Label>
                         <div class="mainImg_Input">
-                            <asp:FileUpload ID="main_img" runat="server" />
+                            <asp:FileUpload ID="FileUpload_main_img" runat="server" AllowMultiple="false" accept="image/*" />
+                            <asp:HiddenField ID="main_img" runat="server" />
+                            <asp:Button CssClass="btn-secondary" ID="Button_main_img" runat="server" Text="이미지 저장" OnClick="Button_main_img_Click" />
+                            <!-- 미리보기 공간 -->
+
                         </div>
                     </div>
                     <div class="mainImg_AlignRight">
@@ -564,7 +610,50 @@
         <!-- KAKAO -->
 
  <script src="./javascript/write.js"></script>
-    
+    <script>
+        <!-- 이미지 미리보기 -->
+
+        var upload = document.querySelector('#FileUpload_main_img');
+        var previw = document.querySelector('#mainImgItem');
+
+
+ 
+    upload.addEventListener('change',function (e) {
+        var get_file = e.target.files;
+ 
+        
+ 
+        /* FileReader 객체 생성 */
+        var reader = new FileReader();
+ 
+        /* reader 시작시 함수 구현 */
+        reader.onload = (function (imgSrc) {
+            console.log(1);
+ 
+            return function (e) {
+                console.log(3);
+                /* base64 인코딩 된 스트링 데이터 */
+                console.info(e.target.result);
+                previw.src = e.target.result
+            }
+        })()
+
+ 
+        if(get_file){
+            /* 
+                get_file[0] 을 읽어서 read 행위가 종료되면 loadend 이벤트가 트리거 되고 
+                onload 에 설정했던 return 으로 넘어간다.
+                이와 함게 base64 인코딩 된 스트링 데이터가 result 속성에 담겨진다.
+            */
+            reader.readAsDataURL(get_file[0]);
+            console.log(2);
+        }
+        
+       
+    })
+
+</script>
+
           
 <script>
 

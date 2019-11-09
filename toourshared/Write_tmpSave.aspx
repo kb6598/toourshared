@@ -36,7 +36,7 @@
             inTravel.Trv_no = WriteStatus["trv_no"];
             Travel curTravel = travelDao.selectTravelBytrv_no(inTravel);            
             
-
+            curTravel.Trv_main_img = Request.Form["main_img"];
             curTravel.Trv_no = WriteStatus["trv_no"];
             curTravel.Trv_secret = Request.Form["trv_secret"];
             curTravel.Trv_tag = Request.Form["hashtag"];
