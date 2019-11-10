@@ -23,7 +23,7 @@ public class MapDao
         MyDB myDB = new MyDB();
         MySqlConnection con = myDB.GetCon();
 
-        string Sql = "INSERT INTO toourshared.map ( trv_day_no, map_data, map_route, map_cost, map_center) VALUES (@trv_day_no, @map_data, @map_route, @map_cost)";
+        string Sql = "INSERT INTO toourshared.map ( trv_day_no, map_data, map_route, map_cost, map_center) VALUES (@trv_day_no, @map_data, @map_route, @map_cost,@map_center)";
         MySqlCommand cmd = new MySqlCommand(Sql, con);
 
         cmd.Parameters.AddWithValue("@map_cost", map.Map_cost);
