@@ -131,7 +131,7 @@
 
         String imgUrl = member.Mem_img_url;
         if (imgUrl == "noImage")
-            returnList.Add("./img/noImage.png");
+            returnList.Add("./img/memberNoImage.png");
         else
             returnList.Add(imgUrl);
         return returnList;
