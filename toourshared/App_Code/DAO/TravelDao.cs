@@ -417,6 +417,58 @@ public class TravelDao
         return returnList;
     }
 
+    public List<Travel> getIndexTravelOrderByFollowerDesc(string locName = "")
+    {
+        MyDB mydb = new MyDB();
+        Travel travel;
+        List<Travel> returnList = new List<Travel>();
+        MySqlConnection con;
+
+        try
+        {
+            con = mydb.GetCon();
+            string Sql = "";
+
+            if (string.IsNullOrEmpty(locName) || locName == "")
+            {
+                Sql = "SELECT *, count(distinct(`follower`.`fol_id`)) as followers FROM toourshared.travel, toourshared.follower as follower WHERE travel.mem_id = follower.mem_id GROUP BY travel.trv_no ORDER BY trv_create_time DESC, followers DESC LIMIT 0, 6";
+            }
+            else
+            {
+                Sql = "SELECT *, count(distinct(`follower`.`fol_id`)) as followers FROM toourshared.travel, toourshared.follower as follower WHERE travel.mem_id = follower.mem_id AND travel.loc_name = '%" + locName + "%' GROUP BY travel.trv_no ORDER BY trv_create_time DESC, followers DESC LIMIT 0, 6";
+            }
+
+            MySqlCommand cmd = new MySqlCommand(Sql, con);
+            con.Open();
+
+            MySqlDataReader reader = cmd.ExecuteReader();
+
+            while (reader.Read())
+            {
+                travel = new Travel();
+                travel.Trv_no = reader["trv_no"].ToString();
+                travel.Trv_secret = reader["trv_secret"].ToString();
+                travel.Trv_views = reader["trv_views"].ToString();
+                travel.Trv_tot_rate = reader["trv_tot_rate"].ToString();
+                travel.Trv_main_img = reader["trv_main_img"].ToString();
+                travel.Trv_title = reader["trv_title"].ToString();
+                travel.Trv_tag = reader["trv_tag"].ToString();
+                travel.Trv_timestamp = reader["trv_timestamp"].ToString();
+                travel.Trv_create_time = reader["trv_create_time"].ToString();
+                travel.Loc_name = reader["loc_name"].ToString();
+                travel.Mem_id = reader["mem_id"].ToString();
+
+                returnList.Add(travel);
+            }
+
+            reader.Close();
+            con.Close();
+        }
+        catch (Exception e) {; }
+
+        return returnList;
+    }
+
     public List<Travel> selectTravelListByMem_idNLimitOrderByDate(Travel travel, int start, int count)
     {
         MyDB mydb = new MyDB();

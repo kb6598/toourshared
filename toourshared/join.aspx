@@ -755,8 +755,7 @@
                     <span class="inforStar">*</span><span class="inforText">아이디</span>
                 </div>
                 <div class="IDItem2">
-                    <asp:TextBox ID="getID" placeholder="아이디" class="inputArea sht" maxlength="15" runat="server"></asp:TextBox>
-                    <a id="idCheckBtn" class="btn btn-warning" data-toggle="modal" data-target="#checkID">중복확인</a>
+                    <asp:TextBox ID="getID" placeholder="아이디" class="inputArea lng" maxlength="15" runat="server"></asp:TextBox>
                 </div>
             </div>
             <div class="Item" id="PW">
@@ -883,6 +882,6 @@
         </div>
     </div>
     </form>
-</body>s
+</body>
 
 </html>
