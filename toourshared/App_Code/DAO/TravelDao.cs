@@ -490,9 +490,346 @@ public class TravelDao
             System.Diagnostics.Debug.WriteLine(ex.ToString());
         }
 
-
-
         return resultList;
+    }
+
+    public int getTravelCountOrderByCreateTimeDesc(string searchText, int limit1 = 0, int limit2 = 5)
+    {
+        // defalut param limit 0, 5
+        int returnInt = 0;
+        String Sql = "";
+        MyDB mydb = new MyDB();
+        MySqlConnection con;
+
+        try
+        {
+            con = mydb.GetCon();
+            if(string.IsNullOrEmpty(searchText) == true) // 검색 문구가 있는 경우 그 값을 구해온다.
+                Sql = "SELECT count(*) as cnt FROM toourshared.travel ORDER BY trv_create_time DESC limit " + limit1 + ", " + limit2;
+            else
+                Sql = "SELECT count(*) as cnt FROM toourshared.travel as travel, toourshared.travel_day as travel_day WHERE (travel.trv_no = travel_day.trv_no) AND ((travel_.trv_title like '%" + searchText + "%') OR (travel.trv_tag like '%" + searchText + "%') OR (travel_day.trv_day_content like '%" + searchText + "%')) ORDER BY trv_create_time DESC limit " + limit1 + ", " + limit2;
+
+            MySqlCommand cmd = new MySqlCommand(Sql, con);
+            con.Open();
+
+            MySqlDataReader reader = cmd.ExecuteReader();
+            if(reader.Read())
+            {
+                returnInt = int.Parse(reader["cnt"].ToString());
+            }
+
+            reader.Close();
+            con.Close();
+
+        }
+        catch(Exception e) {;}
+
+        return returnInt;
+    }
+
+    public int getTravelCountOrderByTotRateDesc(string searchText, int limit1 = 0, int limit2 = 5)
+    {
+        // defalut param limit 0, 5
+        int returnInt = 0;
+        String Sql = "";
+        MyDB mydb = new MyDB();
+        MySqlConnection con;
+
+        try
+        {
+            con = mydb.GetCon();
+            if (string.IsNullOrEmpty(searchText) == true) // 검색 문구가 있는 경우 그 값을 구해온다.
+                Sql = "SELECT count(*) as cnt FROM toourshared.travel ORDER BY trv_tot_rate DESC limit " + limit1 + ", " + limit2;
+            else
+                Sql = "SELECT count(*) as cnt FROM toourshared.travel as travel, toourshared.travel_day as travel_day, toourshared.map as map" +
+                "WHERE(travel.trv_no = travel_day.trv_no) AND(travel_day.trv_day_no = map_trv.day_no) AND" +
+                "((travel.trv_title like '%" + searchText + "%') OR(travel.trv_tag like '%" + searchText + "%') OR(travel_day.trv_day_content like '%" + searchText + "%') OR(map.map_route like '%" + searchText + "%'))" +
+                "ORDER BY trv_tot_rate DESC limit " + limit1 + ", " + limit2;
+
+            MySqlCommand cmd = new MySqlCommand(Sql, con);
+            con.Open();
+
+            MySqlDataReader reader = cmd.ExecuteReader();
+            if (reader.Read())
+            {
+                returnInt = int.Parse(reader["cnt"].ToString());
+            }
+
+            reader.Close();
+            con.Close();
+
+        }
+        catch (Exception e) {; }
+
+        return returnInt;
+    }
+
+    public int getTravelCountOrderByFollowerDesc(string searchText, int limit1 = 0, int limit2 = 5)
+    {
+        // defalut param limit 0, 5
+        int returnInt = 0;
+        String Sql = "";
+        MyDB mydb = new MyDB();
+        MySqlConnection con;
+
+        try
+        {
+            con = mydb.GetCon();
+            if (string.IsNullOrEmpty(searchText) == true) // 검색 문구가 있는 경우 그 값을 구해온다.
+                Sql = "SELECT count(*) as cnt FROM toourshared.travel ORDER BY trv_create_time DESC limit " + limit1 + ", " + limit2;
+            else
+                Sql = "SELECT count(*) as cnt FROM toourshared.travel as travel, toourshared.travel_day as travel_day WHERE (travel.trv_no = travel_day.trv_no) AND ((travel_.trv_title like '%" + searchText + "%') OR (travel.trv_tag like '%" + searchText + "%') OR (travel_day.trv_day_content like '%" + searchText + "%')) ORDER BY trv_create_time DESC limit " + limit1 + ", " + limit2;
+
+            MySqlCommand cmd = new MySqlCommand(Sql, con);
+            con.Open();
+
+            MySqlDataReader reader = cmd.ExecuteReader();
+            if (reader.Read())
+            {
+                returnInt = int.Parse(reader["cnt"].ToString());
+            }
+
+            reader.Close();
+            con.Close();
+
+        }
+        catch (Exception e) {; }
+
+        return returnInt;
+    }
+
+    public int getTravelCountOrderByHotDesc(string searchText, int limit1 = 0, int limit2 = 5)
+    {
+        // defalut param limit 0, 5
+        int returnInt = 0;
+        String Sql = "";
+        MyDB mydb = new MyDB();
+        MySqlConnection con;
+
+        try
+        {
+            con = mydb.GetCon();
+            if (string.IsNullOrEmpty(searchText) == true) // 검색 문구가 있는 경우 그 값을 구해온다.
+                Sql = "SELECT count(*) as cnt FROM toourshared.travel ORDER BY trv_create_time DESC limit " + limit1 + ", " + limit2;
+            else
+                Sql = "SELECT count(*) as cnt FROM toourshared.travel as travel, toourshared.travel_day as travel_day WHERE (travel.trv_no = travel_day.trv_no) AND ((travel_.trv_title like '%" + searchText + "%') OR (travel.trv_tag like '%" + searchText + "%') OR (travel_day.trv_day_content like '%" + searchText + "%')) ORDER BY trv_create_time DESC limit " + limit1 + ", " + limit2;
+
+            MySqlCommand cmd = new MySqlCommand(Sql, con);
+            con.Open();
+
+            MySqlDataReader reader = cmd.ExecuteReader();
+            if (reader.Read())
+            {
+                returnInt = int.Parse(reader["cnt"].ToString());
+            }
+
+            reader.Close();
+            con.Close();
+
+        }
+        catch (Exception e) {; }
+
+        return returnInt;
+    }
+
+    public List<Travel> getTravelOrderByCreateTimeDesc(string searchText, int limit1 = 0, int limit2 = 5)
+    {
+        // default param limit 0, 5
+        MyDB mydb = new MyDB();
+        string Sql = "";
+        Travel travel;
+        List<Travel> returnList = new List<Travel>();
+        MySqlConnection con;
+
+        try
+        {
+            con = mydb.GetCon();
+            if (string.IsNullOrEmpty(searchText) == true)
+                Sql = "SELECT *FROM toourshared.travel ORDER BY trv_create_time DESC limit " + limit1 + ", " + limit2;
+            else
+                Sql = "SELECT * FROM toourshared.travel as travel, toourshared.travel_day as travel_day, toourshared.map as map" +
+                "WHERE(travel.trv_no = travel_day.trv_no) AND(travel_day.trv_day_no = map_trv.day_no) AND" +
+                "((travel.trv_title like '%" + searchText + "%') OR(travel.trv_tag like '%" + searchText + "%') OR(travel_day.trv_day_content like '%" + searchText + "%') OR(map.map_route like '%" + searchText + "%'))" +
+                "ORDER BY trv_create_time DESC limit " + limit1 + ", " + limit2;
+
+            MySqlCommand cmd = new MySqlCommand(Sql, con);
+            con.Open();
+
+            MySqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                travel = new Travel();
+                travel.Trv_no = reader["trv_no"].ToString();
+                travel.Trv_secret = reader["trv_secret"].ToString();
+                travel.Trv_views = reader["trv_views"].ToString();
+                travel.Trv_tot_rate = reader["trv_tot_rate"].ToString();
+                travel.Trv_main_img = reader["trv_main_img"].ToString();
+                travel.Trv_title = reader["trv_title"].ToString();
+                travel.Trv_tag = reader["trv_tag"].ToString();
+                travel.Trv_timestamp = reader["trv_timestamp"].ToString();
+                travel.Trv_create_time = reader["trv_create_time"].ToString();
+                travel.Loc_name = reader["loc_name"].ToString();
+                travel.Mem_id = reader["mem_id"].ToString();
+
+                returnList.Add(travel);
+            }
+
+            reader.Close();
+            con.Close();
+        }
+        catch(Exception e){;} 
+
+        return returnList;
+    }
+
+    public List<Travel> getTravelOrderByTotRateDesc(string searchText, int limit1 = 0, int limit2 = 5)
+    {
+        // default param limit 0, 5
+        MyDB mydb = new MyDB();
+        string Sql = "";
+        Travel travel;
+        List<Travel> returnList = new List<Travel>();
+        MySqlConnection con;
+
+        try
+        {
+            con = mydb.GetCon();
+            if (string.IsNullOrEmpty(searchText) == true)
+                Sql = "SELECT * FROM toourshared.travel ORDER BY trv_tot_rate DESC limit " + limit1 + ", " + limit2;
+            else
+                Sql = "SELECT * FROM toourshared.travel as travel, toourshared.travel_day as travel_day, toourshared.map as map" +
+                "WHERE(travel.trv_no = travel_day.trv_no) AND(travel_day.trv_day_no = map_trv.day_no) AND" +
+                "((travel.trv_title like '%" + searchText + "%') OR(travel.trv_tag like '%" + searchText + "%') OR(travel_day.trv_day_content like '%" + searchText + "%') OR(map.map_route like '%" + searchText + "%'))" +
+                "ORDER BY trv_tot_rate DESC limit " + limit1 + ", " + limit2;
+
+            MySqlCommand cmd = new MySqlCommand(Sql, con);
+            con.Open();
+
+            MySqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                travel = new Travel();
+                travel.Trv_no = reader["trv_no"].ToString();
+                travel.Trv_secret = reader["trv_secret"].ToString();
+                travel.Trv_views = reader["trv_views"].ToString();
+                travel.Trv_tot_rate = reader["trv_tot_rate"].ToString();
+                travel.Trv_main_img = reader["trv_main_img"].ToString();
+                travel.Trv_title = reader["trv_title"].ToString();
+                travel.Trv_tag = reader["trv_tag"].ToString();
+                travel.Trv_timestamp = reader["trv_timestamp"].ToString();
+                travel.Trv_create_time = reader["trv_create_time"].ToString();
+                travel.Loc_name = reader["loc_name"].ToString();
+                travel.Mem_id = reader["mem_id"].ToString();
+
+                returnList.Add(travel);
+            }
+
+            reader.Close();
+            con.Close();
+        }
+        catch (Exception e) {; }
+
+        return returnList;
+    }
+
+    public List<Travel> getTravelOrderByFollowerDesc(string searchText, int limit1 = 0, int limit2 = 5)
+    {
+        // default param limit 0, 5
+        MyDB mydb = new MyDB();
+        string Sql = "";
+        Travel travel;
+        List<Travel> returnList = new List<Travel>();
+        MySqlConnection con;
+
+        try
+        {
+            con = mydb.GetCon();
+            if (string.IsNullOrEmpty(searchText) == true)
+                Sql = "SELECT * FROM toourshared.travel ORDER BY trv_tot_rate DESC limit " + limit1 + ", " + limit2;
+            else
+                Sql = "SELECT * FROM toourshared.travel as travel, toourshared.travel_day as travel_day, toourshared.map as map" +
+                "WHERE(travel.trv_no = travel_day.trv_no) AND(travel_day.trv_day_no = map_trv.day_no) AND" +
+                "((travel.trv_title like '%" + searchText + "%') OR(travel.trv_tag like '%" + searchText + "%') OR(travel_day.trv_day_content like '%" + searchText + "%') OR(map.map_route like '%" + searchText + "%'))" +
+                "ORDER BY trv_tot_rate DESC limit " + limit1 + ", " + limit2;
+
+            MySqlCommand cmd = new MySqlCommand(Sql, con);
+            con.Open();
+
+            MySqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                travel = new Travel();
+                travel.Trv_no = reader["trv_no"].ToString();
+                travel.Trv_secret = reader["trv_secret"].ToString();
+                travel.Trv_views = reader["trv_views"].ToString();
+                travel.Trv_tot_rate = reader["trv_tot_rate"].ToString();
+                travel.Trv_main_img = reader["trv_main_img"].ToString();
+                travel.Trv_title = reader["trv_title"].ToString();
+                travel.Trv_tag = reader["trv_tag"].ToString();
+                travel.Trv_timestamp = reader["trv_timestamp"].ToString();
+                travel.Trv_create_time = reader["trv_create_time"].ToString();
+                travel.Loc_name = reader["loc_name"].ToString();
+                travel.Mem_id = reader["mem_id"].ToString();
+
+                returnList.Add(travel);
+            }
+
+            reader.Close();
+            con.Close();
+        }
+        catch (Exception e) {; }
+
+        return returnList;
+    }
+
+    public List<Travel> getTravelOrderByHotDesc(string searchText, int limit1 = 0, int limit2 = 5)
+    {
+        // default param limit 0, 5
+        MyDB mydb = new MyDB();
+        string Sql = "";
+        Travel travel;
+        List<Travel> returnList = new List<Travel>();
+        MySqlConnection con;
+
+        try
+        {
+            con = mydb.GetCon();
+            if (string.IsNullOrEmpty(searchText) == true)
+                Sql = "SELECT * FROM toourshared.travel ORDER BY trv_tot_rate DESC limit " + limit1 + ", " + limit2;
+            else
+                Sql = "SELECT * FROM toourshared.travel as travel, toourshared.travel_day as travel_day, toourshared.map as map" +
+                "WHERE(travel.trv_no = travel_day.trv_no) AND(travel_day.trv_day_no = map_trv.day_no) AND" +
+                "((travel.trv_title like '%" + searchText + "%') OR(travel.trv_tag like '%" + searchText + "%') OR(travel_day.trv_day_content like '%" + searchText + "%') OR(map.map_route like '%" + searchText + "%'))" +
+                "ORDER BY trv_tot_rate DESC limit " + limit1 + ", " + limit2;
+
+            MySqlCommand cmd = new MySqlCommand(Sql, con);
+            con.Open();
+
+            MySqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                travel = new Travel();
+                travel.Trv_no = reader["trv_no"].ToString();
+                travel.Trv_secret = reader["trv_secret"].ToString();
+                travel.Trv_views = reader["trv_views"].ToString();
+                travel.Trv_tot_rate = reader["trv_tot_rate"].ToString();
+                travel.Trv_main_img = reader["trv_main_img"].ToString();
+                travel.Trv_title = reader["trv_title"].ToString();
+                travel.Trv_tag = reader["trv_tag"].ToString();
+                travel.Trv_timestamp = reader["trv_timestamp"].ToString();
+                travel.Trv_create_time = reader["trv_create_time"].ToString();
+                travel.Loc_name = reader["loc_name"].ToString();
+                travel.Mem_id = reader["mem_id"].ToString();
+
+                returnList.Add(travel);
+            }
+
+            reader.Close();
+            con.Close();
+        }
+        catch (Exception e) {; }
+
+        return returnList;
     }
 
     public List<Travel> travel_count(Travel travel, string date, string loc, string title, string tag, string orderBy)
