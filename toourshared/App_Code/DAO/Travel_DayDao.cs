@@ -34,8 +34,6 @@ public class Travel_DayDao
             cmd.Parameters.AddWithValue("@trv_no", travel_day.Trv_no);
           
 
-
-
             con.Open();
             cmd.ExecuteNonQuery();
 
@@ -123,9 +121,11 @@ public class Travel_DayDao
             con.Open();
             MySqlDataReader reader = cmd.ExecuteReader();
 
-            while(reader.Read())
+            if(reader.Read())
             {
-                
+                result.Trv_day_no = reader["trv_day_no"].ToString();
+                result.Trv_day_content = reader["trv_day_content"].ToString();
+                result.Trv_no = reader["trv_no"].ToString();
             }
 
             reader.Close();

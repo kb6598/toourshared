@@ -16,7 +16,6 @@ public static class timestampConvert
         string YMD = splitArr[0];
         string MAD = splitArr[1];
         string HMS = splitArr[2];
-        System.Diagnostics.Debug.WriteLine(paramStr + " " + YMD + " " + MAD + " " + HMS);
 
         if (string.IsNullOrEmpty(YMD) == true || string.IsNullOrEmpty(MAD) == true || string.IsNullOrEmpty(HMS) == true)
         {

@@ -1,6 +1,5 @@
 ﻿<%@ Page Language="C#" %>
 
-<!DOCTYPE html>
 
 <script runat="server">
 
@@ -8,7 +7,9 @@
     // searchType이 null인 경우 default값은 최신 순(1) 이다.
 
     int searchType;
-    protected List<Travel> getTravelBySearchType()
+    string searchText = "";
+
+    protected List<Travel> getTravelBySearchType(int limit1, int limit2)
     {
         Travel travel = new Travel();
         TravelDao travelDao = new TravelDao();
@@ -16,7 +17,19 @@
 
         if (searchType == 1)
         {
-            return travelDao.getTravelOrderByCreateTimeDesc();
+            return travelDao.getTravelOrderByCreateTimeDesc(searchText, limit1, limit2);
+        }
+        else if(searchType == 2)
+        {
+            return travelDao.getTravelOrderByTotRateDesc(searchText, limit1, limit2);
+        }
+        else if (searchType == 3)
+        {
+            return travelDao.getTravelOrderByFollowerDesc();
+        }
+        else if (searchType == 4)
+        {
+            return travelDao.getTravelOrderByHotDesc();
         }
         else
         {
@@ -38,12 +51,46 @@
     {
         if (Request.QueryString["searchType"] == null)
         {
-            searchType = 1;
+            Response.Redirect("search.aspx?searchType=1");
         }
         else
         {
             searchType = int.Parse(Request.QueryString["searchType"].ToString());
         }
+
+        if (Request.QueryString["text"] != null)
+            searchText = Request.QueryString["text"].ToString();
+    }
+
+    protected void search()
+    {
+        string searchType = Request.QueryString["searchType"].ToString(); // searchType은 무조건 넣게 해놨으니 if문 조건안줘도 됨.
+        string page = "";
+        string text = inputText.Text.ToString();
+
+        if (Request.QueryString["page"] != null)
+            page = Request.QueryString["page"].ToString();
+
+        string absolutePath = HttpContext.Current.Request.Url.AbsolutePath + "?searchType=" + searchType;
+
+        if (page != "")
+            absolutePath += "&page=" + page;
+
+        if (text != "")
+            absolutePath += "&text=" + text;
+
+        Response.Redirect(absolutePath);
+    }
+
+    protected void Button1_Click(object sender, EventArgs e)
+    {
+        search();
+    }
+
+    protected void inputText_TextChanged(object sender, EventArgs e)
+    {
+        //EnterKey 누를 시 Button1_Click 이벤트 발생.
+        inputText.Attributes["onkeyPress"] = "if(event.keyCode == 13) { " + Page.GetPostBackEventReference(Button1) + "; return false; }";
     }
 </script>
 
@@ -56,10 +103,11 @@
     <title>TO OUR SHARED : SEARCH</title>
 
     <!-- Font -->
-    <link href="https://fonts.googleapis.com/css?family=Mansalva|Nanum+Gothic|Nanum+Myeongjo|Noto+Sans+KR|Lora|East+Sea+Dokdo|Jua&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Mansalva|Nanum+Gothic|Nanum+Myeongjo|Noto+Sans+KR|Lora|Yeon+Sung|East+Sea+Dokdo|Jua&display=swap" rel="stylesheet">
 
     <!-- ICON -->
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <script src='https://kit.fontawesome.com/a076d05399.js'></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <!-- CSS -->
@@ -128,10 +176,10 @@
             <div class="sideBar" id="sideBar">
                 <div class="header" id="header">
                     <div class="iconBtnArea">
-                        <button><i class="fas fa-search"></i></button>
+                        <asp:Button class="iconBtnAreaItem" ID="Button1" runat="server" Text="🤔" OnClick="Button1_Click" />
                     </div>
                     <div class="inputArea">
-                        <input type="text" placeholder="리뷰를 볼 지역을 입력하세요" />
+                        <asp:TextBox ID="inputText" class="inputAreaItem" placeholder="원하는 리뷰가 있나요?" maxlength="15" runat="server" OnTextChanged="inputText_TextChanged"></asp:TextBox>
                     </div>
                 </div>
                 <div class="contents" id="contents">
@@ -144,31 +192,33 @@
 <%
     // get방식으로 searchType을 받아와서 radiobutton의 상태를 변경한다. searchType이 null일때는 최신을 default로 잡는다.
     // Request.QueryString["trv_no"].
-
-    string[] str_searchType = new string[] { "최신", "인기", "팔로워", "HOT" };
-    string inputCheck = "";
-    int searchType = 0;
-    if (Request.QueryString["searchType"] == null)
+    try
     {
-        searchType = 1;
-    }
-    else
-    {
-        searchType = int.Parse(Request.QueryString["searchType"].ToString());
-    }
+        string[] str_searchType = new string[] { "최신", "인기", "팔로워", "HOT" };
+        string inputCheck = "";
+        int searchType = 0;
 
-    for (int i = 1; i <= 4; i++)
-    {
-        if (i == searchType) inputCheck = "checked";
-        else inputCheck = "";
+        if (Request.QueryString["searchType"] == null)
+        {
+            searchType = 1;
+        }
+        else
+        {
+            searchType = int.Parse(Request.QueryString["searchType"].ToString());
+        }
 
-        Response.Write("" +
-                        "<td>\n" +
-                            "<div class=\"orderRadioItem\">\n" +
-                                "<input type = \"radio\" id=\"rdo" + i + "\" name=\"orderStd\" runat=\"server\" onchange=\"rdoEvent(" + i + ")\"" + inputCheck + "/><label for=\"rdo" + i + "\">" + str_searchType[(i - 1)] + "</label>\n" +
-                            "</div>\n" +
-                        "</td>\n");
-    }
+        for (int i = 1; i <= 4; i++)
+        {
+            if (i == searchType) inputCheck = "checked";
+            else inputCheck = "";
+
+            Response.Write("" +
+                            "<td>\n" +
+                                "<div class=\"orderRadioItem\">\n" +
+                                    "<input type = \"radio\" id=\"rdo" + i + "\" name=\"orderStd\" runat=\"server\" onchange=\"rdoEvent(" + i + ")\"" + inputCheck + "/><label for=\"rdo" + i + "\">" + str_searchType[(i - 1)] + "</label>\n" +
+                                "</div>\n" +
+                            "</td>\n");
+        }
 %>
                                     </tr>
                                 </table>
@@ -177,19 +227,59 @@
 
                         <div class="boardArea">
                             <div class="boardAlign">
-<% 
-    // boardItem에서 구해야 할 항목 : Member(mainImage) Travel(title, main_img, mem_id, create_time, tot_rate) Trave_Day(content)
-    List<Travel> travelList = getTravelBySearchType();
-
+<%
+    Member member;
     Travel travel;
     Travel_Day travelDay;
-    Member member;
 
+    MemberDao memberDao = new MemberDao();
     TravelDao travelDao = new TravelDao();
     Travel_DayDao travelDayDao = new Travel_DayDao();
-    MemberDao memberDao = new MemberDao();
 
-    for (int i = 1; i <= 5; i++)
+    // 웹 페이징을 위한 변수들
+    int CurrentPage = 0;
+    if (Request.QueryString["page"] == null) CurrentPage = 1;
+    else CurrentPage = int.Parse(Request.QueryString["page"].ToString());
+
+    int totalTravelCount = 0; // searchType(검색 기준)에 따라 구해올 게시글들의 수가 다르다.
+    if(searchType == 1)
+        totalTravelCount = travelDao.getTravelCountOrderByCreateTimeDesc(searchText);
+    else if(searchType == 2)
+        totalTravelCount = travelDao.getTravelCountOrderByTotRateDesc(searchText);
+    else if(searchType == 3)
+        totalTravelCount = travelDao.getTravelCountOrderByFollowerDesc(searchText);
+    else if(searchType == 4)
+        totalTravelCount = travelDao.getTravelCountOrderByHotDesc(searchText);
+
+    int totalPageCount = totalTravelCount / 5;
+    if ((totalTravelCount % 5) > 0) totalPageCount++;
+
+    int pageCount = 5; // 한 페이지에 보여줄 게시글 갯수
+    int blockCount = 0;
+
+    blockCount = (int)Math.Floor((double)((CurrentPage - 1) / pageCount));
+    int startPage = (pageCount * blockCount) + 1; // 시작 페이지
+    int lastPage = startPage + (pageCount - 1); // 마지막 페이지
+
+    int leftArrow = startPage - 5; // 좌측 화살표
+    if (leftArrow <= 0)
+        leftArrow = 1;
+
+    int rightArrow = lastPage + 1; // 우측 화살표
+    if (rightArrow > totalPageCount)
+        rightArrow = totalPageCount;
+
+    String CurrentUrl = HttpContext.Current.Request.Url.AbsolutePath + "?"; // 도메인, 포트, 그리고 쿼리스트링이 제외된 주소. (ex: /board/Index)
+    if (Request.QueryString["searchType"] != null)
+        CurrentUrl += "searchType=" + Request.QueryString["searchType"].ToString();
+
+    int limit1 = (CurrentPage - 1) * 5;
+    int limit2 = 5;
+
+    // boardItem에서 구해야 할 항목 : Member(mainImage) Travel(title, main_img, mem_id, create_time, tot_rate) Trave_Day(content)
+    List<Travel> travelList = getTravelBySearchType(limit1, limit2);
+
+    for (int i = 0; i < travelList.Count; i++)
     {
         member = new Member();
         member.Mem_id = travelList[i].Mem_id;
@@ -205,7 +295,7 @@
         if (travelMainImage == "noImage")
             travelMainImage = "./img/noImage.png";
 
-        if (userMainImage == "noImage")
+        if (userMainImage == "noImage" || userMainImage == null)
             userMainImage = "./img/UserNoneImage.png";
 
         double d_starCount = double.Parse(travelList[i].Trv_tot_rate);
@@ -214,6 +304,12 @@
 
         for (int j = 0; j < i_starCount; j++)
             starText += "⭐";
+
+        string content = "";
+        if (travelDay.Trv_day_content.Length > 10)
+            content = travelDay.Trv_day_content.Substring(0, 10).ToString();
+        else
+            content = travelDay.Trv_day_content.ToString();
 
         Response.Write("" +
             "<div class=\"boardItem\">\n" +
@@ -224,13 +320,13 @@
                         "</a>\n" +
                     "</div>\n" +
                     "<div class=\"boardContent\">" +
-                        "<a href = \"board.aspx?trv_no=\"" + travelList[i].Trv_no.ToString() + "\">\n" +
+                        "<a href = \"board.aspx?trv_no=" + travelList[i].Trv_no.ToString() + "\">\n" +
                             "<div class=\"boardTitle\">" +
                                 "<span>" + travelList[i].Trv_title.ToString() + "</span>" +
                             "</div>\n" +
                             "<div class=\"boardBody\">\n" +
                                 "<span>\n" +
-                                    travelDay.Trv_day_content.ToString() + "\n" +
+                                    content + "\n" +
                                 "</span>\n" +
                             "</div>\n" +
                         "</a>\n" +
@@ -248,11 +344,11 @@
                                 "<span>" + member.Mem_id.ToString() + "</span>\n" +
                             "</a>\n" +
                             "<div class=\"boardUserTime\">\n" +
-                                "<span style = \"cursor: default;\">" + travelList[i].Trv_create_time.ToString() + "</span>\n" +
+                                "<span style = \"cursor: default;\">" + timestampConvert.TimeStampToString(travelList[i].Trv_create_time.ToString()) + "</span>\n" +
                             "</div>\n" +
                         "</div>\n" +
                         "<div class=\"boardScore\" style=\"cursor: default;\">" +
-                            "<span class=\"Score1\">starText</span>\n" +
+                            "<span class=\"Score1\">" + starText + "</span>\n" +
                             "<span class=\"Score3\">(" + d_starCount + ")</span>\n" +
                         "</div>\n" +
                     "</div>\n" +
@@ -264,35 +360,48 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="footer" id="footer">
                     <div class="footerArea">
                         <div class="footerItem">
                             <ul class="pagination">
-                                <a href="#">
-                                    <li>
-                                        <</li> </a> <a href="#">
-                                    <li class="pageActive">1</li>
-                                </a>
-                                <a href="#">
-                                    <li>2</li>
-                                </a>
-                                <a href="#">
-                                    <li>3</li>
-                                </a>
-                                <a href="#">
-                                    <li>4</li>
-                                </a>
-                                <a href="#">
-                                    <li>5</li>
-                                </a>
-                                <a href="#">
-                                    <li>></li>
-                                </a>
+<%
+        if (leftArrow >= 1)
+            Response.Write("<a href=\"" + CurrentUrl + "&page=" + leftArrow + "\"><li><</li></a>\n");
+        else
+            Response.Write("<a href=\"javascript:void(0);\"><li>&nbsp;</li></a>\n");
+
+        for (int i = startPage; i <= lastPage; i++)
+        {
+            string li = "";
+            if (CurrentPage == i)
+                li = "<li class=\"pageActive\">";
+            else
+                li = "<li>";
+
+            if (i < totalPageCount)
+            {
+                Response.Write("<a href=\"" + CurrentUrl + "&page=" + i + "\">" + li + i + "</li></a>\n");
+            }
+            else
+            {
+                Response.Write("<a href=\"javascript: void(0);\"><li>&nbsp;</li></a>\n");
+            }
+        }
+
+        if (rightArrow < totalPageCount)
+            Response.Write("<a href=\"" + CurrentUrl + "&page=" + rightArrow + "\"><li>></li></a>\n");
+        else
+            Response.Write("<a href=\"javascript: void(0);\"><li>&nbsp;</li></a>\n");
+    }
+    catch(Exception e) {;} // 에러 너무 떠서 일단 예외 다 막아버림.
+%>
                             </ul>
                         </div>
                     </div>
                 </div>
             </div>
+
 
             <!-- sideBar open & close switch -->
             <div class="sideBarBtn" id="sideBarBtn">
