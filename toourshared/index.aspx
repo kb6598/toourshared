@@ -26,76 +26,293 @@
         Response.Redirect("/find_idpw.aspx");
     }
 
+    // 최신순, 평점순, 구독자순
+    // 불러올 데이터: 작성자 메인이미지, 아이디, 작성시간, 게시글 메인이미지
+    //최신순
     protected string orderByTime()
     {
-        String userMainImage = ""; // user 메인이미지 Path 담을 변수
-        List<Travel> resultList = getOrderbyTimeList(); // 최신 순으로 게시글 받을 함수. 반환형식은 List<Travel>
-        List<String> travelDay_List; // travel_day 컬럼 데이터 받을 List. 반환형식은 List<String>
-        IndexDao dao = new IndexDao(); // DB 접근하기 위한 Dao
-        int trCount = 0; // tr 주기 위한 Count
+        string memberMainImage = ""; // 작성자 메인 이미지
+        string travelMainImage = ""; // 게시글 메인 이미지
+        string locName = ""; // 선택한 지역 명
+        int locIndex = 0; // 쿼리스트링 받아올 인덱스 변수(locArr에 사용할 변수)
+        int trCount = 0; // 테이블 <tr> 태그 적당할 때 넣어주기 위한 변수
+        string[] locArr = new string[] { "", "서울", "경기", "인천", "충청", "강원", "전라", "경상", "제주" };
+
+        if (Request.QueryString["loc"] != null) // 지역선택한 게 있을 때(쿼리스트링이 존재할 때)
+        {
+            locIndex = int.Parse(Request.QueryString["loc"].ToString());
+            locName = locArr[locIndex];
+        }
+
+        Member member; // 작성자의 데이터를 긁어올 DTO 변수 선언
+        Travel_Day travelDay; // 게시글 내용을 긁어올 DTO 변수 선언
+
+        MemberDao memberDao = new MemberDao(); // 작성자 데이터 접근을 위한 DAO
+        TravelDao travelDao = new TravelDao(); // 게시글 데이터에 접근하기 위한 DAO
+        Travel_DayDao travelDayDao = new Travel_DayDao(); // 게시글 내용에 접근하기 위한 DAO
+        List<Travel> travelList = travelDao.getIndexTravelOrderByCreateTimeDesc(locName); // 인덱스에 나타낼 Travel(최신순) (limit 0, 6);
+
         String returnStr = "                                <div class = \"SlideBody\">\n" +
                                 "                                    <table>\n" +
                                 "                                        <tr>\n";
 
-        for(int i = 0; i < resultList.Count; i++)
+        for (int i = 0; i < travelList.Count; i++)
         {
-            userMainImage = dao.selectUserMainImage(resultList[i].Mem_id);  // 게시글 작성자의 메인 프로필 이미지를 구해온다.
+            member = new Member(); // DTO 객체 생성
+            member.Mem_id = travelList[i].Mem_id;
+            member = memberDao.selectMemberByMem_id(member); // 게시글의 작성자를 파라미터 값으로(member DTO) 가지는 DAO에 접근하여 memberDTO 반환
 
-            if (userMainImage == "noImage")
-                userMainImage = "./img/noImage.png";
+            memberMainImage = member.Mem_img_url; // 반환받은 memberDTO 객체의 메인이미지를 뿌려준다.
+            if (string.IsNullOrEmpty(memberMainImage) || memberMainImage == "noImage") // 변수에 담긴 값이 null, Empty, noImage 일 경우
+                memberMainImage = "./img/UserNoneImage.png";
 
-            travelDay_List = dao.selectTravelDay(int.Parse(resultList[i].Trv_no)); // 게시글 번호에 해당하는 게시글 내용을 구해온다.
+            travelMainImage = travelList[i].Trv_main_img; // 게시글의 메인 이미지를 가져온다.
+            if (string.IsNullOrEmpty(travelMainImage) || travelMainImage == "noImage") // 변수에 담긴 값이 null, Empty, noImage 일 경우
+                travelMainImage = "./img/noImage.png";
 
-            // 게시글 공개범위 여부를 체크해야 한다.
+            travelDay = new Travel_Day();
+            travelDay.Trv_no = travelList[i].Trv_no;
+            travelDay = travelDayDao.selectTravelDayByTrvNo(travelDay); // 게시글 번호를 파라미터 값으로(travel_day DTO) 가지는 DAO에 접근하여 travel_dayDTO 반환
 
-            returnStr += "                                            <td>\n" +
-                             "                                                <div class=\"tableContainer\">\n" +
-                             "                                                    <img src=" + resultList[i].Trv_main_img + " alt=" + resultList[i].Mem_id + ">\n" +
-                             "                                                    <div class=\"tableOverlay\">\n" +
-                             "                                                        <div class=\"tableText\">\n" +
-                             "                                                            <div class=\"tableInfo\">\n" +
-                             "                                                               <div class = \"tableImage\">\n" +
-                             "                                                                   <a href = \"MyPage.aspx?mem_id=" + resultList[i].Mem_id + "\"><img src = \"" + userMainImage + "\" alt=\"" + resultList[i].Mem_id + " MainImage \"/ style=\"width: 40px; height: 40px; border-radius: 100%; border:none;\"></a>\n" +
-                             "                                                               </div>\n" +
-                             "                                                               <div class=\"tableUserInfo\">\n" +
-                             "                                                                    <div class=\"tableUserName\">\n" +
-                             "                                                                        <a href = \"MyPage.aspx?mem_id=" + resultList[i].Mem_id + "\">" + resultList[i].Mem_id + "</a>\n" +
-                             "                                                                    </div>\n" +
-                             "                                                                    <div class=\"tableTime\">" + resultList[i].Trv_create_time + "</div>\n" +
-                             "                                                               </div>\n" +
-                             "                                                               <div class = \"tableGoUrl\">\n" +
-                             "                                                                  <a href = \"#\" class=\"goUrlItem\"><i class='far fa-arrow-alt-circle-right'></i></a>\n" +
-                             "                                                               </div>\n" +
-                             "                                                            </div>\n" +
-                             "                                                            <div class=\"tableData\">\n" +
-                             "                                                                <div class=\"tableBody\">" + travelDay_List[1].ToString() + "</div>\n" +
-                             "                                                            </div>\n" +
-                             "                                                        </div>\n" +
-                             "                                                    </div>\n" +
-                             "                                                </div>\n" +
-                             "                                            </td>\n";
+            returnStr += "" +
+                   "<td>\n" +
+                    "   <div class=\"tableContainer\">\n" +
+                    "       <img src=\"" + travelMainImage + "\" alt=\"" + travelMainImage + "_mainImage\"/>\n" +
+                    "       <div class=\"tableOverlay\">\n" +
+                    "           <div class=\"tableText\">\n" +
+                    "               <div class=\"tableInfo\">\n" +
+                    "                   <div class = \"tableImage\">\n" +
+                    "                       <a href = \"MyPage.aspx?mem_id=" + travelList[i].Mem_id + "\">" +
+                    "                           <img src = \"" + memberMainImage + "\" alt=\"" + memberMainImage + "_mainImage\"/ style=\"width: 40px; height: 40px; border-radius: 100%; border:none;\">" +
+                    "                       </a>\n" +
+                    "                   </div>\n" +
+                    "                   <div class=\"tableUserInfo\">\n" +
+                    "                       <div class=\"tableUserName\">\n" +
+                    "                           <a href = \"MyPage.aspx?mem_id=" + travelList[i].Mem_id + "\">" + travelList[i].Mem_id + "</a>\n" +
+                    "                       </div>\n" +
+                    "                       <div class=\"tableTime\">" + timestampConvert.TimeStampToString(travelList[i].Trv_create_time) + "</div>\n" +
+                    "                   </div>\n" +
+                    "                   <div class = \"tableGoUrl\">\n" +
+                    "                       <a href = \"board.aspx?trv_no=" + travelList[i].Trv_no + "\" class=\"goUrlItem\">" +
+                    "                           <i class='far fa-arrow-alt-circle-right'></i>" +
+                    "                       </a>\n" +
+                    "                   </div>\n" +
+                    "               </div>\n" +
+                    "               <div class=\"tableData\">\n" +
+                    "                   <div class=\"tableBody\">" + travelDay.Trv_day_content + "</div>\n" +
+                    "               </div>\n" +
+                    "           </div>\n" +
+                    "       </div>\n" +
+                    "   </div>\n" +
+                    "</td>\n";
+
             trCount++;
-            if(trCount >= 3)
+            if (trCount >= 3)
             {
                 trCount = 0;
                 returnStr += "" +
-                            "                                        </tr>" +
-                            "                                        <tr>";
+                    "</tr>\n" +
+                    "<tr>\n";
             }
         }
 
-        returnStr += "                                        </tr>";
-        returnStr += "                                    </table>";
-        returnStr += "                                </div>";
+        returnStr += "" +
+            "</tr>\n" +
+            "</table>\n" +
+            "</div>\n";
+
         return returnStr;
     }
 
-    protected List<Travel> getOrderbyTimeList()
+    // 평점순
+    protected string orderByTotRate()
     {
-        List<Travel> resultList = new List<Travel>();
-        IndexDao dao = new IndexDao();
+        string memberMainImage = ""; // 작성자 메인 이미지
+        string travelMainImage = ""; // 게시글 메인 이미지
+        string locName = ""; // 선택한 지역 명
+        int locIndex = 0; // 쿼리스트링 받아올 인덱스 변수(locArr에 사용할 변수)
+        int trCount = 0; // 테이블 <tr> 태그 적당할 때 넣어주기 위한 변수
+        string[] locArr = new string[] { "", "서울", "경기", "인천", "충청", "강원", "전라", "경상", "제주" };
 
-        return dao.selectOrderByTime();
+        if (Request.QueryString["loc"] != null) // 지역선택한 게 있을 때(쿼리스트링이 존재할 때)
+        {
+            locIndex = int.Parse(Request.QueryString["loc"].ToString());
+            locName = locArr[locIndex];
+        }
+
+        Member member; // 작성자의 데이터를 긁어올 DTO 변수 선언
+        Travel_Day travelDay; // 게시글 내용을 긁어올 DTO 변수 선언
+
+        MemberDao memberDao = new MemberDao(); // 작성자 데이터 접근을 위한 DAO
+        TravelDao travelDao = new TravelDao(); // 게시글 데이터에 접근하기 위한 DAO
+        Travel_DayDao travelDayDao = new Travel_DayDao(); // 게시글 내용에 접근하기 위한 DAO
+        List<Travel> travelList = travelDao.getIndexTravelOrderByTotRateDesc(locName); // 인덱스에 나타낼 Travel(평점순) (limit 0, 6);
+
+        String returnStr = "                                <div class = \"SlideBody\">\n" +
+                                "                                    <table>\n" +
+                                "                                        <tr>\n";
+
+        for (int i = 0; i < travelList.Count; i++)
+        {
+            member = new Member(); // DTO 객체 생성
+            member.Mem_id = travelList[i].Mem_id;
+            member = memberDao.selectMemberByMem_id(member); // 게시글의 작성자를 파라미터 값으로(member DTO) 가지는 DAO에 접근하여 memberDTO 반환
+
+            memberMainImage = member.Mem_img_url; // 반환받은 memberDTO 객체의 메인이미지를 뿌려준다.
+            if (string.IsNullOrEmpty(memberMainImage) || memberMainImage == "noImage") // 변수에 담긴 값이 null, Empty, noImage 일 경우
+                memberMainImage = "./img/memberNoImage.png";
+
+            travelMainImage = travelList[i].Trv_main_img; // 게시글의 메인 이미지를 가져온다.
+            if (string.IsNullOrEmpty(travelMainImage) || travelMainImage == "noImage") // 변수에 담긴 값이 null, Empty, noImage 일 경우
+                travelMainImage = "./img/noImage.png";
+
+            travelDay = new Travel_Day();
+            travelDay.Trv_no = travelList[i].Trv_no;
+            travelDay = travelDayDao.selectTravelDayByTrvNo(travelDay); // 게시글 번호를 파라미터 값으로(travel_day DTO) 가지는 DAO에 접근하여 travel_dayDTO 반환
+
+            returnStr += "" +
+                   "<td>\n" +
+                    "   <div class=\"tableContainer\">\n" +
+                    "       <img src=\"" + travelMainImage + "\" alt=\"" + travelMainImage + "_mainImage\"/>\n" +
+                    "       <div class=\"tableOverlay\">\n" +
+                    "           <div class=\"tableText\">\n" +
+                    "               <div class=\"tableInfo\">\n" +
+                    "                   <div class = \"tableImage\">\n" +
+                    "                       <a href = \"MyPage.aspx?mem_id=" + travelList[i].Mem_id + "\">" +
+                    "                           <img src = \"" + memberMainImage + "\" alt=\"" + memberMainImage + "_mainImage\"/ style=\"width: 40px; height: 40px; border-radius: 100%; border:none;\">" +
+                    "                       </a>\n" +
+                    "                   </div>\n" +
+                    "                   <div class=\"tableUserInfo\">\n" +
+                    "                       <div class=\"tableUserName\">\n" +
+                    "                           <a href = \"MyPage.aspx?mem_id=" + travelList[i].Mem_id + "\">" + travelList[i].Mem_id + "</a>\n" +
+                    "                       </div>\n" +
+                    "                       <div class=\"tableTime\">" + timestampConvert.TimeStampToString(travelList[i].Trv_create_time) + "</div>\n" +
+                    "                   </div>\n" +
+                    "                   <div class = \"tableGoUrl\">\n" +
+                    "                       <a href = \"board.aspx?trv_no=" + travelList[i].Trv_no + "\" class=\"goUrlItem\">" +
+                    "                           <i class='far fa-arrow-alt-circle-right'></i>" +
+                    "                       </a>\n" +
+                    "                   </div>\n" +
+                    "               </div>\n" +
+                    "               <div class=\"tableData\">\n" +
+                    "                   <div class=\"tableBody\">" + travelDay.Trv_day_content + "</div>\n" +
+                    "               </div>\n" +
+                    "           </div>\n" +
+                    "       </div>\n" +
+                    "   </div>\n" +
+                    "</td>\n";
+
+            trCount++;
+            if (trCount >= 3)
+            {
+                trCount = 0;
+                returnStr += "" +
+                    "</tr>\n" +
+                    "<tr>\n";
+            }
+        }
+
+        returnStr += "" +
+            "</tr>\n" +
+            "</table>\n" +
+            "</div>\n";
+
+        return returnStr;
+    }
+
+    protected string orderByFollower()
+    {
+        string memberMainImage = ""; // 작성자 메인 이미지
+        string travelMainImage = ""; // 게시글 메인 이미지
+        string locName = ""; // 선택한 지역 명
+        int locIndex = 0; // 쿼리스트링 받아올 인덱스 변수(locArr에 사용할 변수)
+        int trCount = 0; // 테이블 <tr> 태그 적당할 때 넣어주기 위한 변수
+        string[] locArr = new string[] { "", "서울", "경기", "인천", "충청", "강원", "전라", "경상", "제주" };
+
+        if (Request.QueryString["loc"] != null) // 지역선택한 게 있을 때(쿼리스트링이 존재할 때)
+        {
+            locIndex = int.Parse(Request.QueryString["loc"].ToString());
+            locName = locArr[locIndex];
+        }
+
+        Member member; // 작성자의 데이터를 긁어올 DTO 변수 선언
+        Travel_Day travelDay; // 게시글 내용을 긁어올 DTO 변수 선언
+
+        MemberDao memberDao = new MemberDao(); // 작성자 데이터 접근을 위한 DAO
+        TravelDao travelDao = new TravelDao(); // 게시글 데이터에 접근하기 위한 DAO
+        Travel_DayDao travelDayDao = new Travel_DayDao(); // 게시글 내용에 접근하기 위한 DAO
+        List<Travel> travelList = travelDao.getIndexTravelOrderByFollowerDesc(locName); // 인덱스에 나타낼 Travel(평점순) (limit 0, 6);
+
+        String returnStr = "                                <div class = \"SlideBody\">\n" +
+                                "                                    <table>\n" +
+                                "                                        <tr>\n";
+
+        for (int i = 0; i < travelList.Count; i++)
+        {
+            member = new Member(); // DTO 객체 생성
+            member.Mem_id = travelList[i].Mem_id;
+            member = memberDao.selectMemberByMem_id(member); // 게시글의 작성자를 파라미터 값으로(member DTO) 가지는 DAO에 접근하여 memberDTO 반환
+
+            memberMainImage = member.Mem_img_url; // 반환받은 memberDTO 객체의 메인이미지를 뿌려준다.
+            if (string.IsNullOrEmpty(memberMainImage) || memberMainImage == "noImage") // 변수에 담긴 값이 null, Empty, noImage 일 경우
+                memberMainImage = "./img/memberNoImage.png";
+
+            travelMainImage = travelList[i].Trv_main_img; // 게시글의 메인 이미지를 가져온다.
+            if (string.IsNullOrEmpty(travelMainImage) || travelMainImage == "noImage") // 변수에 담긴 값이 null, Empty, noImage 일 경우
+                travelMainImage = "./img/noImage.png";
+
+            travelDay = new Travel_Day();
+            travelDay.Trv_no = travelList[i].Trv_no;
+            travelDay = travelDayDao.selectTravelDayByTrvNo(travelDay); // 게시글 번호를 파라미터 값으로(travel_day DTO) 가지는 DAO에 접근하여 travel_dayDTO 반환
+
+            returnStr += "" +
+                   "<td>\n" +
+                    "   <div class=\"tableContainer\">\n" +
+                    "       <img src=\"" + travelMainImage + "\" alt=\"" + travelMainImage + "_mainImage\"/>\n" +
+                    "       <div class=\"tableOverlay\">\n" +
+                    "           <div class=\"tableText\">\n" +
+                    "               <div class=\"tableInfo\">\n" +
+                    "                   <div class = \"tableImage\">\n" +
+                    "                       <a href = \"MyPage.aspx?mem_id=" + travelList[i].Mem_id + "\">" +
+                    "                           <img src = \"" + memberMainImage + "\" alt=\"" + memberMainImage + "_mainImage\"/ style=\"width: 40px; height: 40px; border-radius: 100%; border:none;\">" +
+                    "                       </a>\n" +
+                    "                   </div>\n" +
+                    "                   <div class=\"tableUserInfo\">\n" +
+                    "                       <div class=\"tableUserName\">\n" +
+                    "                           <a href = \"MyPage.aspx?mem_id=" + travelList[i].Mem_id + "\">" + travelList[i].Mem_id + "</a>\n" +
+                    "                       </div>\n" +
+                    "                       <div class=\"tableTime\">" + timestampConvert.TimeStampToString(travelList[i].Trv_create_time) + "</div>\n" +
+                    "                   </div>\n" +
+                    "                   <div class = \"tableGoUrl\">\n" +
+                    "                       <a href = \"board.aspx?trv_no=" + travelList[i].Trv_no + "\" class=\"goUrlItem\">" +
+                    "                           <i class='far fa-arrow-alt-circle-right'></i>" +
+                    "                       </a>\n" +
+                    "                   </div>\n" +
+                    "               </div>\n" +
+                    "               <div class=\"tableData\">\n" +
+                    "                   <div class=\"tableBody\">" + travelDay.Trv_day_content + "</div>\n" +
+                    "               </div>\n" +
+                    "           </div>\n" +
+                    "       </div>\n" +
+                    "   </div>\n" +
+                    "</td>\n";
+
+            trCount++;
+            if (trCount >= 3)
+            {
+                trCount = 0;
+                returnStr += "" +
+                    "</tr>\n" +
+                    "<tr>\n";
+            }
+        }
+
+        returnStr += "" +
+            "</tr>\n" +
+            "</table>\n" +
+            "</div>\n";
+
+        return returnStr;
     }
 
     protected string localCodeToName()
@@ -105,6 +322,7 @@
             string[] strArray = new string[] { "전", "서울", "경기", "인천", "충청", "강원", "전라", "경상", "제주" };
             int code = int.Parse(Request.QueryString["loc"].ToString());
             string returnStr = "<span style=\"color: orange;\">";
+
             returnStr += strArray[code] + " 지역 ";
             returnStr += "</span>";
 
@@ -116,7 +334,6 @@
             return returnStr;
         }
     }
-
 </script>
 
 <html>
@@ -731,7 +948,7 @@
         }
 
         .tableInfo .tableTime {
-            width: 100%;
+            width: 100px;
             height: 10px;
             text-align: left;
             padding: 0px 0px 0px 10px;
@@ -1157,11 +1374,6 @@
             <div class="mainSlide">
                 <div class="mainSlideContainer">
                     <div id="mainSlide" class="carousel slide" data-ride="carousel">
-                        <ol class="carousel-indicators">
-                            <li data-target="#mainSlide" data-slide-to="0" class="active"></li>
-                            <li data-target="#mainSlide" data-slide-to="1"></li>
-                            <li data-target="#mainSlide" data-slide-to="2"></li>
-                        </ol>
 
                         <div class="carousel-prev">
                             <a class="carousel-control-prev" href="#mainSlide" role="button" data-slide="prev">
@@ -1187,225 +1399,20 @@
                                 <% Response.Write(orderByTime()); %>
                             </div>
 
-                            <!-- 추천 순 -->
+                            <!-- 평점 순-->
                             <div class="carousel-item">
                                 <div class="SlideTitle">
-                                    <label><%Response.Write(localCodeToName());%>추천 순</label>
+                                    <label><%Response.Write(localCodeToName());%>평점 순</label>
                                 </div>
-                                <div class="SlideBody">
-                                    <table>
-                                        <tr>
-                                            <td>
-                                                <div class="tableContainer">
-                                                    <img src="./img/background02.jpg" alt="milk9503">
-                                                    <div class="tableOverlay">
-                                                        <div class="tableText">
-                                                            <div class="tableInfo">
-                                                                <div class="tableUserName">milk9503</div>
-                                                                <div class="tableTime">3초 전</div>
-                                                            </div>
-                                                            <div class="tableData">
-                                                                <div class="tableBody">ㅋㅋ</div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="tableContainer">
-                                                    <img src="./img/background02.jpg" alt="milk9503">
-                                                    <div class="tableOverlay">
-                                                        <div class="tableText">
-                                                            <div class="tableInfo">
-                                                                <div class="tableUserName">milk9503</div>
-                                                                <div class="tableTime">3초 전</div>
-                                                            </div>
-                                                            <div class="tableData">
-                                                                <div class="tableBody">가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하<br /><br /><br /><br /><br /><a href="#"><span style="color: deepskyblue;">#가나다라마바 #사아자차카 #타파하파</span></a></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="tableContainer">
-                                                    <img src="./img/background02.jpg" alt="milk9503">
-                                                    <div class="tableOverlay">
-                                                        <div class="tableText">
-                                                            <div class="tableInfo">
-                                                                <div class="tableUserName">milk9503</div>
-                                                                <div class="tableTime">3초 전</div>
-                                                            </div>
-                                                            <div class="tableData">
-                                                                <div class="tableBody">ㅋㅋ</div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="tableContainer">
-                                                    <img src="./img/background02.jpg" alt="milk9503">
-                                                    <div class="tableOverlay">
-                                                        <div class="tableText">
-                                                            <div class="tableInfo">
-                                                                <div class="tableUserName">milk9503</div>
-                                                                <div class="tableTime">3초 전</div>
-                                                            </div>
-                                                            <div class="tableData">
-                                                                <div class="tableBody">ㅋㅋ</div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="tableContainer">
-                                                    <img src="./img/background02.jpg" alt="milk9503">
-                                                    <div class="tableOverlay">
-                                                        <div class="tableText">
-                                                            <div class="tableInfo">
-                                                                <div class="tableUserName">milk9503</div>
-                                                                <div class="tableTime">3초 전</div>
-                                                            </div>
-                                                            <div class="tableData">
-                                                                <div class="tableBody">ㅋㅋ</div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="tableContainer">
-                                                    <img src="./img/background02.jpg" alt="milk9503">
-                                                    <div class="tableOverlay">
-                                                        <div class="tableText">
-                                                            <div class="tableInfo">
-                                                                <div class="tableUserName">milk9503</div>
-                                                                <div class="tableTime">3초 전</div>
-                                                            </div>
-                                                            <div class="tableData">
-                                                                <div class="tableBody">ㅋㅋ</div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </div>
+                                <% Response.Write(orderByTotRate()); %>
                             </div>
+
                             <!-- 구독자 순 -->
                             <div class="carousel-item">
                                 <div class="SlideTitle">
                                     <label><%Response.Write(localCodeToName());%>구독자 순</label>
                                 </div>
-                                <div class="SlideBody">
-                                    <table>
-                                        <tr>
-                                            <td>
-                                                <div class="tableContainer">
-                                                    <img src="./img/background02.jpg" alt="milk9503">
-                                                    <div class="tableOverlay">
-                                                        <div class="tableText">
-                                                            <div class="tableInfo">
-                                                                <div class="tableUserName">milk9503</div>
-                                                                <div class="tableTime">3초 전</div>
-                                                            </div>
-                                                            <div class="tableData">
-                                                                <div class="tableBody">ㅋㅋ</div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="tableContainer">
-                                                    <img src="./img/background02.jpg" alt="milk9503">
-                                                    <div class="tableOverlay">
-                                                        <div class="tableText">
-                                                            <div class="tableInfo">
-                                                                <div class="tableUserName">milk9503</div>
-                                                                <div class="tableTime">3초 전</div>
-                                                            </div>
-                                                            <div class="tableData">
-                                                                <div class="tableBody">가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하가나다라마바사아자차카타파하</div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="tableContainer">
-                                                    <img src="./img/background02.jpg" alt="milk9503">
-                                                    <div class="tableOverlay">
-                                                        <div class="tableText">
-                                                            <div class="tableInfo">
-                                                                <div class="tableUserName">milk9503</div>
-                                                                <div class="tableTime">3초 전</div>
-                                                            </div>
-                                                            <div class="tableData">
-                                                                <div class="tableBody">ㅋㅋ</div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="tableContainer">
-                                                    <img src="./img/background02.jpg" alt="milk9503">
-                                                    <div class="tableOverlay">
-                                                        <div class="tableText">
-                                                            <div class="tableInfo">
-                                                                <div class="tableUserName">milk9503</div>
-                                                                <div class="tableTime">3초 전</div>
-                                                            </div>
-                                                            <div class="tableData">
-                                                                <div class="tableBody">ㅋㅋ</div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="tableContainer">
-                                                    <img src="./img/background02.jpg" alt="milk9503">
-                                                    <div class="tableOverlay">
-                                                        <div class="tableText">
-                                                            <div class="tableInfo">
-                                                                <div class="tableUserName">milk9503</div>
-                                                                <div class="tableTime">3초 전</div>
-                                                            </div>
-                                                            <div class="tableData">
-                                                                <div class="tableBody">ㅋㅋ</div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="tableContainer">
-                                                    <img src="./img/background02.jpg" alt="milk9503">
-                                                    <div class="tableOverlay">
-                                                        <div class="tableText">
-                                                            <div class="tableInfo">
-                                                                <div class="tableUserName">milk9503</div>
-                                                                <div class="tableTime">3초 전</div>
-                                                            </div>
-                                                            <div class="tableData">
-                                                                <div class="tableBody">ㅋㅋ</div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </div>
+                                <% Response.Write(orderByFollower()); %>
                             </div>
                         </div>
                     </div>

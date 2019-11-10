@@ -311,7 +311,7 @@
 
             if(resultList[indexCount].Trv_main_img == "noImage")
             {
-                returnStr += "               " + resultList[indexCount].Trv_main_img.ToString() + " " + System.IO.File.Exists(resultList[indexCount].Trv_main_img) + " <br/><img src = \"./img/noImage.png\" alt= \"" + resultList[indexCount].Trv_title + "\" >\n";
+                returnStr += "               " + resultList[indexCount].Trv_main_img.ToString() + " " + System.IO.File.Exists(resultList[indexCount].Trv_main_img) + " <br/><img src = \"./img/memerNoImage.png\" alt= \"" + resultList[indexCount].Trv_title + "\" >\n";
             }
             else
             {
