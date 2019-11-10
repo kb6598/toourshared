@@ -123,31 +123,8 @@ var drawingMap = new daum.maps.Map(drawingMapContainer, drawingMap);
 // 위에 작성한 옵션으로 Drawing Manager를 생성합니다
 var manager = new daum.maps.drawing.DrawingManager(options);
 
-// undo, redo 버튼의 disabled 속성을 설정하기 위해 엘리먼트를 변수에 설정합니다
-var undoBtn = document.getElementById('undo');
-var redoBtn = document.getElementById('redo');
 
-// Drawing Manager 객체에 state_changed 이벤트를 등록합니다
-// state_changed 이벤트는 그리기 요소의 생성/수정/이동/삭제 동작
-// 또는 Drawing Manager의 undo, redo 메소드가 실행됐을 때 발생합니다
-        manager.addListener('state_changed', function () {
 
-            // 되돌릴 수 있다면 undo 버튼을 활성화 시킵니다
-            if (manager.undoable()) {
-        undoBtn.disabled = false;
-
-    } else { // 아니면 undo 버튼을 비활성화 시킵니다
-        undoBtn.disabled = true;
-    }
-
-    // 취소할 수 있다면 redo 버튼을 활성화 시킵니다
-            if (manager.redoable()) {
-        redoBtn.disabled = false;
-    } else { // 아니면 redo 버튼을 비활성화 시킵니다
-        redoBtn.disabled = true;
-    }
-
-});
 
 
         class History {
@@ -187,20 +164,6 @@ push
 
 
 
-// undo 버튼 클릭시 호출되는 함수입니다.
-        function undoAction() {
-        // 그리기 요소를 이전 상태로 되돌립니다
-        manager.undo();
-    }
-
-    // redo 버튼 클릭시 호출되는 함수입니다.
-        function redoAction() {
-        // 이전 상태로 되돌린 상태를 취소합니다
-        manager.redo();
-    }
-
-
-    ////////////////////////////////////////////
 
 
 
