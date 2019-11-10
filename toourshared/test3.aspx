@@ -1,5 +1,5 @@
 ﻿<%@ Page Language="C#" %>
-
+<%@ Import Namespace="Newtonsoft.Json.Linq" %>  
 <!DOCTYPE html>
 
 <script runat="server">
@@ -34,14 +34,35 @@
         List<Travel_Day> travel_DayList = travel_DayDao.selectTravelDayListByTrvNo(travel_Day);
 
 
-        foreach(var item in travel_DayList)
+        foreach (var item in travel_DayList)
         {
             tmpMap = new Map();
             inMap.Trv_day_no = item.Trv_day_no;
             tmpMap = mapDao.selectMapByTrv_day_no(inMap);
             resultList.Add(tmpMap);
 
+            //[{\"place_name\":\"\",\"road_address_name\":\"\",\"address_name\":\"\",\"phone\":\"\",\"place_url\":\"\",\"x\":\"400052.5000000007\",\"y\":\"-11542.499999997672\",\"info\":\"\"},{\"place_name\":\"카카오프렌즈 제주스토어\",\"road_address_name\":\"제주특별자치도 제주시 첨단로 242\",\"address_name\":\"undefined\",\"phone\":\"02-6718-1679\",\"place_url\":\"http://place.map.kakao.com/578297505\",\"x\":\"126.570723868449\",\"y\":\"33.4508632665314\",\"info\":\"\"}]', '[{\"itemList\":[],\"place_name\":\"\"},{\"itemList\":[],\"place_name\":\"카카오프렌즈 제주스토어\"}]'
+
+            JObject jo = JObject.Parse(tmpMap.Map_route);
+
+            foreach (var j in jo)
+            {
+                //var key = item.SelectToken("key").ToString();
+                //var category = item.SelectToken("category").ToString();
+                //var text = item.SelectToken("text").ToString();
+                //var items = item.SelectToken("items");
+                //if (items != null)
+                //{
+                //    //foreach (var token in items)
+                //    //{
+                //    //    var name = String.Format("{0}", token.SelectToken("name"));
+                //    //    var value = String.Format("{0}", token.SelectToken("value"));
+                //    //}
+                //}
+            }
+
         }
+
 
 
 
