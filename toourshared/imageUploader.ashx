@@ -55,7 +55,7 @@ public class imageUploader : IHttpHandler,System.Web.SessionState.IRequiresSessi
         try
         {
 
-            string saveDir = @"\Upload\"+HttpContext.Current.Session["mem_id"].ToString()+@"\";
+            string saveDir = @"Upload\"+HttpContext.Current.Session["mem_id"].ToString()+@"\";
             string dirFullPath = HttpContext.Current.Server.MapPath(saveDir);
             Directory.CreateDirectory(dirFullPath);
 
@@ -84,7 +84,7 @@ public class imageUploader : IHttpHandler,System.Web.SessionState.IRequiresSessi
 
 
 
-            context.Response.Write("."+saveDir+str_image);
+            context.Response.Write(saveDir+str_image);
         }
         catch (Exception ac)
         {

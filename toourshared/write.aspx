@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#"  EnableEventValidation="false" ValidateRequest="false"%>
+﻿<%@ Page Language="C#"  EnableEventValidation="false" ValidateRequest="false" Debug="true"%>
 
 <%@ Import Namespace="System.IO" %>  
 
@@ -6,6 +6,7 @@
 <!DOCTYPE html>
 
 <script runat="server">
+
 
 
     protected void btnLogout_Click(object sender, EventArgs e)
