@@ -58,12 +58,6 @@ namespace adminForm
             dataGridView2.Columns[3].HeaderCell.Value = "계정정지 기간";            
         }
 
-        //계정정지 해제 기능(함수)
-        public void MemberBlock_Unlock()
-        {
-
-        }
-
         //신고목록조회 버튼
         private void button1_Click(object sender, EventArgs e)
         {
@@ -93,13 +87,13 @@ namespace adminForm
 
             //    }
             //}
-
-
             Travel travel = new Travel();
             Member member = new Member();
+            Member_Block member_Block = new Member_Block();
             TravelDao travelDao = new TravelDao();
             MemberDao memberDao = new MemberDao();
             Report delete = new Report();
+            Member_BlockDao member_BlockDao = new Member_BlockDao();
 
 
             int selectedCellCount =dataGridView1.GetCellCount(DataGridViewElementStates.Selected);
@@ -112,15 +106,23 @@ namespace adminForm
                 travel.Trv_no = dataGridView1.Rows[dataGridView1.SelectedCells[i].RowIndex].Cells[1].Value.ToString();
 
                 travel = travelDao.selectTravelBytrv_no(travel); // 바꿔치기
+
                 member.Mem_id = travel.Mem_id;
+
                 memberDao.UpdateMemberStateByMemId(member, 1); // 멤버 상태 바꾸고
+
                 travel.Trv_secret = "3"; // travel 객체 secret 속성 데이터 바꾸고
 
-                travelDao.UpdatetTravel(travel); // travelDao로 DB 업데이트 
+                travelDao.UpdatetTravel(travel); // travelDao로 DB 업데이트
+
+
+                //제재 눌렀을때 선택한 행의 trv_no를 가져온다. 
+                travel.Trv_no = dataGridView1.Rows[dataGridView1.SelectedCells[i].RowIndex].Cells[1].Value.ToString();
+                
 
                 //선택 행의 첫번째 rep_no 가져오기
                 delete.Rep_no = dataGridView1.Rows[dataGridView1.SelectedCells[i].RowIndex].Cells[0].Value.ToString();
-
+                
                 try
                 {
                     string sql = "Delete from toourshared.report where rep_no = @rep_no";
@@ -227,8 +229,6 @@ namespace adminForm
             Member member = new Member();
             Member_BlockDao mem = new Member_BlockDao();
 
-            //MessageBox.Show(dataGridView2.CurrentCell.Value.ToString(), "zz", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
             if (dataGridView2.CurrentRow.Selected == true)
             {
                 member.Mem_id = dataGridView2.CurrentRow.Cells[1].Value.ToString();
@@ -245,10 +245,7 @@ namespace adminForm
                 }
 
             }
-
-            //member.Mem_id = dataGridView1.Rows[dataGridView1.SelectedCells[1].RowIndex].Cells[1].Value.ToString();
-
-           // memberDao.MemberBlock_Unlock(member, 0);
+            Member_BlockList();
         }
     }
 }
