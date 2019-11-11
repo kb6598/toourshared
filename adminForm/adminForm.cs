@@ -117,8 +117,40 @@ namespace adminForm
 
 
                 //제재 눌렀을때 선택한 행의 trv_no를 가져온다. 
-                travel.Trv_no = dataGridView1.Rows[dataGridView1.SelectedCells[i].RowIndex].Cells[1].Value.ToString();
-                
+                /*travel.Trv_no = dataGridView1.Rows[dataGridView1.SelectedCells[i].RowIndex].Cells[1].Value.ToString();
+                try
+                {
+                    string sql = "select travel.mem_id as mem_id from toourshared.travel"
+                        + " where travel.trv_no = @trv_no";
+                    string mem_id = "";
+                    MySqlConnection con = myDB.GetCon();
+                    MySqlCommand cmd = new MySqlCommand(sql, con);
+                    cmd.Parameters.AddWithValue("@trv_no", travel.Trv_no);
+                    con.Open();
+                    MySqlDataReader rd = cmd.ExecuteReader();
+                    while(rd.Read())
+                    {
+                        mem_id = rd["mem_id"].ToString();
+                    }
+
+                    rd.Close();
+                    con.Close();                   
+
+                    string sql2 = "insert  into toourshared.mem_block(mem_blo_date, mem_blo_length, mem_id)"
+                        + " values(now(), 3, @mem_id); select last_insert_id()";
+                    MySqlCommand cmd2 = new MySqlCommand(sql2, con);
+                    cmd2.Parameters.AddWithValue("@mem_id", mem_id);
+
+                    con.Open();
+                    cmd2.ExecuteNonQuery();
+                    con.Close();
+                }
+
+                catch
+                {
+
+                }
+                */
 
                 //선택 행의 첫번째 rep_no 가져오기
                 delete.Rep_no = dataGridView1.Rows[dataGridView1.SelectedCells[i].RowIndex].Cells[0].Value.ToString();
