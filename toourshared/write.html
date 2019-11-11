@@ -1018,33 +1018,6 @@ $("#FileUpload_main_img").on('change', function () {
             '</div>' +
             '</div>';
 
-        //console.info(place);
-
-
-        //            var content =
-        //                '<div class="card">' +
-        //                '<div class="card-header">' +
-        //                place.place_name +
-        //                '<div class="btn btn-link" onclick="closeOverlay()" title="닫기" style="float: right">X</div>' +
-        //                '</div>' +
-        //                '<blockquote class="blockquote mb-0">';
-        //
-        //            if (place.road_address_name != null) {
-        //                content += '<li class="card-body-li">' + place.road_address_name + '</li>';
-        //            }
-        //            if (place.address_name != null) {
-        //                content += '<li class="card-body-li">' + place.address_name + '</li>';
-        //            }
-        //            if (place.phone != null) {
-        //                content += '<li class="card-body-li">' + place.phone + '</li>';
-        //            }
-        //            if (place.place_url != null) {
-        //                content += '<li class="card-body-li"><a href="' + place.place_url + '" target="_blank" class="link">상세페이지</a></li>';
-        //            }
-        //            content +=
-        //                '<div class="btn btn-secondary" onclick=\'pushTravelRouteItem("' + place.place_name + '","' + place.road_address_name + '","' + place.ddress_name + '","' + place.phone + '","' + place.place_url + '","' + place.x + '","' + place.y + '")\'>여행경로에 추가</div>' +
-        //                '</blockquote>' +
-        //                '</div>';
 
         infowindow.setContent(content);
         infowindow.open(drawingMap, marker);
