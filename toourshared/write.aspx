@@ -137,7 +137,15 @@
             // 바인드
             title.Text = outputTravel.Trv_title;
             hashtag.Text = outputTravel.Trv_tag;
-            mainImgItem.ImageUrl = outputTravel.Trv_main_img;
+            if(outputTravel.Trv_main_img != null && outputTravel.Trv_main_img != "")
+            {
+                mainImgItem.ImageUrl = outputTravel.Trv_main_img;
+            }
+            else
+            {
+                mainImgItem.ImageUrl = "./img/noImage.png";
+            }
+
             main_img.Value = outputTravel.Trv_main_img;
 
             //Map 가져오기
@@ -149,7 +157,7 @@
             mapData.Value = outputMap.Map_data;
             mapCost.Value = outputMap.Map_cost;
             mapRoute.Value = outputMap.Map_route;
-
+            mapCenter.Value = outputMap.Map_center;
 
 
 
@@ -364,9 +372,7 @@
             <!-- 메인 상단 영역 -->
             <div class="TitleArea">
                 <div class="TitleAlign">
-        <asp:HiddenField ID="mapData" runat="server" />
-        <asp:HiddenField ID="mapRoute" runat="server" />
-        <asp:HiddenField ID="mapCost" runat="server" />
+
                     <asp:TextBox ID="title"  runat="server" type="text" placeholder="게시글의 제목을 정해주세요." autocomplete="off"/>
                 </div>
                 <div class="TitleSub">
@@ -481,7 +487,7 @@
                     </div>
                     <div class="mainImg_AlignRight">
                         <!-- 이미지 미리보기 부분-->
-                        <asp:Image ID="mainImgItem" runat="server" ImageUrl="./img/%EC%A0%9C%EC%A3%BC%EB%8F%84.jpg" alt="userMainImage" />
+                        <asp:Image ID="mainImgItem" runat="server" ImageUrl="~/img/noImage.png" alt="userMainImage" />
                         <!-- 이미지 미리보기 부분-->
                     </div>
                 </div>
@@ -535,7 +541,10 @@
                 </div>
             </div>
         </div>
-
+                <asp:HiddenField ID="mapData" runat="server" />
+        <asp:HiddenField ID="mapRoute" runat="server" />
+        <asp:HiddenField ID="mapCost" runat="server" />
+        <asp:HiddenField ID="mapCenter" runat="server" />
 
     </form>
 
@@ -2312,10 +2321,10 @@ $("#FileUpload_main_img").on('change', function () {
 
         var firstAddress;
         var items = getTravelRouteData();
-        if (items != null && items != []) {
+        if (items != null && items != [] && items.length != 0) {
             var itemsMiddle = Math.floor(items.length / 2);
             var address = "";
-
+            
             if (items[itemsMiddle].address_name != null) {
                 address = items[itemsMiddle].address_name;
             } else {
@@ -2512,23 +2521,52 @@ $("#FileUpload_main_img").on('change', function () {
         //------------------------------------
         //----------From Post START
         //------------------------------------
-    var inputMapData = JSON.parse(document.getElementById("mapData").value);    
-    if (inputMapData != "" && inputMapData != [] && inputMapData != null && inputMapData != '""') {
-        setDrawingMapData(inputMapData);
-        closeCusOverlay();
-        refreshOverlayListener();
+    if (document.getElementById("mapData").value != ""
+        && document.getElementById("mapData").value != []
+        && document.getElementById("mapData").value != null
+        && document.getElementById("mapData").value != '""') {
+        var inputMapData = JSON.parse(document.getElementById("mapData").value);
+        if (inputMapData != "" && inputMapData != [] && inputMapData != null && inputMapData != '""') {
+            setDrawingMapData(inputMapData);
+            closeCusOverlay();
+            refreshOverlayListener();
+        }
     }
 
-
-    TravelRouteList = JSON.parse(document.getElementById("mapRoute").value);
+    if (document.getElementById("mapRoute").value != ""
+        && document.getElementById("mapRoute").value != []
+        && document.getElementById("mapRoute").value != null
+        && document.getElementById("mapRoute").value != '""') {
+        var TravelRouteList = JSON.parse(document.getElementById("mapRoute").value);
     if (TravelRouteList != "" && TravelRouteList != [] && TravelRouteList != null && TravelRouteList != '""') {
+        
         refreashTravelRoute();
+        }
+    }
+    if (document.getElementById("mapCost").value != ""
+        && document.getElementById("mapCost").value != []
+        && document.getElementById("mapCost").value != null
+        && document.getElementById("mapCost").value != '""') {
+            var CostItemList = JSON.parse(document.getElementById("mapCost").value);
+            if (CostItemList != "" && CostItemList != [] && CostItemList != null && CostItemList != '""') {
+            
+                refreashCostItem();
+            }
     }
 
-    CostItemList = JSON.parse(document.getElementById("mapCost").value);
-    if (CostItemList != "" && CostItemList != [] && CostItemList != null && CostItemList != '""') {
-        refreashCostItem();
+    if (document.getElementById("mapCenter").value != ""
+        && document.getElementById("mapCenter").value != []
+        && document.getElementById("mapCenter").value != null
+        && document.getElementById("mapCenter").value != '""') {
+        var mapCenter = JSON.parse(document.getElementById("mapCenter").value);
+        if (CostItemList != "" && CostItemList != [] && CostItemList != null && CostItemList != '""') {
+            drawingMap.setCenter(new kakao.maps.LatLng(mapCenter.Ha, mapCenter.Ga));
+            
+        }
+
     }
+
+
          //------------------------------------
         //----------From Post END
         //------------------------------------
