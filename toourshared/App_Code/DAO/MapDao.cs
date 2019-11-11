@@ -84,7 +84,7 @@ public class MapDao
         MySqlConnection con = myDB.GetCon();
 
 
-        string Sql = "UPDATE toourshared.map SET  map_data = @map_data, map_route = @map_route, map_cost = @map_cost, map_center=@map_center  WHERE trv_day_no = @trv_day_no";
+        string Sql = "UPDATE toourshared.map SET map_data = @map_data, map_route = @map_route, map_cost = @map_cost, map_center = @map_center WHERE trv_day_no = @trv_day_no";
 
 
         MySqlCommand cmd = new MySqlCommand(Sql, con);
@@ -113,7 +113,7 @@ public class MapDao
         MyDB myDB = new MyDB();
         MySqlConnection con = myDB.GetCon();
 
-        string sql = "SELECT map_no,trv_day_no, map_data, map_route, map_cost FROM toourshared.map";
+        string sql = "SELECT map_no,trv_day_no, map_data, map_route, map_cost, map_center FROM toourshared.map";
         MySqlCommand cmd = new MySqlCommand(sql, con); // 커맨드(sql문을 con에서 수행하기 위한 명령문) 생성 DB에서 수행시킬 명령 생성   
 
         MySqlDataAdapter ad = new MySqlDataAdapter();
@@ -228,5 +228,61 @@ public class MapDao
         
         return result;
     }
+
+
+    public List<Map> mapRouteCost(Travel travel)
+    {
+
+        MyDB mydb = new MyDB();
+        Map result = new Map();
+
+        List<Map> resultList = new List<Map>();
+        MySqlConnection con;
+
+        try
+        {
+            con = mydb.GetCon();
+
+            string Sql = "select map_route, map_cost from toourshared.map where trv_day_no in (select trv_day_no from toourshared.travel_day where trv_no = @trv_no)";
+
+            MySqlCommand cmd = new MySqlCommand(Sql, con);
+
+            cmd.Parameters.AddWithValue("@trv_no", travel.Trv_no);
+
+            con.Open();
+            MySqlDataReader rd = cmd.ExecuteReader();
+
+            if (rd.Read())
+            {
+
+
+                result.Map_no = rd["map_no"].ToString();
+                result.Map_cost = rd["map_cost"].ToString();
+                result.Map_data = rd["map_data"].ToString();
+                result.Map_route = rd["map_route"].ToString();
+                result.Map_center = rd["map_center"].ToString();
+                result.Trv_day_no = rd["trv_day_no"].ToString();
+
+                resultList.Add(result);
+                //lstMember.Add(tmpMemberPointer);
+                rd.Close();
+                con.Close();
+
+            }
+            rd.Close();
+            con.Close();
+
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(ex.ToString());
+
+        }
+
+
+        return resultList;
+    }
+
+
 
 }

@@ -15,14 +15,14 @@ public class Map
     private string map_cost;
     private string map_center;
 
-    public Map(string map_no = null, string trv_day_no = null, string map_data = null, string map_route = null, string map_cost = null, string map_center = null)
+    public Map()
     {
-        this.Map_no = map_no;
-        this.Trv_day_no = trv_day_no;
-        this.Map_data = map_data;
-        this.Map_route = map_route;
-        this.Map_cost = map_cost;
-        this.Map_center = map_center;
+        
+        this.Trv_day_no = "";
+        this.Map_data = "";
+        this.Map_route = "";
+        this.Map_cost = "";
+        this.Map_center = "";
     }
 
     public string Map_no { get => map_no; set => map_no = value; }

@@ -29,6 +29,13 @@
         else if (searchType == 4)
         {
             return travelDao.getTravelOrderByHotDesc(searchText, limit1, limit2);
+            //return travelDao.getTravelOrderByFollowerDesc();
+            return null;
+        }
+        else if (searchType == 4)
+        {
+            //return travelDao.getTravelOrderByHotDesc();
+            return null;
         }
         else
         {

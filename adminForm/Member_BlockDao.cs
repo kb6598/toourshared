@@ -19,7 +19,6 @@ public class Member_BlockDao
 
     public string InsertMember_Block(Member_Block member_Block)
     {
-
         string result = "";
         MyDB myDB = new MyDB();
         MySqlConnection con = myDB.GetCon();
@@ -36,7 +35,7 @@ public class Member_BlockDao
 
         cmd.ExecuteNonQuery();
 
-         result = cmd.LastInsertedId.ToString();
+        result = cmd.LastInsertedId.ToString();
 
         con.Close();
 
