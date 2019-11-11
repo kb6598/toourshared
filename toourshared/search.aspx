@@ -9,11 +9,10 @@
     int searchType;
     string searchText = "";
 
-    protected List<Travel> getTravelBySearchType(int limit1, int limit2)
+    protected List<Travel> getTravelBySearchType(string searchText, int limit1, int limit2)
     {
         Travel travel = new Travel();
         TravelDao travelDao = new TravelDao();
-        // travel 및 travelDao 객체 생성
 
         if (searchType == 1)
         {
@@ -25,11 +24,11 @@
         }
         else if (searchType == 3)
         {
-            return travelDao.getTravelOrderByFollowerDesc();
+            return travelDao.getTravelOrderByFollowerDesc(searchText, limit1, limit2);
         }
         else if (searchType == 4)
         {
-            return travelDao.getTravelOrderByHotDesc();
+            return travelDao.getTravelOrderByHotDesc(searchText, limit1, limit2);
         }
         else
         {
@@ -40,11 +39,6 @@
     protected void btnHome_Click(object sender, EventArgs e)
     {
         Response.Redirect("index.aspx");
-    }
-
-    protected void test()
-    {
-        System.Diagnostics.Debug.WriteLine("radioButtonCheckEvent ON");
     }
 
     protected void Page_Load(object sender, EventArgs e)
@@ -192,33 +186,31 @@
 <%
     // get방식으로 searchType을 받아와서 radiobutton의 상태를 변경한다. searchType이 null일때는 최신을 default로 잡는다.
     // Request.QueryString["trv_no"].
-    try
+    string[] str_searchType = new string[] { "최신", "인기", "팔로워", "HOT" };
+    string inputCheck = "";
+    int searchType = 0;
+
+    if (Request.QueryString["searchType"] == null)
     {
-        string[] str_searchType = new string[] { "최신", "인기", "팔로워", "HOT" };
-        string inputCheck = "";
-        int searchType = 0;
+        searchType = 1;
+    }
+    else
+    {
+        searchType = int.Parse(Request.QueryString["searchType"].ToString());
+    }
 
-        if (Request.QueryString["searchType"] == null)
-        {
-            searchType = 1;
-        }
-        else
-        {
-            searchType = int.Parse(Request.QueryString["searchType"].ToString());
-        }
+    for (int i = 1; i <= 4; i++)
+    {
+        if (i == searchType) inputCheck = "checked";
+        else inputCheck = "";
 
-        for (int i = 1; i <= 4; i++)
-        {
-            if (i == searchType) inputCheck = "checked";
-            else inputCheck = "";
-
-            Response.Write("" +
-                            "<td>\n" +
-                                "<div class=\"orderRadioItem\">\n" +
-                                    "<input type = \"radio\" id=\"rdo" + i + "\" name=\"orderStd\" runat=\"server\" onchange=\"rdoEvent(" + i + ")\"" + inputCheck + "/><label for=\"rdo" + i + "\">" + str_searchType[(i - 1)] + "</label>\n" +
-                                "</div>\n" +
-                            "</td>\n");
-        }
+        Response.Write("" +
+                        "<td>\n" +
+                            "<div class=\"orderRadioItem\">\n" +
+                                "<input type = \"radio\" id=\"rdo" + i + "\" name=\"orderStd\" runat=\"server\" onchange=\"rdoEvent(" + i + ")\"" + inputCheck + "/><label for=\"rdo" + i + "\">" + str_searchType[(i - 1)] + "</label>\n" +
+                            "</div>\n" +
+                        "</td>\n");
+    }
 %>
                                     </tr>
                                 </table>
@@ -261,9 +253,7 @@
     int startPage = (pageCount * blockCount) + 1; // 시작 페이지
     int lastPage = startPage + (pageCount - 1); // 마지막 페이지
 
-    int leftArrow = startPage - 5; // 좌측 화살표
-    if (leftArrow <= 0)
-        leftArrow = 1;
+    int leftArrow = startPage - 1; // 좌측 화살표
 
     int rightArrow = lastPage + 1; // 우측 화살표
     if (rightArrow > totalPageCount)
@@ -277,7 +267,7 @@
     int limit2 = 5;
 
     // boardItem에서 구해야 할 항목 : Member(mainImage) Travel(title, main_img, mem_id, create_time, tot_rate) Trave_Day(content)
-    List<Travel> travelList = getTravelBySearchType(limit1, limit2);
+    List<Travel> travelList = getTravelBySearchType(searchText, limit1, limit2);
 
     for (int i = 0; i < travelList.Count; i++)
     {
@@ -295,8 +285,8 @@
         if (travelMainImage == "noImage")
             travelMainImage = "./img/noImage.png";
 
-        if (userMainImage == "noImage" || userMainImage == null)
-            userMainImage = "./img/UserNoneImage.png";
+        if (userMainImage == "noImage" || string.IsNullOrEmpty(userMainImage))
+            userMainImage = "./img/memberNoImage.png";
 
         double d_starCount = double.Parse(travelList[i].Trv_tot_rate);
         int i_starCount = (int)d_starCount;
@@ -306,10 +296,13 @@
             starText += "⭐";
 
         string content = "";
-        if (travelDay.Trv_day_content.Length > 10)
-            content = travelDay.Trv_day_content.Substring(0, 10).ToString();
-        else
-            content = travelDay.Trv_day_content.ToString();
+        if (string.IsNullOrEmpty(travelDay.Trv_day_content) == false)
+        {
+            if (travelDay.Trv_day_content.Length > 10)
+                content = travelDay.Trv_day_content.Substring(0, 10).ToString();
+            else
+                content = travelDay.Trv_day_content.ToString();
+        }
 
         Response.Write("" +
             "<div class=\"boardItem\">\n" +
@@ -366,35 +359,35 @@
                         <div class="footerItem">
                             <ul class="pagination">
 <%
-        if (leftArrow >= 1)
-            Response.Write("<a href=\"" + CurrentUrl + "&page=" + leftArrow + "\"><li><</li></a>\n");
-        else
-            Response.Write("<a href=\"javascript:void(0);\"><li>&nbsp;</li></a>\n");
+    System.Diagnostics.Debug.WriteLine($"페이징 작업: totalPageCount({totalPageCount}) pageCount({pageCount}) blockCount({blockCount}) startPage({startPage}) lastPage({lastPage}) leftArrow({leftArrow}) rightArrow({rightArrow})");
 
-        for (int i = startPage; i <= lastPage; i++)
+    if (leftArrow > 0)
+        Response.Write("<a href=\"" + CurrentUrl + "&page=" + leftArrow + "\"><li><</li></a>\n");
+    else
+        Response.Write("<a href=\"javascript:void(0);\"><li>&nbsp;</li></a>\n");
+
+    for (int i = startPage; i <= lastPage; i++)
+    {
+        string li = "";
+        if (CurrentPage == i)
+            li = "<li class=\"pageActive\">";
+        else
+            li = "<li>";
+
+        if (i < totalPageCount)
         {
-            string li = "";
-            if (CurrentPage == i)
-                li = "<li class=\"pageActive\">";
-            else
-                li = "<li>";
-
-            if (i < totalPageCount)
-            {
-                Response.Write("<a href=\"" + CurrentUrl + "&page=" + i + "\">" + li + i + "</li></a>\n");
-            }
-            else
-            {
-                Response.Write("<a href=\"javascript: void(0);\"><li>&nbsp;</li></a>\n");
-            }
+            Response.Write("<a href=\"" + CurrentUrl + "&page=" + i + "\">" + li + i + "</li></a>\n");
         }
-
-        if (rightArrow < totalPageCount)
-            Response.Write("<a href=\"" + CurrentUrl + "&page=" + rightArrow + "\"><li>></li></a>\n");
         else
-            Response.Write("<a href=\"javascript: void(0);\"><li>&nbsp;</li></a>\n");
+        {
+            Response.Write("<a href=\"javascript:void(0);\"><li>&nbsp;</li></a>\n");
+        }
     }
-    catch(Exception e) {;} // 에러 너무 떠서 일단 예외 다 막아버림.
+
+    if (rightArrow < totalPageCount)
+        Response.Write("<a href=\"" + CurrentUrl + "&page=" + rightArrow + "\"><li>></li></a>\n");
+    else
+        Response.Write("<a href=\"javascript:void(0);\"><li>&nbsp;</li></a>\n");
 %>
                             </ul>
                         </div>
