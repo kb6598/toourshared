@@ -33,8 +33,16 @@ public class Member_BlockDao
 
 
 
+        /*INSERT INTO member_block(mem_id, mem_blo_date, mem_blo_length)
+          VALUES(?, now(), 3);
+          
+          SELECT mem_id FROM travel
+          WHERE trv_no = @trv_no
+        */
+
+
         //선택한 trv_no를 받아 travel.mem_id를 조회.
-        string sql = "SELECT travel.mem_id as idfrom toourshared.travel where travel.trv_no = @trv_no";
+        string sql = "SELECT travel.mem_id as id from toourshared.travel where travel.trv_no = @trv_no";
         string mem_id = "";
 
         MySqlCommand cmd = new MySqlCommand(sql, con);
