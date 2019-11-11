@@ -1,4 +1,5 @@
 ﻿<%@ Page Language="C#" %>
+<%@ Import Namespace="Newtonsoft.Json.Linq" %>  
 
 <!DOCTYPE html>
 
@@ -13,7 +14,6 @@
         }
         bindMapData();
     }
-
 
 
     protected List<String> getTravelByTrvNo()
@@ -175,6 +175,7 @@
     protected List<Map> getMapByTrvDayNo()
     {
         List<Map> mapList = new List<Map>();
+
         int trv_no = int.Parse(Request.QueryString["trv_no"].ToString()); // 게시글 번호 받기
 
         Travel_Day travelDay = new Travel_Day();                         // travel_day 객체 생성
@@ -197,6 +198,33 @@
         return mapList;
     }
 
+    protected List<string> testRouteCost()
+    {
+        List<string> mapRouteCost = new List<string>();
+
+        int trv_no = int.Parse(Request.QueryString["trv_no"].ToString()); // 게시글 번호 받기
+
+        Travel_Day travelDay = new Travel_Day();                         // travel_day 객체 생성
+        travelDay.Trv_no = trv_no.ToString();                               // travel_no 집어 넣기
+        Travel_DayDao travelDayDao = new Travel_DayDao();         // travel_day DAO 객체 생성
+
+        List<Travel_Day> travelDayList = travelDayDao.selectTravelDayListByTrvNo(travelDay);
+        // 게시글 번호에 해당하는 그 게시글의 모든 게시글 내용들(N일 차) 오름차순으로 구해온다.
+
+        Map inMap = new Map();
+        Map tmpMap;
+        MapDao mapDao = new MapDao();
+        foreach (var item in travelDayList)
+        {
+            inMap.Trv_day_no = item.Trv_day_no;
+            tmpMap = new Map();
+            tmpMap = mapDao.selectMapByTrv_day_no(inMap);
+            mapRouteCost.Add(tmpMap.Map_route);
+            mapRouteCost.Add(tmpMap.Map_cost);
+        }
+        return mapRouteCost;
+    }
+
     protected void bindMapData()
     {
         List<Map> mapList = getMapByTrvDayNo();
@@ -213,7 +241,7 @@
             index++;
         }
 
-
+        
 
     }
 
@@ -984,6 +1012,7 @@
             List<String> TravelDayContents = getTravelDayListByTrvNo();  // 해당 게시글의 내용 데이터
             List<Comment> CommentList = getCommentListByTrvNo();    // 해당 게시글의 댓글 데이터
             List<Map> mapList = getMapByTrvDayNo();
+            List<string> mapRouteCost = testRouteCost();
 
 
             int day = 0;                                                                // 일 차
@@ -1034,6 +1063,35 @@
                             <rootitem>
                                 <root-header>여행 간 경로</root-header>
                                 <root-content>
+                                    <% 
+                                        try
+                                        {
+                                            //Response.Write(mapRouteCost[0]);
+                                            string str = mapRouteCost[0];
+                                            JArray ja = JArray.Parse(str);
+
+                                            string placename = "";
+                                            string roadaddress = "";
+                                            string addressname = "";
+                                            string phone = "";
+                                            foreach (var item in ja)
+                                            {
+                                                placename = item["place_name"].ToString();
+                                                if(item["road_address_name"].ToString() != "undefined") roadaddress = item["road_address_name"].ToString();
+                                                phone = item["phone"].ToString();
+
+                                                Response.Write(placename + "<br />");
+                                                Response.Write(roadaddress + "<br />");
+                                                Response.Write(phone + "<br /><br />");
+                                            }
+
+                                        }
+                                        catch(Exception ex)
+                                        {
+                                            System.Diagnostics.Debug.WriteLine(ex.ToString());
+                                        }
+
+                                        %>
                                 </root-content>
                             </rootitem>
                         </div>
@@ -1041,6 +1099,34 @@
                             <costitem>
                                 <cost-header>여행 간 경비</cost-header>
                                 <cost-content>
+                                     <% 
+                                         try
+                                         {
+                                             //Response.Write(mapRouteCost[0]);
+                                             string str = mapRouteCost[1];
+                                             JArray ja = JArray.Parse(mapRouteCost[1]);
+                                             JArray ja2 = JArray.Parse(ja[2]["itemList"].ToString());
+
+                                             string placename = "";
+                                             string placename2 = "";
+                                             string placename3 = "";
+                                             foreach(var item in ja2)
+                                             {
+                                                 placename = item["costType"].ToString();
+                                                 placename2 = item["cost"].ToString();
+                                                 placename3 = item["info"].ToString();
+                                                 Response.Write(placename + "    " + placename2 + "     " + placename3);
+                                             }
+
+
+
+                                         }
+                                         catch(Exception ex)
+                                         {
+                                             System.Diagnostics.Debug.WriteLine(ex.ToString());
+                                         }
+
+                                        %>
                                 </cost-content>
                             </costitem>
                         </div>
@@ -1663,7 +1749,7 @@ function removeOverlays() {
     //------------------------------------
 
 
-
+        // c
         <%
         List<Map> mapList = getMapByTrvDayNo();
         string [] color= { "#007bff", "#dc3545", "#fd7e14", "#28a745", "#17a2b8", "#ffc107" , "#fff","#20c997","#6610f2" };
@@ -1689,6 +1775,106 @@ function removeOverlays() {
 
         %>
 
+        // costItemrefresh
+        function refreashCostItem() {
+
+            var costBody = document.getElementById('costBody'),
+                costHeader = document.getElementById('costHeader'),
+                fragment = document.createDocumentFragment(),
+                headerFragment = document.createDocumentFragment(),
+                itemList = '',
+                el, headerEl, totalCost = 0,
+                pindexTmp;
+
+            ;
+
+            // costBody 모든 자식 노드 삭제
+            while (costBody.hasChildNodes()) {
+                costBody.removeChild(costBody.firstChild);
+            }
+            CostItemList.forEach(function (currentValue, pindex) {
+                pindexTmp = pindex;
+                ////console.info(pindex);
+                ////console.info(currentValue);
+                el = document.createElement('div'),
+                    itemStr =
+
+                    '<div class="costItem-header">' +
+                    '         <span># ' + currentValue.place_name + '</span>' +
+                    '</div>' +
+                    '   <div class="costItem-body">' +
+                    '       <ul>';
+
+                currentValue.itemList.forEach(function (currentValue, index) {
+                    itemStr += '<li>' + currentValue.costType +
+                        '               <div class="btn btn-sm btn-warning" onclick="removeCostItemChild(' + pindex + ',' + index + ')">x</div>' +
+                        '<br/>' +
+                        setComa(currentValue.cost) + ' (' + currentValue.info + ')' + '</li>';
+                    totalCost += parseInt(currentValue.cost);
+                });
+
+                itemStr +=
+                    '<li>' +
+                    '   <div class="btn btn-secondary btn-sm" data-toggle="collapse" data-target="#collapseAddCost_' + pindex + '" aria-expanded="false" aria-controls="collapseAddCost_' + pindex + '">경비추가</div>' +
+                    '   <div class="collapse" id="collapseAddCost_' + pindex + '">' +
+                    '       <select id="addCost_costType_' + pindex + '" class="form-control form-control-sm">' +
+                    '           <option value="식비">식비</option>' +
+                    '           <option value="교통비">교통비</option>' +
+                    '           <option value="숙박비">숙박비</option>' +
+                    '           <option value="기타">기타</option>' +
+                    '       </select>' +
+                    '       <input id="addCost_cost_' + pindex + '" class="form-control form-control-sm" type="number" placeholder="비용">' +
+                    '       <input id="addCost_info_' + pindex + '" class="form-control form-control-sm" type="text" placeholder="비용 설명">' +
+                    '       <div class="btn btn-secondary btn-sm" onclick="pushCostItemChild(' + pindex + ')">+</div>' +
+                    //'       <div class="btn btn-secondary btn-sm" onclick="popCostItemChild(' + pindex + ')">-</div>' +
+
+                    '</div>' +
+                    '</li>' +
+                    '   </ul>' +
+                    '</div>' +
+                    '</div>';
+                el.innerHTML = itemStr;
+                //            el.setAttribute("draggable", 'true');
+                //            el.setAttribute("id", "travelPoint");
+                el.setAttribute("class", "costItem");
+
+
+                var itemEl = el;
+
+                fragment.appendChild(itemEl);
+
+                costBody.appendChild(fragment);
+
+            });
+
+            // 나중에 지도의 travelroute에서 추가할 버튼
+            //el = document.createElement('div'),
+            //    itemStr =
+
+            //    '<div class="btn btn-secondary btn-sm" onclick="addCostItemParent(' + pindexTmp + ')">+</div>';
+
+            //el.innerHTML = itemStr;
+            ////            el.setAttribute("draggable", 'true');
+            ////            el.setAttribute("id", "travelPoint");
+            //el.setAttribute("class", "costItem");
+
+
+            //var itemEl = el;
+
+            //fragment.appendChild(itemEl);
+
+            //costBody.appendChild(fragment);
+
+            ////--------------------
+
+
+            var headerStr =
+                '<span class="chTitle">전체 경비</span>' +
+                '<span class="chBody">💰 ' + setComa(totalCost) + '</span>';
+            costHeader.innerHTML = headerStr;
+
+
+        }
 
     </script>
 </body>
