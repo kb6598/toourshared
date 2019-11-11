@@ -229,4 +229,60 @@ public class MapDao
         return result;
     }
 
+
+    public List<Map> mapRouteCost(Travel travel)
+    {
+
+        MyDB mydb = new MyDB();
+        Map result = new Map();
+
+        List<Map> resultList = new List<Map>();
+        MySqlConnection con;
+
+        try
+        {
+            con = mydb.GetCon();
+
+            string Sql = "select map_route, map_cost from toourshared.map where trv_day_no in (select trv_day_no from toourshared.travel_day where trv_no = @trv_no)";
+
+            MySqlCommand cmd = new MySqlCommand(Sql, con);
+
+            cmd.Parameters.AddWithValue("@trv_no", travel.Trv_no);
+
+            con.Open();
+            MySqlDataReader rd = cmd.ExecuteReader();
+
+            if (rd.Read())
+            {
+
+
+                result.Map_no = rd["map_no"].ToString();
+                result.Map_cost = rd["map_cost"].ToString();
+                result.Map_data = rd["map_data"].ToString();
+                result.Map_route = rd["map_route"].ToString();
+                result.Map_center = rd["map_center"].ToString();
+                result.Trv_day_no = rd["trv_day_no"].ToString();
+
+                resultList.Add(result);
+                //lstMember.Add(tmpMemberPointer);
+                rd.Close();
+                con.Close();
+
+            }
+            rd.Close();
+            con.Close();
+
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(ex.ToString());
+
+        }
+
+
+        return resultList;
+    }
+
+
+
 }

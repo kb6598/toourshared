@@ -334,3 +334,4 @@ function pointsToPath(points) {
 
     return path;
 }
+
