@@ -19,19 +19,19 @@ public class Travel
     private string trv_create_time;
     private string loc_name;
     private string mem_id;
-    public Travel(string trv_no = null, string trv_secret = null, string trv_views = null, string trv_tot_rate = null, string trv_main_img = null, string trv_title = null, string trv_tag = null, string trv_timestamp = null, string trv_create_time = null, string loc_name = null, string mem_id = null)
+    public Travel()
     {
-        this.trv_no = trv_no;
-        this.trv_secret = trv_secret;
-        this.trv_views = trv_views;
-        this.trv_tot_rate = trv_tot_rate;
-        this.trv_main_img = trv_main_img;
-        this.trv_title = trv_title;
-        this.trv_tag = trv_tag;
-        this.trv_timestamp = trv_timestamp;
-        this.trv_create_time = trv_create_time;
-        this.loc_name = loc_name;
-        this.mem_id = mem_id;
+ 
+        this.trv_secret = "";
+        this.trv_views = "";
+        this.trv_tot_rate = "";
+        this.trv_main_img = "";
+        this.trv_title = "";
+        this.trv_tag = "";
+        this.trv_timestamp = "";
+        this.trv_create_time = "";
+        this.loc_name = "";
+        this.mem_id = "";
         //
         // TODO: 여기에 생성자 논리를 추가합니다.
         //

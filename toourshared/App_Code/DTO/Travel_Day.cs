@@ -12,11 +12,11 @@ public class Travel_Day
     private string trv_day_content;
     private string trv_no;
 
-    public Travel_Day(string trv_day_no = null, string trv_day_content = null, string trv_no = null)
+    public Travel_Day()
     {
-        this.trv_day_no = trv_day_no;
-        this.trv_day_content = trv_day_content;
-        this.trv_no = trv_no;
+      
+        this.trv_day_content = "";
+        this.trv_no = "";
         //
         // TODO: 여기에 생성자 논리를 추가합니다.
         //
