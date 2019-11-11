@@ -15,11 +15,18 @@
         {
             selectMyInfo();
         }
+        if (HttpContext.Current.Session["mem_id"] == null)
+        {
+            Session["mem_id"] = "billip";
+        }
+
+
+        selectMyInfo();
     }
 
     protected void selectMyInfo()
     {
-        if(Session["mem_id"] != null)
+        if (Session["mem_id"] != null)
         {
             MemberDao member = new MemberDao();
 
@@ -46,6 +53,46 @@
     }
 
 
+    protected void updateButton_Click(object sender, EventArgs e)
+    {
+        Member mem = new Member();
+        MemberDao Proupdate = new MemberDao();
+
+
+        mem.Mem_pw = mem_pw.Text;
+        mem.Mem_phone = mem_phone.Text;
+        mem.Mem_ques = QnAList.SelectedItem.Text;
+        mem.Mem_answer = Mem_answer.Text;
+
+        int check = member.UpdatetMember(member);
+
+        if (mem_pw.Text.Equals("") || mem_phone.Text.Equals(""))
+        {
+            Page.ClientScript.RegisterStartupScript(this.GetType(), "displayalertmessage", "alert('입력되지 않은 사항이 있습니다.');", true);
+        }
+        else
+        {
+
+           
+            int Member = Proupdate.UpdatetMember(member);
+
+            string str = Member.Mem_pw;
+
+            if (str == null)
+            {
+                Page.ClientScript.RegisterStartupScript(this.GetType(), "displayalertmessage", "alert('정확한 정보를 입력해 주세요.');", true);
+            }
+
+
+            else
+            {
+                Session["userPW"] = str;
+                Response.Redirect("MyPage.aspx?name=" + member.Mem_name);
+            }
+        }
+    }
+
+
 </script>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -66,6 +113,8 @@
     <script src= "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity= "sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin= "anonymous" ></script>
     <script src= "https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity= "sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin= "anonymous" ></script>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+           <!--파일 업로드-->   
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <style>
         html, body, form {
             margin: 0;
@@ -778,41 +827,11 @@
 			document.getElementById("profileEdit").onclick=function(){
 				document.getElementById("modalBody").style.height = "180px";
 				document.getElementById("fileUploadBtn").style.display = "none";
-				$('#filePath').val("...");
+				
 			};
 		});
 		
-		/* FileUpload (경로 없이 무조건 파일명만 뜨게) */
-		$(document).ready(function(){
-			var fileTarget = $('.fileUpload .upload-hidden');
-			var originalFileName;
-			fileTarget.on('change', function(){ // 값이 변경되면
-				if(window.FileReader){ // modern browser
-					originalFileName = $(this)[0].files[0].name;
-					
-					var filename = $(this)[0].files;
-					var filename = $(this)[0].files[0].name;
-				}
-				else
-				{ // old IE
-					originalFileName = $(this).val();
-					var filename = $(this).val().split('/').pop().split('\\').pop(); // 파일명만 추출
-				}
-			
-				// 추출한 파일명 삽입
-				$(this).siblings('.upload-name').val(filename);
-				
-				// modalBody 부분 높이 조절 및 업로드 버튼 나타내기
-				document.getElementById("modalBody").style.height = "400px";
-				document.getElementById("fileUploadBtn").style.display = "block";
-				
-				var image = document.getElementById("fileUploadImage");
-				image.alt = filename;
-                image.src = originalFileName;
-
-                
-			});
-		});
+		
 		
 	</script>
 
@@ -871,7 +890,10 @@
 				<div class = "profileHeader">
 					<div class = "profileItem1">
 						<div class = "profileImage">
-							<img src = "<%Response.Write(mem_img.Value);%>" alt = "프로필 사진">
+
+                                 <!-- 이미지 미리보기 부분-->
+                                <!-- 이미지 미리보기 부분-->
+                        <asp:Image ID="mainImgItem" runat="server" ImageUrl="./img/UserNoneImage.png"	CssClass="userImageStyle"/>
 						</div>
 						<div class = "profileID">
 							<div class = "ID">
@@ -880,6 +902,7 @@
 								<span class = "idSpan2">(<asp:Label ID="mem_name" runat="server" Text=""></asp:Label>)</span>
 							</div>
 							<div class = "imageEdit">
+
 								<div class = "editTxt">
 									<a href = "#" data-toggle="modal" data-target="#myModal" id="profileEdit">
 										<span>프로필 사진 편집</span>
@@ -927,7 +950,7 @@
 								</div>
 								<div class = "profileA">
 									<div class = "profileAEdit">
-										<input type = "text" placeholder = "변경하실 답변을 입력하세요."/>
+										<asp:TextBox ID="mem_ans" runat="server" placeholder = "답변을 입력하세요"></asp:TextBox>
 									</div>
 								</div>
 						</div>
@@ -935,7 +958,8 @@
 					<div class = "profileItem5">
 						<div class = "profileUpdate">
 							<div class = "updateButton">
-								<input type = "button" value = "프로필 편집 완료"/>
+								
+                                <asp:Button ID="updateButton" runat="server" Text="프로필 편집 완료" OnClick ="updateButton_Click"/>
 							</div>
 						</div>
 					</div>
@@ -970,14 +994,18 @@
 						<span class = "fileTextSpan2">프로필 사진 첨부는 2MB까지 가능합니다.</span>
 					</div>
 					<div class = "fileUpload">
-						<input class="upload-name" disabled="disabled" id="filePath">
-						<label for ="fileStyle">사진 첨부</label>
-						<input type = "file" id="fileStyle" class = "upload-hidden" >
+						<input type="text" class="upload-name" disabled="disabled" id="filePath"/>
+                        					
+                            <input type="file" class="upload"  id="FileUpload_main_img" accept="image/*" multiple="false" style="display:none;"/>
+                            <asp:HiddenField ID="main_img" runat="server" Value="noImage"/>
+						<label for ="fileStyle" onclick="document.getElementById('FileUpload_main_img').click();">사진 첨부</label>
+				
 					</div>
 					<div class = "fileUploadButton" id="fileUploadBtn">
 						<div class = "fileUploadArea">
-							<img id = "fileUploadImage" alt="">
+                            
 						</div>
+
 						<input type = "button" value = "적용" data-dismiss="modal">
                         
 					</div>
@@ -995,5 +1023,52 @@
         <asp:HiddenField ID="mem_img" runat="server" />
         </form>
 </body>
+       <script>
+           //이미지 업로드 AJAX
+           // 이미지 업로드가 session["mem_id"]에 종속됨 없으면 업로드 불가
+           function sendFile(file) {
+
+               var formData = new FormData();
+               formData.append('file', $('#FileUpload_main_img')[0].files[0]);
+               $.ajax({
+                   type: 'post',
+                   url: 'imageUploader.ashx',
+                   data: formData,
+                   success: function (status) {
+                       if (status != 'error') {
+                           var my_path = status;
+                           $("#mainImgItem").attr("src", my_path);
+                           $("#main_img").attr("value", my_path);
+                          // $("#filePath").attr("value", my_path);
+                           document.getElementById("filePath").value = my_path;
+                       }
+                   },
+                   processData: false,
+                   contentType: false,
+                   error: function () {
+                       alert("Whoops something went wrong!");
+                   }
+               });
+           }
+
+           var _URL = window.URL || window.webkitURL;
+           $("#FileUpload_main_img").on('change', function () {
+
+               var file, img;
+               if ((file = this.files[0])) {
+                   img = new Image();
+                   img.onload = function () {
+                       sendFile(file);
+                   };
+                   img.onerror = function () {
+                       alert("Not a valid file:" + file.type);
+                   };
+                   img.src = _URL.createObjectURL(file);
+               }
+
+           });
+
+
+        </script>
 	
 </html>
