@@ -19,50 +19,26 @@ public class Member_BlockDao
 
     public string InsertMember_Block(Member_Block member_Block)
     {
-
         string result = "";
         MyDB myDB = new MyDB();
         MySqlConnection con = myDB.GetCon();
 
-        /*string Sql = "INSERT INTO toourshared.member_block (mem_blo_date, mem_ble_length, mem_id) VALUES(@mem_blo_date, @mem_blo_length, @mem_id); select last_insert_id()";
+        string Sql = "INSERT INTO toourshared.member_block (mem_blo_date,mem_ble_length,mem_id) VALUES(@mem_blo_date,@mem_blo_length,@mem_id); select last_insert_id()";
         MySqlCommand cmd = new MySqlCommand(Sql, con);
 
         cmd.Parameters.AddWithValue("@mem_blo_date", member_Block.Mem_blo_date);
         cmd.Parameters.AddWithValue("@mem_blo_length", member_Block.Mem_blo_length);
-        cmd.Parameters.AddWithValue("@mem_id", member_Block.Mem_id);*/
+        cmd.Parameters.AddWithValue("@mem_id", member_Block.Mem_id);
 
-
-
-        //선택한 trv_no를 받아 travel.mem_id를 조회.
-        string sql = "SELECT travel.mem_id as idfrom toourshared.travel where travel.trv_no = @trv_no";
-        string mem_id = "";
-
-        MySqlCommand cmd = new MySqlCommand(sql, con);
-        con.Open();
-        MySqlDataReader rd = cmd.ExecuteReader();
-        while(rd.Read())
-        {
-            mem_id = rd["id"].ToString();
-        }
-
-        rd.Close();
-        con.Close();
-
-
-        //변경
-        string Sql2 = "INSERT INTO toourshared.member_block (mem_blo_date, mem_blo_length, mem_id)"
-            + " VALUES(now(), 3, @mem_id); select last_insert_id()";
-        MySqlCommand cmd2 = new MySqlCommand(Sql2, con);
-
-        cmd2.Parameters.AddWithValue("@mem_id", mem_id);
 
         con.Open();
 
-        cmd2.ExecuteNonQuery();
+        cmd.ExecuteNonQuery();
 
-        result = cmd2.LastInsertedId.ToString();
+        result = cmd.LastInsertedId.ToString();
 
         con.Close();
+
 
         return result;
     }

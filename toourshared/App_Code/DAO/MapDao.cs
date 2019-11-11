@@ -84,7 +84,7 @@ public class MapDao
         MySqlConnection con = myDB.GetCon();
 
 
-        string Sql = "UPDATE toourshared.map SET  map_data = @map_data, map_route = @map_route, map_cost = @map_cost, map_center=@map_center  WHERE trv_day_no = @trv_day_no";
+        string Sql = "UPDATE toourshared.map SET map_data = @map_data, map_route = @map_route, map_cost = @map_cost, map_center = @map_center WHERE trv_day_no = @trv_day_no";
 
 
         MySqlCommand cmd = new MySqlCommand(Sql, con);
@@ -113,7 +113,7 @@ public class MapDao
         MyDB myDB = new MyDB();
         MySqlConnection con = myDB.GetCon();
 
-        string sql = "SELECT map_no,trv_day_no, map_data, map_route, map_cost FROM toourshared.map";
+        string sql = "SELECT map_no,trv_day_no, map_data, map_route, map_cost, map_center FROM toourshared.map";
         MySqlCommand cmd = new MySqlCommand(sql, con); // 커맨드(sql문을 con에서 수행하기 위한 명령문) 생성 DB에서 수행시킬 명령 생성   
 
         MySqlDataAdapter ad = new MySqlDataAdapter();

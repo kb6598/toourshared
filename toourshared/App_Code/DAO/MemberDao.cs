@@ -410,5 +410,39 @@ namespace tooushared.DAO
 
             return result;
         }
+        public int UpdatetMember(Member member)
+        {
+            int result;
+
+            MyDB myDB = new MyDB();
+            
+            MySqlConnection con = myDB.GetCon();
+
+            string Sql = "UPDATE toourshared.member SET mem_id =@mem_id , mem_state =@mem_state, mem_phone =@mem_phone, mem_pw =@mem_pw, mem_name =@mem_name, mem_sex =@mem_sex, mem_ques =@mem_ques, mem_answer =@mem_answer, mem_birth =@mem_birth, mem_email =@mem_email, mem_reg_datetime =@mem_reg_datetime, mem_timestmap =@mem_timestamp, mem_img_url =@mem_img_url  WHERE mem_id = @mem_id";
+
+            MySqlCommand cmd = new MySqlCommand(Sql, con);
+
+            cmd.Parameters.AddWithValue("@mem_id", member.Mem_id);
+            cmd.Parameters.AddWithValue("@mem_state", member.Mem_state);
+            cmd.Parameters.AddWithValue("@mem_phone", member.Mem_phone);
+            cmd.Parameters.AddWithValue("@mem_pw", member.Mem_pw);
+            cmd.Parameters.AddWithValue("@mem_ques", member.Mem_ques);
+            cmd.Parameters.AddWithValue("@mem_answer", member.Mem_answer);
+            cmd.Parameters.AddWithValue("@mem_birth", member.Mem_birth);
+            cmd.Parameters.AddWithValue("@mem_email", member.Mem_email);
+            cmd.Parameters.AddWithValue("@mem_reg_datetime", member.Mem_reg_datetime);
+            cmd.Parameters.AddWithValue("@mem-timestamp", member.Mem_timestmap);
+            cmd.Parameters.AddWithValue("@mem_img_url", member.Mem_img_url);
+
+            con.Open();
+
+            result = cmd.ExecuteNonQuery();
+
+
+            con.Close();
+
+
+            return result;
+        }
     }
 }

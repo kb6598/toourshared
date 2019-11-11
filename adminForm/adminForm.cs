@@ -17,6 +17,7 @@ namespace adminForm
     {
         MyDB myDB = new MyDB();
         
+        //adminForm 기본 설정
         public adminForm()
         {
             InitializeComponent();
@@ -98,12 +99,11 @@ namespace adminForm
 
             int selectedCellCount =dataGridView1.GetCellCount(DataGridViewElementStates.Selected);
 
-            for (int i = 0; i < selectedCellCount; i++)
-            {
+
                 // trvNo를 받아와서 그 Travel의 mem_id를 가지고 그 mem_id의 state를 바꾼다.
 
                 //선택한 셀들의 행을 구해오고 그행의 두번째열 trv_no의 값을 가져온다.
-                travel.Trv_no = dataGridView1.Rows[dataGridView1.SelectedCells[i].RowIndex].Cells[1].Value.ToString();
+                travel.Trv_no = dataGridView1.Rows[dataGridView1.SelectedCells[0].RowIndex].Cells[1].Value.ToString();
 
                 travel = travelDao.selectTravelBytrv_no(travel); // 바꿔치기
 
@@ -117,11 +117,43 @@ namespace adminForm
 
 
                 //제재 눌렀을때 선택한 행의 trv_no를 가져온다. 
-                travel.Trv_no = dataGridView1.Rows[dataGridView1.SelectedCells[i].RowIndex].Cells[1].Value.ToString();
+                travel.Trv_no = dataGridView1.Rows[dataGridView1.SelectedCells[0].RowIndex].Cells[1].Value.ToString();
+                try
+                {
+                    string sql = "select travel.mem_id as mem_id from toourshared.travel"
+                        + " where travel.trv_no = @trv_no";
+                    string mem_id = "";
+                    MySqlConnection con = myDB.GetCon();
+                    MySqlCommand cmd = new MySqlCommand(sql, con);
+                    cmd.Parameters.AddWithValue("@trv_no", travel.Trv_no);
+                    con.Open();
+                    MySqlDataReader rd = cmd.ExecuteReader();
+                    while(rd.Read())
+                    {
+                        mem_id = rd["mem_id"].ToString();
+                    }
+
+                    rd.Close();
+                    con.Close();                   
+
+                    string sql2 = "insert  into toourshared.member_block(mem_blo_date, mem_blo_length, mem_id)"
+                        + " values(now(), 3, @mem_id)";
+                    MySqlCommand cmd2 = new MySqlCommand(sql2, con);
+                    cmd2.Parameters.AddWithValue("@mem_id", mem_id);
+
+                    con.Open();
+                    cmd2.ExecuteNonQuery();
+                    con.Close();
+                }
+
+                catch
+                {
+
+                }
                 
 
                 //선택 행의 첫번째 rep_no 가져오기
-                delete.Rep_no = dataGridView1.Rows[dataGridView1.SelectedCells[i].RowIndex].Cells[0].Value.ToString();
+                delete.Rep_no = dataGridView1.Rows[dataGridView1.SelectedCells[0].RowIndex].Cells[0].Value.ToString();
                 
                 try
                 {
@@ -139,7 +171,7 @@ namespace adminForm
                 {
 
                 }                
-            }
+            
             After_Report();
         }
 
@@ -211,7 +243,6 @@ namespace adminForm
 
                 catch (Exception ex)
                 {
-
                 }
             }
             After_Report();
@@ -227,22 +258,56 @@ namespace adminForm
         private void button5_Click(object sender, EventArgs e)
         {
             Member member = new Member();
-            Member_BlockDao mem = new Member_BlockDao();
+            Member_BlockDao member_blockDao = new Member_BlockDao();
 
             if (dataGridView2.CurrentRow.Selected == true)
             {
                 member.Mem_id = dataGridView2.CurrentRow.Cells[1].Value.ToString();
-                int upd_result = mem.updateMemberBlock(member.Mem_id);
-                int del_result = mem.deleteMemberBlock(member.Mem_id);
+                int upd_result = member_blockDao.updateMemberBlock(member.Mem_id);
+                int del_result = member_blockDao.deleteMemberBlock(member.Mem_id);
 
-                if (upd_result == 1 && del_result == 1)
+                MyDB mydb = new MyDB();
+                MySqlConnection con;
+                MySqlCommand cmd;
+
+                string date;
+                string[] strArr;
+                int YEAR, MONTH, DAY;
+                DateTime nowTime = DateTime.Now;
+                DateTime blockTime;
+                TimeSpan CheckTime;
+
+                try
                 {
-                    MessageBox.Show(member.Mem_id + "님의 블락이 해제되었습니다.", "알림", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    con = mydb.GetCon();
+                    string Sql = "SELECT * FROM member_block WHERE mem_id = @mem_id";
+
+                    cmd = new MySqlCommand(Sql, con);
+                    cmd.Parameters.AddWithValue("@mem_id", member.Mem_id);
+
+                    con.Open();
+                    MySqlDataReader reader = cmd.ExecuteReader();
+
+                    if (reader.Read())
+                    {
+                        date = reader["mem_blo_date"].ToString();
+                        strArr = date.Split(new char[] { '-' });
+
+                        YEAR = int.Parse(strArr[0]);
+                        MONTH = int.Parse(strArr[1]);
+                        DAY = int.Parse(strArr[2]);
+
+                        blockTime = new DateTime(YEAR, MONTH, DAY);
+                        CheckTime = blockTime - nowTime;
+
+                        int diffDay = CheckTime.Days;
+                        System.Diagnostics.Debug.WriteLine("차이: " + diffDay);
+                    }
+
+                    reader.Close();
+                    con.Close();
                 }
-                else
-                {
-                    MessageBox.Show("제대로 처리되지 않았습니다.,", "알림", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                catch{;}
 
             }
             Member_BlockList();

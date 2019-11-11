@@ -25,11 +25,13 @@
         }
         else if (searchType == 3)
         {
-            return travelDao.getTravelOrderByFollowerDesc();
+            //return travelDao.getTravelOrderByFollowerDesc();
+            return null;
         }
         else if (searchType == 4)
         {
-            return travelDao.getTravelOrderByHotDesc();
+            //return travelDao.getTravelOrderByHotDesc();
+            return null;
         }
         else
         {
