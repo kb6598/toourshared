@@ -29,6 +29,7 @@
         Dictionary<string, string> WriteStatus = SessionLib.getWriteStatus();
         if (WriteStatus != null)
         {
+ 
             //update Travel
             Travel inTravel = new Travel();
             TravelDao travelDao = new TravelDao();

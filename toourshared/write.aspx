@@ -2200,7 +2200,8 @@ $("#FileUpload_main_img").on('change', function () {
 
 
     function gotoDay() {
-        addDataAtForm();
+        var form = document.createElement("form");
+        addDataAtForm(form);
 
         var targetDay = document.getElementById("goDay").value;
         var targetDayData = document.createElement("input"); // input 엘리멘트 생성
@@ -2218,8 +2219,8 @@ $("#FileUpload_main_img").on('change', function () {
     function tmpSave() {
 
   
-
-        addDataAtForm();
+        var form = document.createElement("form");
+        addDataAtForm(form);
         form.setAttribute('action', "Write_tmpSave.aspx");
         //form.submit(); // 전송
         var data = new FormData(form);
@@ -2241,12 +2242,14 @@ $("#FileUpload_main_img").on('change', function () {
     });
     }
     function addDay() {
-        addDataAtForm();
+        var form = document.createElement("form");
+        addDataAtForm(form);
         form.setAttribute('action', "Write_addDay.aspx");
        form.submit(); // 전송
     }
     function endWrite() {
-        addDataAtForm();
+        var form = document.createElement("form");
+        addDataAtForm(form);
         form.setAttribute('action', "Write_endWrite.aspx");
         form.submit(); // 전송
     }
@@ -2261,17 +2264,17 @@ $("#FileUpload_main_img").on('change', function () {
     //------------------------------------
     //----------Post START
     //------------------------------------
-    var form = document.createElement("form");
+  
 
 
     // 다음페이지로 markers, polyline, rect, circle, polygon 보내는 기능
-    function addDataAtForm() {
+    function addDataAtForm(form) {
 
         //var title = document.getElementById("title").value;
         //var article = document.getElementById("article").value;
         //var hashtag = document.getElementById("hashtag").value;
         //var main_img = document.getElementById("main_img").value;
-
+        form.setAttribute("style", "display: none;");
         var title = document.getElementById("title").cloneNode();
         var article = document.getElementById("article").cloneNode();
         var hashtag = document.getElementById("hashtag").cloneNode();
@@ -2301,7 +2304,7 @@ $("#FileUpload_main_img").on('change', function () {
 
         var mapData = document.createElement("input"); // input 엘리멘트 생성
         mapData.setAttribute("type", "hidden"); // type 속성을 hidden으로 설정
-        mapData.setAttribute("name", "mapData"); // name 속성을 'stadium'으로 설정
+        mapData.setAttribute("name", "mapData"); // name 속성을 'stadium'으로 설정        
         mapData.setAttribute("value", JSON.stringify(getMapData())); // value 속성을 삽입
         form.appendChild(mapData);
 
@@ -2335,16 +2338,16 @@ $("#FileUpload_main_img").on('change', function () {
             firstAddress=addresstokens[0];
          }
         var LocName = document.createElement("input"); // input 엘리멘트 생성
-        mapData.setAttribute("type", "hidden"); // type 속성을 hidden으로 설정
-        mapData.setAttribute("name", "loc_name"); // name 속성을 'stadium'으로 설정
-        mapData.setAttribute("value", firstAddress); // value 속성을 삽입
+        LocName.setAttribute("type", "hidden"); // type 속성을 hidden으로 설정
+        LocName.setAttribute("name", "loc_name"); // name 속성을 'stadium'으로 설정
+        LocName.setAttribute("value", firstAddress); // value 속성을 삽입
         form.appendChild(LocName);
 
         var map_center = drawingMap.getCenter();
         var mapCenter = document.createElement("input"); // input 엘리멘트 생성
-        mapData.setAttribute("type", "hidden"); // type 속성을 hidden으로 설정
-        mapData.setAttribute("name", "map_center"); // name 속성을 'stadium'으로 설정
-        mapData.setAttribute("value", JSON.stringify(map_center)); // value 속성을 삽입
+        mapCenter.setAttribute("type", "hidden"); // type 속성을 hidden으로 설정
+        mapCenter.setAttribute("name", "map_center"); // name 속성을 'stadium'으로 설정
+        mapCenter.setAttribute("value", JSON.stringify(map_center)); // value 속성을 삽입
         form.appendChild(mapCenter);
 
 
@@ -2526,32 +2529,29 @@ $("#FileUpload_main_img").on('change', function () {
         && document.getElementById("mapData").value != null
         && document.getElementById("mapData").value != '""') {
         var inputMapData = JSON.parse(document.getElementById("mapData").value);
-        if (inputMapData != "" && inputMapData != [] && inputMapData != null && inputMapData != '""') {
+
             setDrawingMapData(inputMapData);
             closeCusOverlay();
             refreshOverlayListener();
-        }
+
     }
 
     if (document.getElementById("mapRoute").value != ""
         && document.getElementById("mapRoute").value != []
         && document.getElementById("mapRoute").value != null
         && document.getElementById("mapRoute").value != '""') {
-        var TravelRouteList = JSON.parse(document.getElementById("mapRoute").value);
-    if (TravelRouteList != "" && TravelRouteList != [] && TravelRouteList != null && TravelRouteList != '""') {
-        
+        TravelRouteList = JSON.parse(document.getElementById("mapRoute").value);
         refreashTravelRoute();
-        }
+
     }
     if (document.getElementById("mapCost").value != ""
         && document.getElementById("mapCost").value != []
         && document.getElementById("mapCost").value != null
         && document.getElementById("mapCost").value != '""') {
-            var CostItemList = JSON.parse(document.getElementById("mapCost").value);
-            if (CostItemList != "" && CostItemList != [] && CostItemList != null && CostItemList != '""') {
-            
+        CostItemList = JSON.parse(document.getElementById("mapCost").value);
+
                 refreashCostItem();
-            }
+
     }
 
     if (document.getElementById("mapCenter").value != ""
@@ -2559,10 +2559,10 @@ $("#FileUpload_main_img").on('change', function () {
         && document.getElementById("mapCenter").value != null
         && document.getElementById("mapCenter").value != '""') {
         var mapCenter = JSON.parse(document.getElementById("mapCenter").value);
-        if (CostItemList != "" && CostItemList != [] && CostItemList != null && CostItemList != '""') {
+
             drawingMap.setCenter(new kakao.maps.LatLng(mapCenter.Ha, mapCenter.Ga));
             
-        }
+
 
     }
 
