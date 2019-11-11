@@ -42,7 +42,7 @@
         // 테스트 코드
         if(HttpContext.Current.Session["mem_id"] == null)
         {
-            Session["mem_id"] = "billip";
+            Session["mem_id"] = "GM";
         }
 
         //status -> 편집 페이지 정보
@@ -1076,7 +1076,19 @@ $("#FileUpload_main_img").on('change', function () {
 
             alert('검색 결과가 존재하지 않아 더 넓은 주소로 찾습니다.');
             var keyword = document.getElementById('keyword');
-            keyword.value = keyword.value.split('-')[0];
+            var keywordArr = keyword.value.split(' ');
+
+            console.info(keywordArr);
+            var str = "";
+
+            for (var i = 0; i < keywordArr.length-1; i++) {
+                str += keywordArr[i] + " ";
+            }
+         
+
+
+            //console.info(str);
+            keyword.value = str;
             ps.keywordSearch(keyword.value, placesSearchByAddressCB);
             return;
 
@@ -1300,7 +1312,7 @@ $("#FileUpload_main_img").on('change', function () {
             '</div>' +
             '</div>';
 
-        console.info(place);
+        //console.info(place);
 
 
         //            var content =
