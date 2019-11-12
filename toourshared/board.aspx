@@ -243,7 +243,7 @@
         }
     }
 
-<<<<<<< HEAD
+
     protected string HtmlSpecialChars(string Str)
     {
         string returnStr = "";
@@ -283,9 +283,7 @@
 
                 CommentDao commentDao = new CommentDao(); // commentDAO 객체 생성
                 commentDao.InsertComment(comment); // comment 데이터 삽입
-=======
 
->>>>>>> 8451cd397e6e51e1676f374e17130bcebf3bb693
 
                 TravelDao travelDao = new TravelDao();
                 travelDao.setTotRateByTrvNo(int.Parse(trv_no.ToString()), memberScore); // TotRate 최신화 작업
@@ -1830,11 +1828,9 @@
         // c
         <%
         List<Map> mapList = getMapByTrvDayNo();
-<<<<<<< HEAD
+
         string [] color= { "#E53A40", "#F68657", "#EFDC05", "#58C9B9", "#a3daff", "#0080ff" , "#A593E0", "#C5C6B6", "#D09E88", "#FADAD8", "#fab1ce", "#fffff5", "#c8c8a9", "#3a5134" };
-=======
-        string[] color = { "#007bff", "#dc3545", "#fd7e14", "#28a745", "#17a2b8", "#ffc107", "#fff", "#20c997", "#6610f2" };
->>>>>>> 8451cd397e6e51e1676f374e17130bcebf3bb693
+
         int colorIndex = 0;
         int index = 0;
         JObject mapCenter;
