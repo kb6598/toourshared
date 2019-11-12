@@ -64,7 +64,7 @@
 
             memberMainImage = member.Mem_img_url; // 반환받은 memberDTO 객체의 메인이미지를 뿌려준다.
             if (string.IsNullOrEmpty(memberMainImage) || memberMainImage == "noImage") // 변수에 담긴 값이 null, Empty, noImage 일 경우
-                memberMainImage = "./img/UserNoneImage.png";
+                memberMainImage = "./img/memberNoImage.png";
 
             travelMainImage = travelList[i].Trv_main_img; // 게시글의 메인 이미지를 가져온다.
             if (string.IsNullOrEmpty(travelMainImage) || travelMainImage == "noImage") // 변수에 담긴 값이 null, Empty, noImage 일 경우

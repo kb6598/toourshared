@@ -71,21 +71,6 @@
         return returnList;
     }
 
-    protected List<Map> getMapListByTrvDayNo()
-    {
-        List<Map> resultList = new List<Map>();
-        Map inMap = new Map();
-        Map outMap = new Map();
-
-        MapDao mapDao = new MapDao();
-
-
-
-
-
-        return resultList;
-    }
-
 
     protected int getLikeCountByTrvNo()
     {
@@ -173,7 +158,7 @@
     }
 
 
-    protected List<Map> getMapByTrvDayNo()
+    protected List<Map> getMapByTrvNo()
     {
         List<Map> mapList = new List<Map>();
 
@@ -228,7 +213,7 @@
 
     protected void bindMapData()
     {
-        List<Map> mapList = getMapByTrvDayNo();
+        List<Map> mapList = getMapByTrvNo();
 
         HtmlInputHidden tmpHidden;
         int index = 0;
@@ -295,7 +280,7 @@
                     commentDao.InsertComment(comment); // comment 데이터 삽입
 
                     TravelDao travelDao = new TravelDao();
-                    travelDao.setTotRateByTrvNo(int.Parse(trv_no.ToString()), memberScore); // TotRate 최신화 작업
+                    travelDao.setTotRateByTrvNo(int.Parse(trv_no)); // TotRate 최신화 작업
                 }
             }
         }
@@ -1087,7 +1072,7 @@
             List<String> MemberList = getMemberByTrvNo();                 // 해당 게시글의 작성자의 데이터
             List<String> TravelDayContents = getTravelDayListByTrvNo();  // 해당 게시글의 내용 데이터
             List<Comment> CommentList = getCommentListByTrvNo();    // 해당 게시글의 댓글 데이터
-            List<Map> mapList = getMapByTrvDayNo();
+            List<Map> mapList = getMapByTrvNo();
             List<string> mapRouteCost = testRouteCost();
 
 
@@ -1322,8 +1307,14 @@
                 <%
                     // hashtag 누르면 search.aspx?hashtag=○○○○ 로 이동
                     List<String> hashtagList = getHashTagList();
+
+
                     for (int i = 0; i < hashtagList.Count; i++)
                     {
+                        string HashTagKeyword = hashtagList[i].ToString().Substring(1);
+                        string EncodedHashTag = Server.UrlEncode(HashTagKeyword);
+
+                        Response.Write("<a href = \"search.aspx?searchType=1&hashtag="+ EncodedHashTag+ "\"><div class = \"hashtag\">" + hashtagList[i].ToString() + "</div></a>\n");
                         Response.Write("<a href = \"search.aspx?hashtag=" + hashtagList[i].ToString() + "\"><div class = \"hashtag\">" + hashtagList[i].ToString() + "</div></a>\n");
                     }
                 %>
@@ -1914,7 +1905,7 @@
 
         // c
         <%
-        List<Map> mapList = getMapByTrvDayNo();
+        List<Map> mapList = getMapByTrvNo();
         string [] color= { "#E53A40", "#F68657", "#EFDC05", "#58C9B9", "#a3daff", "#0080ff" , "#A593E0", "#C5C6B6", "#D09E88", "#FADAD8", "#fab1ce", "#fffff5", "#c8c8a9", "#3a5134" };
 
         int colorIndex = 0;

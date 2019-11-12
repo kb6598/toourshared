@@ -1,4 +1,6 @@
 ﻿<%@ Page Language="C#" %>
+<%@ Import Namespace="Newtonsoft.Json.Linq" %>
+
 
 
 <script runat="server">
@@ -8,7 +10,7 @@
 
     int searchType;
     string searchText = "";
-    string QueryStringHashTag = "";
+    string HashTag = "";
 
     protected List<Travel> getTravelBySearchType(string searchText, int limit1, int limit2)
     {
@@ -61,22 +63,29 @@
         }
 
         if (Request.QueryString["text"] != null)
+        {
             searchText = Request.QueryString["text"].ToString();
+        }
 
         if (Request.QueryString["hashtag"] != null) // 해시태그를 통한 search 페이지 접근 시
         {
-            QueryStringHashTag = Request.QueryString["hashtag"].ToString(); // QueryString을 받고
-            searchText = QueryStringHashTag.ToString(); // searchText에 해시태그 값을 담고
-            inputText.Text = QueryStringHashTag.ToString(); // 검색 상자에 해시태그 값을 넣고
-            Page.GetPostBackEventReference(Button1); // 검색함수 호출
+            HashTag = Request.QueryString["hashtag"].ToString(); // board 페이지에서 search 페이지에 접근하기 위해 눌렀던 해시태그를 구해온다
+            inputText.Text = HashTag.ToString();
+            search(1); // hashTag로 search 실행 시 
         }
     }
 
-    protected void search()
+    protected void search(int n = 0)
     {
-        string searchType = Request.QueryString["searchType"].ToString(); // searchType은 무조건 넣게 해놨으니 if문 조건안줘도 됨.
+        if (Request.QueryString["searchType"] == null)
+            searchType = 1;
+        else
+            searchType = int.Parse(Request.QueryString["searchType"].ToString());
+
+        string text = "";
         string page = "";
-        string text = inputText.Text.ToString();
+
+        text = inputText.Text.ToString();
 
         if (Request.QueryString["page"] != null)
             page = Request.QueryString["page"].ToString();
@@ -94,7 +103,7 @@
 
     protected void Button1_Click(object sender, EventArgs e)
     {
-        search();
+        search(0);
     }
 
     protected void inputText_TextChanged(object sender, EventArgs e)
@@ -102,6 +111,8 @@
         //EnterKey 누를 시 Button1_Click 이벤트 발생.
         inputText.Attributes["onkeyPress"] = "if(event.keyCode == 13) { " + Page.GetPostBackEventReference(Button1) + "; return false; }";
     }
+
+
 </script>
 
 <html>
@@ -134,10 +145,26 @@
     <!-- kakodev -->
       <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=ebcd0c1accbe0ff4bbb47bd777ef2fcf&libraries=service&libraries=services,clusterer,drawing"></script>
 
+
+    <!-- AJAX-->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha256-pasqAKBDmFT4eHoN2ndd6lN370kFiGUFyTiUHWhU7k8=" crossorigin="anonymous"></script>
     <script>
 
-        function rdoEvent(paramType){
-            window.location.href = "search.aspx?searchType=" + paramType;
+        function rdoEvent(paramType) {
+            var hashtag = "";
+           
+
+            <%
+          if (Request.QueryString["text"] != null) // 해시태그를 통한 search 페이지 접근 시
+        {
+            HashTag = Request.QueryString["text"].ToString(); // board 페이지에서 search 페이지에 접근하기 위해 눌렀던 해시태그를 구해온다.
+            string encodedHashtag = Server.UrlEncode(HashTag);
+            Response.Write("hashtag = '&hashtag="+encodedHashtag+ "'");
+            
+        }
+        %>
+
+            window.location.href = "search.aspx?searchType=" + paramType + hashtag;
         }
 
         function sidebarSwitch() {
@@ -236,6 +263,7 @@
                         <div class="boardArea">
                             <div class="boardAlign">
 <%
+    List<Travel> travelList;
     Member member;
     Travel travel;
     Travel_Day travelDay;
@@ -283,7 +311,10 @@
     int limit2 = 5;
 
     // boardItem에서 구해야 할 항목 : Member(mainImage) Travel(title, main_img, mem_id, create_time, tot_rate) Trave_Day(content)
-    List<Travel> travelList = getTravelBySearchType(searchText, limit1, limit2);
+    travelList = getTravelBySearchType(searchText, limit1, limit2);
+    // 맵데이터 바인딩
+
+
 
     for (int i = 0; i < travelList.Count; i++)
     {
@@ -432,6 +463,7 @@
         <!-- Kakao Map Area -->
         <div class="map" id="mapArea"></div>
     </div>
+        <asp:PlaceHolder ID="PlaceHolder_mapData" runat="server"></asp:PlaceHolder>
 </form>
     <script>
         var drawingMapContainer = document.getElementById('mapArea'),
@@ -439,11 +471,45 @@
                 center: new kakao.maps.LatLng(37.56671, 126.98298), // 지도의 중심좌표
                 level: 4, // 지도의 확대 레벨
                 mapTypeId: kakao.maps.MapTypeId.ROADMAP // 지도종류
-            };
+            }, overlays = [];
 
         // 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
         //var drawingMap = new daum.maps.Map(drawingMapContainer, mapOption);
         var drawingMap = new daum.maps.Map(drawingMapContainer, drawingMap);
+
+        var maps;
+
+        function setMaps(mapDataId) {
+            var mapDatas = Jason.Parse(document.getElementById(mapDataId).value);
+            maps = Json.Parse(mapDatas);
+            console.info(maps);
+        }
+        var maps;
+
+        function setMaps(mapDatas) {
+            maps = mapDatas;
+            console.info(maps);
+        }
+
+        function getMapData(trv_no) {
+            $.ajax({
+                type: "POST",
+                url: "./GetMaps.asmx/getMaps",
+                // The key needs to match your method's input parameter (case-sensitive).
+                data: '{"trv_no":"' + trv_no + '"}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) { setMaps(data); },
+                failure: function (errMsg) {
+                    alert(errMsg);
+                }
+            });
+
+
+        }
+
+
+
 
     </script>
 </body>
