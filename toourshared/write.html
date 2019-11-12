@@ -37,9 +37,10 @@
 -->
     <link rel="stylesheet" href="./css/write.css" />
     <style>
+/*
         #category {
-            display: flex;
-            flex-direction: column;
+            //display: flex;
+            //flex-direction: column;
             //position: sticky;
             //top: 10px;
             //left: 10px;
@@ -48,76 +49,45 @@
             //box-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
             //background: #fff;
             overflow: hidden;
-            z-index: 2;
+            z-index: 100;
         }
 
-        #category ul {
-            padding-left: 0px;
-        }
 
-        #category li {
+
+        #category a {
             float: left;
             list-style: none;
-            width: 50%;
+            width: 100%;
             //border-right: 1px solid #acacac;
             padding: 6px 0px;
             text-align: center;
             cursor: pointer;
         }
 
-        #category li.on {
+        #category a.on {
             background: #eee;
         }
 
-        #category li:hover {
+        #category a:hover {
             background: #ffe6e6;
             border-left: 1px solid #acacac;
             margin-left: -1px;
         }
 
-        #category li:last-child {
+        #category a:last-child {
             margin-right: 0;
             border-right: 0;
         }
 
-        #category li span {
+        #category a span {
+            font-size: 11px;
             display: block;
             margin: 0 auto 3px;
-            width: 27px;
+            width: 100%;
             height: 28px;
         }
-
-        #category li .category_bg {
-            background: url(http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/places_category.png) no-repeat;
-        }
-
-        #category li .bank {
-            background-position: -10px 0;
-        }
-
-        #category li .mart {
-            background-position: -10px -36px;
-        }
-
-        #category li .pharmacy {
-            background-position: -10px -72px;
-        }
-
-        #category li .oil {
-            background-position: -10px -108px;
-        }
-
-        #category li .cafe {
-            background-position: -10px -144px;
-        }
-
-        #category li .store {
-            background-position: -10px -180px;
-        }
-
-        #category li.on .category_bg {
-            background-position-x: -46px;
-        }
+        
+*/
     </style>
 
 
@@ -275,53 +245,25 @@
                                     <p>🍳</p>
                                     <p>카테고리 검색</p>
                                 </button>
-                                <div class="dropdown-menu">
-                                    <ul id="category">
-                                        <li id="BK9" data-order="0">
-                                            <span class="category_bg bank"></span>
-                                            은행
-                                        </li>
-                                        <li id="MT1" data-order="1">
-                                            <span class="category_bg mart"></span>
-                                            마트
-                                        </li>
-                                        <li id="PM9" data-order="2">
-                                            <span class="category_bg pharmacy"></span>
-                                            약국
-                                        </li>
-                                        <li id="OL7" data-order="3">
-                                            <span class="category_bg oil"></span>
-                                            주유소
-                                        </li>
-                                        <li id="CE7" data-order="4">
-                                            <span class="category_bg cafe"></span>
-                                            카페
-                                        </li>
-                                        <li id="CS2" data-order="5">
-                                            <span class="category_bg store"></span>
-                                            편의점
-                                        </li>
-                                        
-                                            <li id='MT1' data-order="1"> <span class="category_bg"> 대형마트</span></li>
-                                            <li id='CS2' data-order="2"> <span class="category_bg"> 편의점</span></li>
-                                            <li id='PS3' data-order="3"> <span class="category_bg"> 어린이집, 유치원</span></li>
-                                            <li id='SC4' data-order="4"> <span class="category_bg"> 학교</span></li>
-                                            <li id='AC5' data-order="5"> <span class="category_bg"> 학원</span></li>
-                                            <li id='PK6' data-order="6"> <span class="category_bg"> 주차장</span></li>
-                                            <li id='OL7' data-order="7"> <span class="category_bg"> 주유소, 충전소</span></li>
-                                            <li id='SW8' data-order="8"> <span class="category_bg"> 지하철역</span></li>
-                                            <li id='BK9' data-order="9"> <span class="category_bg"> 은행</span></li>
-                                            <li id='CT1' data-order="10"><span class="category_bg"> 문화시설</span></li>
-                                            <li id='AG2' data-order="11"><span class="category_bg"> 중개업소</span></li>
-                                            <li id='PO3' data-order="12"><span class="category_bg"> 공공기관</span></li>
-                                            <li id='AT4' data-order="13"><span class="category_bg"> 관광명소</span></li>
-                                            <li id='AD5' data-order="14"><span class="category_bg"> 숙박</span></li>
-                                            <li id='FD6' data-order="15"><span class="category_bg"> 음식점</span></li>
-                                            <li id='CE7' data-order="16"><span class="category_bg"> 카페</span></li>
-                                            <li id='HP8' data-order="17"><span class="category_bg"> 병원</span></li>
-                                            <li id='PM9' data-order="18"><span class="category_bg"> 약국</span></li>
-                                       
-                                    </ul>
+                                <div id="category" class="dropdown-menu">                                                                     
+                                            <a id='MT1' class="dropdown-item" data-order="0">  대형마트</a>
+                                            <a id='CS2' class="dropdown-item" data-order="1">  편의점</a>
+                                            <a id='PS3' class="dropdown-item" data-order="2">  어린이집, 유치원</a>
+                                            <a id='SC4' class="dropdown-item" data-order="3">  학교</a>
+                                            <a id='AC5' class="dropdown-item" data-order="4">  학원</a>
+                                            <a id='PK6' class="dropdown-item" data-order="5">  주차장</a>
+                                            <a id='OL7' class="dropdown-item" data-order="6">  주유소, 충전소</a>
+                                            <a id='SW8' class="dropdown-item" data-order="7">  지하철역</a>
+                                            <a id='BK9' class="dropdown-item" data-order="8">  은행</a>
+                                            <a id='CT1' class="dropdown-item" data-order="9">  문화시설</a>
+                                            <a id='AG2' class="dropdown-item" data-order="10"> 중개업소</a>
+                                            <a id='PO3' class="dropdown-item" data-order="11"> 공공기관</a>
+                                            <a id='AT4' class="dropdown-item" data-order="12"> 관광명소</a>
+                                            <a id='AD5' class="dropdown-item" data-order="13"> 숙박</a>
+                                            <a id='FD6' class="dropdown-item" data-order="14"> 음식점</a>
+                                            <a id='CE7' class="dropdown-item" data-order="15"> 카페</a>
+                                            <a id='HP8' class="dropdown-item" data-order="16"> 병원</a>
+                                            <a id='PM9' class="dropdown-item" data-order="17"> 약국</a>                                   
                                 </div>
                             </div>
 
@@ -2498,7 +2440,9 @@
         //----------From Post END
         //------------------------------------
 
-        //---------------------------------
+         //------------------------------------
+        //----------From around category search START
+        //------------------------------------
 
 
         // 마커를 클릭했을 때 해당 장소의 상세정보를 보여줄 커스텀오버레이입니다
@@ -2602,20 +2546,55 @@
                 })(marker, places[i]);
             }
         }
+        
+//        <li id='MT1' data-order="0"> <span class="category_bg mart"> 대형마트</span></li>
+//        <li id='CS2' data-order="1"> <span class="category_bg store"> 편의점</span></li>
+//        <li id='PS3' data-order="2"> <span class="category_bg elemantry"> 어린이집, 유치원</span></li>
+//        <li id='SC4' data-order="3"> <span class="category_bg"> 학교</span></li>
+//        <li id='AC5' data-order="4"> <span class="category_bg"> 학원</span></li>
+//        <li id='PK6' data-order="5"> <span class="category_bg"> 주차장</span></li>
+//        <li id='OL7' data-order="6"> <span class="category_bg oil"> 주유소, 충전소</span></li>
+//        <li id='SW8' data-order="7"> <span class="category_bg"> 지하철역</span></li>
+//        <li id='BK9' data-order="8"> <span class="category_bg bank"> 은행</span></li>
+//        <li id='CT1' data-order="9"><span class="category_bg"> 문화시설</span></li>
+//        <li id='AG2' data-order="10"><span class="category_bg"> 중개업소</span></li>
+//        <li id='PO3' data-order="11"><span class="category_bg"> 공공기관</span></li>
+//        <li id='AT4' data-order="12"><span class="category_bg"> 관광명소</span></li>
+//        <li id='AD5' data-order="13"><span class="category_bg"> 숙박</span></li>
+//        <li id='FD6' data-order="14"><span class="category_bg"> 음식점</span></li>
+//        <li id='CE7' data-order="15"><span class="category_bg cafe"> 카페</span></li>
+//        <li id='HP8' data-order="16"><span class="category_bg"> 병원</span></li>
+//        <li id='PM9' data-order="17"><span class="category_bg pharmacy"> 약국</span></li>     
+        
 
         // 마커를 생성하고 지도 위에 마커를 표시하는 함수입니다
         function addMarker(position, order) {
-            var imageSrc = 'http://t1.daumcdn.net/localimg/localimages/07/mapapidoc/places_category.png', // 마커 이미지 url, 스프라이트 이미지를 씁니다
-                imageSize = new kakao.maps.Size(27, 28), // 마커 이미지의 크기
-                imgOptions = {
-                    spriteSize: new kakao.maps.Size(72, 208), // 스프라이트 이미지의 크기
-                    spriteOrigin: new kakao.maps.Point(46, (order * 36)), // 스프라이트 이미지 중 사용할 영역의 좌상단 좌표
-                    offset: new kakao.maps.Point(11, 28) // 마커 좌표에 일치시킬 이미지 내에서의 좌표
-                },
-                markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imgOptions),
-                marker = new kakao.maps.Marker({
+            var imageSize = new kakao.maps.Size(33, 44); // 마커이미지의 크기입니다
+            var imageOption = {offset: new kakao.maps.Point(27, 69)}; 
+            var iconUrl =  [
+                "./img/ico/marker/shopping.png",               //대형마트
+                "./img/ico/marker/retail-stores.png",          //편의점
+                "./img/ico/marker/play-schools.png",           //어린이집, 유치원
+                "./img/ico/marker/schools.png",                //학교
+                "./img/ico/marker/education.png",              //학원
+                "./img/ico/marker/automotive.png",             //주차장
+                "./img/ico/marker/gas-station.png",      //주유소, 충전소
+                "./img/ico/marker/transport.png",              //지하철역
+                "./img/ico/marker/financial-services.png",     //은행
+                "./img/ico/marker/tickets.png",                //문화시설
+                "./img/ico/marker/business.png",               //중개업소
+                "./img/ico/marker/government.png",             //공공기관
+                "./img/ico/marker/travel.png",                  //관광명소
+                "./img/ico/marker/residential-places.png",      //숙박
+                "./img/ico/marker/restaurants.png",            //음식점
+                "./img/ico/marker/coffee-n-tea.png",           //카페
+                "./img/ico/marker/medical.png",                //병원
+                "./img/ico/marker/health-medical.png"          //약국
+                            ];
+                
+                var marker = new kakao.maps.Marker({
                     position: position, // 마커의 위치
-                    image: markerImage
+                    image: new kakao.maps.MarkerImage(iconUrl[order], imageSize, imageOption)
                 });
 
             marker.setMap(drawingMap); // 지도 위에 마커를 표출합니다
@@ -2692,7 +2671,7 @@
 
             placeOverlay.setMap(null);
 
-            if (className === 'on') {
+            if (className === 'dropdown-item active') {
                 currCategory = '';
                 changeCategoryClass();
                 removeMarkerAround();
@@ -2710,13 +2689,17 @@
                 i;
 
             for (i = 0; i < children.length; i++) {
-                children[i].className = '';
+                children[i].className = 'dropdown-item';
             }
 
             if (el) {
-                el.className = 'on';
+                el.className = 'dropdown-item active';
             }
         }
+        
+        //------------------------------------
+        //----------From around category search END
+        //------------------------------------
     </script>
 
 </body></html>
