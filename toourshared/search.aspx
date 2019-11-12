@@ -112,96 +112,7 @@
         inputText.Attributes["onkeyPress"] = "if(event.keyCode == 13) { " + Page.GetPostBackEventReference(Button1) + "; return false; }";
     }
 
-    protected List<Map> getMapByTrvNo(string trv_no)
-    {
-        List<Map> mapList = new List<Map>();
 
-
-
-        Travel_Day travelDay = new Travel_Day();                         // travel_day 객체 생성
-        travelDay.Trv_no = trv_no;                               // travel_no 집어 넣기
-        Travel_DayDao travelDayDao = new Travel_DayDao();         // travel_day DAO 객체 생성
-
-        List<Travel_Day> travelDayList = travelDayDao.selectTravelDayListByTrvNo(travelDay);
-        // 게시글 번호에 해당하는 그 게시글의 모든 게시글 내용들(N일 차) 오름차순으로 구해온다.
-
-        Map inMap = new Map();
-        Map tmpMap;
-        MapDao mapDao = new MapDao();
-        foreach (var item in travelDayList)
-        {
-            inMap.Trv_day_no = item.Trv_day_no;
-            tmpMap = new Map();
-            tmpMap = mapDao.selectMapByTrv_day_no(inMap);
-            mapList.Add(tmpMap);
-        }
-        return mapList;
-
-
-    }
-    protected void bindMapData(string trv_no, int index)
-    {
-        List<Map> mapList = getMapByTrvNo(trv_no);
-
-        HtmlInputHidden tmpHidden;
-
-        double totalGa = 0.0;
-        double totalHa = 0.0;
-        double tmpGa = 0.0;
-        double tmpHa = 0.0;
-        JArray jArray = new JArray();
-        string tmpMapData = "";
-        string tmpMapCenter = "";
-        JObject map_center = new JObject();
-        int map_center_cnt = 0;
-        foreach (var map in mapList)
-        {
-            //map.MapDat를 Json 배열로 만들어서 반환
-            // 널일경우 비어잇는 Json 배열을 넣어줌
-            if(map.Map_data != null && map.Map_data != "")
-            {
-                tmpMapData = map.Map_data;
-            }
-            else
-            {
-                tmpMapData = "{}";
-            }
-            jArray.Add(JObject.Parse(tmpMapData));
-
-
-
-            if(map.Map_center != null && map.Map_center != "")
-            {
-                tmpMapCenter = map.Map_center;
-                map_center = JObject.Parse(tmpMapCenter);
-                double.TryParse(map_center["Ga"].ToString(), out tmpGa);
-                double.TryParse(map_center["Ha"].ToString(), out tmpHa);
-                totalGa += tmpGa;
-                totalHa += tmpHa;
-                map_center_cnt++;
-            }       
-
-            
-            
-            //json 객체의 Ga Ha 값을 가져와 double로 변환
-            
-            
-
-        }
-
-        tmpHidden = new HtmlInputHidden();
-        tmpHidden.Name = "mapData_" + index;
-        tmpHidden.ID = "mapData_" + index; // set the id
-        tmpHidden.Value = jArray.ToString();
-        PlaceHolder_mapData.Controls.Add(tmpHidden);
-
-        tmpHidden = new HtmlInputHidden();
-        tmpHidden.Name = "mapCenter_" + index;
-        tmpHidden.ID = "mapCenter_" + index; // set the id
-        tmpHidden.Value = "{Ga:"+totalGa/map_center_cnt+",Ha:"+totalHa/map_center_cnt+"}";
-        PlaceHolder_mapData.Controls.Add(tmpHidden);
-
-    }
 </script>
 
 <html>
@@ -402,12 +313,7 @@
     // boardItem에서 구해야 할 항목 : Member(mainImage) Travel(title, main_img, mem_id, create_time, tot_rate) Trave_Day(content)
     travelList = getTravelBySearchType(searchText, limit1, limit2);
     // 맵데이터 바인딩
-    int travelListIdx = 0;
-    foreach(var item in travelList)
-    {
-        bindMapData(item.Trv_no, travelListIdx);
-        travelListIdx++;
-    }
+
 
 
     for (int i = 0; i < travelList.Count; i++)
@@ -578,14 +484,30 @@
             maps = Json.Parse(mapDatas);
             console.info(maps);
         }
+        var maps;
 
-        <%
-
-        for(int i = 0; i < 5; i++)
-        {
-            Response.Write("setMaps('mapData_"+i+"');");
+        function setMaps(mapDatas) {
+            maps = mapDatas;
+            console.info(maps);
         }
-        %>
+
+        function getMapData(trv_no) {
+            $.ajax({
+                type: "POST",
+                url: "./GetMaps.asmx/getMaps",
+                // The key needs to match your method's input parameter (case-sensitive).
+                data: '{"trv_no":"' + trv_no + '"}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) { setMaps(data); },
+                failure: function (errMsg) {
+                    alert(errMsg);
+                }
+            });
+
+
+        }
+
 
 
 

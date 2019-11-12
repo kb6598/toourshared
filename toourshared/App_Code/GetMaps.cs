@@ -7,6 +7,9 @@ using tooushared.DAO;
 using tooushared.DTO;
 using tooushared.Lib;
 using Newtonsoft.Json;
+using System.Web.Script.Services;
+using System.Web.Script.Serialization;
+using System.Collections;
 
 
 /// <summary>
@@ -18,13 +21,14 @@ using Newtonsoft.Json;
 [System.Web.Script.Services.ScriptService]
 public class GetMaps : System.Web.Services.WebService
 {
-  
 
 
 
-    
+
+
 
     [WebMethod]
+    [ScriptMethod(UseHttpGet = true, ResponseFormat = ResponseFormat.Json)]
     public void getMaps(string trv_no)
     {
         // trv_no를 통해 해당 travel의 travel_day list를 가져옴
