@@ -28,11 +28,12 @@ public class CommentDao
             MyDB myDB = new MyDB();
             MySqlConnection con = myDB.GetCon();
 
-            string Sql = "INSERT INTO toourshared.comment (trv_no, cmt_content, cmt_rate, cmt_timestamp) VALUES(@trv_no, @cmt_content, @cmt_rate, @cmt_timestamp); select last_insert_id()";
+            string Sql = "INSERT INTO toourshared.comment (trv_no, cmt_content, mem_id, cmt_rate, cmt_timestamp) VALUES(@trv_no, @cmt_content, @mem_id, @cmt_rate, @cmt_timestamp); select last_insert_id()";
             MySqlCommand cmd = new MySqlCommand(Sql, con);
 
             cmd.Parameters.AddWithValue("@trv_no", comment.Trv_no);
             cmd.Parameters.AddWithValue("@cmt_content", comment.Cmt_content);
+            cmd.Parameters.AddWithValue("@mem_id", comment.Mem_id.ToString());
             cmd.Parameters.AddWithValue("@cmt_rate", comment.Cmt_rate);
             cmd.Parameters.AddWithValue("@cmt_timestamp", comment.Cmt_timestamp);
 

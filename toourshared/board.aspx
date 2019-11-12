@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" %>
+﻿<%@ Page Language="C#" ValidateRequest="false" %>
 
 <%@ Import Namespace="Newtonsoft.Json.Linq" %>
 
@@ -243,52 +243,60 @@
         }
     }
 
-<<<<<<< HEAD
-    protected string HtmlSpecialChars(string Str)
+    protected string HtmlTagConvert(string Str)
     {
-        string returnStr = "";
-        returnStr = returnStr.Replace("&", "&amp;");
-        returnStr = returnStr.Replace(">", "&gt;");
-        returnStr = returnStr.Replace("<", "&lt;");
-        returnStr = returnStr.Replace("'", "&#039;");
+        string returnStr = Str;
+        returnStr = returnStr.Replace("&", "&amp");
+        returnStr = returnStr.Replace("\"", "&quot");
+        returnStr = returnStr.Replace("'", "&#039");
+        returnStr = returnStr.Replace("<", "&lt");
+        returnStr = returnStr.Replace(">", "&gt");
 
         return returnStr;
     }
 
     protected void Button1_Click(object sender, EventArgs e)
     {
-        int memberScore = int.Parse(replyStarList.SelectedValue.ToString()); // 유저가 선택한 평점
-
-        if(memberScore == 0)
+        if (Session["mem_id"] == null)
         {
-            Response.Write("<script language='javascript'>alert('게시글에 대한 평점(⭐)을 선택해주세요.');</script language='javascript'>");
+            Response.Write("<script language='javascript'>alert('로그인을 해야 댓글을 작성할 수 있습니다.');</script language='javascript'>");
         }
         else
         {
-            if (Request.QueryString["trv_no"] == null)
+            string memID = Session["mem_id"].ToString(); // 로그인 한 유저의 아이디(세션)을 불러와 memID 변수에 담는다.
+            int memberScore = int.Parse(replyStarList.SelectedValue.ToString()); // 유저가 선택한 평점
+
+            if (memberScore == 0)
             {
-                Response.Write("<script language='javascript'>alert('세션이 만료되었습니다. 다시 접근해주세요.');</script language='javascript'>");
-                Response.Redirect("/index.aspx");
+                Response.Write("<script language='javascript'>alert('게시글에 대한 평점(⭐)을 선택해주세요.');</script language='javascript'>");
             }
             else
             {
-                string trv_no = Request.QueryString["trv_no"].ToString(); // 현재 게시글의 번호를 받고
-                string cmt = replyWriteText.Text.ToString();
+                if (Request.QueryString["trv_no"] == null)
+                {
+                    Response.Write("<script language='javascript'>alert('세션이 만료되었습니다. 다시 접근해주세요.');</script language='javascript'>");
+                    Response.Redirect("/index.aspx");
+                }
+                else
+                {
+                    string trv_no = Request.QueryString["trv_no"].ToString(); // 현재 게시글의 번호를 받고
+                    string cmt = replyWriteText.Text.ToString();
+                    System.Diagnostics.Debug.WriteLine("현재 로그인 한 아이디: " + memID);
+                    System.Diagnostics.Debug.WriteLine("입력한 댓글 내용: " + cmt);
 
-                Comment comment = new Comment(); // commentDTO 객체 생성하고 속성 집어넣기
-                comment.Trv_no = trv_no.ToString();
-                comment.Cmt_content = cmt.ToString();
-                comment.Cmt_rate = memberScore.ToString();
-                comment.Cmt_timestamp = TimeLib.GetTimeStamp().ToString();
+                    Comment comment = new Comment(); // commentDTO 객체 생성하고 속성 집어넣기
+                    comment.Trv_no = trv_no.ToString();
+                    comment.Cmt_content = HtmlTagConvert(cmt.ToString());
+                    comment.Mem_id = memID.ToString();
+                    comment.Cmt_rate = memberScore.ToString();
+                    comment.Cmt_timestamp = TimeLib.GetTimeStamp().ToString();
 
-                CommentDao commentDao = new CommentDao(); // commentDAO 객체 생성
-                commentDao.InsertComment(comment); // comment 데이터 삽입
-=======
+                    CommentDao commentDao = new CommentDao(); // commentDAO 객체 생성
+                    commentDao.InsertComment(comment); // comment 데이터 삽입
 
->>>>>>> 8451cd397e6e51e1676f374e17130bcebf3bb693
-
-                TravelDao travelDao = new TravelDao();
-                travelDao.setTotRateByTrvNo(int.Parse(trv_no.ToString()), memberScore); // TotRate 최신화 작업
+                    TravelDao travelDao = new TravelDao();
+                    travelDao.setTotRateByTrvNo(int.Parse(trv_no.ToString()), memberScore); // TotRate 최신화 작업
+                }
             }
         }
     }
@@ -1830,11 +1838,8 @@
         // c
         <%
         List<Map> mapList = getMapByTrvDayNo();
-<<<<<<< HEAD
         string [] color= { "#E53A40", "#F68657", "#EFDC05", "#58C9B9", "#a3daff", "#0080ff" , "#A593E0", "#C5C6B6", "#D09E88", "#FADAD8", "#fab1ce", "#fffff5", "#c8c8a9", "#3a5134" };
-=======
-        string[] color = { "#007bff", "#dc3545", "#fd7e14", "#28a745", "#17a2b8", "#ffc107", "#fff", "#20c997", "#6610f2" };
->>>>>>> 8451cd397e6e51e1676f374e17130bcebf3bb693
+
         int colorIndex = 0;
         int index = 0;
         JObject mapCenter;

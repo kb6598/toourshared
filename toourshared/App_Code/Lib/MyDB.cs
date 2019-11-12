@@ -14,7 +14,7 @@ namespace tooushared.Lib
         MySqlConnection con = null;
 
         public MyDB(){
-            String connectionString = "server=itbuddy.iptime.org;user=yuhan;database=toourshared;password=yuhan1234;port=8233;max pool size=1;";
+            String connectionString = "server=itbuddy.iptime.org;user=yuhan;database=toourshared;password=yuhan1234;port=8233;";
             this.con = new MySqlConnection(connectionString);
         }
 
