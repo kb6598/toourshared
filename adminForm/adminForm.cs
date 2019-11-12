@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using MySql.Data.MySqlClient;
 using tooushared.DAO;
 using tooushared.DTO;
+using System.Diagnostics;
 
 namespace adminForm
 {
@@ -59,7 +60,7 @@ namespace adminForm
             dataGridView2.Columns[3].HeaderCell.Value = "계정정지 기간";
         }
 
-        //신고목록조회 버튼
+        //신고 목록 조회 버튼
         private void button1_Click(object sender, EventArgs e)
         {
             After_Report();
@@ -290,6 +291,18 @@ namespace adminForm
             //③ 이전시간 + 3일 값이 현재시간보다 크거나 같으면 테이블에서 해당 데이터를 삭제한다.
 
             Member_BlockList();//계정 정지목록 조회
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            Travel travel = new Travel();
+            travel.Trv_no = dataGridView1.Rows[dataGridView1.SelectedCells[0].RowIndex].Cells[1].Value.ToString();
+
+            Process process = new System.Diagnostics.Process();
+            process.StartInfo = new System.Diagnostics.ProcessStartInfo(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)
+                + "\\Internet Explorer\\iexplore.exe", "http://itbuddy.iptime.org/toourshared/board.aspx?trv_no=" + travel.Trv_no);
+
+            process.Start();
         }
     }
 }

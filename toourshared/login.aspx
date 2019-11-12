@@ -72,6 +72,16 @@
         Response.Redirect("/find_idpw.aspx");
     }
 
+
+    protected void FindPW_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("/find_idpw.aspx");
+    }
+
+    protected void FindID_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("/find_idpw.aspx");
+    }
     protected void mem_id_TextChanged(object sender, EventArgs e)
     {
         mem_id.Attributes["onkeyPress"] = "if(event.keyCode == 13) { " + Page.GetPostBackEventReference(BtnLogin) + "; return false; }";
@@ -579,12 +589,12 @@
             <!-- 아이디 비밀번호 찾기 -->
             <div class="area2">
                 <div class="findID">
-                    <asp:Button ID="FindID" runat="server" Text="아이디찾기" BorderStyle="None" />
+                    <asp:Button ID="FindID" runat="server" Text="아이디찾기" BorderStyle="None" onclick="FindID_Click" />
                 </div>
                 <!-- 구분선 -->
                 <div class="findLine"></div>
                 <div class="findPW">
-                    <asp:Button ID="FindPW" runat="server" Text="비밀번호찾기" BorderStyle="None"/>
+                    <asp:Button ID="FindPW" runat="server" Text="비밀번호찾기" BorderStyle="None" OnClick ="FindPW_Click"/>
                 </div>
             </div>
 

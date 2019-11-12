@@ -67,7 +67,7 @@
 
         if (Request.QueryString["hashtag"] != null) // 해시태그를 통한 search 페이지 접근 시
         {
-            HashTag = Request.QueryString["hashtag"].ToString(); // board 페이지에서 search 페이지에 접근하기 위해 눌렀던 해시태그를 구해온다.
+            HashTag = Request.QueryString["hashtag"].ToString(); // board 페이지에서 search 페이지에 접근하기 위해 눌렀던 해시태그를 구해온다
             inputText.Text = HashTag.ToString();
             search(1); // hashTag로 search 실행 시 
         }
@@ -144,7 +144,20 @@
     <script>
 
         function rdoEvent(paramType) {
-                window.location.href = "search.aspx?searchType=" + paramType;
+            var hashtag = "";
+           
+
+            <%
+          if (Request.QueryString["text"] != null) // 해시태그를 통한 search 페이지 접근 시
+        {
+            HashTag = Request.QueryString["text"].ToString(); // board 페이지에서 search 페이지에 접근하기 위해 눌렀던 해시태그를 구해온다.
+            string encodedHashtag = Server.UrlEncode(HashTag);
+            Response.Write("hashtag = '&hashtag="+encodedHashtag+ "'");
+            
+        }
+        %>
+
+            window.location.href = "search.aspx?searchType=" + paramType + hashtag;
         }
 
         function sidebarSwitch() {
@@ -451,6 +464,11 @@
         // 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
         //var drawingMap = new daum.maps.Map(drawingMapContainer, mapOption);
         var drawingMap = new daum.maps.Map(drawingMapContainer, drawingMap);
+
+
+
+
+
 
     </script>
 </body>
