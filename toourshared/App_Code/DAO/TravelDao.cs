@@ -1035,21 +1035,26 @@ public class TravelDao
     }
 
     // 게시글 번호를 받아 그 게시글의 평균 평점을 최신화 해주는 함수
-    public void setTotRateByTrvNo(int trv_no, int rate)
+    public void setTotRateByTrvNo(int trv_no)
     {
         Travel travel = new Travel();
         TravelDao travelDao = new TravelDao();
         CommentDao commentDao = new CommentDao();
 
-        travel.Trv_no = trv_no.ToString();
-        int commentCount = commentDao.selectCommentCountByTrvNo(travel);
+        MyDB mydb = new MyDB();
+        MySqlConnection con;
 
-        travel = travelDao.selectTravelBytrv_no(travel);
-        double totRate = ((double)(int.Parse(travel.Trv_tot_rate.ToString()) + rate) / (double)(commentCount)); // 기존 평점 합계점수 + 추가될 점수 / 댓글 갯수 = 평균 평점
+        try
+        {
+            con = mydb.GetCon();
+            String Sql = "UPDATE toourshared.travel as trv SET trv.trv_tot_rate = (SELECT sum(cmt.cmt_rate) / count(cmt.cmt_rate) as trv_tot_rate FROM comment as cmt WHERE trv_no = " + trv_no.ToString() + ") WHERE trv_no = " + trv_no.ToString();
 
-        travel.Trv_no = trv_no.ToString();              // UpdateTravel 함수가 trv_no를 바탕으로 업데이트 되므로 혹시 모르니 다시 trv_no를 준다.
-        travel.Trv_tot_rate = totRate.ToString();      // 평균 평점 최신화 데이터 삽입
-        travelDao.UpdatetTravel(travel);               // DAO를 통한 travel 테이블 Update
+            MySqlCommand cmd = new MySqlCommand(Sql, con);
+            con.Open();
+            cmd.ExecuteNonQuery();
+            con.Close();
+        }
+        catch (Exception e) {;}
     }
 }
 

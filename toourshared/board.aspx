@@ -295,7 +295,7 @@
                     commentDao.InsertComment(comment); // comment 데이터 삽입
 
                     TravelDao travelDao = new TravelDao();
-                    travelDao.setTotRateByTrvNo(int.Parse(trv_no.ToString()), memberScore); // TotRate 최신화 작업
+                    travelDao.setTotRateByTrvNo(int.Parse(trv_no)); // TotRate 최신화 작업
                 }
             }
         }
