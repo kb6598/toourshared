@@ -64,6 +64,7 @@ public class TravelDao
 
         return result;
     }
+
     public DataSet SelectTravel()
     {
         MyDB myDB = new MyDB();
@@ -81,7 +82,6 @@ public class TravelDao
 
         return ds;
     }
-
 
     public Travel selectTravelBytrv_no(Travel travel)
     {
@@ -214,8 +214,6 @@ public class TravelDao
         return ds;
     }
 
-
-
     public List<Travel> selectTravelListByMem_id(Travel travel)
     {
         MyDB mydb = new MyDB();
@@ -303,12 +301,8 @@ public class TravelDao
         cmd.Parameters.AddWithValue("@trv_views", travel.Trv_views);
 
         con.Open();
-
         result = cmd.ExecuteNonQuery();
-
-
         con.Close();
-
 
         return result;
     }
@@ -333,7 +327,7 @@ public class TravelDao
             {
                 Sql = "SELECT * FROM toourshared.travel WHERE loc_name like '%" + locName + "%' ORDER BY trv_create_time DESC limit 0, 6";
             }
-            
+
             MySqlCommand cmd = new MySqlCommand(Sql, con);
             con.Open();
 
@@ -360,7 +354,7 @@ public class TravelDao
             reader.Close();
             con.Close();
         }
-        catch(Exception e) {;}
+        catch (Exception e) {; }
 
         return returnList;
     }
@@ -528,7 +522,7 @@ public class TravelDao
 
         return resultList;
     }
-    public List<Travel> SelectTagTravel(Travel travel,string keyword, int start, int count)
+    public List<Travel> SelectTagTravel(Travel travel, string keyword, int start, int count)
     {
         MyDB mydb = new MyDB();
 
@@ -542,12 +536,12 @@ public class TravelDao
 
             con = mydb.GetCon();
 
-            string Sql = "SELECT * FROM toourshared.travel where trv_tag like '%"+keyword+"%' order by trv_create_time desc limit @start,@count";
+            string Sql = "SELECT * FROM toourshared.travel where trv_tag like '%" + keyword + "%' order by trv_create_time desc limit @start,@count";
 
 
             MySqlCommand cmd = new MySqlCommand(Sql, con);
 
-            
+
             cmd.Parameters.AddWithValue("@keyword", travel.Trv_tag);
             cmd.Parameters.AddWithValue("@start", start);
             cmd.Parameters.AddWithValue("@count", count);
@@ -626,7 +620,7 @@ public class TravelDao
                 //lstMember.Add(tmpMemberPointer);
 
                 resultList.Add(result);
-                
+
 
             }
 
@@ -643,7 +637,6 @@ public class TravelDao
         return resultList;
     }
 
-    // SEARCH.ASPX 관련 DAO 시작
     // 최신 순 게시글 총 카운트 구해오는 함수
     public int getTravelCountOrderByCreateTimeDesc(string searchText)
     {
@@ -665,7 +658,7 @@ public class TravelDao
             con.Open();
 
             MySqlDataReader reader = cmd.ExecuteReader();
-            if(reader.Read())
+            if (reader.Read())
             {
                 returnInt = int.Parse(reader["cnt"].ToString());
             }
@@ -674,7 +667,7 @@ public class TravelDao
             con.Close();
 
         }
-        catch(Exception e) {;}
+        catch (Exception e) {; }
 
         return returnInt;
     }
@@ -844,7 +837,7 @@ public class TravelDao
             reader.Close();
             con.Close();
         }
-        catch(Exception e){;} 
+        catch (Exception e) {; }
 
         return returnList;
     }
@@ -1003,14 +996,14 @@ public class TravelDao
         MyDB mydb = new MyDB();
         List<Travel> resultList = new List<Travel>();
         Travel result;
-        
+
         MySqlConnection con;
 
         try
         {
             con = mydb.GetCon();
 
-            string Sql = "SELECT count(*) FROM toourshared.travel where " + date + "loc_name LIKE" + loc + "or trv_title LIKE " + title + "or trv_tag LIKE " + tag + " " + orderBy ;
+            string Sql = "SELECT count(*) FROM toourshared.travel where " + date + "loc_name LIKE" + loc + "or trv_title LIKE " + title + "or trv_tag LIKE " + tag + " " + orderBy;
 
 
             MySqlCommand cmd = new MySqlCommand(Sql, con);
@@ -1039,6 +1032,24 @@ public class TravelDao
 
 
         return resultList;
+    }
+
+    // 게시글 번호를 받아 그 게시글의 평균 평점을 최신화 해주는 함수
+    public void setTotRateByTrvNo(int trv_no, int rate)
+    {
+        Travel travel = new Travel();
+        TravelDao travelDao = new TravelDao();
+        CommentDao commentDao = new CommentDao();
+
+        travel.Trv_no = trv_no.ToString();
+        int commentCount = commentDao.selectCommentCountByTrvNo(travel);
+
+        travel = travelDao.selectTravelBytrv_no(travel);
+        double totRate = ((double)(int.Parse(travel.Trv_tot_rate.ToString()) + rate) / (double)(commentCount)); // 기존 평점 합계점수 + 추가될 점수 / 댓글 갯수 = 평균 평점
+
+        travel.Trv_no = trv_no.ToString();              // UpdateTravel 함수가 trv_no를 바탕으로 업데이트 되므로 혹시 모르니 다시 trv_no를 준다.
+        travel.Trv_tot_rate = totRate.ToString();      // 평균 평점 최신화 데이터 삽입
+        travelDao.UpdatetTravel(travel);               // DAO를 통한 travel 테이블 Update
     }
 }
 

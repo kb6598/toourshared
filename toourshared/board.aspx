@@ -240,9 +240,52 @@
             PlaceHolder_hidden.Controls.Add(tmpHidden);
             index++;
         }
+    }
 
-        
+    protected string HtmlSpecialChars(string Str)
+    {
+        string returnStr = "";
+        returnStr = returnStr.Replace("&", "&amp;");
+        returnStr = returnStr.Replace(">", "&gt;");
+        returnStr = returnStr.Replace("<", "&lt;");
+        returnStr = returnStr.Replace("'", "&#039;");
 
+        return returnStr;
+    }
+
+    protected void Button1_Click(object sender, EventArgs e)
+    {
+        int memberScore = int.Parse(replyStarList.SelectedValue.ToString()); // 유저가 선택한 평점
+
+        if(memberScore == 0)
+        {
+            Response.Write("<script language='javascript'>alert('게시글에 대한 평점(⭐)을 선택해주세요.');</script language='javascript'>");
+        }
+        else
+        {
+            if (Request.QueryString["trv_no"] == null)
+            {
+                Response.Write("<script language='javascript'>alert('세션이 만료되었습니다. 다시 접근해주세요.');</script language='javascript'>");
+                Response.Redirect("/index.aspx");
+            }
+            else
+            {
+                string trv_no = Request.QueryString["trv_no"].ToString(); // 현재 게시글의 번호를 받고
+                string cmt = replyWriteText.Text.ToString();
+
+                Comment comment = new Comment(); // commentDTO 객체 생성하고 속성 집어넣기
+                comment.Trv_no = trv_no.ToString();
+                comment.Cmt_content = cmt.ToString();
+                comment.Cmt_rate = memberScore.ToString();
+                comment.Cmt_timestamp = TimeLib.GetTimeStamp().ToString();
+
+                CommentDao commentDao = new CommentDao(); // commentDAO 객체 생성
+                commentDao.InsertComment(comment); // comment 데이터 삽입
+
+                TravelDao travelDao = new TravelDao();
+                travelDao.setTotRateByTrvNo(int.Parse(trv_no.ToString()), memberScore); // TotRate 최신화 작업
+            }
+        }
     }
 
 </script>
@@ -843,7 +886,7 @@
             padding: 20px 10px 10px;
         }
 
-        #reply-write-text {
+        #replyWriteText {
             width: 1475px;
             height: 150px;
             padding: 10px;
@@ -941,7 +984,7 @@
         }
 
         $(function () {
-            $('#reply-write-text').keyup(function (e) {
+            $('#replyWriteText').keyup(function (e) {
                 var content = $(this).val();
                 $('#limitText').html("(" + content.length + " / 200)");
 
@@ -950,7 +993,7 @@
                     $('#limitText').html("(200 / 200)");
                 }
             });
-            $('#reply-write-text').keyup();
+            $('#replyWriteText').keyup();
         });
     </script>
 </head>
@@ -1039,13 +1082,13 @@
                 </div>
                 <div class="board-writer">
                     <div class="writer-Image">
-                        <a href="#">
+                        <a href="MyPage.aspx?mem_id=<%Response.Write(MemberList[0].ToString());%>">
                             <img src="<%Response.Write(MemberList[12].ToString());%>" alt="writerImage" class="writer-ImageItem" />
                         </a>
                     </div>
                     <div class="writer-Text">
                         <div class="writerID">
-                            <a href="#">
+                            <a href="MyPage.aspx?mem_id=<%Response.Write(MemberList[0].ToString());%>">
                                 <%Response.Write(MemberList[0].ToString());%>
                             </a>
                         </div>
@@ -1053,8 +1096,15 @@
                     </div>
                 </div>
                 <div class="board-score">
-                    <span class="star"><%Response.Write(starText);%></span>
-                    <span class="score">(<%Response.Write(starScore.ToString());%>)</span>
+<%
+    if (starCount > 0)
+    {
+
+        Response.Write("                    <span class=\"star\">" + starText + "</span>\n" +
+        "                   <span class=\"score\">(" + starScore.ToString() + ")</span>\n");
+
+    }
+%>
                 </div>
                 <div class="board-content">
                     <div class="board-map" id="total_map"></div>
@@ -1245,24 +1295,25 @@
                 </div>
                 <div class="reply-write">
                     <div class="reply-write-input">
-                        <textarea id="reply-write-text"></textarea>
+                        <asp:TextBox ID="replyWriteText" runat="server" TextMode="MultiLine" MaxLength="200"></asp:TextBox>
                     </div>
                     <div class="reply-write-item">
                         <span class="star" style="font-size: 18px; padding-right: 3px; padding-bottom: 3px;">⭐</span>
                         <div class="reply-star-input">
-                            <select class="reply-star">
-                                <option value="5">5</option>
-                                <option value="4">4</option>
-                                <option value="3" selected>3</option>
-                                <option value="2">2</option>
-                                <option value="1">1</option>
-                            </select>
+                            <asp:DropDownList ID="replyStarList" runat="server" class="reply-star">
+                                <asp:ListItem Value="0" Selected="True">평점</asp:ListItem>
+                                <asp:ListItem Value="5">5</asp:ListItem>
+                                <asp:ListItem Value="4">4</asp:ListItem>
+                                <asp:ListItem Value="3">3</asp:ListItem>
+                                <asp:ListItem Value="2">2</asp:ListItem>
+                                <asp:ListItem Value="1">1</asp:ListItem>
+                            </asp:DropDownList>
                         </div>
                         <div class="reply-write-limit">
-                            <span id="limitText">(0 / 200)</span>
+                            <asp:Label ID="limitText" runat="server" Text="Label">(0 / 200)</asp:Label>
                         </div>
                         <div class="reply-write-btn"></div>
-                        <button class="replyButton">등록</button>
+                        <asp:Button ID="Button1" class="replyButton" runat="server" Text="등록" OnClick="Button1_Click" />
                     </div>
                 </div>
             </div>
@@ -1752,7 +1803,7 @@ function removeOverlays() {
         // c
         <%
         List<Map> mapList = getMapByTrvDayNo();
-        string [] color= { "#007bff", "#dc3545", "#fd7e14", "#28a745", "#17a2b8", "#ffc107" , "#fff","#20c997","#6610f2" };
+        string [] color= { "#E53A40", "#F68657", "#EFDC05", "#58C9B9", "#a3daff", "#0080ff" , "#A593E0", "#C5C6B6", "#D09E88", "#FADAD8", "#fab1ce", "#fffff5", "#c8c8a9", "#3a5134" };
         int colorIndex = 0;
         int index = 0;
         foreach (var map in mapList)
