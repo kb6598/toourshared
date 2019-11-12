@@ -4,85 +4,90 @@
 
 <script runat="server">
 
-            protected void Page_Load(object sender, EventArgs e)
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        if (Session["mem_id"] == null)
+        {
+            MessageBox.Show("접근 할 수 없습니다.", this.Page);
+            Response.Redirect("/index.aspx");
+        }
+        else
+        {
+            selectMyInfo();
+        }
+
+        //selectMyInfo();
+    }
+
+    protected void selectMyInfo()
+    {
+        if (Session["mem_id"] != null)
+        {
+            MemberDao member = new MemberDao();
+
+            Member mem = new Member();
+
+            mem.Mem_id = Session["mem_id"].ToString();
+
+            Member resultMem = member.selectMemberByMem_id(mem);
+
+            mem_id.Text = resultMem.Mem_id;
+            mem_name.Text = resultMem.Mem_name;
+            mainImgItem.ImageUrl= resultMem.Mem_img_url;
+        }
+    }
+    protected void btnLogout_Click(object sender, EventArgs e)
+    {
+        Session.Abandon();
+        Response.Redirect("/index.aspx");
+    }
+
+    protected void btnMypage_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("/MyPage.aspx");
+    }
+
+
+    protected void updateButton_Click(object sender, EventArgs e)
+    {
+        MemberDao member = new MemberDao();
+
+        Member mem = new Member();
+
+        mem.Mem_id = Session["mem_id"].ToString();
+        mem.Mem_pw = mem_pw.Text;
+        mem.Mem_phone = mem_phone.Text;
+        mem.Mem_ques = QnAList.SelectedItem.Text;
+        mem.Mem_answer = mem_ans.Text;
+        mem.Mem_img_url = main_img.Value;
+        mem.Mem_timestmap = TimeLib.GetTimeStamp();
+
+
+        if (mem_pw.Text.Equals("") || mem_ans.Text.Equals("") || mem_phone.Text.Equals(""))
+        {
+            Page.ClientScript.RegisterStartupScript(this.GetType(), "displayalertmessage", "alert('입력되지 않은 항목이 있습니다.');", true);
+        }
+        else if (mem_pw.Text.Length < 6)
+        {
+            Page.ClientScript.RegisterStartupScript(this.GetType(), "displayalertmessage", "alert('비밀번호는 6자 이상으로 입력해주세요.');", true);
+        }
+        else
+        {
+            int check = member.UpdatetMember(mem);
+            if(check == 1)
             {
-                if (Session["mem_id"] == null)
-                {
-                    MessageBox.Show("접근 할 수 없습니다.", this.Page);
-                    Response.Redirect("/index.aspx");
-                }
-                else
-                {
-                    selectMyInfo();
-                }
-                if (HttpContext.Current.Session["mem_id"] == null)
-                {
-                    Session["mem_id"] = "billip";
-                }
-
-
-                selectMyInfo();
+                Response.Write("<script language=javascript>alert('정상적으로 수정이 완료되었습니다.'); location.replace('/MyPage.aspx');</script language=javascript>");
             }
-
-            protected void selectMyInfo()
+            else
             {
-                if (Session["mem_id"] != null)
-                {
-                    MemberDao member = new MemberDao();
-
-                    Member mem = new Member();
-
-                    mem.Mem_id = Session["mem_id"].ToString();
-
-                    Member resultMem = member.selectMemberByMem_id(mem);
-
-                    mem_id.Text = resultMem.Mem_id;
-                    mem_name.Text = resultMem.Mem_name;
-                    mem_img.Value = resultMem.Mem_img_url;
-                }
+                Response.Write("<script language=javascript>alert('수정이 정상적으로 되지 않았습니다.'); location.replace('/MyPage.aspx');</script language=javascript>");
             }
-            protected void btnLogout_Click(object sender, EventArgs e)
-            {
-                Session.Abandon();
-                Response.Redirect("/index.aspx");
-            }
+            
+        }
 
-            protected void btnMypage_Click(object sender, EventArgs e)
-            {
-                Response.Redirect("/MyPage.aspx");
-            }
+    }
 
 
-            protected void updateButton_Click(object sender, EventArgs e)
-            {
-                MemberDao member = new MemberDao();
-
-                Member mem = new Member();
-
-                mem.Mem_pw = mem_pw.Text;
-                mem.Mem_phone = mem_phone.Text;
-                mem.Mem_ques = QnAList.SelectedItem.Text;
-                mem.Mem_answer = mem_ans.Text;
-
-                int check = member.UpdatetMember(mem);
-
-                if (mem_pw.Text.Equals("") || mem_ans.Text.Equals("") || mem_phone.Text.Equals(""))
-                {
-                    Page.ClientScript.RegisterStartupScript(this.GetType(), "displayalertmessage", "alert('입력되지 않은 항목이 있습니다.');", true);
-                }
-                else if (mem_pw.Text.Length < 6)
-                {
-                    Page.ClientScript.RegisterStartupScript(this.GetType(), "displayalertmessage", "alert('비밀번호는 6자 이상으로 입력해주세요.');", true);
-                }
-
-                else
-                {
-                    member.UpdatetMember(mem);
-                    Response.Redirect("/MyPage.aspx");
-                }
-            }
-        
-    
 </script>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -880,7 +885,6 @@
 				<div class = "profileHeader">
 					<div class = "profileItem1">
 						<div class = "profileImage">
-
                                  <!-- 이미지 미리보기 부분-->
                                 <!-- 이미지 미리보기 부분-->
                         <asp:Image ID="mainImgItem" runat="server" ImageUrl="./img/UserNoneImage.png"	CssClass="userImageStyle"/>
@@ -889,7 +893,7 @@
 							<div class = "ID">
 								<span class = "idSpan1">
                                     <asp:Label ID="mem_id" runat="server" Text=""></asp:Label></span>
-								<span class = "idSpan2">(<asp:Label ID="mem_name" runat="server" Text=""></asp:Label>)</span>
+								<span class = "idSpan2">(<asp:Label ID="mem_name" runat="server" Text=""></span>
 							</div>
 							<div class = "imageEdit">
 
