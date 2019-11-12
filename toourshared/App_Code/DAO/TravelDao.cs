@@ -691,7 +691,7 @@ public class TravelDao
         try
         {
             con = mydb.GetCon();
-            if (string.IsNullOrEmpty(searchText) == true) // 검색 문구가 있는 경우 그 값을 구해온다.
+            if (string.IsNullOrEmpty(searchText) == true)
                 Sql = "SELECT count(distinct(`travel`.`trv_no`)) as cnt FROM toourshared.travel ORDER BY trv_tot_rate DESC";
             else
                 Sql = "select count(distinct(`travel`.`trv_no`)) as cnt from toourshared.travel as travel, toourshared.travel_day as travel_day, toourshared.map as map where (travel.trv_no = travel_day.trv_no) AND (travel_day.trv_day_no = map.trv_day_no) AND ((travel.trv_title like '%" + searchText + "%') OR (travel.trv_tag like '%" + searchText + "%') OR (travel_day.trv_day_content like '%" + searchText + "%') OR (map.map_route like '%" + searchText + "')) ORDER BY trv_tot_rate DESC";
@@ -726,7 +726,7 @@ public class TravelDao
         try
         {
             con = mydb.GetCon();
-            if (string.IsNullOrEmpty(searchText) == true) // 검색 문구가 있는 경우 그 값을 구해온다.
+            if (string.IsNullOrEmpty(searchText) == true)
                 Sql = "SELECT count(distinct((`travel`.`trv_no`))) as trvNoCnt, count(distinct(follower.fol_id)) as folCnt FROM toourshared.travel as travel, toourshared.travel_day as travel_day, toourshared.map as map, toourshared.follower as follower WHERE((travel.trv_no = travel_day.trv_no) AND(travel_day.trv_day_no = map.trv_day_no) AND(travel.mem_id = follower.mem_id)) ORDER BY travel.trv_create_time DESC, folCnt DESC";
             else
                 Sql = "SELECT count(distinct((`travel`.`trv_no`))) as trvNoCnt, count(distinct(follower.fol_id)) as folCnt FROM toourshared.travel as travel, toourshared.travel_day as travel_day, toourshared.map as map, toourshared.follower as follower WHERE((travel.trv_no = travel_day.trv_no) AND(travel_day.trv_day_no = map.trv_day_no) AND(travel.mem_id = follower.mem_id)) AND ((travel.trv_title like '%" + searchText + "%') OR(travel.trv_tag like '%" + searchText + "%') OR(travel_day.trv_day_content like '%" + searchText + "%') OR(map.map_route like '%" + searchText + "%')) ORDER BY travel.trv_create_time DESC, folCnt DESC";
@@ -761,10 +761,10 @@ public class TravelDao
         try
         {
             con = mydb.GetCon();
-            if (string.IsNullOrEmpty(searchText) == true) // 검색 문구가 있는 경우 그 값을 구해온다.
-                Sql = "SELECT count(*) as cnt FROM toourshared.travel ORDER BY trv_create_time DESC limit " + limit1 + ", " + limit2;
+            if (string.IsNullOrEmpty(searchText) == true)
+                Sql = "SELECT count(distinct(travel.trv_no)) as trvNo, count(lik.mem_id) as cnt FROM toourshared.like as lik, toourshared.travel as travel, toourshared.travel_day as travel_day, toourshared.map as map WHERE(travel.trv_no = lik.trv_no AND travel.trv_no = travel_day.trv_no AND travel_day.trv_day_no = map.trv_day_no) AND date(travel.trv_create_time) between date_sub(sysdate(), INTERVAL 14 DAY) and date(sysdate()) order by cnt desc";
             else
-                Sql = "SELECT count(*) as cnt FROM toourshared.travel as travel, toourshared.travel_day as travel_day WHERE (travel.trv_no = travel_day.trv_no) AND ((travel_.trv_title like '%" + searchText + "%') OR (travel.trv_tag like '%" + searchText + "%') OR (travel_day.trv_day_content like '%" + searchText + "%')) ORDER BY trv_create_time DESC limit " + limit1 + ", " + limit2;
+                Sql = "SELECT count(distinct(travel.trv_no)) as trvNo, count(lik.mem_id) as cnt FROM toourshared.like as lik, toourshared.travel as travel, toourshared.travel_day as travel_day, toourshared.map as map WHERE(travel.trv_no = lik.trv_no AND travel.trv_no = travel_day.trv_no AND travel_day.trv_day_no = map.trv_day_no) AND date(travel.trv_create_time) between date_sub(sysdate(), INTERVAL 14 DAY) and date(sysdate()) AND ((travel.trv_title like '%" + searchText + "%') OR (travel.trv_tag like '%" + searchText + "%') OR (travel_day.trv_day_content like '%" + searchText + "%') OR (map.map_route like '%" + searchText + "%')) order by cnt desc";
 
             MySqlCommand cmd = new MySqlCommand(Sql, con);
             con.Open();
@@ -772,7 +772,7 @@ public class TravelDao
             MySqlDataReader reader = cmd.ExecuteReader();
             if (reader.Read())
             {
-                returnInt = int.Parse(reader["cnt"].ToString());
+                returnInt = int.Parse(reader["trvNo"].ToString());
             }
 
             reader.Close();
@@ -784,6 +784,7 @@ public class TravelDao
         return returnInt;
     }
 
+    // 최신 순 Travel DTO List형식으로 반환하는 함수
     public List<Travel> getTravelOrderByCreateTimeDesc(string searchText, int limit1 = 0, int limit2 = 5)
     {
         // default param limit 0, 5
@@ -848,6 +849,7 @@ public class TravelDao
         return returnList;
     }
 
+    // 평점 순 Travel DTO List형식으로 반환하는 함수
     public List<Travel> getTravelOrderByTotRateDesc(string searchText, int limit1 = 0, int limit2 = 5)
     {
         // default param limit 0, 5
@@ -900,6 +902,7 @@ public class TravelDao
         return returnList;
     }
 
+    // 팔로워 순 Travel DTO List형식으로 반환하는 함수
     public List<Travel> getTravelOrderByFollowerDesc(string searchText, int limit1 = 0, int limit2 = 5)
     {
         // default param limit 0, 5
@@ -947,6 +950,7 @@ public class TravelDao
         return returnList;
     }
 
+    // HOT 순 Travel DTO List형식으로 반환하는 함수
     public List<Travel> getTravelOrderByHotDesc(string searchText, int limit1 = 0, int limit2 = 5)
     {
         // default param limit 0, 5
@@ -960,12 +964,9 @@ public class TravelDao
         {
             con = mydb.GetCon();
             if (string.IsNullOrEmpty(searchText) == true)
-                Sql = "SELECT * FROM toourshared.travel ORDER BY trv_tot_rate DESC limit " + limit1 + ", " + limit2;
+                Sql = "SELECT distinct((`travel`.`trv_no`)) as trvNo, `travel`.`trv_secret` as trv_secret, `travel`.`trv_views` as trv_views, `travel`.`trv_tot_rate` as trv_tot_rate, `travel`.`trv_main_img` as trv_main_img, `travel`.`trv_title` as trv_title, `travel`.`trv_tag` as trv_tag, `travel`.`trv_timestamp` as trv_timestamp, `travel`.`trv_create_time` as trv_create_time, `travel`.`loc_name` as loc_name, `travel`.`mem_id` as mem_id, count(lik.mem_id) as cnt FROM toourshared.like as lik, toourshared.travel as travel, toourshared.travel_day as travel_day, toourshared.map as map WHERE(travel.trv_no = lik.trv_no AND travel.trv_no = travel_day.trv_no AND travel_day.trv_day_no = map.trv_day_no) AND date(travel.trv_create_time) between date_sub(sysdate(), INTERVAL 14 DAY) and date(sysdate()) group by travel.trv_no order by cnt desc limit " + limit1 + ", " + limit2;
             else
-                Sql = "SELECT * FROM toourshared.travel as travel, toourshared.travel_day as travel_day, toourshared.map as map" +
-                "WHERE(travel.trv_no = travel_day.trv_no) AND(travel_day.trv_day_no = map_trv.day_no) AND" +
-                "((travel.trv_title like '%" + searchText + "%') OR(travel.trv_tag like '%" + searchText + "%') OR(travel_day.trv_day_content like '%" + searchText + "%') OR(map.map_route like '%" + searchText + "%'))" +
-                "ORDER BY trv_tot_rate DESC limit " + limit1 + ", " + limit2;
+                Sql = "SELECT distinct((`travel`.`trv_no`)) as trvNo, `travel`.`trv_secret` as trv_secret, `travel`.`trv_views` as trv_views, `travel`.`trv_tot_rate` as trv_tot_rate, `travel`.`trv_main_img` as trv_main_img, `travel`.`trv_title` as trv_title, `travel`.`trv_tag` as trv_tag, `travel`.`trv_timestamp` as trv_timestamp, `travel`.`trv_create_time` as trv_create_time, `travel`.`loc_name` as loc_name, `travel`.`mem_id` as mem_id, count(lik.mem_id) as cnt FROM toourshared.like as lik, toourshared.travel as travel, toourshared.travel_day as travel_day, toourshared.map as map WHERE(travel.trv_no = lik.trv_no AND travel.trv_no = travel_day.trv_no AND travel_day.trv_day_no = map.trv_day_no) AND date(travel.trv_create_time) between date_sub(sysdate(), INTERVAL 14 DAY) and date(sysdate()) AND ((travel.trv_title like '%" + searchText + "%') OR (travel.trv_tag like '%" + searchText + "%') OR (travel_day.trv_day_content like '%" + searchText + "%') OR (map.map_route like '%" + searchText + "%')) group by travel.trv_no order by cnt desc limit " + limit1 + ", " + limit2;
 
             MySqlCommand cmd = new MySqlCommand(Sql, con);
             con.Open();
@@ -974,7 +975,7 @@ public class TravelDao
             while (reader.Read())
             {
                 travel = new Travel();
-                travel.Trv_no = reader["trv_no"].ToString();
+                travel.Trv_no = reader["trvNo"].ToString();
                 travel.Trv_secret = reader["trv_secret"].ToString();
                 travel.Trv_views = reader["trv_views"].ToString();
                 travel.Trv_tot_rate = reader["trv_tot_rate"].ToString();

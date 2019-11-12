@@ -31,9 +31,6 @@ namespace tooushared.DAO
 
         public string InsertMember(Member member)
         {
-
-
-
             string result = "";
             if (member.Mem_id == "" && member.Mem_pw == "" && member.Mem_name == "")
             {
@@ -67,9 +64,6 @@ namespace tooushared.DAO
                 cmd.Parameters.AddWithValue("@mem_reg_datetime", member.Mem_reg_datetime);
                 cmd.Parameters.AddWithValue("@mem_timestmap", member.Mem_timestmap);
                 cmd.Parameters.AddWithValue("@mem_img_url", member.Mem_img_url);
-
-
-
 
                 con.Open();
                 cmd.ExecuteNonQuery();
@@ -113,65 +107,51 @@ namespace tooushared.DAO
         //public List<Member> selectMember()
         public Member selectMemberByMem_id(Member member)
         {
-
             MyDB mydb = new MyDB();
-            
-            Member resultMember = new Member();
+            Member mem = new Member();
             MySqlConnection con;
+            MySqlCommand cmd;
+            MySqlDataReader reader;
 
-            try
+            using (con = mydb.GetCon())
             {
+                string Sql = "SELECT * FROM toourshared.member WHERE mem_id = @mem_id";
 
-                con = mydb.GetCon();
-
-                string Sql = "SELECT member.mem_id, member.mem_state, member.mem_phone, member.mem_pw, member.mem_name, member.mem_sex, member.mem_ques, member.mem_answer, member.mem_birth, member.mem_email, member.mem_reg_datetime, member.mem_timestmap, member.mem_img_url FROM toourshared.member where mem_id=@mem_id";
-
-                
-                MySqlCommand cmd = new MySqlCommand(Sql, con);
-
+                cmd = new MySqlCommand(Sql, con);
                 cmd.Parameters.AddWithValue("@mem_id", member.Mem_id);
 
                 con.Open();
-                MySqlDataReader rd = cmd.ExecuteReader();
+                reader = cmd.ExecuteReader();
 
-                if (rd.HasRows)
+                if(reader.Read())
                 {
-                        rd.Read();
+                    mem.Mem_id = reader["mem_id"].ToString();
+                    mem.Mem_state = reader["mem_state"].ToString();
+                    mem.Mem_phone = reader["mem_phone"].ToString();
+                    mem.Mem_pw = reader["mem_pw"].ToString();
+                    mem.Mem_name = reader["mem_name"].ToString();
+                    mem.Mem_sex = reader["mem_sex"].ToString();
+                    mem.Mem_ques = reader["mem_ques"].ToString();
+                    mem.Mem_answer = reader["mem_answer"].ToString();
+                    mem.Mem_birth = reader["mem_birth"].ToString();
+                    mem.Mem_email = reader["mem_email"].ToString();
+                    mem.Mem_reg_datetime = reader["mem_reg_datetime"].ToString();
+                    mem.Mem_timestmap = reader["mem_timestmap"].ToString();
+                    mem.Mem_img_url = reader["mem_img_url"].ToString();
 
-                        resultMember.Mem_id = rd["mem_id"].ToString();
-                        resultMember.Mem_state = rd["mem_state"].ToString();
-                        resultMember.Mem_phone = rd["mem_phone"].ToString();
-                        resultMember.Mem_pw = rd["mem_pw"].ToString();
-                        resultMember.Mem_name = rd["mem_name"].ToString();
-                        resultMember.Mem_sex = rd["mem_sex"].ToString();
-                        resultMember.Mem_ques = rd["mem_ques"].ToString();
-                        resultMember.Mem_answer = rd["mem_answer"].ToString();
-                        resultMember.Mem_birth = rd["mem_birth"].ToString();
-                        resultMember.Mem_email = rd["mem_email"].ToString();
-                        resultMember.Mem_reg_datetime = rd["mem_reg_datetime"].ToString();
-                        resultMember.Mem_timestmap = rd["mem_timestmap"].ToString();
-
-                        string mainImg = rd["mem_img_url"].ToString();
-                    if (mainImg == "noImage")
-                        mainImg = "UserNoneImage.png";
-
-                    resultMember.Mem_img_url = mainImg;
-
-                    //lstMember.Add(tmpMemberPointer);
-                    rd.Close();
-                    con.Close();
-                    return resultMember;
-
+                    // mem_img_url 컬럼에 NULL or EMPTY or "noImage" 일 경우 "./img/memberNoImage.png" 로 속성 값 적용
+                    if(string.IsNullOrEmpty(mem.Mem_img_url) || mem.Mem_img_url == "noImage")
+                        mem.Mem_img_url = "./img/memberNoImage.png";
                 }
             }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine(ex.ToString());
-            }
 
+            if (reader != null)
+                reader.Close();
 
+            if (con != null)
+                con.Close();
 
-            return resultMember;
+            return mem;
         }
 
         public int Login(Member member)

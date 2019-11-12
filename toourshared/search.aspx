@@ -8,6 +8,7 @@
 
     int searchType;
     string searchText = "";
+    string QueryStringHashTag = "";
 
     protected List<Travel> getTravelBySearchType(string searchText, int limit1, int limit2)
     {
@@ -61,6 +62,14 @@
 
         if (Request.QueryString["text"] != null)
             searchText = Request.QueryString["text"].ToString();
+
+        if (Request.QueryString["hashtag"] != null) // 해시태그를 통한 search 페이지 접근 시
+        {
+            QueryStringHashTag = Request.QueryString["hashtag"].ToString(); // QueryString을 받고
+            searchText = QueryStringHashTag.ToString(); // searchText에 해시태그 값을 담고
+            inputText.Text = QueryStringHashTag.ToString(); // 검색 상자에 해시태그 값을 넣고
+            Page.GetPostBackEventReference(Button1); // 검색함수 호출
+        }
     }
 
     protected void search()
@@ -346,14 +355,18 @@
                             "<div class=\"boardUserTime\">\n" +
                                 "<span style = \"cursor: default;\">" + timestampConvert.TimeStampToString(travelList[i].Trv_create_time.ToString()) + "</span>\n" +
                             "</div>\n" +
-                        "</div>\n" +
-                        "<div class=\"boardScore\" style=\"cursor: default;\">" +
-                            "<span class=\"Score1\">" + starText + "</span>\n" +
-                            "<span class=\"Score3\">(" + d_starCount + ")</span>\n" +
-                        "</div>\n" +
+                        "</div>\n");
+
+        if (i_starCount > 0)
+        {
+            Response.Write("<div class=\"boardScore\" style=\"cursor: default;\">\n" +
+                                    "<span class=\"Score1\">" + starText + "</span>\n" +
+                                    "<span class=\"Score3\">(" + d_starCount + ")</span>\n" +
+                                "</div>\n");
+        }
+        Response.Write("</div>\n" +
                     "</div>\n" +
-                "</div>\n" +
-            "</div>\n");
+                "</div>\n");
     }
     %>
                             </div>
@@ -381,7 +394,7 @@
         else
             li = "<li>";
 
-        if (i < totalPageCount)
+        if (i <= totalPageCount)
         {
             Response.Write("<a href=\"" + CurrentUrl + "&page=" + i + "\">" + li + i + "</li></a>\n");
         }
