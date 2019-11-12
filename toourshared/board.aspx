@@ -1,5 +1,6 @@
 ﻿<%@ Page Language="C#" %>
-<%@ Import Namespace="Newtonsoft.Json.Linq" %>  
+
+<%@ Import Namespace="Newtonsoft.Json.Linq" %>
 
 <!DOCTYPE html>
 
@@ -234,14 +235,15 @@
         foreach (var map in mapList)
         {
             tmpHidden = new HtmlInputHidden();
-            tmpHidden.Name = "mapData_"+index;
-            tmpHidden.ID = "mapData_"+index; // set the id
+            tmpHidden.Name = "mapData_" + index;
+            tmpHidden.ID = "mapData_" + index; // set the id
             tmpHidden.Value = map.Map_data;
             PlaceHolder_hidden.Controls.Add(tmpHidden);
             index++;
         }
     }
 
+<<<<<<< HEAD
     protected string HtmlSpecialChars(string Str)
     {
         string returnStr = "";
@@ -281,6 +283,9 @@
 
                 CommentDao commentDao = new CommentDao(); // commentDAO 객체 생성
                 commentDao.InsertComment(comment); // comment 데이터 삽입
+=======
+
+>>>>>>> 8451cd397e6e51e1676f374e17130bcebf3bb693
 
                 TravelDao travelDao = new TravelDao();
                 travelDao.setTotRateByTrvNo(int.Parse(trv_no.ToString()), memberScore); // TotRate 최신화 작업
@@ -1127,7 +1132,7 @@
                                             foreach (var item in ja)
                                             {
                                                 placename = item["place_name"].ToString();
-                                                if(item["road_address_name"].ToString() != "undefined") roadaddress = item["road_address_name"].ToString();
+                                                if (item["road_address_name"].ToString() != "undefined") roadaddress = item["road_address_name"].ToString();
                                                 phone = item["phone"].ToString();
 
                                                 Response.Write(placename + "<br />");
@@ -1136,7 +1141,7 @@
                                             }
 
                                         }
-                                        catch(Exception ex)
+                                        catch (Exception ex)
                                         {
                                             System.Diagnostics.Debug.WriteLine(ex.ToString());
                                         }
@@ -1160,7 +1165,7 @@
                                              string placename = "";
                                              string placename2 = "";
                                              string placename3 = "";
-                                             foreach(var item in ja2)
+                                             foreach (var item in ja2)
                                              {
                                                  placename = item["costType"].ToString();
                                                  placename2 = item["cost"].ToString();
@@ -1171,7 +1176,7 @@
 
 
                                          }
-                                         catch(Exception ex)
+                                         catch (Exception ex)
                                          {
                                              System.Diagnostics.Debug.WriteLine(ex.ToString());
                                          }
@@ -1327,69 +1332,79 @@
     <script>
 
 
-        
+
 
         // Drawing Manager에서 데이터를 가져와 도형을 표시할 아래쪽 지도 div
-var mapContainer = document.getElementById('total_map'),
-    mapOptions = { 
-        center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
-        level: 3 // 지도의 확대 레벨
-    };
+        var mapContainer = document.getElementById('total_map'),
+            mapOptions = {
+                center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+                level: 3 // 지도의 확대 레벨
+            };
 
-// 지도 div와 지도 옵션으로 지도를 생성합니다
-var map = new kakao.maps.Map(mapContainer, mapOptions),
-    overlays = []; // 지도에 그려진 도형을 담을 배열
+        // 지도 div와 지도 옵션으로 지도를 생성합니다
+        var map = new kakao.maps.Map(mapContainer, mapOptions),
+            overlays = []; // 지도에 그려진 도형을 담을 배열
 
-function getDataFromDrawingMap(mapDataId, instrokeColor, infillColor) {
-    // Drawing Manager에서 그려진 데이터 정보를 가져옵니다 
+        function getDataFromDrawingMap(mapDataId, instrokeColor, infillColor) {
+            // Drawing Manager에서 그려진 데이터 정보를 가져옵니다 
 
-    var data = JSON.parse(document.getElementById(mapDataId).value);
-    console.info(data);
+            var data = JSON.parse(document.getElementById(mapDataId).value);
+            console.info(data);
 
 
-    // 지도에 가져온 데이터로 도형들을 그립니다
-        // 지도에 가져온 데이터로 도형들을 그립니다
-    //drawMarker(data[kakao.maps.drawing.OverlayType.MARKER]);
-    //drawPolyline(data[kakao.maps.drawing.OverlayType.POLYLINE]);
-    //drawRectangle(data[kakao.maps.drawing.OverlayType.RECTANGLE]);
-    //drawCircle(data[kakao.maps.drawing.OverlayType.CIRCLE]);
-    //drawPolygon(data[kakao.maps.drawing.OverlayType.POLYGON]);
-    //    drawArrow(data[kakao.maps.drawing.OverlayType.POLYLINE]);
-    //    drawEllipse(data[kakao.maps.drawing.OverlayType.ELLIPSE]);
+            // 지도에 가져온 데이터로 도형들을 그립니다
+            // 지도에 가져온 데이터로 도형들을 그립니다
+            //drawMarker(data[kakao.maps.drawing.OverlayType.MARKER]);
+            //drawPolyline(data[kakao.maps.drawing.OverlayType.POLYLINE]);
+            //drawRectangle(data[kakao.maps.drawing.OverlayType.RECTANGLE]);
+            //drawCircle(data[kakao.maps.drawing.OverlayType.CIRCLE]);
+            //drawPolygon(data[kakao.maps.drawing.OverlayType.POLYGON]);
+            //    drawArrow(data[kakao.maps.drawing.OverlayType.POLYLINE]);
+            //    drawEllipse(data[kakao.maps.drawing.OverlayType.ELLIPSE]);
 
-         drawMarker(data["marker"], instrokeColor, infillColor);
-        drawPolyline(data["polyline"], instrokeColor, infillColor);
-        drawRectangle(data["rectangle"], instrokeColor, infillColor);
-        drawCircle(data["circle"], instrokeColor, infillColor);
-        drawPolygon(data["polygon"], instrokeColor, infillColor);
-        drawEllipse(data["ellipse"], instrokeColor, infillColor);
-        drawArrow(data["arrow"], instrokeColor, infillColor);
+            drawMarker(data["marker"], instrokeColor, infillColor);
+            drawPolyline(data["polyline"], instrokeColor, infillColor);
+            drawRectangle(data["rectangle"], instrokeColor, infillColor);
+            drawCircle(data["circle"], instrokeColor, infillColor);
+            drawPolygon(data["polygon"], instrokeColor, infillColor);
+            drawEllipse(data["ellipse"], instrokeColor, infillColor);
+            drawArrow(data["arrow"], instrokeColor, infillColor);
 
-}
+        }
 
-// 아래 지도에 그려진 도형이 있다면 모두 지웁니다
-function removeOverlays() {
-    var len = overlays.length, i = 0;
+        // 아래 지도에 그려진 도형이 있다면 모두 지웁니다
+        function removeOverlays() {
+            var len = overlays.length, i = 0;
 
-    for (; i < len; i++) {
-        overlays[i].setMap(null);
-    }
+            for (; i < len; i++) {
+                overlays[i].setMap(null);
+            }
 
-    overlays = [];
-}
+            overlays = [];
+        }
 
 
         function drawArrow(arrow, instrokeColor, infillColor) {
             if (arrow != [] || arrow != "" || arrow != null) {
-
-
-                var len = arrow.length,
-                    i = 0;
+                var len = arrow.length, i = 0;
 
                 for (; i < len; i++) {
                     var path = pointsToPath(arrow[i].points);
-                    manager.put(kakao.maps.drawing.OverlayType.ARROW, path);
+                    var style = arrow[i].options;
+                    var polyline = new kakao.maps.Polyline({
+                        map: map,
+                        endArrow: true,
+                        path: path,
+                        strokeColor: instrokeColor,
+                        strokeOpacity: style.strokeOpacity,
+                        strokeStyle: style.strokeStyle,
+                        strokeWeight: style.strokeWeight
+                    });
+
+                    overlays.push(polyline);
                 }
+
+
             }
         }
 
@@ -1399,18 +1414,30 @@ function removeOverlays() {
                     i = 0;
 
                 for (; i < len; i++) {
-                    var style = ellipse[i].options;
-                    bounds = new kakao.maps.LatLngBounds(
-                        new kakao.maps.LatLng(ellipse[i].sPoint.y, ellipse[i].sPoint.x),
-                        new kakao.maps.LatLng(ellipse[i].ePoint.y, ellipse[i].ePoint.x)
-                    );
-                    manager.put(kakao.maps.drawing.OverlayType.ELLIPSE, bounds);
+
+
+                    var ellipse = new kakao.maps.Ellipse({
+                        map: map,
+                        center: new daum.maps.LatLng(ellipse[i].center.y, ellipse[i].center.x),
+                        rx: ellipse[i].rx,
+                        ry: ellipse[i].ry,
+                        strokeWeight: 2,
+                        strokeColor: instrokeColor,
+                        strokeOpacity: 0.8,
+                        strokeStyle: 'solid',
+                        fillColor: infillColor,
+                        fillOpacity: 0.3
+
+                    });
+                    overlays.push(ellipse);
+
+
                 }
             }
-    }
+        }
 
 
-// Drawing Manager에서 가져온 데이터 중 마커를 아래 지도에 표시하는 함수입니다
+        // Drawing Manager에서 가져온 데이터 중 마커를 아래 지도에 표시하는 함수입니다
         function drawMarker(markers, instrokeColor, infillColor) {
             if (markers != [] || markers != "" || markers != null) {
                 var len = markers.length, i = 0;
@@ -1425,9 +1452,9 @@ function removeOverlays() {
                     overlays.push(marker);
                 }
             }
-}
+        }
 
-// Drawing Manager에서 가져온 데이터 중 선을 아래 지도에 표시하는 함수입니다
+        // Drawing Manager에서 가져온 데이터 중 선을 아래 지도에 표시하는 함수입니다
         function drawPolyline(lines, instrokeColor, infillColor) {
             if (lines != [] || lines != "" || lines != null) {
                 var len = lines.length, i = 0;
@@ -1438,7 +1465,7 @@ function removeOverlays() {
                     var polyline = new kakao.maps.Polyline({
                         map: map,
                         path: path,
-                        strokeColor: style.strokeColor,
+                        strokeColor: instrokeColor,
                         strokeOpacity: style.strokeOpacity,
                         strokeStyle: style.strokeStyle,
                         strokeWeight: style.strokeWeight
@@ -1447,9 +1474,9 @@ function removeOverlays() {
                     overlays.push(polyline);
                 }
             }
-}
+        }
 
-// Drawing Manager에서 가져온 데이터 중 사각형을 아래 지도에 표시하는 함수입니다
+        // Drawing Manager에서 가져온 데이터 중 사각형을 아래 지도에 표시하는 함수입니다
         function drawRectangle(rects, instrokeColor, infillColor) {
             if (rects != [] || rects != "" || rects != null) {
                 var len = rects.length, i = 0;
@@ -1462,20 +1489,20 @@ function removeOverlays() {
                             new kakao.maps.LatLng(rects[i].sPoint.y, rects[i].sPoint.x),
                             new kakao.maps.LatLng(rects[i].ePoint.y, rects[i].ePoint.x)
                         ),
-                        strokeColor: style.strokeColor,
+                        strokeColor: instrokeColor,
                         strokeOpacity: style.strokeOpacity,
                         strokeStyle: style.strokeStyle,
                         strokeWeight: style.strokeWeight,
-                        fillColor: style.fillColor,
+                        fillColor: infillColor,
                         fillOpacity: style.fillOpacity
                     });
 
                     overlays.push(rect);
                 }
             }
-}
+        }
 
-// Drawing Manager에서 가져온 데이터 중 원을 아래 지도에 표시하는 함수입니다
+        // Drawing Manager에서 가져온 데이터 중 원을 아래 지도에 표시하는 함수입니다
         function drawCircle(circles, instrokeColor, infillColor) {
             if (circles != [] || circles != "" || circles != null) {
                 var len = circles.length, i = 0;
@@ -1497,9 +1524,9 @@ function removeOverlays() {
                     overlays.push(circle);
                 }
             }
-}
+        }
 
-// Drawing Manager에서 가져온 데이터 중 다각형을 아래 지도에 표시하는 함수입니다
+        // Drawing Manager에서 가져온 데이터 중 다각형을 아래 지도에 표시하는 함수입니다
         function drawPolygon(polygons, instrokeColor, infillColor) {
             if (polygons != [] || polygons != "" || polygons != null) {
                 var len = polygons.length, i = 0;
@@ -1521,7 +1548,7 @@ function removeOverlays() {
                     overlays.push(polygon);
                 }
             }
-}
+        }
 
 
 
@@ -1783,7 +1810,7 @@ function removeOverlays() {
 
         // Drawing Manager에서 가져온 데이터 중 
         // 선과 다각형의 꼭지점 정보를 kakao.maps.LatLng객체로 생성하고 배열로 반환하는 함수입니다 
-        function pointsToPath( points) {
+        function pointsToPath(points) {
             var len = points.length,
                 path = [],
                 i = 0;
@@ -1803,16 +1830,22 @@ function removeOverlays() {
         // c
         <%
         List<Map> mapList = getMapByTrvDayNo();
+<<<<<<< HEAD
         string [] color= { "#E53A40", "#F68657", "#EFDC05", "#58C9B9", "#a3daff", "#0080ff" , "#A593E0", "#C5C6B6", "#D09E88", "#FADAD8", "#fab1ce", "#fffff5", "#c8c8a9", "#3a5134" };
+=======
+        string[] color = { "#007bff", "#dc3545", "#fd7e14", "#28a745", "#17a2b8", "#ffc107", "#fff", "#20c997", "#6610f2" };
+>>>>>>> 8451cd397e6e51e1676f374e17130bcebf3bb693
         int colorIndex = 0;
         int index = 0;
+        JObject mapCenter;
         foreach (var map in mapList)
         {
+            mapCenter = JObject.Parse(map.Map_center);
 
-            Response.Write("var map_"+index+" = makeMapOption('map_" + index + "', new daum.maps.LatLng(33.450701, 126.570667), 3, 'mapData_" + index + "', '#39f', '#39f') ;");
-            Response.Write("setDrawingMapDataByManagerMapId(map_"+index+".manager, 'mapData_"+index+"');");
-            Response.Write("getDataFromDrawingMap('mapData_"+index+"', '"+color[colorIndex]+"', '"+color[colorIndex]+"');");
-            if(colorIndex < color.Length)
+            Response.Write("var map_" + index + " = makeMapOption('map_" + index + "', new daum.maps.LatLng("+mapCenter["Ha"]+", "+mapCenter["Ga"]+"), 3, 'mapData_" + index + "', '"+color[colorIndex]+"', '"+color[colorIndex]+"') ;");
+            Response.Write("setDrawingMapDataByManagerMapId(map_" + index + ".manager, 'mapData_" + index + "');");
+            Response.Write("getDataFromDrawingMap('mapData_" + index + "', '" + color[colorIndex] + "', '" + color[colorIndex] + "');");
+            if (colorIndex < color.Length)
             {
                 colorIndex++;
             }
@@ -1826,106 +1859,9 @@ function removeOverlays() {
 
         %>
 
-        // costItemrefresh
-        function refreashCostItem() {
+       
 
-            var costBody = document.getElementById('costBody'),
-                costHeader = document.getElementById('costHeader'),
-                fragment = document.createDocumentFragment(),
-                headerFragment = document.createDocumentFragment(),
-                itemList = '',
-                el, headerEl, totalCost = 0,
-                pindexTmp;
-
-            ;
-
-            // costBody 모든 자식 노드 삭제
-            while (costBody.hasChildNodes()) {
-                costBody.removeChild(costBody.firstChild);
-            }
-            CostItemList.forEach(function (currentValue, pindex) {
-                pindexTmp = pindex;
-                ////console.info(pindex);
-                ////console.info(currentValue);
-                el = document.createElement('div'),
-                    itemStr =
-
-                    '<div class="costItem-header">' +
-                    '         <span># ' + currentValue.place_name + '</span>' +
-                    '</div>' +
-                    '   <div class="costItem-body">' +
-                    '       <ul>';
-
-                currentValue.itemList.forEach(function (currentValue, index) {
-                    itemStr += '<li>' + currentValue.costType +
-                        '               <div class="btn btn-sm btn-warning" onclick="removeCostItemChild(' + pindex + ',' + index + ')">x</div>' +
-                        '<br/>' +
-                        setComa(currentValue.cost) + ' (' + currentValue.info + ')' + '</li>';
-                    totalCost += parseInt(currentValue.cost);
-                });
-
-                itemStr +=
-                    '<li>' +
-                    '   <div class="btn btn-secondary btn-sm" data-toggle="collapse" data-target="#collapseAddCost_' + pindex + '" aria-expanded="false" aria-controls="collapseAddCost_' + pindex + '">경비추가</div>' +
-                    '   <div class="collapse" id="collapseAddCost_' + pindex + '">' +
-                    '       <select id="addCost_costType_' + pindex + '" class="form-control form-control-sm">' +
-                    '           <option value="식비">식비</option>' +
-                    '           <option value="교통비">교통비</option>' +
-                    '           <option value="숙박비">숙박비</option>' +
-                    '           <option value="기타">기타</option>' +
-                    '       </select>' +
-                    '       <input id="addCost_cost_' + pindex + '" class="form-control form-control-sm" type="number" placeholder="비용">' +
-                    '       <input id="addCost_info_' + pindex + '" class="form-control form-control-sm" type="text" placeholder="비용 설명">' +
-                    '       <div class="btn btn-secondary btn-sm" onclick="pushCostItemChild(' + pindex + ')">+</div>' +
-                    //'       <div class="btn btn-secondary btn-sm" onclick="popCostItemChild(' + pindex + ')">-</div>' +
-
-                    '</div>' +
-                    '</li>' +
-                    '   </ul>' +
-                    '</div>' +
-                    '</div>';
-                el.innerHTML = itemStr;
-                //            el.setAttribute("draggable", 'true');
-                //            el.setAttribute("id", "travelPoint");
-                el.setAttribute("class", "costItem");
-
-
-                var itemEl = el;
-
-                fragment.appendChild(itemEl);
-
-                costBody.appendChild(fragment);
-
-            });
-
-            // 나중에 지도의 travelroute에서 추가할 버튼
-            //el = document.createElement('div'),
-            //    itemStr =
-
-            //    '<div class="btn btn-secondary btn-sm" onclick="addCostItemParent(' + pindexTmp + ')">+</div>';
-
-            //el.innerHTML = itemStr;
-            ////            el.setAttribute("draggable", 'true');
-            ////            el.setAttribute("id", "travelPoint");
-            //el.setAttribute("class", "costItem");
-
-
-            //var itemEl = el;
-
-            //fragment.appendChild(itemEl);
-
-            //costBody.appendChild(fragment);
-
-            ////--------------------
-
-
-            var headerStr =
-                '<span class="chTitle">전체 경비</span>' +
-                '<span class="chBody">💰 ' + setComa(totalCost) + '</span>';
-            costHeader.innerHTML = headerStr;
-
-
-        }
+    
 
     </script>
 </body>
