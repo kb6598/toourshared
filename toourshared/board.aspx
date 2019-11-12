@@ -1247,7 +1247,7 @@
                     List<String> hashtagList = getHashTagList();
                     for (int i = 0; i < hashtagList.Count; i++)
                     {
-                        Response.Write("<a href = \"search.aspx?hashtag=" + hashtagList[i].ToString() + "\"><div class = \"hashtag\">" + hashtagList[i].ToString() + "</div></a>\n");
+                        Response.Write("<a href = \"search.aspx?searchType=1&hashtag=" + hashtagList[i].ToString() + "\"><div class = \"hashtag\">" + hashtagList[i].ToString() + "</div></a>\n");
                     }
                 %>
             </div>
@@ -1292,7 +1292,7 @@
                                                                     CommentList[k].Mem_id + "\n" +
                                                                 "</a>\n" +
                                                             "</div>\n" +
-                                                            "<div class=\"writerTime\">" + CommentList[k].Cmt_timestamp + "</div>\n" +
+                                                            "<div class=\"writerTime\">" + timestampConvert.TimeStampToString( CommentList[k].Cmt_timestamp) + "</div>\n" +
                                                         "</div>\n" +
                                                     "</div>\n" +
                                                     "<div class = \"reply-content\">\n" +
@@ -1343,6 +1343,7 @@
 
 
         // Drawing Manager에서 데이터를 가져와 도형을 표시할 아래쪽 지도 div
+        //center 좌표 계산 필요
         var mapContainer = document.getElementById('total_map'),
             mapOptions = {
                 center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
@@ -1353,7 +1354,7 @@
         var map = new kakao.maps.Map(mapContainer, mapOptions),
             overlays = []; // 지도에 그려진 도형을 담을 배열
 
-        function getDataFromDrawingMap(mapDataId, instrokeColor, infillColor) {
+        function getDataFromDrawingMap(mapDataId, instrokeColor, infillColor, iconUrl) {
             // Drawing Manager에서 그려진 데이터 정보를 가져옵니다 
 
             var data = JSON.parse(document.getElementById(mapDataId).value);
@@ -1370,7 +1371,7 @@
             //    drawArrow(data[kakao.maps.drawing.OverlayType.POLYLINE]);
             //    drawEllipse(data[kakao.maps.drawing.OverlayType.ELLIPSE]);
 
-            drawMarker(data["marker"], instrokeColor, infillColor);
+            drawMarker(data["marker"], iconUrl);
             drawPolyline(data["polyline"], instrokeColor, infillColor);
             drawRectangle(data["rectangle"], instrokeColor, infillColor);
             drawCircle(data["circle"], instrokeColor, infillColor);
@@ -1443,15 +1444,25 @@
                 }
             }
         }
+        // 숫자 포멧팅
+        function pad(n, width) {
+            n = n + '';
+            return n.length >= width ? n : new Array(width - n.length + 1).join('0') + n;
+        }
 
 
         // Drawing Manager에서 가져온 데이터 중 마커를 아래 지도에 표시하는 함수입니다
-        function drawMarker(markers, instrokeColor, infillColor) {
+        function drawMarker(markers, iconUrl) {
             if (markers != [] || markers != "" || markers != null) {
                 var len = markers.length, i = 0;
+             
+                var icon =  new kakao.maps.MarkerImage(
+                    iconUrl,
+                    new kakao.maps.Size(31, 35));
 
                 for (; i < len; i++) {
                     var marker = new kakao.maps.Marker({
+                        image: icon,
                         map: map,
                         position: new kakao.maps.LatLng(markers[i].y, markers[i].x),
                         zIndex: markers[i].zIndex
@@ -1564,7 +1575,7 @@
 
         // input (맵객체id, 중심좌표, 지도 데이터를 포함한 hiddenfiled , inStrokeColor,inFillColor)
         // return -> {생성한 지도객체, 생성한 manager, }
-        function makeMapOption(mapId, mapCenter, mapLevel, mapDataInputId, inStrokeColor, inFillColor) {
+        function makeMapOption(mapId, mapCenter, mapLevel, mapDataInputId, inStrokeColor, inFillColor, markerIco) {
 
             var drawingMapContainer = document.getElementById(mapId),
                 drawingMap = {
@@ -1620,38 +1631,14 @@
                 markerOptions: { // 마커 옵션입니다
                     draggable: false, // 마커를 그리고 나서 드래그 가능하게 합니다
                     removable: false, // 마커를 삭제 할 수 있도록 x 버튼이 표시됩니다
-                    markerImages: [
-                        null, // API에서 제공하는 기본 마커 이미지
-                        {
-                            src: 'http://t1.daumcdn.net/localimg/localimages/07/2009/map/icon/ico_mn_13.png',
-                            width: 31,
-                            height: 35,
-                            shape: 'rect',
-                            coords: '0,0,31,35',
-                            hoverImage: {
-                                src: 'http://t1.daumcdn.net/localimg/localimages/07/2012/img/marker_normal.png',
-                                width: 33,
-                                height: 36,
-                                offsetX: 12,
-                                offsetY: 36,
-                                spriteWidth: 644,
-                                spriteHeight: 946,
-                                spriteOriginX: 10,
-                                spriteOriginY: 10
-                            },
-                            dragImage: {
-                                src: 'http://t1.daumcdn.net/localimg/localimages/07/2012/attach/pc_img/ico_comm.png',
-                                width: 20, // 마커 크기
-                                height: 20, // 마커 크기
-                                offsetX: 10, // 지도에 고정시킬 이미지 내 위치 좌표
-                                offsetY: 20, // 지도에 고정시킬 이미지 내 위치 좌표
-                                spriteWidth: 118, // 이미지 전체 크기
-                                spriteHeight: 111, // 이미지 전체 크기
-                                spriteOriginX: 0, // 이미지 중 마커로 사용할 위치
-                                spriteOriginY: 90 // 이미지 중 마커로 사용할 위치
-                            }
-                        }
-                    ]
+                    markerImages: [{
+                        src: markerIco,
+                        width: 31,
+                        height: 35,
+                        shape: 'rect',
+                        coords: '0,0,31,35'
+                    }
+                       ]
                 },
                 polylineOptions: { // 선 옵션입니다
                     draggable: false, // 그린 후 드래그가 가능하도록 설정합니다
@@ -1756,7 +1743,7 @@
                 i = 0;
 
             for (; i < len; i++) {
-                inManager.put(kakao.maps.drawing.OverlayType.MARKER, new kakao.maps.LatLng(markers[i].y, markers[i].x), 2);
+                inManager.put(kakao.maps.drawing.OverlayType.MARKER, new kakao.maps.LatLng(markers[i].y, markers[i].x), 0);
             }
         }
 
@@ -1839,17 +1826,19 @@
         <%
         List<Map> mapList = getMapByTrvDayNo();
         string [] color= { "#E53A40", "#F68657", "#EFDC05", "#58C9B9", "#a3daff", "#0080ff" , "#A593E0", "#C5C6B6", "#D09E88", "#FADAD8", "#fab1ce", "#fffff5", "#c8c8a9", "#3a5134" };
-
+        string[] marker = { "default_01.png", "default_02.png", "default_03.png", "default_04.png", "default_05.png", "default_06.png" , "default_07.png", "default_08.png", "default_09.png", "default_10.png", "default_11.png", "default_12.png", "default_13.png", "default_14.png" };
+        string icoDir = "./img/ico/marker/";
         int colorIndex = 0;
         int index = 0;
         JObject mapCenter;
         foreach (var map in mapList)
         {
             mapCenter = JObject.Parse(map.Map_center);
-
-            Response.Write("var map_" + index + " = makeMapOption('map_" + index + "', new daum.maps.LatLng("+mapCenter["Ha"]+", "+mapCenter["Ga"]+"), 3, 'mapData_" + index + "', '"+color[colorIndex]+"', '"+color[colorIndex]+"') ;");
+            //일일 경로 표시 지도
+            Response.Write("var map_" + index + " = makeMapOption('map_" + index + "', new daum.maps.LatLng("+mapCenter["Ha"]+", "+mapCenter["Ga"]+"), 3, 'mapData_" + index + "', '"+color[colorIndex]+"', '"+color[colorIndex]+"','"+icoDir+marker[colorIndex]+"') ;");
             Response.Write("setDrawingMapDataByManagerMapId(map_" + index + ".manager, 'mapData_" + index + "');");
-            Response.Write("getDataFromDrawingMap('mapData_" + index + "', '" + color[colorIndex] + "', '" + color[colorIndex] + "');");
+            // 모든 경로 표시 지도
+            Response.Write("getDataFromDrawingMap('mapData_" + index + "', '" + color[colorIndex] + "', '" + color[colorIndex] + "','"+icoDir+marker[colorIndex]+"');");
             if (colorIndex < color.Length)
             {
                 colorIndex++;
