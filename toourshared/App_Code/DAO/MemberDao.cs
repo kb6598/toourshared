@@ -17,17 +17,12 @@ namespace tooushared.DAO
 {
     public class MemberDao
     {
-
-
-
         public MemberDao()
         {
             //
             // TODO: 여기에 생성자 논리를 추가합니다.
             //
         }
-
-
 
         public string InsertMember(Member member)
         {
@@ -111,8 +106,9 @@ namespace tooushared.DAO
             Member mem = new Member();
             MySqlConnection con;
 
-            using (con = mydb.GetCon())
+            try
             {
+                con = mydb.GetCon();
                 string Sql = "SELECT * FROM toourshared.member as mem WHERE mem.mem_id = '" + memberDTO.Mem_id + "'";
 
                 MySqlCommand cmd = new MySqlCommand(Sql, con);
@@ -141,12 +137,11 @@ namespace tooushared.DAO
                         mem.Mem_img_url = "./img/memberNoImage.png";
                 }
 
-                if (reader != null)
-                    reader.Close();
+                reader.Close();
+                con.Close();
 
-                if (con != null)
-                    con.Close();
             }
+            catch(Exception e) {;}
 
             return mem;
         }
@@ -429,6 +424,42 @@ namespace tooushared.DAO
             }
 
             return result;
+        }
+
+        // member 존재 유무를 판단해주는 함수(존재하는 경우 true, 존재하지 않는 경우 false 반환)
+        public bool IsExistByMemberID(Member member)
+        {
+            bool returnBool = false;
+            int check = 0;
+
+            MyDB mydb = new MyDB();
+            MySqlConnection con;
+
+            try
+            {
+                con = mydb.GetCon();
+                String Sql = "SELECT count(*) as cnt FROM toourshared.member WHERE mem_id = '" + member.Mem_id + "'";
+
+                MySqlCommand cmd = new MySqlCommand(Sql, con);
+                con.Open();
+
+                MySqlDataReader reader = cmd.ExecuteReader();
+                if(reader.Read())
+                {
+                    check = int.Parse(reader["cnt"].ToString());
+                }
+
+                reader.Close();
+                con.Close();
+
+                if (check > 0) // 존재하는 경우 1이 반환될 것이고
+                    returnBool = true;
+                else // 그렇지 않은 경우 0이 반환될 것이다.
+                    returnBool = false;
+            }
+            catch (Exception e) {;}
+
+            return returnBool;
         }
     }
 }
