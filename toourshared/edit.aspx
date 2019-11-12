@@ -4,95 +4,85 @@
 
 <script runat="server">
 
-    protected void Page_Load(object sender, EventArgs e)
-    {
-        if (Session["mem_id"] == null)
-        {
-            MessageBox.Show("접근 할 수 없습니다.", this.Page);
-            Response.Redirect("/index.aspx");
-        }
-        else
-        {
-            selectMyInfo();
-        }
-        if (HttpContext.Current.Session["mem_id"] == null)
-        {
-            Session["mem_id"] = "billip";
-        }
-
-
-        selectMyInfo();
-    }
-
-    protected void selectMyInfo()
-    {
-        if (Session["mem_id"] != null)
-        {
-            MemberDao member = new MemberDao();
-
-            Member mem = new Member();
-
-            mem.Mem_id = Session["mem_id"].ToString();
-
-            Member resultMem = member.selectMemberByMem_id(mem);
-
-            mem_id.Text = resultMem.Mem_id;
-            mem_name.Text = resultMem.Mem_name;
-            mem_img.Value = resultMem.Mem_img_url;
-        }
-    }
-    protected void btnLogout_Click(object sender, EventArgs e)
-    {
-        Session.Abandon();
-        Response.Redirect("/index.aspx");
-    }
-
-    protected void btnMypage_Click(object sender, EventArgs e)
-    {
-        Response.Redirect("/MyPage.aspx");
-    }
-
-
-    protected void updateButton_Click(object sender, EventArgs e)
-    {
-        Member mem = new Member();
-        MemberDao Proupdate = new MemberDao();
-
-
-        mem.Mem_pw = mem_pw.Text;
-        mem.Mem_phone = mem_phone.Text;
-        mem.Mem_ques = QnAList.SelectedItem.Text;
-        mem.Mem_answer = Mem_answer.Text;
-
-        int check = member.UpdatetMember(member);
-
-        if (mem_pw.Text.Equals("") || mem_phone.Text.Equals(""))
-        {
-            Page.ClientScript.RegisterStartupScript(this.GetType(), "displayalertmessage", "alert('입력되지 않은 사항이 있습니다.');", true);
-        }
-        else
-        {
-
-           
-            int Member = Proupdate.UpdatetMember(member);
-
-            string str = Member.Mem_pw;
-
-            if (str == null)
+            protected void Page_Load(object sender, EventArgs e)
             {
-                Page.ClientScript.RegisterStartupScript(this.GetType(), "displayalertmessage", "alert('정확한 정보를 입력해 주세요.');", true);
+                if (Session["mem_id"] == null)
+                {
+                    MessageBox.Show("접근 할 수 없습니다.", this.Page);
+                    Response.Redirect("/index.aspx");
+                }
+                else
+                {
+                    selectMyInfo();
+                }
+                if (HttpContext.Current.Session["mem_id"] == null)
+                {
+                    Session["mem_id"] = "billip";
+                }
+
+
+                selectMyInfo();
+            }
+
+            protected void selectMyInfo()
+            {
+                if (Session["mem_id"] != null)
+                {
+                    MemberDao member = new MemberDao();
+
+                    Member mem = new Member();
+
+                    mem.Mem_id = Session["mem_id"].ToString();
+
+                    Member resultMem = member.selectMemberByMem_id(mem);
+
+                    mem_id.Text = resultMem.Mem_id;
+                    mem_name.Text = resultMem.Mem_name;
+                    mem_img.Value = resultMem.Mem_img_url;
+                }
+            }
+            protected void btnLogout_Click(object sender, EventArgs e)
+            {
+                Session.Abandon();
+                Response.Redirect("/index.aspx");
+            }
+
+            protected void btnMypage_Click(object sender, EventArgs e)
+            {
+                Response.Redirect("/MyPage.aspx");
             }
 
 
-            else
+            protected void updateButton_Click(object sender, EventArgs e)
             {
-                Session["userPW"] = str;
-                Response.Redirect("MyPage.aspx?name=" + member.Mem_name);
+                MemberDao member = new MemberDao();
+
+                Member mem = new Member();
+
+                mem.Mem_pw = mem_pw.Text;
+                mem.Mem_phone = mem_phone.Text;
+                mem.Mem_ques = QnAList.SelectedItem.Text;
+                mem.Mem_answer = mem_ans.Text;
+
+                int check = member.UpdatetMember(mem);
+
+                if (mem_pw.Text.Equals("") || mem_ans.Text.Equals("") || mem_phone.Text.Equals(""))
+                {
+                    Page.ClientScript.RegisterStartupScript(this.GetType(), "displayalertmessage", "alert('입력되지 않은 항목이 있습니다.');", true);
+                }
+                else if (mem_pw.Text.Length < 6)
+                {
+                    Page.ClientScript.RegisterStartupScript(this.GetType(), "displayalertmessage", "alert('비밀번호는 6자 이상으로 입력해주세요.');", true);
+                }
+
+                else
+                {
+                    member.UpdatetMember(mem);
+                    Response.Redirect("/MyPage.aspx");
+                }
             }
-        }
-    }
-
-
+        
+    
 </script>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
