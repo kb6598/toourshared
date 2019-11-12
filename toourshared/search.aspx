@@ -8,7 +8,7 @@
 
     int searchType;
     string searchText = "";
-    string QueryStringHashTag = "";
+    string HashTag = "";
 
     protected List<Travel> getTravelBySearchType(string searchText, int limit1, int limit2)
     {
@@ -61,22 +61,29 @@
         }
 
         if (Request.QueryString["text"] != null)
+        {
             searchText = Request.QueryString["text"].ToString();
+        }
 
         if (Request.QueryString["hashtag"] != null) // 해시태그를 통한 search 페이지 접근 시
         {
-            QueryStringHashTag = Request.QueryString["hashtag"].ToString(); // QueryString을 받고
-            searchText = QueryStringHashTag.ToString(); // searchText에 해시태그 값을 담고
-            inputText.Text = QueryStringHashTag.ToString(); // 검색 상자에 해시태그 값을 넣고
-            Page.GetPostBackEventReference(Button1); // 검색함수 호출
+            HashTag = Request.QueryString["hashtag"].ToString(); // board 페이지에서 search 페이지에 접근하기 위해 눌렀던 해시태그를 구해온다.
+            inputText.Text = HashTag.ToString();
+            search(1); // hashTag로 search 실행 시 
         }
     }
 
-    protected void search()
+    protected void search(int n = 0)
     {
-        string searchType = Request.QueryString["searchType"].ToString(); // searchType은 무조건 넣게 해놨으니 if문 조건안줘도 됨.
+        if (Request.QueryString["searchType"] == null)
+            searchType = 1;
+        else
+            searchType = int.Parse(Request.QueryString["searchType"].ToString());
+
+        string text = "";
         string page = "";
-        string text = inputText.Text.ToString();
+
+        text = inputText.Text.ToString();
 
         if (Request.QueryString["page"] != null)
             page = Request.QueryString["page"].ToString();
@@ -94,7 +101,7 @@
 
     protected void Button1_Click(object sender, EventArgs e)
     {
-        search();
+        search(0);
     }
 
     protected void inputText_TextChanged(object sender, EventArgs e)
@@ -136,8 +143,8 @@
 
     <script>
 
-        function rdoEvent(paramType){
-            window.location.href = "search.aspx?searchType=" + paramType;
+        function rdoEvent(paramType) {
+                window.location.href = "search.aspx?searchType=" + paramType;
         }
 
         function sidebarSwitch() {
