@@ -179,13 +179,9 @@ public class TravelDao
 
         try
         {
-
-
-
             con = mydb.GetCon();
 
             string Sql = "SELECT * FROM toourshared.travel where mem_id=@mem_id";
-
 
             MySqlCommand cmd = new MySqlCommand(Sql, con);
 
@@ -195,8 +191,7 @@ public class TravelDao
             MySqlDataReader rd = cmd.ExecuteReader();
 
             while (rd.Read())
-            {
-                
+            {                
                 result = new Travel();
                 result.Trv_no = rd["trv_no"].ToString();
                 result.Trv_secret = rd["trv_secret"].ToString();
@@ -210,11 +205,9 @@ public class TravelDao
                 result.Loc_name = rd["loc_name"].ToString();
                 result.Mem_id = rd["mem_id"].ToString();
 
-
                 //lstMember.Add(tmpMemberPointer);
 
                 resultList.Add(result);
-
             }
 
             con.Close();
@@ -225,9 +218,6 @@ public class TravelDao
         {
             System.Diagnostics.Debug.WriteLine(ex.ToString());
         }
-
-
-
         return resultList;
     }
 
@@ -260,9 +250,7 @@ public class TravelDao
 
         result = cmd.ExecuteNonQuery();
 
-
         con.Close();
-
 
         return result;
     }
