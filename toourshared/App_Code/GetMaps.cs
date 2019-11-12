@@ -25,7 +25,7 @@ public class GetMaps : System.Web.Services.WebService
     
 
     [WebMethod]
-    public string getMaps(string trv_no)
+    public void getMaps(string trv_no)
     {
         // trv_no를 통해 해당 travel의 travel_day list를 가져옴
         Travel_Day inTravel_Day = new Travel_Day();
@@ -48,11 +48,14 @@ public class GetMaps : System.Web.Services.WebService
             tmpMap = mapDao.selectMapByTrv_day_no(inMap);
             maps.Add(tmpMap);
         }
-
-        return JsonConvert.SerializeObject(maps);
+        
+               
+        Context.Response.Write(JsonConvert.SerializeObject(maps));
 
 
 
     }
+
+
 
 }

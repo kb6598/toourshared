@@ -1,4 +1,6 @@
 ﻿<%@ Page Language="C#" %>
+<%@ Import Namespace="Newtonsoft.Json.Linq" %>
+
 
 
 <script runat="server">
@@ -110,14 +112,14 @@
         inputText.Attributes["onkeyPress"] = "if(event.keyCode == 13) { " + Page.GetPostBackEventReference(Button1) + "; return false; }";
     }
 
-    protected List<string> testRouteCost()
+    protected List<Map> getMapByTrvNo(string trv_no)
     {
-        List<string> mapRouteCost = new List<string>();
+        List<Map> mapList = new List<Map>();
 
-        int trv_no = int.Parse(Request.QueryString["trv_no"].ToString()); // 게시글 번호 받기
+
 
         Travel_Day travelDay = new Travel_Day();                         // travel_day 객체 생성
-        travelDay.Trv_no = trv_no.ToString();                               // travel_no 집어 넣기
+        travelDay.Trv_no = trv_no;                               // travel_no 집어 넣기
         Travel_DayDao travelDayDao = new Travel_DayDao();         // travel_day DAO 객체 생성
 
         List<Travel_Day> travelDayList = travelDayDao.selectTravelDayListByTrvNo(travelDay);
@@ -131,10 +133,74 @@
             inMap.Trv_day_no = item.Trv_day_no;
             tmpMap = new Map();
             tmpMap = mapDao.selectMapByTrv_day_no(inMap);
-            mapRouteCost.Add(tmpMap.Map_route);
-            mapRouteCost.Add(tmpMap.Map_cost);
+            mapList.Add(tmpMap);
         }
-        return mapRouteCost;
+        return mapList;
+
+
+    }
+    protected void bindMapData(string trv_no, int index)
+    {
+        List<Map> mapList = getMapByTrvNo(trv_no);
+
+        HtmlInputHidden tmpHidden;
+
+        double totalGa = 0.0;
+        double totalHa = 0.0;
+        double tmpGa = 0.0;
+        double tmpHa = 0.0;
+        JArray jArray = new JArray();
+        string tmpMapData = "";
+        string tmpMapCenter = "";
+        JObject map_center = new JObject();
+        int map_center_cnt = 0;
+        foreach (var map in mapList)
+        {
+            //map.MapDat를 Json 배열로 만들어서 반환
+            // 널일경우 비어잇는 Json 배열을 넣어줌
+            if(map.Map_data != null && map.Map_data != "")
+            {
+                tmpMapData = map.Map_data;
+            }
+            else
+            {
+                tmpMapData = "{}";
+            }
+            jArray.Add(JObject.Parse(tmpMapData));
+
+
+
+            if(map.Map_center != null && map.Map_center != "")
+            {
+                tmpMapCenter = map.Map_center;
+                map_center = JObject.Parse(tmpMapCenter);
+                double.TryParse(map_center["Ga"].ToString(), out tmpGa);
+                double.TryParse(map_center["Ha"].ToString(), out tmpHa);
+                totalGa += tmpGa;
+                totalHa += tmpHa;
+                map_center_cnt++;
+            }       
+
+            
+            
+            //json 객체의 Ga Ha 값을 가져와 double로 변환
+            
+            
+
+        }
+
+        tmpHidden = new HtmlInputHidden();
+        tmpHidden.Name = "mapData_" + index;
+        tmpHidden.ID = "mapData_" + index; // set the id
+        tmpHidden.Value = jArray.ToString();
+        PlaceHolder_mapData.Controls.Add(tmpHidden);
+
+        tmpHidden = new HtmlInputHidden();
+        tmpHidden.Name = "mapCenter_" + index;
+        tmpHidden.ID = "mapCenter_" + index; // set the id
+        tmpHidden.Value = "{Ga:"+totalGa/map_center_cnt+",Ha:"+totalHa/map_center_cnt+"}";
+        PlaceHolder_mapData.Controls.Add(tmpHidden);
+
     }
 </script>
 
@@ -286,6 +352,7 @@
                         <div class="boardArea">
                             <div class="boardAlign">
 <%
+    List<Travel> travelList;
     Member member;
     Travel travel;
     Travel_Day travelDay;
@@ -333,7 +400,15 @@
     int limit2 = 5;
 
     // boardItem에서 구해야 할 항목 : Member(mainImage) Travel(title, main_img, mem_id, create_time, tot_rate) Trave_Day(content)
-    List<Travel> travelList = getTravelBySearchType(searchText, limit1, limit2);
+    travelList = getTravelBySearchType(searchText, limit1, limit2);
+    // 맵데이터 바인딩
+    int travelListIdx = 0;
+    foreach(var item in travelList)
+    {
+        bindMapData(item.Trv_no, travelListIdx);
+        travelListIdx++;
+    }
+
 
     for (int i = 0; i < travelList.Count; i++)
     {
@@ -482,6 +557,7 @@
         <!-- Kakao Map Area -->
         <div class="map" id="mapArea"></div>
     </div>
+        <asp:PlaceHolder ID="PlaceHolder_mapData" runat="server"></asp:PlaceHolder>
 </form>
     <script>
         var drawingMapContainer = document.getElementById('mapArea'),
@@ -497,26 +573,19 @@
 
         var maps;
 
-        function setMaps(mapDatas) {
+        function setMaps(mapDataId) {
+            var mapDatas = Jason.Parse(document.getElementById(mapDataId).value);
             maps = Json.Parse(mapDatas);
+            console.info(maps);
         }
 
-        function getMapData(trv_no) {
-            $.ajax({
-                type: "POST",
-                url: "./GetMaps.asmx/getMaps",
-                // The key needs to match your method's input parameter (case-sensitive).
-                data: '{"trv_no":"' + trv_no + '"}',
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function (data) { setMaps(data);},
-                failure: function (errMsg) {
-                    alert(errMsg);
-                }
-            });
+        <%
 
-
+        for(int i = 0; i < 5; i++)
+        {
+            Response.Write("setMaps('mapData_"+i+"');");
         }
+        %>
 
 
 
