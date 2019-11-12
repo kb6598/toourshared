@@ -893,7 +893,7 @@
 							<div class = "ID">
 								<span class = "idSpan1">
                                     <asp:Label ID="mem_id" runat="server" Text=""></asp:Label></span>
-								<span class = "idSpan2">(<asp:Label ID="mem_name" runat="server" Text=""></span>
+								<span class = "idSpan2">(<asp:Label ID="mem_name" runat="server" Text=""/></span>
 							</div>
 							<div class = "imageEdit">
 
