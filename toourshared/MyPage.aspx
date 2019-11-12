@@ -352,11 +352,15 @@
 
     protected void Page_Load(object sender, EventArgs e)
     {
+       
          // 테스트 코드 이미지 업로드가 session["mem_id"]에 종속됨
         if(HttpContext.Current.Session["mem_id"] == null)
         {
             Session["mem_id"] = "billip";
         }
+
+        
+        
 
         Bind_Table_Travel();
         Bind_Table_MyReviews();
@@ -379,6 +383,7 @@
 
             mem_id.Text = id;
             mem_name.Text = name;
+            mainImgItem.ImageUrl = member.Mem_img_url;
         }
         else
         {
