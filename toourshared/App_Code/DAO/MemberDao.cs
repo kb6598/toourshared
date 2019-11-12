@@ -105,23 +105,20 @@ namespace tooushared.DAO
         }
 
         //public List<Member> selectMember()
-        public Member selectMemberByMem_id(Member member)
+        public Member selectMemberByMem_id(Member memberDTO)
         {
             MyDB mydb = new MyDB();
             Member mem = new Member();
             MySqlConnection con;
-            MySqlCommand cmd;
-            MySqlDataReader reader;
 
             using (con = mydb.GetCon())
             {
-                string Sql = "SELECT * FROM toourshared.member WHERE mem_id = @mem_id";
+                string Sql = "SELECT * FROM toourshared.member as mem WHERE mem.mem_id = '" + memberDTO.Mem_id + "'";
 
-                cmd = new MySqlCommand(Sql, con);
-                cmd.Parameters.AddWithValue("@mem_id", member.Mem_id);
-
+                MySqlCommand cmd = new MySqlCommand(Sql, con);
                 con.Open();
-                reader = cmd.ExecuteReader();
+
+                MySqlDataReader reader = cmd.ExecuteReader();
 
                 if(reader.Read())
                 {
@@ -143,13 +140,13 @@ namespace tooushared.DAO
                     if(string.IsNullOrEmpty(mem.Mem_img_url) || mem.Mem_img_url == "noImage")
                         mem.Mem_img_url = "./img/memberNoImage.png";
                 }
+
+                if (reader != null)
+                    reader.Close();
+
+                if (con != null)
+                    con.Close();
             }
-
-            if (reader != null)
-                reader.Close();
-
-            if (con != null)
-                con.Close();
 
             return mem;
         }
