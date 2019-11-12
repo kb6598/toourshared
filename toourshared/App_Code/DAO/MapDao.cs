@@ -230,7 +230,7 @@ public class MapDao
     }
 
 
-    public List<Map> mapRouteCost(Travel travel)
+    public List<Map> mapRouteCost(int travelNo)
     {
 
         MyDB mydb = new MyDB();
@@ -247,7 +247,7 @@ public class MapDao
 
             MySqlCommand cmd = new MySqlCommand(Sql, con);
 
-            cmd.Parameters.AddWithValue("@trv_no", travel.Trv_no);
+            cmd.Parameters.AddWithValue("@trv_no", travelNo);
 
             con.Open();
             MySqlDataReader rd = cmd.ExecuteReader();
