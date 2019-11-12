@@ -39,7 +39,7 @@
     <style>
         #category {
             display: flex;
-        flex-direction: column;
+            flex-direction: column;
             //position: sticky;
             //top: 10px;
             //left: 10px;
@@ -50,7 +50,8 @@
             overflow: hidden;
             z-index: 2;
         }
-        #category ul{
+
+        #category ul {
             padding-left: 0px;
         }
 
@@ -271,36 +272,56 @@
                             </button>
                             <div class="dropdown">
                                 <button class="dropdown-toggle TILAST" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                 <p>🍳</p>
-                                <p>카테고리 검색</p>
+                                    <p>🍳</p>
+                                    <p>카테고리 검색</p>
                                 </button>
                                 <div class="dropdown-menu">
- <ul id="category">
-        <li id="BK9" data-order="0"> 
-            <span class="category_bg bank"></span>
-            은행
-        </li>       
-        <li id="MT1" data-order="1"> 
-            <span class="category_bg mart"></span>
-            마트
-        </li>  
-        <li id="PM9" data-order="2"> 
-            <span class="category_bg pharmacy"></span>
-            약국
-        </li>  
-        <li id="OL7" data-order="3"> 
-            <span class="category_bg oil"></span>
-            주유소
-        </li>  
-        <li id="CE7" data-order="4"> 
-            <span class="category_bg cafe"></span>
-            카페
-        </li>  
-        <li id="CS2" data-order="5"> 
-            <span class="category_bg store"></span>
-            편의점
-        </li>      
-    </ul>
+                                    <ul id="category">
+                                        <li id="BK9" data-order="0">
+                                            <span class="category_bg bank"></span>
+                                            은행
+                                        </li>
+                                        <li id="MT1" data-order="1">
+                                            <span class="category_bg mart"></span>
+                                            마트
+                                        </li>
+                                        <li id="PM9" data-order="2">
+                                            <span class="category_bg pharmacy"></span>
+                                            약국
+                                        </li>
+                                        <li id="OL7" data-order="3">
+                                            <span class="category_bg oil"></span>
+                                            주유소
+                                        </li>
+                                        <li id="CE7" data-order="4">
+                                            <span class="category_bg cafe"></span>
+                                            카페
+                                        </li>
+                                        <li id="CS2" data-order="5">
+                                            <span class="category_bg store"></span>
+                                            편의점
+                                        </li>
+                                        
+                                            <li id='MT1' data-order="1"> <span class="category_bg"> 대형마트</span></li>
+                                            <li id='CS2' data-order="2"> <span class="category_bg"> 편의점</span></li>
+                                            <li id='PS3' data-order="3"> <span class="category_bg"> 어린이집, 유치원</span></li>
+                                            <li id='SC4' data-order="4"> <span class="category_bg"> 학교</span></li>
+                                            <li id='AC5' data-order="5"> <span class="category_bg"> 학원</span></li>
+                                            <li id='PK6' data-order="6"> <span class="category_bg"> 주차장</span></li>
+                                            <li id='OL7' data-order="7"> <span class="category_bg"> 주유소, 충전소</span></li>
+                                            <li id='SW8' data-order="8"> <span class="category_bg"> 지하철역</span></li>
+                                            <li id='BK9' data-order="9"> <span class="category_bg"> 은행</span></li>
+                                            <li id='CT1' data-order="10"><span class="category_bg"> 문화시설</span></li>
+                                            <li id='AG2' data-order="11"><span class="category_bg"> 중개업소</span></li>
+                                            <li id='PO3' data-order="12"><span class="category_bg"> 공공기관</span></li>
+                                            <li id='AT4' data-order="13"><span class="category_bg"> 관광명소</span></li>
+                                            <li id='AD5' data-order="14"><span class="category_bg"> 숙박</span></li>
+                                            <li id='FD6' data-order="15"><span class="category_bg"> 음식점</span></li>
+                                            <li id='CE7' data-order="16"><span class="category_bg"> 카페</span></li>
+                                            <li id='HP8' data-order="17"><span class="category_bg"> 병원</span></li>
+                                            <li id='PM9' data-order="18"><span class="category_bg"> 약국</span></li>
+                                       
+                                    </ul>
                                 </div>
                             </div>
 
@@ -2482,10 +2503,10 @@
 
         // 마커를 클릭했을 때 해당 장소의 상세정보를 보여줄 커스텀오버레이입니다
         var placeOverlay = new kakao.maps.CustomOverlay({
-            xAnchor: 0.5,
-            yAnchor: 1.25,
-            zIndex: 3
-                
+                xAnchor: 0.5,
+                yAnchor: 1.25,
+                zIndex: 3
+
             }),
             contentNode = document.createElement('div'), // 커스텀 오버레이의 컨텐츠 엘리먼트 입니다 
             markersAround = [], // 마커를 담을 배열입니다
@@ -2510,7 +2531,8 @@
 
         // 각 카테고리에 클릭 이벤트를 등록합니다
         addCategoryClickEvent();
-        function closePlaceOverlay(){
+
+        function closePlaceOverlay() {
             placeOverlay.setMap(null);
         }
 
@@ -2537,7 +2559,7 @@
 
             ps.categorySearch(currCategory, placesSearchCBArround, {
                 useMapBounds: true,
-                useMapCenter: true
+
             });
         }
 
@@ -2614,7 +2636,7 @@
         function displayPlaceInfo(place) {
             console.info(place);
 
-             var content =
+            var content =
                 '<div class="card card-cus" style="width:300px;">' +
                 '<div class="card-header">' +
                 '<div class="card-title">' +
