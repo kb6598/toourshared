@@ -5,23 +5,37 @@
 <!DOCTYPE html>
 
 <script runat="server">
-    // 내가 작성한글, 내가 팔로일하는 사람의 글, 나를 팔로우 하는 사람의 글
+
+    //====== ( temp Init Area ) ==========
+    string myID; // session(로그인 한 사람)의 아이디를 저장할 변수
+    string memberID; // QueryString(페이지의 주인)의 아이디를 저장할 변수
+    bool pageOwner = false; // MyPage의 주인인지 아닌지 여부를 나타낼 변수
+    string memberName; // MyPage 주인의 이름을 저장할 변수
+    int travelCount = 0; // MyPage 주인이 작성한 게시글의 총 수를 저장할 변수
+    int followCount = 0; // MyPage 주인의 팔로우 카운트를 저장할 변수
+    int followerCount = 0; // MyPage 주인의 팔로워 카운트를 저장할 변수
+    //============================
+
+    // 로그아웃 눌렀을 때 발생할 이벤트
     protected void btnLogout_Click(object sender, EventArgs e)
     {
         Session.Abandon();
         Response.Redirect("/index.aspx");
     }
 
+    // 마이페이지 눌렀을 때 발생할 이벤트
     protected void btnMypage_Click(object sender, EventArgs e)
     {
         Response.Redirect("/MyPage.aspx");
     }
 
+    // 회원가입 눌렀을 때 발생할 이벤트
     protected void btnJoin_Click(object sender, EventArgs e)
     {
         Response.Redirect("/join.aspx");
     }
 
+    // 계정찾기 눌렀을 때 발생할 이벤트
     protected void btnFindIDPW_Click(object sender, EventArgs e)
     {
         Response.Redirect("/find_idpw.aspx");
@@ -59,7 +73,7 @@
             tmpTableCell_article1 = new TableCell();
             tmpTableCell_article1.Text = "<a href = \"#\" alt = \"bg2\">" +
                                             "<div class = \"tableContainer\" >" +
-                                            "<img src = \"" + resultList[i].Trv_main_img + "\" alt= \""+ resultList[i].Trv_title + "\" >" +
+                                            "<img src = \"" + resultList[i].Trv_main_img + "\" alt= \"" + resultList[i].Trv_title + "\" >" +
                                                 "<div class = \"tableOverlay\" >" +
                                                     "<div class = \"tableText\" >" +
                                                         "<div class = \"tableAlign\">" +
@@ -89,7 +103,7 @@
             tmpTableCell_article2 = new TableCell();
             tmpTableCell_article2.Text = "<a href = \"#\" alt = \"bg2\">" +
                                             "<div class = \"tableContainer\" >" +
-                                            "<img src = \"" + resultList[i].Trv_main_img + "\" alt= \""+ resultList[i].Trv_title + "\" >" +
+                                            "<img src = \"" + resultList[i].Trv_main_img + "\" alt= \"" + resultList[i].Trv_title + "\" >" +
                                                 "<div class = \"tableOverlay\" >" +
                                                     "<div class = \"tableText\" >" +
                                                         "<div class = \"tableAlign\">" +
@@ -120,7 +134,7 @@
             tmpTableCell_article3 = new TableCell();
             tmpTableCell_article3.Text = "<a href = \"#\" alt = \"bg2\">" +
                                             "<div class = \"tableContainer\" >" +
-                                            "<img src = \"" + resultList[i].Trv_main_img + "\" alt= \""+ resultList[i].Trv_title + "\" >" +
+                                            "<img src = \"" + resultList[i].Trv_main_img + "\" alt= \"" + resultList[i].Trv_title + "\" >" +
                                                 "<div class = \"tableOverlay\" >" +
                                                     "<div class = \"tableText\" >" +
                                                         "<div class = \"tableAlign\">" +
@@ -147,6 +161,7 @@
             Table_travel.Rows.Add(tmpTableRow_article);
         }
     }
+
     protected List<Comment> getReviewsList(string mem_id)
     {
         List<Comment> resultList;
@@ -352,44 +367,71 @@
 
     protected void Page_Load(object sender, EventArgs e)
     {
-       
-         // 테스트 코드 이미지 업로드가 session["mem_id"]에 종속됨
-        if(HttpContext.Current.Session["mem_id"] == null)
+        // 테스트 코드 이미지 업로드가 session["mem_id"]에 종속됨
+
+        if(Request.QueryString["mem_id"] == null || String.IsNullOrEmpty(Request.QueryString["mem_id"].ToString())) // mem_id 쿼리스트링이 존재하는지 체크
         {
-            Session["mem_id"] = "billip";
-        }
-
-        
-        
-
-        Bind_Table_Travel();
-        Bind_Table_MyReviews();
-        selectMyInfo();
-
-
-    }
-
-    protected void selectMyInfo()
-    {
-        Member member = new Member();
-        MemberDao mem = new MemberDao();
-        if(Session["mem_id"] != null)
-        {
-            member.Mem_id = Session["mem_id"].ToString();
-            member = mem.selectMemberByMem_id(member);
-
-            string id = member.Mem_id.ToString();
-            string name = member.Mem_name.ToString();
-
-            mem_id.Text = id;
-            mem_name.Text = name;
-            mainImgItem.ImageUrl = member.Mem_img_url;
+            // null OR empty 인 경우 index로 redirect.
+            System.Diagnostics.Debug.WriteLine("접근 형태: " + Request.QueryString["mem_id"]);
+            Response.Write("<script language='javascript'>alert('접근 방법이 잘못되었습니다.');</script language='javascript'>");
+            Response.Redirect("/index.aspx");
         }
         else
         {
+            Member member = new Member();
+            MemberDao memberDao = new MemberDao();
 
+            memberID = Request.QueryString["mem_id"].ToString(); // 쿼리스트링 값 memberID 변수에 담고
+            member.Mem_id = memberID;
+
+            if(memberDao.IsExistByMemberID(member) == false) // 적절하지 않은 데이터의 아이디로 들어올 경우 index로 redirect 시키는 작업
+            {
+                System.Diagnostics.Debug.WriteLine("1-1");
+                Response.Write("<script language='javascript'>alert('" + member.Mem_id + "님의 페이지는 존재하지 않습니다.');</script language='javascript'>");
+                Response.Redirect("/index.aspx");
+            }
+
+            System.Diagnostics.Debug.WriteLine(2);
+
+            if(HttpContext.Current.Session["mem_id"] == null) // 세션이 존재하지 않는 경우 (로그인 하지 않은 경우)
+            {
+                myID = "";
+                pageOwner = false;
+
+                System.Diagnostics.Debug.WriteLine(3);
+            }
+            else // 로그인 한 경우 ( 세션이 존재하는 경우 )
+            {
+                System.Diagnostics.Debug.WriteLine(4);
+                myID = HttpContext.Current.Session["mem_id"].ToString();
+
+                if(HttpContext.Current.Session["mem_id"].ToString() != Request.QueryString["mem_id"].ToString()) // 로그인 한 아이디(session)와 현재 MyPage Owner(mem_id)가 다른 경우
+                {
+                    pageOwner = false;
+                }
+                else // 같은 경우 자신의 페이지에 본인이 들어온 것임을 알 수 있다.
+                {
+                    pageOwner = true;
+                }
+            }
+
+            mem_id.Text = memberID; // 페이지에 주인의 아이디를 출력시키고
+            member.Mem_id = memberID; // 페이지 주인의 아이디를 DTO에 넣고
+            member = memberDao.selectMemberByMem_id(member); // DTO를 바꾼다.
+
+            memberName = member.Mem_name.ToString(); // 그리고 DTO 내의 사용자 이름을 구해온다.
+            main_img.Value = member.Mem_img_url; // HiddenField에 회원의 메인 이미지를 넣는다.
+
+            TravelDao travelDao = new TravelDao();
+            travelCount = travelDao.getTravelCountByMemId(memberID); // 페이지 주인이 작성한 게시글의 총 수를 구해온다.
+
+            FollowerDao followerDao = new FollowerDao(); // follower DAO 객체를 생성하고
+            followerCount = followerDao.getFollowerCountByMemId(memberID); // 팔로워 카운트를 구한 뒤
+            followCount = followerDao.getFollowCountByMemId(memberID); // 팔로우 카운트를 구해온다.
         }
 
+        Bind_Table_Travel();
+        Bind_Table_MyReviews();
     }
 
 </script>
@@ -627,8 +669,8 @@
     }
 
     .userImageItem .userImageStyle {
-        width: 100%;
-        height: 100%;
+        width: 150px;
+        height: 150px;
         padding: 0;
         margin: 0;
         border: none;
@@ -900,13 +942,24 @@
         document.getElementById("boardItemDefault").style.display = "none";
     }
 
-    document.getElementById("defaultOpen").click();		
+    document.getElementById("defaultOpen").click();
+
+    $(function () {
+        var hdField = document.getElementById('main_img');
+        if (hdField.value != null && hdField.value != "" && hdField.value != '""') {
+            document.getElementById('mainPageImage').src = hdField.value;
+        }
+        else {
+            document.getElementById('mainPageImage').src = "./img/memberNoImage.png";
+        }
+    });
+
 </script>
 </head>
      <!-- navbar 영역 -->
     <body>
     <form name="form1" runat="server">
- <div id="nav" class="topnav">
+         <div id="nav" class="topnav">
         <ul class="topnavUl">
             <li class="topnavLi">
                 <div class="nav-logo">
@@ -975,8 +1028,6 @@
         </ul>
     </div>
       
-
-   
         <div class="section">
             <!-- UserProfile -->
             <div class="section01">
@@ -984,15 +1035,21 @@
                     <div class="userImageAlign">
                         <div class="userImageItem">
                             <a href="#">
-                             <!-- 이미지 업로드 -->
-                            <input type="file" class="upload"  id="FileUpload_main_img" accept="image/*" multiple="false" style="display:none;"/>
-                            <asp:HiddenField ID="main_img" runat="server" Value="noImage"/>
-                                 <!-- 이미지 미리보기 부분-->
-                                <!-- 이미지 미리보기 부분-->
-                        <asp:Image ID="mainImgItem" runat="server" ImageUrl="./img/UserNoneImage.png" alt="프로	필 사진 편집" CssClass="userImageStyle" onclick="document.getElementById('FileUpload_main_img').click();"/>
-                        
+                                <!-- 이미지 업로드 -->
+                                <input type="file" class="upload"  id="FileUpload_main_img" accept="image/*" multiple="false" style="display:none;"/>
+                                <asp:HiddenField ID="main_img" runat="server" Value=""/>
 
-                 
+                                <!-- 이미지 미리보기 부분-->
+<%
+    if (pageOwner == true)
+    {
+        Response.Write("<img src=\"./img/memberNoImage.png\" ID=\"mainPageImage\" alt=\"프로필 사진\" class=\"userImageStyle\" onclick=\"document.getElementById('FileUpload_main_img').click();\" />");
+    }
+    else
+    {
+        Response.Write("<img src=\"./img/memberNoImage.png\" ID=\"mainPageImage\" alt=\"프로필 사진\" class=\"userImageStyle\" />");
+    }
+%>
                             </a>
                         </div>
                     </div>
@@ -1005,23 +1062,29 @@
                                     <asp:Label ID="mem_id" runat="server" Text="Label"></asp:Label></h1>
                             </div>
                             <div class="Setting">
-                                <input type="button" value="프로필 편집" class="settingButton" onclick="location.href = '/edit.aspx' "/>
+<%
+    if (pageOwner == true)
+        Response.Write("                                <input type=\"button\" value=\"프로필 편집\" class=\"settingButton\" onclick=\"location.href = '/edit.aspx'\"/>");
+%>
                             </div>
                         </div>
                         <div class="data">
                             <div class="dataItem">
-                                게시물 <span>0</span>
+                                게시물 <span><%Response.Write(travelCount);%></span>
                             </div>
                             <div class="dataItem">
-                                팔로워 <span>10</span>
+                                팔로워 <span><%Response.Write(followerCount);%></span>
                             </div>
                             <div class="dataItem">
-                                팔로우 <span>10</span>
+                                팔로우 <span><%Response.Write(followCount);%></span>
                             </div>
                         </div>
                         <div class="name">
                             <span>
-                                <asp:Label ID="mem_name" runat="server" Text="Label"></asp:Label></span>
+                                <asp:Label ID="mem_name" runat="server" Text="Label">
+                                    <%Response.Write(memberName);%>
+                                </asp:Label>
+                            </span>
                         </div>
                     </div>
                 </div>
