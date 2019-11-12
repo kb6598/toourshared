@@ -109,6 +109,33 @@
         //EnterKey 누를 시 Button1_Click 이벤트 발생.
         inputText.Attributes["onkeyPress"] = "if(event.keyCode == 13) { " + Page.GetPostBackEventReference(Button1) + "; return false; }";
     }
+
+    protected List<string> testRouteCost()
+    {
+        List<string> mapRouteCost = new List<string>();
+
+        int trv_no = int.Parse(Request.QueryString["trv_no"].ToString()); // 게시글 번호 받기
+
+        Travel_Day travelDay = new Travel_Day();                         // travel_day 객체 생성
+        travelDay.Trv_no = trv_no.ToString();                               // travel_no 집어 넣기
+        Travel_DayDao travelDayDao = new Travel_DayDao();         // travel_day DAO 객체 생성
+
+        List<Travel_Day> travelDayList = travelDayDao.selectTravelDayListByTrvNo(travelDay);
+        // 게시글 번호에 해당하는 그 게시글의 모든 게시글 내용들(N일 차) 오름차순으로 구해온다.
+
+        Map inMap = new Map();
+        Map tmpMap;
+        MapDao mapDao = new MapDao();
+        foreach (var item in travelDayList)
+        {
+            inMap.Trv_day_no = item.Trv_day_no;
+            tmpMap = new Map();
+            tmpMap = mapDao.selectMapByTrv_day_no(inMap);
+            mapRouteCost.Add(tmpMap.Map_route);
+            mapRouteCost.Add(tmpMap.Map_cost);
+        }
+        return mapRouteCost;
+    }
 </script>
 
 <html>
@@ -141,6 +168,9 @@
     <!-- kakodev -->
       <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=ebcd0c1accbe0ff4bbb47bd777ef2fcf&libraries=service&libraries=services,clusterer,drawing"></script>
 
+
+    <!-- AJAX-->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha256-pasqAKBDmFT4eHoN2ndd6lN370kFiGUFyTiUHWhU7k8=" crossorigin="anonymous"></script>
     <script>
 
         function rdoEvent(paramType) {
@@ -459,14 +489,34 @@
                 center: new kakao.maps.LatLng(37.56671, 126.98298), // 지도의 중심좌표
                 level: 4, // 지도의 확대 레벨
                 mapTypeId: kakao.maps.MapTypeId.ROADMAP // 지도종류
-            };
+            }, overlays = [];
 
         // 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
         //var drawingMap = new daum.maps.Map(drawingMapContainer, mapOption);
         var drawingMap = new daum.maps.Map(drawingMapContainer, drawingMap);
 
+        var maps;
+
+        function setMaps(mapDatas) {
+            maps = Json.Parse(mapDatas);
+        }
+
+        function getMapData(trv_no) {
+            $.ajax({
+                type: "POST",
+                url: "./GetMaps.asmx/getMaps",
+                // The key needs to match your method's input parameter (case-sensitive).
+                data: '{"trv_no":"' + trv_no + '"}',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (data) { setMaps(data);},
+                failure: function (errMsg) {
+                    alert(errMsg);
+                }
+            });
 
 
+        }
 
 
 

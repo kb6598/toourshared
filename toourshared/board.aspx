@@ -71,21 +71,6 @@
         return returnList;
     }
 
-    protected List<Map> getMapListByTrvDayNo()
-    {
-        List<Map> resultList = new List<Map>();
-        Map inMap = new Map();
-        Map outMap = new Map();
-
-        MapDao mapDao = new MapDao();
-
-
-
-
-
-        return resultList;
-    }
-
 
     protected int getLikeCountByTrvNo()
     {
@@ -173,7 +158,7 @@
     }
 
 
-    protected List<Map> getMapByTrvDayNo()
+    protected List<Map> getMapByTrvNo()
     {
         List<Map> mapList = new List<Map>();
 
@@ -228,7 +213,7 @@
 
     protected void bindMapData()
     {
-        List<Map> mapList = getMapByTrvDayNo();
+        List<Map> mapList = getMapByTrvNo();
 
         HtmlInputHidden tmpHidden;
         int index = 0;
@@ -1067,7 +1052,7 @@
             List<String> MemberList = getMemberByTrvNo();                 // 해당 게시글의 작성자의 데이터
             List<String> TravelDayContents = getTravelDayListByTrvNo();  // 해당 게시글의 내용 데이터
             List<Comment> CommentList = getCommentListByTrvNo();    // 해당 게시글의 댓글 데이터
-            List<Map> mapList = getMapByTrvDayNo();
+            List<Map> mapList = getMapByTrvNo();
             List<string> mapRouteCost = testRouteCost();
 
 
@@ -1829,7 +1814,7 @@
 
         // c
         <%
-        List<Map> mapList = getMapByTrvDayNo();
+        List<Map> mapList = getMapByTrvNo();
         string [] color= { "#E53A40", "#F68657", "#EFDC05", "#58C9B9", "#a3daff", "#0080ff" , "#A593E0", "#C5C6B6", "#D09E88", "#FADAD8", "#fab1ce", "#fffff5", "#c8c8a9", "#3a5134" };
         string[] marker = { "default_01.png", "default_02.png", "default_03.png", "default_04.png", "default_05.png", "default_06.png" , "default_07.png", "default_08.png", "default_09.png", "default_10.png", "default_11.png", "default_12.png", "default_13.png", "default_14.png" };
         string icoDir = "./img/ico/marker/";
