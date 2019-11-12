@@ -1245,9 +1245,14 @@
                 <%
                     // hashtag 누르면 search.aspx?hashtag=○○○○ 로 이동
                     List<String> hashtagList = getHashTagList();
+
+
                     for (int i = 0; i < hashtagList.Count; i++)
                     {
-                        Response.Write("<a href = \"search.aspx?searchType=1&hashtag=" + hashtagList[i].ToString() + "\"><div class = \"hashtag\">" + hashtagList[i].ToString() + "</div></a>\n");
+                        string HashTagKeyword = hashtagList[i].ToString().Substring(1);
+                        string EncodedHashTag = Server.UrlEncode(HashTagKeyword);
+
+                        Response.Write("<a href = \"search.aspx?searchType=1&hashtag="+ EncodedHashTag+ "\"><div class = \"hashtag\">" + hashtagList[i].ToString() + "</div></a>\n");
                     }
                 %>
             </div>
