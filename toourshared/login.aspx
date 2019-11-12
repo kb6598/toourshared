@@ -71,6 +71,17 @@
     {
         Response.Redirect("/find_idpw.aspx");
     }
+
+    protected void mem_id_TextChanged(object sender, EventArgs e)
+    {
+        mem_id.Attributes["onkeyPress"] = "if(event.keyCode == 13) { " + Page.GetPostBackEventReference(BtnLogin) + "; return false; }";
+    }
+
+    protected void mem_pw_TextChanged(object sender, EventArgs e)
+    {
+        mem_pw.Attributes["onkeyPress"] = "if(event.keyCode == 13) { " + Page.GetPostBackEventReference(BtnLogin) + "; return false; }";
+    }
+
 </script>
  <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -555,14 +566,14 @@
             <!-- 아이디 및 패스워드 입력, 로그인 버튼-->
             <div class="area1">
                 <div class="ID">
-                    <asp:TextBox ID="mem_id" runat="server" placeholder="아이디" maxlength="15"></asp:TextBox>
+                    <asp:TextBox ID="mem_id" runat="server" placeholder="아이디" maxlength="15" OnTextChanged="mem_id_TextChanged"></asp:TextBox>
                 </div>
                 <div class="PW">
-                    <asp:TextBox ID="mem_pw" runat="server" placeholder="비밀번호" maxlength="20" TextMode="Password"></asp:TextBox>
+                    <asp:TextBox ID="mem_pw" runat="server" placeholder="비밀번호" maxlength="20" TextMode="Password" OnTextChanged="mem_pw_TextChanged"></asp:TextBox>
                 </div>
                 <div class="LOGINBTN">
                     <asp:Button ID="BtnLogin" runat="server" Text="로그인"  CssClass="LOGINBTNitem" OnClick="BtnLogin_Click" />
-                </div>
+                </div> 
             </div>
 
             <!-- 아이디 비밀번호 찾기 -->

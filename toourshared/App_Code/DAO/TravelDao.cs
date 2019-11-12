@@ -214,6 +214,49 @@ public class TravelDao
         return ds;
     }
 
+    public Travel selectTravelByMemID(Travel travel)
+    {
+        if(string.IsNullOrEmpty(travel.Mem_id.ToString())) // DTO 내 Mem_id 에 데이터가 Null OR Empty 인 경우 null 반환
+        {
+            return null;
+        }
+
+        MyDB mydb = new MyDB();
+        Travel result = new Travel();
+        MySqlConnection con;
+
+        try
+        {
+            con = mydb.GetCon();
+            string Sql = "SELECT * FROM toourshared.travel WHERE mem_id = '" + travel.Mem_id.ToString() + "'";
+            MySqlCommand cmd = new MySqlCommand(Sql, con);
+
+            con.Open();
+            MySqlDataReader rd = cmd.ExecuteReader();
+
+            if(rd.Read())
+            {
+                result.Trv_no = rd["trv_no"].ToString();
+                result.Trv_secret = rd["trv_secret"].ToString();
+                result.Trv_views = rd["trv_views"].ToString();
+                result.Trv_tot_rate = rd["trv_tot_rate"].ToString();
+                result.Trv_main_img = rd["trv_main_img"].ToString();
+                result.Trv_title = rd["trv_title"].ToString();
+                result.Trv_tag = rd["trv_tag"].ToString();
+                result.Trv_timestamp = rd["trv_timestamp"].ToString();
+                result.Trv_create_time = rd["trv_create_time"].ToString();
+                result.Loc_name = rd["loc_name"].ToString();
+                result.Mem_id = rd["mem_id"].ToString();
+            }
+
+            rd.Close();
+            con.Close();
+        }
+        catch (Exception ex){;}
+
+        return result;
+    }
+
     public List<Travel> selectTravelListByMem_id(Travel travel)
     {
         MyDB mydb = new MyDB();
@@ -1055,6 +1098,42 @@ public class TravelDao
             con.Close();
         }
         catch (Exception e) {;}
+    }
+
+    // 아이디를 받으면 그 아이디가 작성한 게시글의 카운트를 반환하는 함수
+    public int getTravelCountByMemId(string memberID)
+    {
+        if (String.IsNullOrEmpty(memberID)) // 파라미터로 받은 memberID 값이 null 혹은 empty 인 경우 0을 반환한다.
+        {
+            return 0;
+        }
+        else
+        {
+            MyDB myDB = new MyDB();
+            MySqlConnection con;
+            int returnInt = 0;
+
+            try
+            {
+                con = myDB.GetCon();
+                String Sql = "SELECT count(*) as cnt FROM toourshared.travel WHERE mem_id = '" + memberID + "'";
+
+                MySqlCommand cmd = new MySqlCommand(Sql, con);
+                con.Open();
+
+                MySqlDataReader reader = cmd.ExecuteReader();
+                if(reader.Read())
+                {
+                    returnInt = int.Parse(reader["cnt"].ToString());
+                }
+
+                reader.Close();
+                con.Close();
+            }
+            catch (Exception e) {; }
+
+            return returnInt;
+        }
     }
 }
 

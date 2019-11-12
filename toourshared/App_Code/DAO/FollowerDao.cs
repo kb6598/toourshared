@@ -160,4 +160,62 @@ public class FollowerDao
 
         return resultList;
     }
+    
+    // 파라미터로 받은 사용자(ID)의 팔로워 수를 반환하는 함수
+    public int getFollowerCountByMemId(string ID)
+    {
+        MyDB myDB = new MyDB();
+        MySqlConnection con;
+        int returnInt = 0;
+
+        try
+        {
+            con = myDB.GetCon();
+            string Sql = "SELECT count(fol_id) as cnt FROM toourshared.follower WHERE mem_id = '"+ ID +"'";
+
+            MySqlCommand cmd = new MySqlCommand(Sql, con);
+            con.Open();
+
+            MySqlDataReader reader = cmd.ExecuteReader();
+            if(reader.Read())
+            {
+                returnInt = int.Parse(reader["cnt"].ToString());
+            }
+
+            reader.Close();
+            con.Close();
+        }
+        catch (Exception e) {;}
+
+        return returnInt;
+    }
+
+    // 파라미터로 받은 사용자(ID)의 팔로우 수를 반환하는 함수
+    public int getFollowCountByMemId(string ID)
+    {
+        MyDB myDB = new MyDB();
+        MySqlConnection con;
+        int returnInt = 0;
+
+        try
+        {
+            con = myDB.GetCon();
+            string Sql = "SELECT count(mem_id) as cnt FROM toourshared.follower WHERE fol_id = '" + ID + "'";
+
+            MySqlCommand cmd = new MySqlCommand(Sql, con);
+            con.Open();
+
+            MySqlDataReader reader = cmd.ExecuteReader();
+            if (reader.Read())
+            {
+                returnInt = int.Parse(reader["cnt"].ToString());
+            }
+
+            reader.Close();
+            con.Close();
+        }
+        catch (Exception e) {; }
+
+        return returnInt;
+    }
 }
