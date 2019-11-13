@@ -183,7 +183,7 @@ public class Travel_DayDao
 
         Travel_Day result = new Travel_Day();
         MySqlConnection con = null;
-        MySqlDataReader reader = null;
+        MySqlDataReader rd = null;
 
         try
         {
@@ -197,7 +197,7 @@ public class Travel_DayDao
             cmd.Parameters.AddWithValue("@trv_day_no", travel_Day.Trv_day_no);
 
             con.Open();
-            MySqlDataReader rd = cmd.ExecuteReader();
+             rd = cmd.ExecuteReader();
 
             if (rd.Read())
             {
@@ -212,13 +212,13 @@ public class Travel_DayDao
         catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
-            reader.Close();
+            rd.Close();
             con.Close();
 
         }
         finally
         {
-            reader.Close();
+            rd.Close();
             con.Close();
         }
 
