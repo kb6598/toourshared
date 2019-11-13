@@ -526,7 +526,7 @@
             },
             markerOptions: { // 마커 옵션입니다
                 draggable: false, // 마커를 그리고 나서 드래그 가능하게 합니다
-                removable: true, // 마커를 삭제 할 수 있도록 x 버튼이 표시됩니다
+                removable: false, // 마커를 삭제 할 수 있도록 x 버튼이 표시됩니다
                 markerImages: [
                     null, // API에서 제공하는 기본 마커 이미지
                     {
@@ -613,11 +613,6 @@
 
 
 
-//        manager.addListener('drawend', function(data) {
-//            // data.target 에 그려진 오버레이 객체가 넘어온다.
-//            console.info(data.target);
-//        });
-
 
 
 
@@ -642,7 +637,8 @@
 
         function refreshOverlayListener() {
             var data = manager.getOverlays();
-            var overlayType = ["circle", "ellipse", "marker", "polygon", "rectangle"];
+            //var overlayType = ["circle", "ellipse", "marker", "polygon", "rectangle"];
+            var overlayType = ["marker"];
             overlayType.forEach(function(overlay, overlayIndex, overlayArray) {
                 // 각 오버레이들은 길이가 0인 배열로 최초부터 존제
                 //if (data[overlay] != null) {
@@ -680,11 +676,22 @@
         function closeCusOverlay() {
             customOverlay.setMap(null);
         }
+        
+        manager.addListener('drawend', function(data) {
+            console.log('drawend', data);
+            if(data.overlayType == 'marker'){
+                
+                
+                
+                pushTravelRouteItem("","","","","","","");
+            }
+        });
+        
+
+        
 
 
-
-
-        var curOverlay = Array(1);
+    
 
         //-----------------------------------------------
         // 클릭시 발생하는 이벤트
@@ -700,8 +707,7 @@
             //---- 오버레이 타입마다 좌표가 존재하는 위치가 다름
 
             var coord_WCONGNAMUL = getWCONGNAMULFromOverlay(this);
-            curOverlay[0] = this;
-
+            
 
             //----좌표값으로 주소를 가져옴
             geocoder.coord2Address(coord_WCONGNAMUL.wcongnamulX, coord_WCONGNAMUL.wcongnamulY, function(result, status) {
@@ -723,6 +729,8 @@
                             //                                ps.keywordSearch(keyword.value, placesSearchByStateChange);
                             //                                $('#searchPlaceModal').modal('show');
 
+                            
+                             
                             content =
 
 
@@ -748,9 +756,6 @@
                                 '<li class="card-body-li"> </li>' +
                                 '</blockquote>' +
                                 '<table style="margin-top: 10px;"><tr>' +
-                                '<td>' +
-                                '<div class="card-addBtn" onclick=\'pushTravelRouteItem("","","","","","' + coord_WCONGNAMUL.wcongnamulX + '","' + coord_WCONGNAMUL.wcongnamulY + '")\'>추가</div>' +
-                                '</td>' +
                                 '<td>';
                             if (result[0].address.address_name != null) {
                                 content += '<div class="card-addBtn" onclick=\'searchPlacesByAddress("' + result[0].address.address_name + '")\'>주소로 검색</div>'
@@ -762,7 +767,7 @@
                                 '</tr></table>' +
                                 '</div>';
 
-
+                                
                         }
                     }
 
@@ -904,7 +909,7 @@
         function placesSearchByAddressCB(data, status, pagination) {
             if (status === kakao.maps.services.Status.OK) {
 
-                manager.remove(curOverlay[0]);
+                
                 // 정상적으로 검색이 완료됐으면
                 // 검색 목록과 마커를 표출합니다
                 displayPlaces(data);
@@ -1148,7 +1153,7 @@
             }
             content +=
                 '</blockquote>' +
-                '<div class="card-addBtn" onclick=\'pushTravelRouteItem("' + place.place_name + '","' + place.road_address_name + '","' + place.address_name + '","' + place.phone + '","' + place.place_url + '","' + place.x + '","' + place.y + '")\'>추가</div>' +
+                '<div class="card-addBtn" onclick=\'AddMarkerWithTravelRouteItem("' + place.place_name + '","' + place.road_address_name + '","' + place.address_name + '","' + place.phone + '","' + place.place_url + '","' + place.x + '","' + place.y + '")\'>추가</div>' +
                 '</div>' +
                 '</div>';
 
@@ -1328,6 +1333,22 @@
             dragAndDropAction();
 
         }
+        
+         function AddMarkerWithTravelRouteItem(place_name, road_address_name, address_name, phone, place_url, x, y) {
+             pushTravelRouteItem(place_name, road_address_name, address_name, phone, place_url, x, y);
+            
+             var position = new kakao.maps.LatLng(y, x);
+             manager.put(kakao.maps.drawing.OverlayType.MARKER, position, 0);
+             
+
+        }
+
+        
+        
+        
+        
+        
+        
 
         function pushTravelRouteItem(place_name, road_address_name, address_name, phone, place_url, x, y) {
 
@@ -1339,6 +1360,8 @@
 
         }
 
+        
+        
   
 
         function removeTravelRouteItem(index) {
@@ -1356,7 +1379,7 @@
         
         function checkMarkerNRemove(order){
             var markers = manager.getOverlays([kakao.maps.drawing.OverlayType.MARKER]);
-            items.marker.forEach(function(value,idx,arr){ 
+            markers.marker.forEach(function(value,idx,arr){ 
                 if(value._order == order){
                     manager.remove(value);
                 }
@@ -2669,7 +2692,7 @@
 //////////////////////////////////////////////////////////////////////////////////
             content +=
                 '</blockquote>' +
-                '<div class="card-addBtn" onclick=\'pushTravelRouteItem("' + place.place_name + '","' + place.road_address_name + '","' + place.address_name + '","' + place.phone + '","' + place.place_url + '","' + place.x + '","' + place.y + '")\'>추가</div>' +
+                '<div class="card-addBtn" onclick=\'AddMarkerWithTravelRouteItem("' + place.place_name + '","' + place.road_address_name + '","' + place.address_name + '","' + place.phone + '","' + place.place_url + '","' + place.x + '","' + place.y + '")\'>추가</div>' +
                 '</div>' +
                 '</div>';
 

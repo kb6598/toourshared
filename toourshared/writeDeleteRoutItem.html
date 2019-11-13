@@ -1343,7 +1343,8 @@
 
         function removeTravelRouteItem(index) {
             var removingOrder = TravelRouteList[index].order;
-            checkMarkerNRemove(removingOrder);            
+            checkMarkerNRemove(removingOrder);  
+            
             TravelRouteList.splice(index, 1);
             removeCostItemParent(index);            
             refreashTravelRoute();
@@ -1356,7 +1357,7 @@
         
         function checkMarkerNRemove(order){
             var markers = manager.getOverlays([kakao.maps.drawing.OverlayType.MARKER]);
-            items.marker.forEach(function(value,idx,arr){ 
+            markers.marker.forEach(function(value,idx,arr){ 
                 if(value._order == order){
                     manager.remove(value);
                 }

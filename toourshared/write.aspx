@@ -590,7 +590,34 @@
  <script src="./javascript/write.js"></script>
   
 -->  
+  <script>
+      
+      
 
+      
+      
+      //윈도우에서 엔터 백스페이스 막기
+      window.onkeydown = function() {
+	var kcode = event.keyCode;
+	if(window.event.keyCode == 13 || kcode == 116) event.returnValue = false;
+    }
+
+
+
+         function searchPlacesByEnter(){
+             var kcode = event.keyCode;
+	if(window.event.keyCode == 13 ){
+        searchPlaces();
+    }
+        
+            
+            
+        }
+
+
+
+  </script>
+    
     <script>
         //이미지 업로드 AJAX
         function sendFile(file) {
@@ -601,7 +628,7 @@
                 type: 'post',
                 url: './imageUploader.ashx',
                 data: formData,
-                success: function (status) {
+                success: function(status) {
                     if (status != 'error') {
                         var my_path = status;
                         $("#mainImgItem").attr("src", my_path);
@@ -610,34 +637,36 @@
                 },
                 processData: false,
                 contentType: false,
-                error: function () {
+                error: function() {
                     alert("Whoops something went wrong!");
                 }
             });
         }
 
         var _URL = window.URL || window.webkitURL;
-        $("#FileUpload_main_img").on('change', function () {
+        $("#FileUpload_main_img").on('change', function() {
 
             var file, img;
             if ((file = this.files[0])) {
                 img = new Image();
-                img.onload = function () {
+                img.onload = function() {
                     sendFile(file);
                 };
-                img.onerror = function () {
+                img.onerror = function() {
                     alert("Not a valid file:" + file.type);
                 };
                 img.src = _URL.createObjectURL(file);
             }
 
         });
+        
+
     </script>
 
 
     <script>
         // Drawing Manager로 도형을 그릴 지도 div
-        var drawingMapContainer = document.getElementById('drawingMap'),
+    var drawingMapContainer = document.getElementById('drawingMap'),
             drawingMap = {
                 center: new daum.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
                 level: 3 // 지도의 확대 레벨
@@ -695,7 +724,7 @@
             },
             markerOptions: { // 마커 옵션입니다
                 draggable: false, // 마커를 그리고 나서 드래그 가능하게 합니다
-                removable: true, // 마커를 삭제 할 수 있도록 x 버튼이 표시됩니다
+                removable: false, // 마커를 삭제 할 수 있도록 x 버튼이 표시됩니다
                 markerImages: [
                     null, // API에서 제공하는 기본 마커 이미지
                     {
@@ -765,29 +794,6 @@
 
 
 
-        class History {
-            constructor() {
-                this._cursor = 0;
-                this.cur_overlay
-                this.history = Array();
-                this.history.push({
-                    PlaceList: Array(),
-                    TravelRouteItemList: Array(),
-                    CostItemList: Array()
-                });
-            }
-            setRoute(place_name, road_address_name, address_name, phone, place_url, x, y) {
-
-                this.place_name = place_name;
-                this.road_address_name = road_address_name;
-                this.address_name = address_name;
-                this.phone = phone;
-                this.place_url = place_url;
-                this.x = x;
-                this.y = y;
-            }
-            push
-        }
 
 
 
@@ -801,11 +807,6 @@
         }
 
 
-        manager.addListener('select', function (data) {
-
-            
-        });
-
 
 
 
@@ -815,7 +816,7 @@
 
         // drawManager의 상태가 변경되고
         // travelRoute와 변경
-        manager.addListener('state_changed', function () {
+        manager.addListener('state_changed', function() {
             closeCusOverlay();
             //console.info(this._historyStroage);
             refreshOverlayListener();
@@ -826,11 +827,8 @@
         // 대상이 삭제되면 listener 도 같이 삭제됨
         // 애초에 리스너가 ExtenedMarker의 부분 요소로 들어가기 때문에
         // 같이 삭제됨
-        manager.addListener('remove', function (e) {
-            console.info("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-            console.info(e);
-            console.info("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-            curOverlay[0] = e;
+        manager.addListener('remove', function(e) {
+
         });
         //http://localhost:49862/
 
@@ -839,13 +837,13 @@
             var data = manager.getOverlays();
             //var overlayType = ["circle", "ellipse", "marker", "polygon", "rectangle"];
             var overlayType = ["marker"];
-            overlayType.forEach(function (overlay, overlayIndex, overlayArray) {
+            overlayType.forEach(function(overlay, overlayIndex, overlayArray) {
                 // 각 오버레이들은 길이가 0인 배열로 최초부터 존제
                 //if (data[overlay] != null) {
                 if (data[overlay].length > 0) {
                     //현재 상태와 이전 상태의 오버레이 갯수가 같다면 해당 리스트 전부 새로고침
                     //console.info(overlay + " : " + data[overlay]._index + "를 새로 고침");
-                    data[overlay].forEach(function (value, index, array) {
+                    data[overlay].forEach(function(value, index, array) {
                         try {
                             //removeListener 시도
                             // 리스너를 만드는중에 오버레이를 전달
@@ -876,18 +874,27 @@
         function closeCusOverlay() {
             customOverlay.setMap(null);
         }
-        function deleteMrker() {
-            manager.remove(curOverlay[0]);
-        }
-
-
+        
+        manager.addListener('drawend', function(data) {
+            console.log('drawend', data);
+            if(data.overlayType == 'marker'){
+                
+                
+                
+                pushTravelRouteItem("","","","","","","");
+            }
+        });
+        
 
         
+
+
+    
 
         //-----------------------------------------------
         // 클릭시 발생하는 이벤트
         //----------------------------------------------
-        var onClick_overlay = function () {
+        var onClick_overlay = function() {
 
             //console.info(overlay.constructor.name + '_' + overlay._index);
 
@@ -898,11 +905,10 @@
             //---- 오버레이 타입마다 좌표가 존재하는 위치가 다름
 
             var coord_WCONGNAMUL = getWCONGNAMULFromOverlay(this);
-            curOverlay[0] = this;
-
+            
 
             //----좌표값으로 주소를 가져옴
-            geocoder.coord2Address(coord_WCONGNAMUL.wcongnamulX, coord_WCONGNAMUL.wcongnamulY, function (result, status) {
+            geocoder.coord2Address(coord_WCONGNAMUL.wcongnamulX, coord_WCONGNAMUL.wcongnamulY, function(result, status) {
 
 
                 if (status === kakao.maps.services.Status.OK) {
@@ -921,6 +927,8 @@
                             //                                ps.keywordSearch(keyword.value, placesSearchByStateChange);
                             //                                $('#searchPlaceModal').modal('show');
 
+                            
+                             
                             content =
 
 
@@ -946,9 +954,6 @@
                                 '<li class="card-body-li"> </li>' +
                                 '</blockquote>' +
                                 '<table style="margin-top: 10px;"><tr>' +
-                                '<td>' +
-                                '<div class="card-addBtn" onclick=\'pushTravelRouteItem("","","","","","' + coord_WCONGNAMUL.wcongnamulX + '","' + coord_WCONGNAMUL.wcongnamulY + '")\'>추가</div>' +
-                                '</td>' +
                                 '<td>';
                             if (result[0].address.address_name != null) {
                                 content += '<div class="card-addBtn" onclick=\'searchPlacesByAddress("' + result[0].address.address_name + '")\'>주소로 검색</div>'
@@ -960,7 +965,7 @@
                                 '</tr></table>' +
                                 '</div>';
 
-
+                                
                         }
                     }
 
@@ -968,7 +973,7 @@
 
 
                     geocoder.transCoord(coord_WCONGNAMUL.wcongnamulX, coord_WCONGNAMUL.wcongnamulY,
-                        function (result, status) {
+                        function(result, status) {
 
                             // 정상적으로 검색이 완료됐으면
                             if (status === kakao.maps.services.Status.OK) {
@@ -983,8 +988,8 @@
 
                 }
             }, {
-                    input_coord: kakao.maps.services.Coords.WCONGNAMUL
-                });
+                input_coord: kakao.maps.services.Coords.WCONGNAMUL
+            });
 
 
         }
@@ -1007,7 +1012,7 @@
                 //ExtendedPolygon has ig{0: {ga: ha:}, }
                 var gaTotal = 0;
                 var haTotal = 0;
-                overlay.Ig.forEach(function (value, index, array) {
+                overlay.Ig.forEach(function(value, index, array) {
                     gaTotal += value.Ga;
                     haTotal += value.Ha;
                 });
@@ -1102,7 +1107,7 @@
         function placesSearchByAddressCB(data, status, pagination) {
             if (status === kakao.maps.services.Status.OK) {
 
-                manager.remove(curOverlay[0]);
+                
                 // 정상적으로 검색이 완료됐으면
                 // 검색 목록과 마커를 표출합니다
                 displayPlaces(data);
@@ -1112,22 +1117,22 @@
                 $('#searchPlaceModal').modal('show');
             } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
 
-                alert('검색 결과가 존재하지 않아 더 넓은 주소로 찾습니다.');
-                var keyword = document.getElementById('keyword');
-                var keywordArr = keyword.value.split(' ');
-
-                console.info(keywordArr);
-                var str = "";
-
-                for (var i = 0; i < keywordArr.length - 1; i++) {
-                    str += keywordArr[i] + " ";
-                }
-
-
-
-                //console.info(str);
-                keyword.value = str;
-                ps.keywordSearch(keyword.value, placesSearchByAddressCB);
+//                alert('검색 결과가 존재하지 않아 더 넓은 주소로 찾습니다.');
+//                var keyword = document.getElementById('keyword');
+//                var keywordArr = keyword.value.split(' ');
+//
+//                console.info(keywordArr);
+//                var str = "";
+//
+//                for (var i = 0; i < keywordArr.length - 1; i++) {
+//                    str += keywordArr[i] + " ";
+//                }
+//
+//
+//
+//                //console.info(str);
+//                keyword.value = str;
+//                ps.keywordSearch(keyword.value, placesSearchByAddressCB);
                 return;
 
             } else if (status === kakao.maps.services.Status.ERROR) {
@@ -1175,16 +1180,16 @@
                 // 마커와 검색결과 항목에 mouseover 했을때
                 // 해당 장소에 인포윈도우에 장소명을 표시합니다
                 // mouseout 했을 때는 인포윈도우를 닫습니다
-                (function (marker, place) {
-                    kakao.maps.event.addListener(marker, 'click', function () {
+                (function(marker, place) {
+                    kakao.maps.event.addListener(marker, 'click', function() {
                         displayInfowindow(marker, place);
                     });
 
-                    itemEl.onmouseover = function () {
+                    itemEl.onmouseover = function() {
                         displayInfowindow(marker, place);
                     };
 
-                    itemEl.onmouseclick = function () {
+                    itemEl.onmouseclick = function() {
                         displayInfowindow(marker, place);
                         $('#searchPlaceModal').modal('hide');
 
@@ -1235,8 +1240,8 @@
 
             var el = document.createElement('li'),
                 itemStr = '<span class="markerbg marker_' + (index + 1) + '"></span>' +
-                    '<div class="info">' +
-                    '   <h5 data-dismiss="modal">' + places.place_name + '</h5>';
+                '<div class="info">' +
+                '   <h5 data-dismiss="modal">' + places.place_name + '</h5>';
 
             if (places.road_address_name) {
                 itemStr += '    <span data-dismiss="modal">' + places.road_address_name + '</span>' +
@@ -1302,8 +1307,8 @@
                 if (i === pagination.current) {
                     el.className = 'on';
                 } else {
-                    el.onclick = (function (i) {
-                        return function () {
+                    el.onclick = (function(i) {
+                        return function() {
                             pagination.gotoPage(i);
                         }
                     })(i);
@@ -1346,7 +1351,7 @@
             }
             content +=
                 '</blockquote>' +
-                '<div class="card-addBtn" onclick=\'pushTravelRouteItem("' + place.place_name + '","' + place.road_address_name + '","' + place.address_name + '","' + place.phone + '","' + place.place_url + '","' + place.x + '","' + place.y + '")\'>추가</div>' +
+                '<div class="card-addBtn" onclick=\'AddMarkerWithTravelRouteItem("' + place.place_name + '","' + place.road_address_name + '","' + place.address_name + '","' + place.phone + '","' + place.place_url + '","' + place.x + '","' + place.y + '")\'>추가</div>' +
                 '</div>' +
                 '</div>';
 
@@ -1397,7 +1402,7 @@
         //------------------------------------
         //----------TravelRouteItem and travelRouteList Start
         //------------------------------------
-
+            var TravelOrder = 0;
         class TravelRouteItem {
             constructor(place_name, road_address_name, address_name, phone, place_url, x, y) {
                 this.place_name = place_name;
@@ -1408,7 +1413,8 @@
                 this.x = x;
                 this.y = y;
                 this.info = "";
-
+                this.order = TravelOrder;
+                TravelOrder++;
             }
             setRoute(place_name, road_address_name, address_name, phone, place_url, x, y) {
 
@@ -1446,7 +1452,7 @@
             while (travelRouteUl.hasChildNodes()) {
                 travelRouteUl.removeChild(travelRouteUl.firstChild);
             }
-            TravelRouteList.forEach(function (currentValue, index) {
+            TravelRouteList.forEach(function(currentValue, index) {
 
                 ////console.info(index);
                 ////console.info(currentValue);
@@ -1525,6 +1531,22 @@
             dragAndDropAction();
 
         }
+        
+         function AddMarkerWithTravelRouteItem(place_name, road_address_name, address_name, phone, place_url, x, y) {
+             pushTravelRouteItem(place_name, road_address_name, address_name, phone, place_url, x, y);
+            
+             var position = new kakao.maps.LatLng(y, x);
+             manager.put(kakao.maps.drawing.OverlayType.MARKER, position, 0);
+             
+
+        }
+
+        
+        
+        
+        
+        
+        
 
         function pushTravelRouteItem(place_name, road_address_name, address_name, phone, place_url, x, y) {
 
@@ -1536,14 +1558,30 @@
 
         }
 
+        
+        
+  
 
         function removeTravelRouteItem(index) {
+            var removingOrder = TravelRouteList[index].order;
+            checkMarkerNRemove(removingOrder);            
             TravelRouteList.splice(index, 1);
-            removeCostItemParent(index);
+            removeCostItemParent(index);            
             refreashTravelRoute();
 
 
 
+        }
+        
+        // manger의 마커의 order의 값을 비교하여 삭제 
+        
+        function checkMarkerNRemove(order){
+            var markers = manager.getOverlays([kakao.maps.drawing.OverlayType.MARKER]);
+            markers.marker.forEach(function(value,idx,arr){ 
+                if(value._order == order){
+                    manager.remove(value);
+                }
+            });
         }
 
 
@@ -1640,7 +1678,7 @@
             while (costBody.hasChildNodes()) {
                 costBody.removeChild(costBody.firstChild);
             }
-            CostItemList.forEach(function (currentValue, pindex) {
+            CostItemList.forEach(function(currentValue, pindex) {
                 pindexTmp = pindex;
                 ////console.info(pindex);
                 ////console.info(currentValue);
@@ -1653,7 +1691,7 @@
                     '   <div class="costItem-body">' +
                     '       <ul>';
 
-                currentValue.itemList.forEach(function (currentValue, index) {
+                currentValue.itemList.forEach(function(currentValue, index) {
                     itemStr += '<li>' + currentValue.costType +
                         '               <div class="btn btn-sm btn-warning" onclick="removeCostItemChild(' + pindex + ',' + index + ')">x</div>' +
                         '<br/>' +
@@ -1849,15 +1887,15 @@
                 travelRoutes: [],
                 currentContainer: null,
 
-                add: function (travelRoute) {
+                add: function(travelRoute) {
                     this.travelRoutes.push(travelRoute);
                 },
 
-                handleEvent: function (event) {
+                handleEvent: function(event) {
                     ////console.info(event.target);
                     if (event.type == 'dragstart') {
                         //console.info("dragstart");
-                        var containers = this.travelRoutes.filter(function (container) {
+                        var containers = this.travelRoutes.filter(function(container) {
 
                             return container.contains(event.target);
                         });
@@ -1891,12 +1929,12 @@
                 DragManager.add(this);
             }
 
-            travelRoute.prototype.contains = function (target) {
+            travelRoute.prototype.contains = function(target) {
                 ////console.info(target);
                 return $(this.element).find(target).length;
             }
 
-            travelRoute.prototype.handleEvent = function (event) {
+            travelRoute.prototype.handleEvent = function(event) {
                 // NOTE: We've bound `this` to the travelRoute object, not
                 // the element the event was fired on.
                 var $t = $(event.target);
@@ -1973,7 +2011,7 @@
                 }
             }
 
-            travelRoute.prototype.activate = function () {
+            travelRoute.prototype.activate = function() {
                 for (var i = 0, j = this.items.length; i < j; i++) {
                     // Make sure `this` is always a travelRoute instead of the element the
                     // event was activated on.
@@ -1984,7 +2022,7 @@
                 }
             }
 
-            travelRoute.prototype.deactivate = function () {
+            travelRoute.prototype.deactivate = function() {
                 this.draggingItem = null;
                 for (var i = 0, j = this.items.length; i < j; i++) {
                     //this.items[i].removeEventListener('dragenter', this.handleEvent);
@@ -2283,14 +2321,14 @@
                 type: 'post',
                 url: 'Write_tmpSave.aspx',
                 data: data,
-                success: function (status) {
+                success: function(status) {
                     if (status != 'error') {
                         alert("저장되었습니다.");
                     }
                 },
                 processData: false,
                 contentType: false,
-                error: function () {
+                error: function() {
                     alert("Whoops something went wrong!");
                 }
             });
@@ -2398,7 +2436,7 @@
 
                 //현재 지도의 중앙부분의 주소를 가져와 가장 앞 주소(시/도)만 사용
                 var coord = drawingMap.getCenter();
-                geocoder.coord2Address(coord.Ga, coord.Ha, function (result, status) {
+                geocoder.coord2Address(coord.Ga, coord.Ha, function(result, status) {
                     if (status === kakao.maps.services.Status.OK) {
                         //주소가 있다면 검색
                         if (result[0] != null) {
@@ -2646,18 +2684,18 @@
         //----------From Post END
         //------------------------------------
 
-        //------------------------------------
+         //------------------------------------
         //----------From around category search START
         //------------------------------------
 
 
         // 마커를 클릭했을 때 해당 장소의 상세정보를 보여줄 커스텀오버레이입니다
         var placeOverlay = new kakao.maps.CustomOverlay({
-            xAnchor: 0.5,
-            yAnchor: 1.25,
-            zIndex: 3
+                xAnchor: 0.5,
+                yAnchor: 1.25,
+                zIndex: 3
 
-        }),
+            }),
             contentNode = document.createElement('div'), // 커스텀 오버레이의 컨텐츠 엘리먼트 입니다 
             markersAround = [], // 마커를 담을 배열입니다
             currCategory = ''; // 현재 선택된 카테고리를 가지고 있을 변수입니다
@@ -2741,43 +2779,43 @@
             for (var i = 0; i < places.length; i++) {
 
                 // 마커를 생성하고 지도에 표시합니다
-                var marker = addMarker(new kakao.maps.LatLng(places[i].y, places[i].x), order);
+                var marker = addMarkerArround(new kakao.maps.LatLng(places[i].y, places[i].x), order);
 
                 // 마커와 검색결과 항목을 클릭 했을 때
                 // 장소정보를 표출하도록 클릭 이벤트를 등록합니다
-                (function (marker, place) {
-                    kakao.maps.event.addListener(marker, 'click', function () {
+                (function(marker, place) {
+                    kakao.maps.event.addListener(marker, 'click', function() {
                         displayPlaceInfo(place);
                     });
                 })(marker, places[i]);
             }
         }
-
-        //        <li id='MT1' data-order="0"> <span class="category_bg mart"> 대형마트</span></li>
-        //        <li id='CS2' data-order="1"> <span class="category_bg store"> 편의점</span></li>
-        //        <li id='PS3' data-order="2"> <span class="category_bg elemantry"> 어린이집, 유치원</span></li>
-        //        <li id='SC4' data-order="3"> <span class="category_bg"> 학교</span></li>
-        //        <li id='AC5' data-order="4"> <span class="category_bg"> 학원</span></li>
-        //        <li id='PK6' data-order="5"> <span class="category_bg"> 주차장</span></li>
-        //        <li id='OL7' data-order="6"> <span class="category_bg oil"> 주유소, 충전소</span></li>
-        //        <li id='SW8' data-order="7"> <span class="category_bg"> 지하철역</span></li>
-        //        <li id='BK9' data-order="8"> <span class="category_bg bank"> 은행</span></li>
-        //        <li id='CT1' data-order="9"><span class="category_bg"> 문화시설</span></li>
-        //        <li id='AG2' data-order="10"><span class="category_bg"> 중개업소</span></li>
-        //        <li id='PO3' data-order="11"><span class="category_bg"> 공공기관</span></li>
-        //        <li id='AT4' data-order="12"><span class="category_bg"> 관광명소</span></li>
-        //        <li id='AD5' data-order="13"><span class="category_bg"> 숙박</span></li>
-        //        <li id='FD6' data-order="14"><span class="category_bg"> 음식점</span></li>
-        //        <li id='CE7' data-order="15"><span class="category_bg cafe"> 카페</span></li>
-        //        <li id='HP8' data-order="16"><span class="category_bg"> 병원</span></li>
-        //        <li id='PM9' data-order="17"><span class="category_bg pharmacy"> 약국</span></li>     
-
+        
+//        <li id='MT1' data-order="0"> <span class="category_bg mart"> 대형마트</span></li>
+//        <li id='CS2' data-order="1"> <span class="category_bg store"> 편의점</span></li>
+//        <li id='PS3' data-order="2"> <span class="category_bg elemantry"> 어린이집, 유치원</span></li>
+//        <li id='SC4' data-order="3"> <span class="category_bg"> 학교</span></li>
+//        <li id='AC5' data-order="4"> <span class="category_bg"> 학원</span></li>
+//        <li id='PK6' data-order="5"> <span class="category_bg"> 주차장</span></li>
+//        <li id='OL7' data-order="6"> <span class="category_bg oil"> 주유소, 충전소</span></li>
+//        <li id='SW8' data-order="7"> <span class="category_bg"> 지하철역</span></li>
+//        <li id='BK9' data-order="8"> <span class="category_bg bank"> 은행</span></li>
+//        <li id='CT1' data-order="9"><span class="category_bg"> 문화시설</span></li>
+//        <li id='AG2' data-order="10"><span class="category_bg"> 중개업소</span></li>
+//        <li id='PO3' data-order="11"><span class="category_bg"> 공공기관</span></li>
+//        <li id='AT4' data-order="12"><span class="category_bg"> 관광명소</span></li>
+//        <li id='AD5' data-order="13"><span class="category_bg"> 숙박</span></li>
+//        <li id='FD6' data-order="14"><span class="category_bg"> 음식점</span></li>
+//        <li id='CE7' data-order="15"><span class="category_bg cafe"> 카페</span></li>
+//        <li id='HP8' data-order="16"><span class="category_bg"> 병원</span></li>
+//        <li id='PM9' data-order="17"><span class="category_bg pharmacy"> 약국</span></li>     
+        
 
         // 마커를 생성하고 지도 위에 마커를 표시하는 함수입니다
-        function addMarker(position, order) {
+        function addMarkerArround(position, order) {
             var imageSize = new kakao.maps.Size(33, 44); // 마커이미지의 크기입니다
-            var imageOption = { offset: new kakao.maps.Point(27, 69) };
-            var iconUrl = [
+            var imageOption = {offset: new kakao.maps.Point(27, 69)}; 
+            var iconUrl =  [
                 "./img/ico/marker/shopping.png",               //대형마트
                 "./img/ico/marker/retail-stores.png",          //편의점
                 "./img/ico/marker/play-schools.png",           //어린이집, 유치원
@@ -2796,12 +2834,12 @@
                 "./img/ico/marker/coffee-n-tea.png",           //카페
                 "./img/ico/marker/medical.png",                //병원
                 "./img/ico/marker/health-medical.png"          //약국
-            ];
-
-            var marker = new kakao.maps.Marker({
-                position: position, // 마커의 위치
-                image: new kakao.maps.MarkerImage(iconUrl[order], imageSize, imageOption)
-            });
+                            ];
+                
+                var marker = new kakao.maps.Marker({
+                    position: position, // 마커의 위치
+                    image: new kakao.maps.MarkerImage(iconUrl[order], imageSize, imageOption)
+                });
 
             marker.setMap(drawingMap); // 지도 위에 마커를 표출합니다
             markersAround.push(marker); // 배열에 생성된 마커를 추가합니다
@@ -2847,9 +2885,12 @@
             if (place.place_url != null) {
                 content += '<li class="card-body-li" style="padding: 15px 0;"><a href="' + place.place_url + '" target="_blank" style="text-decoration: none;">상세페이지</a></li>';
             }
+            
+            
+//////////////////////////////////////////////////////////////////////////////////
             content +=
                 '</blockquote>' +
-                '<div class="card-addBtn" onclick=\'pushTravelRouteItem("' + place.place_name + '","' + place.road_address_name + '","' + place.address_name + '","' + place.phone + '","' + place.place_url + '","' + place.x + '","' + place.y + '")\'>추가</div>' +
+                '<div class="card-addBtn" onclick=\'AddMarkerWithTravelRouteItem("' + place.place_name + '","' + place.road_address_name + '","' + place.address_name + '","' + place.phone + '","' + place.place_url + '","' + place.x + '","' + place.y + '")\'>추가</div>' +
                 '</div>' +
                 '</div>';
 
@@ -2902,7 +2943,7 @@
                 el.className = 'dropdown-item active';
             }
         }
-
+        
         //------------------------------------
         //----------From around category search END
         //------------------------------------
