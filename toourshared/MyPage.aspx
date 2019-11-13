@@ -769,12 +769,18 @@
         padding: 14px 16px;
         width: auto;
         background-color: transparent;
+        transition-duration: .2s;
     }
 
         /* get → border-top */
         .boardTapOpen:hover {
-            margin-top: -1px;
-            border-top: 1px solid black;
+            margin-top: -2px;
+            border-top: 3px solid #2e2e2e;
+        }
+
+        .active{
+            margin-top: -2px;
+            border-top: 3px solid #2e2e2e;
         }
 
     .boardTapTxt {
@@ -784,7 +790,7 @@
 
     .boardContents {
         width: 100%;
-        height: auto;
+        height: 500px;
     }
 
     .boardItem {
@@ -869,23 +875,6 @@
             padding-right: 7px;
         }
 
-    .footer {
-        width: 100%;
-        height: 150px;
-        position: relative;
-        background-color: #272625;
-    }
-
-    .footerText {
-        width: 100%;
-        height: inherit;
-        color: white;
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
-        position: absolute;
-    }
     .navJoinBtn{
             border: none;
             outline: none;
@@ -1083,7 +1072,7 @@
                 <!-- boardTap -->
                 <div class="boardTap">
                     <a
-                        class="boardTapOpen" onclick="openPage('MyTravels', this)">
+                        class="boardTapOpen active" onclick="openPage('MyTravels', this)">
                         <span class="boardTapTxt">▦ My Travels</span>
                     </a>
                     <a class="boardTapOpen" onclick="openPage('MyReviews', this)">
@@ -1119,13 +1108,6 @@
             </div>
         </div>
 
-
-        <!-- 바닥글 영역 -->
-        <div class="footer">
-            <div class="footerText">
-                ㅂㄷㄱ
-            </div>
-        </div>
     </form>
 
 

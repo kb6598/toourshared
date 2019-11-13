@@ -25,7 +25,7 @@ namespace tooushared.Lib
             return this.con;
         }
 
-        public void CloseCon()
+        ~MyDB()
         {
             this.con.Close();
 

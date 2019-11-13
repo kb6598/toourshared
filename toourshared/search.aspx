@@ -316,7 +316,6 @@
     // 맵데이터 바인딩
 
 
-
     for (int i = 0; i < travelList.Count; i++)
     {
         member = new Member();
@@ -398,7 +397,7 @@
         }
         Response.Write("</div>\n" +
                     "</div>\n" +
-                "</div>\n");
+                "</div>\n"+"<input type=\"hidden\" class=\"hidden_trv_no\" value=\""+travelList[i].Trv_no.ToString()+"\" />");
     }
     %>
                             </div>
@@ -410,6 +409,7 @@
                     <div class="footerArea">
                         <div class="footerItem">
                             <ul class="pagination">
+                                
 <%
     System.Diagnostics.Debug.WriteLine($"페이징 작업: totalPageCount({totalPageCount}) pageCount({pageCount}) blockCount({blockCount}) startPage({startPage}) lastPage({lastPage}) leftArrow({leftArrow}) rightArrow({rightArrow})");
 
@@ -468,51 +468,114 @@
 </form>
     <script>
 
+        var trvMapDatas = [];
+        
+        $(document).ready(function () {
+            var hiddenFileds = document.getElementsByClassName("hidden_trv_no");
 
+            for (var i = 0; i < hiddenFileds.length; i++) {
+                //console.log(hiddenFileds[i].value); //second console output
+                getMapData2Arrs(hiddenFileds[i].value);
+            }
+      
+            console.info(trvMapDatas);
 
-        var cur_trv_no;
-        function getMapData(travel_no) {
-            console.info(cur_trv_no +":"+ travel_no);
-            if (cur_trv_no != travel_no) {
-
+            
+        });
+        function getMapData2Arrs(travel_no) {
+            
                 $.ajax({
                     type: "GET",
                     url: "./getMaps.ashx?trv_no=" + travel_no,
                     dataType: 'json',
-                    success: function (data) {
-                        console.info(cur_trv_no);
-                        console.info(travel_no);
+                    success: function (data) {     
+                        //console.info(travel_no);
 
+                        //console.info(data);
+                        var tmpData = {};
                         console.info(data);
-                        setMapDatas(data);
+                        tmpData[travel_no] = JSON.parse(data);
+                        
+                        trvMapDatas.push(tmpData);
 
 
 
                     }
 
-                });
-                cur_trv_no = travel_no;
+                });        
 
 
-            }
+            
         }
+        function setMapByIndex(trv_no) {
+            setMapDatasByIndex(trv_no);
+            //setMapCenterByIndex(trv_no);
+        }
+
 
         var color= [ "#E53A40", "#F68657", "#EFDC05", "#58C9B9", "#a3daff", "#0080ff" , "#A593E0", "#C5C6B6", "#D09E88", "#FADAD8", "#fab1ce", "#fffff5", "#c8c8a9", "#3a5134" ];
         var markerIco = [ "default_01.png", "default_02.png", "default_03.png", "default_04.png", "default_05.png", "default_06.png" , "default_07.png", "default_08.png", "default_09.png", "default_10.png", "default_11.png", "default_12.png", "default_13.png", "default_14.png" ];
         var icoDir = "./img/ico/marker/";
 
-        function setMapDatas(data) {
-            if (data != null && data != "" && data != '""') {
 
-                
-                data.forEach(function (value, index, array) {
-                    if (value != null && value != "" && value != '""') {
-                        getDataFromDrawingMap(value, color[index], color[index], icoDir + markerIco[index]);
-                    }
-                });
+        function setMapDatasByIndex(trv_no) {
+            removeOverlays();
+            console.info(trvMapDatas);  
+            if (trvMapDatas[trv_no] != null && trvMapDatas[trv_no] != '""' && trvMapDatas[trv_no] != "[]" && trvMapDatas[trv_no] != '[""]') {
+                var data = JSON.parse(trvMapDatas[trv_no]);
+
+
+                data.forEach(function (value, index, arr) {
+                    getDataFromDrawingMap(value, color[index], color[index], icoDir + markerIco[index]);
+
+                }
+                );
             }
+           
+            
+                     
+
         }
 
+        function setMapCenterByIndex(trv_no) {
+            console.info(trvMapCenters);
+            //var data = JSON.parse(trvMapCenters[trv_no]);
+            //console.info(data);
+            //if (data != null && data != "" && data != '""') {
+                
+            //    var totalGa = 0.0;
+            //    var totalHa = 0.0;
+            //    var cnt = 0;
+            //    var tmpCenter;
+            //    data.forEach(function (value, index, array) {
+            //        if (value != null && value != "" && value != '""') {
+            //            tmpCenter = JSON.parse(value);
+
+            //            console.info(tmpCenter.Ga);
+            //            console.info(tmpCenter.Ha);
+            //            totalGa += tmpCenter.Ga;
+            //            totalHa += tmpCenter.Ha;
+            //            cnt++;
+            //            console.info(totalGa);
+            //            console.info(totalHa);
+            //        }
+            //    });
+            //    map.setLevel(4, { animate: true });
+
+            //    panTo(totalHa / cnt, totalGa / cnt);
+                
+                
+            //}
+        }
+
+        function panTo( Ha, Ga) {
+            // 이동할 위도 경도 위치를 생성합니다 
+            var moveLatLon = new kakao.maps.LatLng(Ha, Ga);
+
+            // 지도 중심을 부드럽게 이동시킵니다
+            // 만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동합니다
+            map.panTo(moveLatLon);
+        } 
 
         
         // Drawing Manager에서 데이터를 가져와 도형을 표시할 아래쪽 지도 div
@@ -529,13 +592,13 @@
 
         function getDataFromDrawingMap(mapData, instrokeColor, infillColor, iconUrl) {
             // Drawing Manager에서 그려진 데이터 정보를 가져옵니다 
-            console.info(mapData);
+            //console.info(mapData);
+            var data = mapData;
+            //var data = JSON.parse(mapData);
             //var data = mapData;
-            var data = JSON.parse(mapData);
-            //var data = mapData;
-            console.info(data);
+            //console.info(data);
             
-            removeOverlays();
+            
             // 지도에 가져온 데이터로 도형들을 그립니다
             // 지도에 가져온 데이터로 도형들을 그립니다
             //drawMarker(data[kakao.maps.drawing.OverlayType.MARKER]);

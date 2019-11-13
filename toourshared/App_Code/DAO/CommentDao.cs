@@ -26,8 +26,12 @@ public class CommentDao
     {
 
             MyDB myDB = new MyDB();
-            MySqlConnection con = myDB.GetCon();
+            MySqlConnection con = null;
+            string result = "";
+        try
+        {
 
+            con = myDB.GetCon();
             string Sql = "INSERT INTO toourshared.comment (trv_no, cmt_content, mem_id, cmt_rate, cmt_timestamp) VALUES(@trv_no, @cmt_content, @mem_id, @cmt_rate, @cmt_timestamp); select last_insert_id()";
             MySqlCommand cmd = new MySqlCommand(Sql, con);
 
@@ -41,10 +45,21 @@ public class CommentDao
 
             cmd.ExecuteNonQuery();
 
-            string result = cmd.LastInsertedId.ToString();
+            result = cmd.LastInsertedId.ToString();
 
+            
+
+        }
+        catch(Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
             con.Close();
-
+            
+        }
+        finally
+        {
+            con.Close();
+        }
 
         return result;
     }   
@@ -53,12 +68,13 @@ public class CommentDao
 
     public int UpdateComment(Comment comment)
     {
-        int result;
+        int result =0;
 
         MyDB myDB = new MyDB();
-        MySqlConnection con = myDB.GetCon();
-
-        string Sql = "UPDATE toourshared.comment SET cmt_content=@cmt_content, cmt_rate=@cmt_rate, cmt_timestamp=@cmt_timestamp, mem_id=@mem_id where cmt_no=@cmt_no";
+        MySqlConnection con = null;
+        try {
+            con = myDB.GetCon();
+            string Sql = "UPDATE toourshared.comment SET cmt_content=@cmt_content, cmt_rate=@cmt_rate, cmt_timestamp=@cmt_timestamp, mem_id=@mem_id where cmt_no=@cmt_no";
         MySqlCommand cmd = new MySqlCommand(Sql, con);
 
         cmd.Parameters.AddWithValue("@cmt_content", comment.Cmt_content);
@@ -71,8 +87,18 @@ public class CommentDao
 
         result = cmd.ExecuteNonQuery();
 
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            con.Close();
 
-        con.Close();
+        }
+        finally
+        {
+            con.Close();
+        }
+
 
 
         return result;
@@ -80,12 +106,15 @@ public class CommentDao
 
     public int DeleteComment(Comment comment)
     {
-        int result;
+        int result = 0;
 
         MyDB myDB = new MyDB();
-        MySqlConnection con = myDB.GetCon();
+        MySqlConnection con =null;
+        try
+        {
+            con = myDB.GetCon();
 
-        string Sql = "DELETE FROM toourshared.comment WHERE cmt_no=@cmt_no";
+            string Sql = "DELETE FROM toourshared.comment WHERE cmt_no=@cmt_no";
         MySqlCommand cmd = new MySqlCommand(Sql, con);
 
         cmd.Parameters.AddWithValue("@cmt_no", comment.Cmt_no);
@@ -93,8 +122,18 @@ public class CommentDao
         con.Open();
 
         result = cmd.ExecuteNonQuery();
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            con.Close();
 
-        con.Close();
+        }
+        finally
+        {
+            con.Close();
+        }
+
 
         return result;
 
@@ -104,16 +143,31 @@ public class CommentDao
     public DataSet SelectComment()
     {
         MyDB myDB = new MyDB();
-        MySqlConnection con = myDB.GetCon();
+        MySqlConnection con = null;
+        DataSet ds = null;
+        try
+        {
 
-        string sql = "Select cmt_no, cmt_content, cmt_rate, cmt_timestamp, mem_id  From toourshared.comment";
+            con = myDB.GetCon();
+            string sql = "Select cmt_no, cmt_content, cmt_rate, cmt_timestamp, mem_id  From toourshared.comment";
         MySqlCommand cmd = new MySqlCommand(sql, con); // 커맨드(sql문을 con에서 수행하기 위한 명령문) 생성 DB에서 수행시킬 명령 생성   
 
         MySqlDataAdapter ad = new MySqlDataAdapter();
         ad.SelectCommand = cmd;
-        DataSet ds = new DataSet();
+        
         ad.Fill(ds);
-       
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            con.Close();
+
+        }
+        finally
+        {
+            con.Close();
+        }
+
 
         return ds;
     }
@@ -124,8 +178,8 @@ public class CommentDao
         MyDB mydb = new MyDB();
 
         Comment result = new Comment();
-        MySqlConnection con;
-
+        MySqlConnection con = null;
+        MySqlDataReader rd = null;
         try
         {
             con = mydb.GetCon();
@@ -138,7 +192,7 @@ public class CommentDao
             cmd.Parameters.AddWithValue("@cmt_no", comment.Cmt_no);
 
             con.Open();
-            MySqlDataReader rd = cmd.ExecuteReader();
+             rd = cmd.ExecuteReader();
 
             if (rd.HasRows)
             {
@@ -157,13 +211,20 @@ public class CommentDao
                 return result;
 
             }
-            rd.Close();
-            con.Close();
+            
 
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine(ex.ToString());
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            rd.Close();
+            con.Close();
+
+        }
+        finally
+        {
+            rd.Close();
+            con.Close();
         }
         return result;
     }
@@ -172,7 +233,8 @@ public class CommentDao
     {
         MyDB mydb = new MyDB();
         int returnInt = 0;
-        MySqlConnection con;
+        MySqlConnection con = null;
+        MySqlDataReader reader = null;
 
         try
         {
@@ -183,17 +245,27 @@ public class CommentDao
             cmd.Parameters.AddWithValue("@trv_no", travel.Trv_no);
 
             con.Open();
-            MySqlDataReader reader = cmd.ExecuteReader();
+            reader = cmd.ExecuteReader();
 
             if (reader.Read())
             {
                 returnInt = int.Parse(reader["cnt"].ToString());
             }
 
+            
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            reader.Close();
+            con.Close();
+
+        }
+        finally
+        {
             reader.Close();
             con.Close();
         }
-        catch (Exception e) {;}
 
         return returnInt;
     }
@@ -203,8 +275,8 @@ public class CommentDao
         MyDB mydb = new MyDB();
         List<Comment> returnList = new List<Comment>();
         Comment result;
-        MySqlConnection con;
-
+        MySqlConnection con = null;
+        MySqlDataReader reader = null;
         try
         {
             con = mydb.GetCon();
@@ -214,7 +286,7 @@ public class CommentDao
             cmd.Parameters.AddWithValue("@trv_no", travel.Trv_no);
 
             con.Open();
-            MySqlDataReader reader = cmd.ExecuteReader();
+           reader = cmd.ExecuteReader();
 
             while (reader.Read())
             {
@@ -228,10 +300,20 @@ public class CommentDao
                 returnList.Add(result);
             }
 
+            
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            reader.Close();
+            con.Close();
+
+        }
+        finally
+        {
             reader.Close();
             con.Close();
         }
-        catch (Exception e) {;}
 
         return returnList;
     }
@@ -242,8 +324,8 @@ public class CommentDao
 
         List<Comment> resultList = new List<Comment>();
         Comment result;
-        MySqlConnection con;
-
+        MySqlConnection con = null;
+        MySqlDataReader rd= null;
         try
         {
                        
@@ -257,7 +339,7 @@ public class CommentDao
             cmd.Parameters.AddWithValue("@mem_id", travel.Mem_id);
 
             con.Open();
-            MySqlDataReader rd = cmd.ExecuteReader();
+           rd = cmd.ExecuteReader();
 
             while (rd.Read())
             {
@@ -273,14 +355,22 @@ public class CommentDao
                 resultList.Add(result);
 
             }
-            rd.Close();
-            con.Close();
+            
+        
 
 
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine(ex.ToString());
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            rd.Close();
+            con.Close();
+
+        }
+        finally
+        {
+            rd.Close();
+            con.Close();
         }
 
 

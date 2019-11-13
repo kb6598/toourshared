@@ -1,4 +1,4 @@
-﻿<%@ WebHandler Language="C#" Class="getMaps" %>
+﻿<%@ WebHandler Language="C#" Class="getMapCenter" %>
 
 using System;
 using System.Web;
@@ -16,7 +16,7 @@ using System.Web.Script.Serialization;
 using System.Collections;
 
 
-public class getMaps : IHttpHandler,System.Web.SessionState.IRequiresSessionState {
+public class getMapCenter : IHttpHandler,System.Web.SessionState.IRequiresSessionState {
 
     public void ProcessRequest (HttpContext context) {
         if (context.Request.QueryString["trv_no"] != null)
@@ -40,7 +40,7 @@ public class getMaps : IHttpHandler,System.Web.SessionState.IRequiresSessionStat
                 inMap.Trv_day_no = travel_day.Trv_day_no;
                 tmpMap = new Map();
                 tmpMap = mapDao.selectMapByTrv_day_no(inMap);
-                jArray.Add(JToken.Parse(JsonConvert.SerializeObject(tmpMap)));
+                jArray.Add(JToken.Parse(JsonConvert.SerializeObject(tmpMap.Map_center)));
 
             }
 
