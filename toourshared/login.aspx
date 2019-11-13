@@ -441,12 +441,6 @@
             background-color: darkorange;
         }
 
-        .footer {
-            width: 100%;
-            height: 250px;
-            background-color: #272625;
-        }
-
         .navJoinBtn{
             border: none;
             outline: none;
@@ -603,11 +597,6 @@
                 </div>
             </div>
         </div>
-    </div>
-
-    <!-- footer 영역 -->
-    <div class="footer">
-        a
     </div>
         </form>
 </body>

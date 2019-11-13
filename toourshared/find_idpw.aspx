@@ -426,16 +426,6 @@
             background-color: #bd1550;
             transition-duration: .5s;
         }
-
-        .footer {
-            width: 100%;
-            height: 250px;
-            color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #272625;
-        }
         .navJoinBtn{
             border: none;
             outline: none;
@@ -675,9 +665,6 @@
             </div>
         </div>
     </div>
-    
-    <!-- footer 영역 -->
-    <div class ="footer">바닥글</div>
 </form>
 </body>
 </html>

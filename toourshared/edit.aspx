@@ -604,27 +604,6 @@
 			transition-duration: .5s;
 		}
 		
-		.footer
-		{
-			width: 100%;
-			height: 150px;
-			position: relative;
-			background-color: #272625;
-		}
-		
-		.footerText{
-			width: 100%;
-			height: inherit;
-			
-			color: white;
-			
-			display: flex;
-			flex-direction: row;
-			justify-content: center;
-			align-items: center;
-			position: absolute;
-		}
-		
 		/* modal Css */
 		
 		.modal-dialog{
@@ -962,11 +941,6 @@
 		</div>
 	</div>
 	
-	<!-- 바닥글 영역 -->
-	<div class="footer">
-		<div class = "footerText">
-			ㅂㄷㄱ
-		</div>
 	</div>
 	
 	<!-- 프로필 사진 편집 Modal -->

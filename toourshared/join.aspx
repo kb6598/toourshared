@@ -498,12 +498,6 @@
             background-color: darkorange;
         }
 
-        .footer {
-            width: 100%;
-            height: 250px;
-            background-color: #272625;
-        }
-
         .modal-dialog {
             margin-top: 15%;
         }

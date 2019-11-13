@@ -1063,12 +1063,6 @@
             cursor: default;
         }
 
-        .footer {
-            width: 100%;
-            height: 250px;
-            background-color: #272625;
-        }
-
     </style>
 
     <script language="javascript">
@@ -1458,13 +1452,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <!-- 바닥글 영역 -->
-    <div class="footer">
-        <div class="footerText" style="color: white; text-align: center; height: 100%; padding: 120px 0px;">
-            바 닥 글
         </div>
     </div>
 </form>
