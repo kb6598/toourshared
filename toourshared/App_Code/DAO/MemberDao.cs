@@ -391,7 +391,6 @@ namespace tooushared.DAO
             MySqlConnection con = myDB.GetCon();
             try
             {
-
                 string Sql = "UPDATE toourshared.member SET mem_pw =@mem_pw, mem_phone =@mem_phone, mem_ques =@mem_ques, mem_answer =@mem_answer, mem_timestmap =@mem_timestmap, mem_img_url =@mem_img_url  WHERE mem_id = @mem_id";
 
 
@@ -424,6 +423,30 @@ namespace tooushared.DAO
             }
 
             return result;
+        }
+
+        public void UpdateMemImgUrlByMemID(Member member)
+        {
+            if (string.IsNullOrEmpty(member.Mem_img_url) || string.IsNullOrEmpty(member.Mem_id))
+                return;
+
+            MyDB mydb = new MyDB();
+            MySqlConnection con;
+
+            try
+            {
+                con = mydb.GetCon();
+                string Sql = "UPDATE toourshared.member as mem SET mem.mem_img_url = @image WHERE mem.mem_id = @id";
+
+                MySqlCommand cmd = new MySqlCommand(Sql, con);
+                cmd.Parameters.AddWithValue("@image", member.Mem_img_url.ToString());
+                cmd.Parameters.AddWithValue("@id", member.Mem_id.ToString());
+                con.Open();
+
+                cmd.ExecuteNonQuery();
+                con.Close();
+            }
+            catch(Exception e) {;}
         }
 
         // member 존재 유무를 판단해주는 함수(존재하는 경우 true, 존재하지 않는 경우 false 반환)
