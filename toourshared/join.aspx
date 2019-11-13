@@ -113,6 +113,7 @@
             /* 전체 배경색 */
             background-color: #00b9f1;
             background-repeat: no-repeat;
+            font-family: 'Noto Sans KR', sans-serif;
         }
 
         .topnavUl {
@@ -832,55 +833,12 @@
             </div>
             <div class="Item" id="REG">
                 <div class="REGitem1">
-                    <a href="#">
-                        <asp:Button ID="btnJoin" runat="server" Text="회원가입" class="REGbtn" OnClick="btnJoin_Click" />
-                    </a>
+                    <asp:Button ID="btnJoin" runat="server" Text="회원가입" class="REGbtn" OnClick="btnJoin_Click" />
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- footer 영역 -->
-    <div class="footer">
-        바닥글
-    </div>
-
-    <!-- The Modal -->
-    <div class="modal fade" id="checkID">
-        <div class="modal-dialog">
-            <div class="modal-content">
-
-                <!-- Modal Header -->
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
-
-                <!-- Modal body -->
-                <div class="modal-body">
-                    <div class="bodyItem1">
-                        <div class="inputArea">
-                            <asp:TextBox ID="setID" runat="server"></asp:TextBox>
-                        </div>
-                        <div class="checkBtn">
-                            <!--<button id="chkID" class="btn btn-warning">중복확인</button>-->
-                            <asp:Button ID="chkID" runat="server" Text="중복확인" CssClass="btn btn-warning"  OnClientClick="return ValidNum();"  />
-                        </div>
-                    </div>
-                    <div class="bodyItem2">
-                        <div class="result">
-                            <span id="result">😊 사용할 수 있는 아이디 입니다.</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Modal footer -->
-                <div class="modal-footer" id="modalFooter">
-                    <a href="#" id="useID" class="btn btn-danger" data-dismiss="modal">사용하기</a>
-                </div>
-
-            </div>
-        </div>
-    </div>
     </form>
 </body>
 

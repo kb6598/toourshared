@@ -597,7 +597,7 @@
                     <span>아직 회원이 아니신가요?</span>
                 </div>
                 <div class="joinBtn">
-                    <a href="#">
+                    <a href="./join.aspx">
                         <asp:Button ID="JoinBtn" runat="server" Text="회원가입" class="joinBtnItem" />
                     </a>
                 </div>
