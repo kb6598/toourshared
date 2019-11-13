@@ -236,25 +236,28 @@ public class CommentDao
         return returnList;
     }
 
-    public List<Comment> selectCommentListByMem_id(Comment travel)
+    public List<Comment> selectCommentListByMem_id(Comment comment, int limit1 = -1, int limit2 = -1)
     {
         MyDB mydb = new MyDB();
 
         List<Comment> resultList = new List<Comment>();
         Comment result;
         MySqlConnection con;
+        string Sql = "";
 
         try
         {
                        
             con = mydb.GetCon();
 
-            string Sql = "SELECT * FROM toourshared.comment where mem_id=@mem_id";
+            if (limit1 != -1 && limit2 != -1)
+                Sql = "SELECT * FROM toourshared.comment WHERE mem_id = @mem_id ORDER BY cmt_timestamp DESC LIMIT " + limit1 + ", " + limit2;
+            else
+                Sql = "SELECT * FROM toourshared.comment WHERE mem_id = @mem_id";
 
 
             MySqlCommand cmd = new MySqlCommand(Sql, con);
-
-            cmd.Parameters.AddWithValue("@mem_id", travel.Mem_id);
+            cmd.Parameters.AddWithValue("@mem_id", comment.Mem_id);
 
             con.Open();
             MySqlDataReader rd = cmd.ExecuteReader();
@@ -263,20 +266,17 @@ public class CommentDao
             {
 
                 result = new Comment();
-                result.Cmt_content = rd["Cmt_content"].ToString();
-                result.Cmt_no = rd["Cmt_no"].ToString();
-                result.Cmt_rate = rd["Cmt_rate"].ToString();
-                result.Cmt_timestamp = rd["Cmt_timestamp"].ToString();
-                result.Mem_id = rd["Mem_id"].ToString();
-                result.Trv_no = rd["Trv_no"].ToString();
-
+                result.Cmt_no = rd["cmt_no"].ToString();
+                result.Trv_no = rd["trv_no"].ToString();
+                result.Mem_id = rd["mem_id"].ToString();
+                result.Cmt_rate = rd["cmt_rate"].ToString();
+                result.Cmt_timestamp = rd["cmt_timestamp"].ToString();
+                result.Cmt_content = rd["cmt_content"].ToString();
                 resultList.Add(result);
-
             }
+
             rd.Close();
             con.Close();
-
-
         }
         catch (Exception ex)
         {

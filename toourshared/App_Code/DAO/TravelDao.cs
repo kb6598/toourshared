@@ -257,22 +257,22 @@ public class TravelDao
         return result;
     }
 
-    public List<Travel> selectTravelListByMem_id(Travel travel)
+    public List<Travel> selectTravelListByMem_id(Travel travel, int limit1 = -1, int limit2 = -1)
     {
         MyDB mydb = new MyDB();
 
         List<Travel> resultList = new List<Travel>();
         Travel result;
         MySqlConnection con;
+        string Sql = "";
 
         try
         {
-
-
-
             con = mydb.GetCon();
-
-            string Sql = "SELECT * FROM toourshared.travel where mem_id=@mem_id";
+            if (limit1 != -1 && limit2 != -1)
+                Sql = "SELECT * FROM toourshared.travel WHERE mem_id = @mem_id ORDER BY trv_create_time DESC LIMIT " + limit1 + ", " + limit2;
+            else
+                Sql = "SELECT * FROM toourshared.travel WHERE mem_id = @mem_id";
 
 
             MySqlCommand cmd = new MySqlCommand(Sql, con);

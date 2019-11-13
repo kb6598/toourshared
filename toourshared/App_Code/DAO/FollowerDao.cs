@@ -109,6 +109,47 @@ public class FollowerDao
         return result;
     }
 
+    public List<Follower> selectFollowListByMemID(Follower follower, int defaultNum = -1)
+    {
+        MyDB mydb = new MyDB();
+        List<Follower> returnList = new List<Follower>();
+
+        Follower fol;
+        MySqlConnection con;
+        string Sql = "";
+
+        try
+        {
+            con = mydb.GetCon();
+
+            if (defaultNum == -1)
+                Sql = "SELECT * FROM toourshared.follower where fol_id = @mem_id";
+            else
+                Sql = "SELECT * FROM toourshared.follower WHERE fol_id = @mem_id ORDER BY fol_no DESC LIMIT 0, 15";
+
+            MySqlCommand cmd = new MySqlCommand(Sql, con);
+            cmd.Parameters.AddWithValue("@mem_id", follower.Mem_id);
+
+            con.Open();
+            MySqlDataReader reader = cmd.ExecuteReader();
+
+            while(reader.Read())
+            {
+                fol = new Follower();
+                fol.Mem_id = reader["mem_id"].ToString();
+                fol.Fol_id = reader["fol_id"].ToString();
+
+                returnList.Add(fol);
+            }
+
+            reader.Close();
+            con.Close();
+        }
+        catch (Exception e) {;}
+
+        return returnList;
+    }
+
     public List<Follower> selectFollwerListByMem_id(Follower follower)
     {
         MyDB mydb = new MyDB();
