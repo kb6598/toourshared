@@ -20,22 +20,22 @@
     protected void btnLogout_Click(object sender, EventArgs e)
     {
         Session.Abandon();
-        Response.Redirect("/index.aspx");
+        Response.Redirect("./index.aspx");
     }
 
     protected void btnMypage_Click(object sender, EventArgs e)
     {
-        Response.Redirect("/MyPage.aspx");
+        Response.Redirect("./MyPage.aspx");
     }
 
     protected void btnJoin_Click(object sender, EventArgs e)
     {
-        Response.Redirect("/join.aspx");
+        Response.Redirect("./join.aspx");
     }
 
     protected void btnFindIDPW_Click(object sender, EventArgs e)
     {
-        Response.Redirect("/find_idpw.aspx");
+        Response.Redirect("./find_idpw.aspx");
     }
 </script>
 
@@ -477,7 +477,7 @@
                 <div class="nav-log">
                     <a>
                         <div class="nav-log-area">
-                            <asp:Button ID="btnLogin" runat="server" Text="로그인" class="nav-log-item" PostBackUrl="~/login.aspx"/>
+                            <asp:Button ID="btnLogin" runat="server" Text="로그인" class="nav-log-item" PostBackUrl="./login.aspx"/>
                         </div>
                     </a>
                 </div>
@@ -562,10 +562,10 @@
                 </div>
                 <div class = "contentBtn">
                     <div class = "go Back">
-                        <asp:Button ID="btnBack" runat="server" Text="이전으로" PostBackUrl="~/find_idpw.aspx"/>
+                        <asp:Button ID="btnBack" runat="server" Text="이전으로" PostBackUrl="./find_idpw.aspx"/>
                     </div>
                     <div class = "go Home">
-                        <asp:Button ID="btnHome" runat="server" Text="메인으로" PostBackUrl="~/index.aspx"/>
+                        <asp:Button ID="btnHome" runat="server" Text="메인으로" PostBackUrl="./index.aspx"/>
                     </div>
                 </div>
             </div>

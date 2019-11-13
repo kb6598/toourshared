@@ -1,4 +1,8 @@
 ﻿<%@ Page Language="C#" %>
+<%@ Import Namespace="System" %>
+<%@ Import Namespace="System.Linq" %>
+<%@ Import Namespace="Newtonsoft.Json" %>
+<%@ Import Namespace="Newtonsoft.Json.Linq" %>
 
 
 
@@ -376,6 +380,31 @@
             </div>      
             <asp:Literal ID="Literal1" runat="server"></asp:Literal>
             
+            <%
+                
+                string str = @"{ 
+                Id: 101,                
+                Phone: ['010-123-3456', '02-2222-3333', '010-222-1121']
+                }";
+
+            // 예제 1 : LINQ to JSON
+            // JSON 문자열을 파싱하여 JObject를 리턴
+            JObject jo = JObject.Parse(str);
+
+            // JObject 인덱서를 사용하여 특정 Token을 리턴
+            JToken idToken = jo["Id"];
+            int id = (int)idToken;
+            string phone1 = jo["Phone"][0].ToString();
+             Response.Write($"{id}:{phone1}");
+
+            
+
+            // 예제 2 : dynamic 
+            dynamic jobj = JsonConvert.DeserializeObject(str);
+            var xid = jobj.Id.ToString();
+            var xphone1 = jobj.Phone[1].ToString();
+            Response.Write($"{xid}:{xphone1}");
+                %>
  
         </div>
 
