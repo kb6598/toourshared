@@ -133,31 +133,30 @@ namespace tooushared.DAO
                 MySqlCommand cmd = new MySqlCommand(Sql, con);
                 con.Open();
 
-                MySqlDataReader reader = cmd.ExecuteReader();
+                rd = cmd.ExecuteReader();
 
-                if(reader.Read())
+                if(rd.Read())
                 {
-                    mem.Mem_id = reader["mem_id"].ToString();
-                    mem.Mem_state = reader["mem_state"].ToString();
-                    mem.Mem_phone = reader["mem_phone"].ToString();
-                    mem.Mem_pw = reader["mem_pw"].ToString();
-                    mem.Mem_name = reader["mem_name"].ToString();
-                    mem.Mem_sex = reader["mem_sex"].ToString();
-                    mem.Mem_ques = reader["mem_ques"].ToString();
-                    mem.Mem_answer = reader["mem_answer"].ToString();
-                    mem.Mem_birth = reader["mem_birth"].ToString();
-                    mem.Mem_email = reader["mem_email"].ToString();
-                    mem.Mem_reg_datetime = reader["mem_reg_datetime"].ToString();
-                    mem.Mem_timestmap = reader["mem_timestmap"].ToString();
-                    mem.Mem_img_url = reader["mem_img_url"].ToString();
+                    mem.Mem_id = rd["mem_id"].ToString();
+                    mem.Mem_state = rd["mem_state"].ToString();
+                    mem.Mem_phone = rd["mem_phone"].ToString();
+                    mem.Mem_pw = rd["mem_pw"].ToString();
+                    mem.Mem_name = rd["mem_name"].ToString();
+                    mem.Mem_sex = rd["mem_sex"].ToString();
+                    mem.Mem_ques = rd["mem_ques"].ToString();
+                    mem.Mem_answer = rd["mem_answer"].ToString();
+                    mem.Mem_birth = rd["mem_birth"].ToString();
+                    mem.Mem_email = rd["mem_email"].ToString();
+                    mem.Mem_reg_datetime = rd["mem_reg_datetime"].ToString();
+                    mem.Mem_timestmap = rd["mem_timestmap"].ToString();
+                    mem.Mem_img_url = rd["mem_img_url"].ToString();
 
                     // mem_img_url 컬럼에 NULL or EMPTY or "noImage" 일 경우 "./img/memberNoImage.png" 로 속성 값 적용
                     if(string.IsNullOrEmpty(mem.Mem_img_url) || mem.Mem_img_url == "noImage")
                         mem.Mem_img_url = "./img/memberNoImage.png";
                 }
 
-                reader.Close();
-                con.Close();
+
 
             }
             catch (Exception ex)
@@ -180,6 +179,7 @@ namespace tooushared.DAO
         {
             MyDB myDB = new MyDB();
             MySqlConnection con = myDB.GetCon();
+            MySqlDataReader rd = null;
             int count = 0;
             try
             {
@@ -193,27 +193,28 @@ namespace tooushared.DAO
 
                 
                 MySqlDataReader reader = cmd.ExecuteReader();
-                if (reader.Read())
+                if (rd.Read())
                 {
-                    reader.Close();
-                    con.Close();
+                    
+                  
                     count = 1;
                 }
                 else
                 {
                     count = 0;
                 }
-                return count;
+                
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
                 con.Close();
-
+                rd.Close();
             }
             finally
             {
                 con.Close();
+                rd.Close();
             }
             return count;
         }
@@ -223,6 +224,7 @@ namespace tooushared.DAO
             int count = 0;
             MyDB myDB = new MyDB();
             MySqlConnection con = myDB.GetCon();
+            MySqlDataReader reader = null;
             try
             {
                 string Sql = "Select * From toourshared.member Where mem_id = @mem_id";
@@ -232,12 +234,11 @@ namespace tooushared.DAO
 
                 con.Open();
 
-                
-                MySqlDataReader reader = cmd.ExecuteReader();
+
+                reader = cmd.ExecuteReader();
                 if (reader.Read())
                 {
-                    reader.Close();
-                    con.Close();
+                    
                     count = 1;
                 }
                 else
@@ -248,11 +249,13 @@ namespace tooushared.DAO
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+                reader.Close();
                 con.Close();
 
             }
             finally
             {
+                reader.Close();
                 con.Close();
             }
             return count;
@@ -266,7 +269,7 @@ namespace tooushared.DAO
 
             Member FindID = new Member();
             MySqlConnection con = null;
-
+            MySqlDataReader rd = null;
             try
             {
 
@@ -284,27 +287,28 @@ namespace tooushared.DAO
                 cmd.Parameters.AddWithValue("@mem_answer", member.Mem_answer);
 
                 con.Open();
-                MySqlDataReader rd = cmd.ExecuteReader();
+                rd = cmd.ExecuteReader();
 
                 if (rd.HasRows)
                 {
                     rd.Read();
 
                     FindID.Mem_id = rd["mem_id"].ToString();
-                    rd.Close();
-                    con.Close();
-                    return FindID;
+                    
+                   
 
                 }
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+                rd.Close();
                 con.Close();
 
             }
             finally
             {
+                rd.Close();
                 con.Close();
             }
             return FindID;
@@ -317,7 +321,7 @@ namespace tooushared.DAO
 
             Member FindPW = new Member();
             MySqlConnection con = null;
-
+            MySqlDataReader rd = null;
             try
             {
 
@@ -335,7 +339,7 @@ namespace tooushared.DAO
                 cmd.Parameters.AddWithValue("@mem_answer", member.Mem_answer);
 
                 con.Open();
-                MySqlDataReader rd = cmd.ExecuteReader();
+                rd = cmd.ExecuteReader();
 
                 if (rd.HasRows)
                 {
@@ -345,7 +349,7 @@ namespace tooushared.DAO
 
                     rd.Close();
                     con.Close();
-                    return FindPW;
+                    
 
                 }
             }
@@ -426,7 +430,7 @@ namespace tooushared.DAO
                     result.Mem_timestmap = rd["mem_timestamp"].ToString();
                     result.Mem_img_url = rd["mem_img_url"].ToString();
 
-                    return result;
+                   
                 }
 
                 con.Close();
@@ -511,7 +515,7 @@ namespace tooushared.DAO
                 con.Open();
 
                 cmd.ExecuteNonQuery();
-                con.Close();
+                
             }
             catch (Exception ex)
             {
@@ -532,7 +536,7 @@ namespace tooushared.DAO
             int check = 0;
             MySqlConnection con = null;
             MyDB mydb = new MyDB();
-            
+            MySqlDataReader reader = null;
 
             try
             {
@@ -542,7 +546,7 @@ namespace tooushared.DAO
                 MySqlCommand cmd = new MySqlCommand(Sql, con);
                 con.Open();
 
-                MySqlDataReader reader = cmd.ExecuteReader();
+                 reader = cmd.ExecuteReader();
                 if(reader.Read())
                 {
                     check = int.Parse(reader["cnt"].ToString());
@@ -559,11 +563,13 @@ namespace tooushared.DAO
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+                reader.Close();
                 con.Close();
 
             }
             finally
             {
+                reader.Close();
                 con.Close();
             }
 

@@ -128,7 +128,7 @@ public class FollowerDao
 
                 //lstMember.Add(tmpMemberPointer);
 
-                return result;
+               
 
             }
          
@@ -157,8 +157,8 @@ public class FollowerDao
         Follower result;
       
         MySqlConnection con = null;
-        MySqlDataReader reader = null;
 
+        MySqlDataReader rd = null;
         try
         {
 
@@ -174,7 +174,7 @@ public class FollowerDao
             cmd.Parameters.AddWithValue("@mem_id", follower.Mem_id);
 
             con.Open();
-            MySqlDataReader rd = cmd.ExecuteReader();
+            rd = cmd.ExecuteReader();
 
             while (rd.Read())
             {
@@ -196,12 +196,12 @@ public class FollowerDao
         catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine(ex.ToString());
-            reader.Close();
+            rd.Close();
             con.Close();
         }
         finally
         {
-            reader.Close();
+            rd.Close();
             con.Close();
         }
 
@@ -232,8 +232,7 @@ public class FollowerDao
                 returnInt = int.Parse(reader["cnt"].ToString());
             }
 
-            reader.Close();
-            con.Close();
+            
         }
         catch (Exception ex)
         {
@@ -273,8 +272,7 @@ public class FollowerDao
                 returnInt = int.Parse(reader["cnt"].ToString());
             }
 
-            reader.Close();
-            con.Close();
+            
         }
         catch (Exception ex)
         {

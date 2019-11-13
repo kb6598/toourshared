@@ -39,7 +39,7 @@ public class LikeDao
 
         result = cmd.LastInsertedId.ToString();
 
-        con.Close();
+        
         }
         catch (Exception ex)
         {
@@ -90,8 +90,8 @@ public class LikeDao
     {
         MyDB mydb = new MyDB();
         int result = 0;
-        MySqlConnection con;
-
+        MySqlConnection con = null ;
+        MySqlDataReader reader = null;
         try
         {
             con = mydb.GetCon();
@@ -101,17 +101,24 @@ public class LikeDao
             cmd.Parameters.AddWithValue("@trv_no", like.Trv_no);
 
             con.Open();
-            MySqlDataReader reader = cmd.ExecuteReader();
+            reader = cmd.ExecuteReader();
 
             if(reader.Read())
             {
                 result = int.Parse(reader["cnt"].ToString());
             }
 
+            
+        }
+        catch(Exception e) {
             reader.Close();
             con.Close();
         }
-        catch(Exception e) {;}
+        finally
+        {
+            reader.Close();
+            con.Close();
+        }
 
         return result;
     }

@@ -38,7 +38,7 @@ public class LocationDao
 
             result = cmd.LastInsertedId.ToString();
 
-            con.Close();
+           
         }
         catch (Exception ex)
         {
@@ -119,11 +119,9 @@ public class LocationDao
 
                 //lstMember.Add(tmpMemberPointer);
 
-                return result;
+                
 
             }
-            rd.Close();
-            con.Close();
 
         }
         catch (Exception ex)

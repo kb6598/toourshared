@@ -44,7 +44,7 @@ public class ImageDao
             con.Open();
 
 
-            con.Close();
+            
 
             result = cmd.ExecuteNonQuery();
 
@@ -53,7 +53,7 @@ public class ImageDao
         {
             
             con.Close();
-
+            
             Console.WriteLine(e.StackTrace);
             result = -1;
         }
@@ -134,8 +134,7 @@ public class ImageDao
                 return result;
 
             }
-            rd.Close();
-            con.Close();
+
 
         }
         catch (Exception ex)

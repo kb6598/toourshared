@@ -40,9 +40,7 @@ public class MapDao
 
             cmd.ExecuteNonQuery();
 
-            result = cmd.LastInsertedId.ToString();
 
-            con.Close();
         }
         catch (Exception ex)
         {
@@ -87,7 +85,7 @@ public class MapDao
             result = cmd.ExecuteNonQuery();
 
 
-            con.Close();
+        
         }
         catch (Exception ex)
         {
@@ -129,7 +127,7 @@ public class MapDao
             result = cmd.ExecuteNonQuery();
 
 
-            con.Close();
+     
         }
         catch (Exception ex)
         {
@@ -150,16 +148,28 @@ public class MapDao
     public DataSet SelectMap()
     {
         MyDB myDB = new MyDB();
-        MySqlConnection con = myDB.GetCon();
+        MySqlConnection con = null;
+        DataSet ds = null;
+        try {
+            con = myDB.GetCon();
 
         string sql = "SELECT map_no,trv_day_no, map_data, map_route, map_cost, map_center FROM toourshared.map";
         MySqlCommand cmd = new MySqlCommand(sql, con); // 커맨드(sql문을 con에서 수행하기 위한 명령문) 생성 DB에서 수행시킬 명령 생성   
-
+            con.Open();
         MySqlDataAdapter ad = new MySqlDataAdapter();
         ad.SelectCommand = cmd;
-        DataSet ds = new DataSet();
+        ds = new DataSet();
         ad.Fill(ds);
-
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            con.Close();
+        }
+        finally
+        {
+            con.Close();
+        }
 
         return ds;
     }
@@ -202,11 +212,10 @@ public class MapDao
 
                 //lstMember.Add(tmpMemberPointer);
 
-                return result;
+
 
             }
-            rd.Close();
-            con.Close();
+   
 
         }
         catch (Exception ex)
@@ -260,13 +269,10 @@ public class MapDao
 
 
                 //lstMember.Add(tmpMemberPointer);
-                rd.Close();
-                con.Close();
-                return result;
+
 
             }
-            rd.Close();
-            con.Close();
+
 
         }
         catch (Exception ex)
@@ -324,12 +330,10 @@ public class MapDao
 
                 resultList.Add(result);
                 //lstMember.Add(tmpMemberPointer);
-                rd.Close();
-                con.Close();
+
 
             }
-            rd.Close();
-            con.Close();
+
 
         }
         catch (Exception ex)
