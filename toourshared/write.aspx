@@ -555,7 +555,7 @@
                             <div class="option">
                                 <div>
                                     키워드 :
-                                <input id="keyword" value="" type="text" />
+                                <input id="keyword" value="" type="text" onkeyup="searchPlacesByEnter();"/>
                                     <div class="btn btn-secondary" onclick="searchPlaces();">검색하기</div>
                                 </div>
                             </div>

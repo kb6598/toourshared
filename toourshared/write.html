@@ -357,7 +357,7 @@
                             <div class="option">
                                 <div>
                                     키워드 :
-                                    <input id="keyword" value="" type="text" />
+                                    <input id="keyword" value="" type="text" onkeyup="searchPlacesByEnter();"/>
                                     <div class="btn btn-secondary" onclick="searchPlaces();">검색하기</div>
                                 </div>
                             </div>
@@ -392,6 +392,34 @@
  <script src="./javascript/write.js"></script>
   
 -->
+  <script>
+      
+      
+
+      
+      
+      //윈도우에서 엔터 백스페이스 막기
+      window.onkeydown = function() {
+	var kcode = event.keyCode;
+	if(window.event.keyCode == 13 || kcode == 116) event.returnValue = false;
+    }
+
+
+
+         function searchPlacesByEnter(){
+             var kcode = event.keyCode;
+	if(window.event.keyCode == 13 ){
+        searchPlaces();
+    }
+        
+            
+            
+        }
+
+
+
+  </script>
+    
     <script>
         //이미지 업로드 AJAX
         function sendFile(file) {
@@ -433,17 +461,20 @@
             }
 
         });
+        
+
     </script>
 
 
     <script>
         // Drawing Manager로 도형을 그릴 지도 div
-        var drawingMapContainer = document.getElementById('drawingMap'),
+    var drawingMapContainer = document.getElementById('drawingMap'),
             drawingMap = {
                 center: new daum.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
                 level: 3 // 지도의 확대 레벨
             };
-
+        //현재 선택한 오버레이
+        var curOverlay = Array(1);
         // 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
         //var drawingMap = new daum.maps.Map(drawingMapContainer, mapOption);
         var drawingMap = new daum.maps.Map(drawingMapContainer, drawingMap);
@@ -464,7 +495,7 @@
             guideTooltip: ['draw', 'drag', 'edit'],
             arrowOptions: {
                 draggable: true,
-                removable: false,
+                removable: true,
                 editable: true,
                 strokeWeight: 3,
                 strokeOpacity: 0.8,
@@ -476,7 +507,7 @@
             },
             circleOptions: {
                 draggable: true,
-                removable: false,
+                removable: true,
                 editable: true,
                 strokeColor: '#39f',
                 fillColor: '#39f',
@@ -484,7 +515,7 @@
             },
             ellipseOptions: {
                 draggable: true,
-                removable: false,
+                removable: true,
                 editable: true,
                 strokeWeight: 2,
                 strokeOpacity: 0.8,
@@ -494,8 +525,8 @@
                 fillOpacity: 0.3
             },
             markerOptions: { // 마커 옵션입니다
-                draggable: true, // 마커를 그리고 나서 드래그 가능하게 합니다
-                removable: false, // 마커를 삭제 할 수 있도록 x 버튼이 표시됩니다
+                draggable: false, // 마커를 그리고 나서 드래그 가능하게 합니다
+                removable: true, // 마커를 삭제 할 수 있도록 x 버튼이 표시됩니다
                 markerImages: [
                     null, // API에서 제공하는 기본 마커 이미지
                     {
@@ -531,7 +562,7 @@
             },
             polylineOptions: { // 선 옵션입니다
                 draggable: true, // 그린 후 드래그가 가능하도록 설정합니다
-                removable: false, // 그린 후 삭제 할 수 있도록 x 버튼이 표시됩니다
+                removable: true, // 그린 후 삭제 할 수 있도록 x 버튼이 표시됩니다
                 editable: true, // 그린 후 수정할 수 있도록 설정합니다
                 strokeColor: '#39f', // 선 색
                 hintStrokeStyle: 'dash', // 그리중 마우스를 따라다니는 보조선의 선 스타일
@@ -539,7 +570,7 @@
             },
             polygonOptions: {
                 draggable: true,
-                removable: false,
+                removable: true,
                 editable: true,
                 strokeColor: '#39f',
                 fillColor: '#39f',
@@ -565,29 +596,6 @@
 
 
 
-        class History {
-            constructor() {
-                this._cursor = 0;
-                this.cur_overlay
-                this.history = Array();
-                this.history.push({
-                    PlaceList: Array(),
-                    TravelRouteItemList: Array(),
-                    CostItemList: Array()
-                });
-            }
-            setRoute(place_name, road_address_name, address_name, phone, place_url, x, y) {
-
-                this.place_name = place_name;
-                this.road_address_name = road_address_name;
-                this.address_name = address_name;
-                this.phone = phone;
-                this.place_url = place_url;
-                this.x = x;
-                this.y = y;
-            }
-            push
-        }
 
 
 
@@ -605,10 +613,10 @@
 
 
 
-        manager.addListener('drawend', function(data) {
-            // data.target 에 그려진 오버레이 객체가 넘어온다.
-            console.info(data.target);
-        });
+//        manager.addListener('drawend', function(data) {
+//            // data.target 에 그려진 오버레이 객체가 넘어온다.
+//            console.info(data.target);
+//        });
 
 
 
@@ -906,22 +914,22 @@
                 $('#searchPlaceModal').modal('show');
             } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
 
-                alert('검색 결과가 존재하지 않아 더 넓은 주소로 찾습니다.');
-                var keyword = document.getElementById('keyword');
-                var keywordArr = keyword.value.split(' ');
-
-                console.info(keywordArr);
-                var str = "";
-
-                for (var i = 0; i < keywordArr.length - 1; i++) {
-                    str += keywordArr[i] + " ";
-                }
-
-
-
-                //console.info(str);
-                keyword.value = str;
-                ps.keywordSearch(keyword.value, placesSearchByAddressCB);
+//                alert('검색 결과가 존재하지 않아 더 넓은 주소로 찾습니다.');
+//                var keyword = document.getElementById('keyword');
+//                var keywordArr = keyword.value.split(' ');
+//
+//                console.info(keywordArr);
+//                var str = "";
+//
+//                for (var i = 0; i < keywordArr.length - 1; i++) {
+//                    str += keywordArr[i] + " ";
+//                }
+//
+//
+//
+//                //console.info(str);
+//                keyword.value = str;
+//                ps.keywordSearch(keyword.value, placesSearchByAddressCB);
                 return;
 
             } else if (status === kakao.maps.services.Status.ERROR) {
@@ -2535,7 +2543,7 @@
             for (var i = 0; i < places.length; i++) {
 
                 // 마커를 생성하고 지도에 표시합니다
-                var marker = addMarker(new kakao.maps.LatLng(places[i].y, places[i].x), order);
+                var marker = addMarkerArround(new kakao.maps.LatLng(places[i].y, places[i].x), order);
 
                 // 마커와 검색결과 항목을 클릭 했을 때
                 // 장소정보를 표출하도록 클릭 이벤트를 등록합니다
@@ -2568,7 +2576,7 @@
         
 
         // 마커를 생성하고 지도 위에 마커를 표시하는 함수입니다
-        function addMarker(position, order) {
+        function addMarkerArround(position, order) {
             var imageSize = new kakao.maps.Size(33, 44); // 마커이미지의 크기입니다
             var imageOption = {offset: new kakao.maps.Point(27, 69)}; 
             var iconUrl =  [
@@ -2641,6 +2649,9 @@
             if (place.place_url != null) {
                 content += '<li class="card-body-li" style="padding: 15px 0;"><a href="' + place.place_url + '" target="_blank" style="text-decoration: none;">상세페이지</a></li>';
             }
+            
+            
+//////////////////////////////////////////////////////////////////////////////////
             content +=
                 '</blockquote>' +
                 '<div class="card-addBtn" onclick=\'pushTravelRouteItem("' + place.place_name + '","' + place.road_address_name + '","' + place.address_name + '","' + place.phone + '","' + place.place_url + '","' + place.x + '","' + place.y + '")\'>추가</div>' +
