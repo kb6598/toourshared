@@ -1,5 +1,8 @@
 ﻿<%@ Page Language="C#" ValidateRequest="false" %>
 
+<%@ Import Namespace="System" %>
+<%@ Import Namespace="System.Linq" %>
+<%@ Import Namespace="Newtonsoft.Json" %>
 <%@ Import Namespace="Newtonsoft.Json.Linq" %>
 
 <!DOCTYPE html>
@@ -8,12 +11,33 @@
     //http://localhost:6118/board.aspx?trv_no=176
     protected void Page_Load(object sender, EventArgs e)
     {
+
+
         if (Request.QueryString["trv_no"] == null)
         {
             System.Diagnostics.Debug.WriteLine("지금 되는건가용?");
             Response.Redirect("/index.aspx");
         }
         bindMapData();
+    }
+     protected void btnLogout_Click(object sender, EventArgs e)
+    {
+        Session.Abandon();
+        Response.Redirect("/index.aspx");
+    }
+
+    protected void btnMypage_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("/MyPage.aspx");
+    }
+    protected void btnJoin_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("/join.aspx");
+    }
+
+    protected void btnFindIDPW_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("/find_idpw.aspx");
     }
 
 
@@ -497,6 +521,8 @@
             color: white;
             background-color: transparent;
         }
+        
+        
 
         /* 창 크기 조절 시 nav display none 설정 */
         @media only screen and (max-width: 1600px) {
@@ -658,7 +684,7 @@
 
         .travel-cost {
             width: 380px;
-            height: 390px;
+            height: 200px;
             display: flex;
             flex-direction: column;
             background-color: #eee;
@@ -977,6 +1003,52 @@
                 border: .5px solid rgba(0, 0, 0, .1);
                 text-align-last: center;
             }
+            .navJoinBtn{
+            border: none;
+            outline: none;
+            background-color: transparent;
+            color: white;
+            font-size: 14px;
+            padding-bottom: 20px;
+        }
+
+        .navFindBtn:hover, .navJoinBtn:hover{
+            font-weight: bold;
+        }
+
+        .navFindBtn{
+            border: none;
+            outline: none;
+            background-color: transparent;
+            color: white;
+            font-size: 14px;
+        .reply-star-input .reply-star {
+            width: 50px;
+            font-size: 13px;
+            padding: 5px;
+            outline: none;
+            color: dimgray;
+            border: .5px solid rgba(0, 0, 0, .1);
+            text-align-last: center;
+        }
+
+         .map-info-items {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .map-info-items-title {
+            width: 150px;
+            height: 30px;
+            border: solid 1px;
+            padding: 10px, 5px;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .map-info-items:hover {
+            background: RGBA(0, 0, 255, .05);
+        }
     </style>
 
     <script>
@@ -1045,21 +1117,42 @@
                         <li><a href="FAQ.aspx">자주 찾는 질문</a></li>
                     </ul>
                 </li>
-                <li class="topnavLi">
-                    <% if (Session["mem_id"] != null)
-                        {%>
-                    <a href="#"><% string id = Session["mem_id"].ToString(); Response.Write(id); %></a>
-                    <ul>
-                        <li>
-                            <asp:Button ID="btnMypage" runat="server" Text="마이페이지" /></li>
-                        <li>
-                            <asp:Button ID="btnLogout" runat="server" Text="로그아웃" /></li>
+         <% 
+            if (IsLogin.isLogin() == false)
+            {
+        %>
+            <li class="topnavLi">
+                <div class="nav-log">
+                    <a>
+                        <div class="nav-log-area">
+                            <asp:Button ID="btnLogin" runat="server" Text="로그인" class="nav-log-item" PostBackUrl="~/login.aspx"/>
+                        </div>
+                    </a>
+                </div>
+                <ul>
+                    <br />
+                    <li><asp:Button ID="btnJoin" runat="server" Text="회원가입" OnClick="btnJoin_Click" class ="navJoinBtn"/></li>
+                    <li><asp:Button ID="btnFindIDPW" runat="server" Text="계정찾기" OnClick="btnFindIDPW_Click" class ="navFindBtn" /></li>
+                </ul>
+            </li>
+        <%  
+            }
+            else
+            {
+        %>
+            <li class = "topnavLi" >
+				<a href = "#" ><% string id = Session["mem_id"].ToString(); Response.Write(id); %></a>
+                <ul>
+                    <li><asp:Button ID="btnMypage" runat="server" Text="마이페이지" OnClick="btnMypage_Click" class ="navJoinBtn"/></li>
+                    <li><asp:Button ID="btnLogout" runat="server" Text="로그아웃" OnClick="btnLogout_Click" class ="navFindBtn"/></li>
 
-                    </ul>
-                    <%} %>
-                </li>
-            </ul>
-        </div>
+                </ul>
+            </li>
+        <% 
+            }
+        %>
+        </ul>
+    </div>
         <%
             // ============== Data Init ================
 
@@ -1127,33 +1220,47 @@
                                 <root-header>여행 간 경로</root-header>
                                 <root-content>
                                     <% 
-                                        try
+                                        foreach (var map in mapList)
                                         {
-                                            //Response.Write(mapRouteCost[0]);
-                                            string str = mapRouteCost[0];
-                                            JArray ja = JArray.Parse(str);
-
+                                            JToken mapRoute = JToken.Parse(map.Map_route);
+                                            JToken route = JToken.Parse(mapRoute.ToString());
+                                            //Response.Write(route);
                                             string placename = "";
                                             string roadaddress = "";
                                             string addressname = "";
                                             string phone = "";
-                                            foreach (var item in ja)
+                                            string info = "";
+                                            string placeurl = "";
+                                            foreach (var item in route)
                                             {
                                                 placename = item["place_name"].ToString();
                                                 if (item["road_address_name"].ToString() != "undefined") roadaddress = item["road_address_name"].ToString();
+                                                if (item["address_name"].ToString() != "undefined") addressname = item["address_name"].ToString();
                                                 phone = item["phone"].ToString();
+                                                info = item["info"].ToString();
+                                                placeurl = item["place_url"].ToString();
 
-                                                Response.Write(placename + "<br />");
-                                                Response.Write(roadaddress + "<br />");
-                                                Response.Write(phone + "<br /><br />");
+                                                %>
+                                                    <root-content>
+                                                        <div class="list-group travel-cost">
+                                                            <div class="card w-100 map-info-items">
+                                                                <div class="card-header">
+                                                                    <h5 class="card-title"><% Response.Write(placename); %></h5>
+                                                                </div>
+                                                                <div class="card-body">
+                                                                    <h6 class="card-subtitle mb-2 text-muted"><% Response.Write("전화번호 : " + phone); %></h6>
+                                                                    <p class="card-text">
+                                                                        주소 : <% Response.Write("(" + roadaddress + "/" + addressname + ")"); %><br />
+                                                                        info
+                                                                        <% Response.Write(info); %>
+                                                                    </p>
+                                                                    <a href="place_link" class="card-link"><% Response.Write(placeurl); %></a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                <%
                                             }
-
                                         }
-                                        catch (Exception ex)
-                                        {
-                                            System.Diagnostics.Debug.WriteLine(ex.ToString());
-                                        }
-
                                         %>
                                 </root-content>
                             </rootitem>
@@ -1162,13 +1269,28 @@
                             <costitem>
                                 <cost-header>여행 간 경비</cost-header>
                                 <cost-content>
-                                     <% 
+                                                                       
+                                    <% 
+                                        foreach (var map in mapList)
+                                        {
+                                            JToken mapCost = JToken.Parse(map.Map_cost);
+                                            //JArray ja2 = JArray.Parse(mapCost[]["itemList"].ToString());
+                                            
+                                            //JToken costtype = mapCost["itemList"].ToString();
+                                            //Response.Write(route);
+
+                                            Response.Write(mapCost);
+
+                                        }
+
+                                        %>
+
+<%--                                     <% 
                                          try
                                          {
                                              //Response.Write(mapRouteCost[0]);
-                                             string str = mapRouteCost[1];
-                                             JArray ja = JArray.Parse(mapRouteCost[1]);
-                                             JArray ja2 = JArray.Parse(ja[2]["itemList"].ToString());
+                                             JToken ja = JToken.Parse(mapRouteCost[1]);
+                                             JToken ja2 = JToken.Parse(ja[2]["itemList"].ToString());
 
                                              string placename = "";
                                              string placename2 = "";
@@ -1189,7 +1311,7 @@
                                              System.Diagnostics.Debug.WriteLine(ex.ToString());
                                          }
 
-                                        %>
+                                        %>--%>
                                 </cost-content>
                             </costitem>
                         </div>

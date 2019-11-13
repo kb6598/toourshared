@@ -24,6 +24,7 @@ public class LikeDao
         MyDB myDB = new MyDB();
         MySqlConnection con = myDB.GetCon();
 
+        try { 
         string Sql = "INSERT INTO toourshared.like (mem_id,like_type,trv_no) VALUES(@mem_id,@like_type,@trv_no); select last_insert_id()";
         MySqlCommand cmd = new MySqlCommand(Sql, con);
 
@@ -38,8 +39,18 @@ public class LikeDao
 
         result = cmd.LastInsertedId.ToString();
 
-        con.Close();
+        
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            con.Close();
 
+        }
+        finally
+        {
+            con.Close();
+        }
 
         return result;
     }
@@ -48,14 +59,28 @@ public class LikeDao
     {
         MyDB myDB = new MyDB();
         MySqlConnection con = myDB.GetCon();
+        DataSet ds = null;
 
-        string sql = "Select lik_no, lik_type,mem_id,trv_no  From toourshared.like";
-        MySqlCommand cmd = new MySqlCommand(sql, con); // 커맨드(sql문을 con에서 수행하기 위한 명령문) 생성 DB에서 수행시킬 명령 생성   
+        try
+        {
+            string sql = "Select lik_no, lik_type,mem_id,trv_no  From toourshared.like";
+            MySqlCommand cmd = new MySqlCommand(sql, con); // 커맨드(sql문을 con에서 수행하기 위한 명령문) 생성 DB에서 수행시킬 명령 생성   
 
-        MySqlDataAdapter ad = new MySqlDataAdapter();
-        ad.SelectCommand = cmd;
-        DataSet ds = new DataSet();
-        ad.Fill(ds);
+            MySqlDataAdapter ad = new MySqlDataAdapter();
+            ad.SelectCommand = cmd;
+           
+            ad.Fill(ds);
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            con.Close();
+
+        }
+        finally
+        {
+            con.Close();
+        }
 
 
         return ds;
@@ -65,8 +90,8 @@ public class LikeDao
     {
         MyDB mydb = new MyDB();
         int result = 0;
-        MySqlConnection con;
-
+        MySqlConnection con = null ;
+        MySqlDataReader reader = null;
         try
         {
             con = mydb.GetCon();
@@ -76,17 +101,24 @@ public class LikeDao
             cmd.Parameters.AddWithValue("@trv_no", like.Trv_no);
 
             con.Open();
-            MySqlDataReader reader = cmd.ExecuteReader();
+            reader = cmd.ExecuteReader();
 
             if(reader.Read())
             {
                 result = int.Parse(reader["cnt"].ToString());
             }
 
+            
+        }
+        catch(Exception e) {
             reader.Close();
             con.Close();
         }
-        catch(Exception e) {;}
+        finally
+        {
+            reader.Close();
+            con.Close();
+        }
 
         return result;
     }
@@ -94,9 +126,10 @@ public class LikeDao
     public Like selectLikeBylik_no(Like like)
     {
         MyDB mydb = new MyDB();
-
+        MySqlConnection con = null;
+        MySqlDataReader rd = null;
         Like result = new Like();
-        MySqlConnection con;
+      
 
         try
         {
@@ -110,7 +143,7 @@ public class LikeDao
             cmd.Parameters.AddWithValue("@lik_no", like.lik_no);
 
             con.Open();
-            MySqlDataReader rd = cmd.ExecuteReader();
+            rd = cmd.ExecuteReader();
 
             if (rd.Read())
             {
@@ -127,9 +160,17 @@ public class LikeDao
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine(ex.ToString());
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            rd.Close();
+            con.Close();
+
         }
 
+        finally
+        {
+            rd.Close();
+            con.Close();
+        }
         return result;
     }
 

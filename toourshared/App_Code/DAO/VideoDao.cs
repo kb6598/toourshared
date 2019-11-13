@@ -20,10 +20,11 @@ public class VideoDao
     public string InsertVideo(Video video)
     {
         string result = "";
+        MySqlConnection con = null;
         try
         {
             MyDB myDB = new MyDB();
-            MySqlConnection con = myDB.GetCon();
+            con = myDB.GetCon();
 
             string Sql = "INSERT INTO toourshared.video (mem_id,vid_name,vid_caption)" +
                 "VALUES (@mem_id, @vid_name, @vid_caption)";
@@ -50,25 +51,38 @@ public class VideoDao
         catch (Exception e)
         {
             Console.WriteLine(e.StackTrace);
-           
+            con.Close();
         }
-
+        finally
+        {
+            con.Close();
+        }
         return result;
     }
     public DataSet SelectVideo()
     {
         MyDB myDB = new MyDB();
         MySqlConnection con = myDB.GetCon();
-
+        DataSet ds = null;
+        try { 
         string sql = "Select vid_no, mem_id, vid_name, vid_caption  From toourshared.video";
         MySqlCommand cmd = new MySqlCommand(sql, con); // 커맨드(sql문을 con에서 수행하기 위한 명령문) 생성 DB에서 수행시킬 명령 생성   
 
         MySqlDataAdapter ad = new MySqlDataAdapter();
         ad.SelectCommand = cmd;
-        DataSet ds = new DataSet();
+       
         ad.Fill(ds);
+    }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            con.Close();
 
-
+        }
+        finally
+        {
+            con.Close();
+        }
         return ds;
     }
 
@@ -78,7 +92,8 @@ public class VideoDao
         MyDB mydb = new MyDB();
 
         Video result = new Video();
-        MySqlConnection con;
+        MySqlConnection con = null;
+        MySqlDataReader rd = null;
 
         try
         {
@@ -92,7 +107,7 @@ public class VideoDao
             cmd.Parameters.AddWithValue("@vid_no", video.Vid_no);
 
             con.Open();
-            MySqlDataReader rd = cmd.ExecuteReader();
+            rd = cmd.ExecuteReader();
 
             if (rd.HasRows)
             {
@@ -117,7 +132,16 @@ public class VideoDao
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine(ex.ToString());
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            rd.Close();
+            con.Close();
+
+        }
+
+        finally
+        {
+            rd.Close();
+            con.Close();
         }
         return result;
     }

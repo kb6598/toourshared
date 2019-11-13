@@ -55,7 +55,7 @@
     {
         if (Request.QueryString["searchType"] == null)
         {
-            Response.Redirect("search.aspx?searchType=1");
+            Response.Redirect("./search.aspx?searchType=1");
         }
         else
         {
@@ -73,6 +73,7 @@
             inputText.Text = HashTag.ToString();
             search(1); // hashTag로 search 실행 시 
         }
+
     }
 
     protected void search(int n = 0)
@@ -164,7 +165,7 @@
         }
         %>
 
-            window.location.href = "search.aspx?searchType=" + paramType + hashtag;
+            window.location.href = "./search.aspx?searchType=" + paramType + hashtag;
         }
 
         function sidebarSwitch() {
@@ -354,12 +355,12 @@
             "<div class=\"boardItem\">\n" +
                 "<div class=\"article1\">\n" +
                     "<div class=\"boardImage\">\n" +
-                        "<a href = \"board.aspx?trv_no=" + travelList[i].Trv_no.ToString() + "\" onmouseover=\"setMapDatasByIndex("+i+")\">\n" +
+                        "<a href = \"./board.aspx?trv_no=" + travelList[i].Trv_no.ToString() + "\" onmouseover=\"getMapData("+travelList[i].Trv_no.ToString()+")\">\n" +
                             "<img src = \"" + travelMainImage + "\" alt=\"" + member.Mem_id.ToString() + "\" class=\"boardImageItem\">\n" +
                         "</a>\n" +
                     "</div>\n" +
                     "<div class=\"boardContent\">" +
-                        "<a href = \"board.aspx?trv_no=" + travelList[i].Trv_no.ToString() + "\" onmouseover=\"setMapDatasByIndex("+i+")\">\n" +
+                        "<a href = \"./board.aspx?trv_no=" + travelList[i].Trv_no.ToString() + "\" onmouseover=\"getMapData("+travelList[i].Trv_no.ToString()+")\">\n" +
                             "<div class=\"boardTitle\">" +
                                 "<span>" + travelList[i].Trv_title.ToString() + "</span>" +
                             "</div>\n" +
@@ -374,12 +375,12 @@
                 "<div class=\"article2\">\n" +
                     "<div class=\"boardUser\">\n" +
                         "<div class=\"boardUserImage\">\n" +
-                            "<a href = \"MyPage.aspx?mem_id=" + member.Mem_id.ToString() + "\">\n" +
+                            "<a href = \"./MyPage.aspx?mem_id=" + member.Mem_id.ToString() + "\">\n" +
                                 "<img src=\"" + userMainImage + "\" alt=\"" + member.Mem_id.ToString() + "\" class=\"userImageItem\">\n" +
                             "</a>\n" +
                         "</div>\n" +
                         "<div class=\"boardUserId\">\n" +
-                            "<a href = \"MyPage.aspx?mem_id=" + member.Mem_id.ToString() + "\">\n" +
+                            "<a href = \"./MyPage.aspx?mem_id=" + member.Mem_id.ToString() + "\">\n" +
                                 "<span>" + member.Mem_id.ToString() + "</span>\n" +
                             "</a>\n" +
                             "<div class=\"boardUserTime\">\n" +
@@ -476,7 +477,9 @@
                 console.log(hiddenFileds[i].value); //second console output
                 getMapData2Arrs(hiddenFileds[i].value);
             }
-
+            console.info("---------------------------------");
+            console.info(trvMapDatas);
+            console.info(trvMapCenters);
             
         });
 
@@ -497,7 +500,7 @@
                     success: function (data) {
 
 
-                        console.info(data);
+                        //console.info(data);
                         trvMapCenters.push(data);
                         
 
@@ -513,9 +516,9 @@
                     url: "./getMaps.ashx?trv_no=" + travel_no,
                     dataType: 'json',
                     success: function (data) {     
-                        console.info(travel_no);
+                        //console.info(travel_no);
 
-                        console.info(data);
+                        //console.info(data);
                         trvMapDatas.push(data);
 
 
@@ -533,17 +536,21 @@
         var icoDir = "./img/ico/marker/";
 
         function setMapByIndex(index) {
+            console.info("setMapByIndex called");
             setMapDatasByIndex(index);
             setMapCenterByIndex(index);
         }
 
         function setMapDatasByIndex(index) {
-            var data = JSON.parse(trvMapDatas[index]);
+            removeOverlays();
+            var data = trvMapDatas[index];
             if (data != null && data != "" && data != '""') {
-
-                removeOverlays();
+                
+                
+                //console.info(data);
                 data.forEach(function (value, index, array) {
                     if (value != null && value != "" && value != '""') {
+                        //console.info(value);
                         getDataFromDrawingMap(value, color[index], color[index], icoDir + markerIco[index]);
                     }
                 });
@@ -551,8 +558,9 @@
         }
 
         function setMapCenterByIndex(index) {
-            
-            var data = JSON.parse(trvMapCenters[index]);
+            console.info("setMapCenterByIndex called");
+            var data = trvMapCenters[index];
+            console.info(data);
             if (data != null && data != "" && data != '""') {
                 
                 var totalGa = 0.0;
@@ -604,11 +612,11 @@
 
         function getDataFromDrawingMap(mapData, instrokeColor, infillColor, iconUrl) {
             // Drawing Manager에서 그려진 데이터 정보를 가져옵니다 
-            console.info(mapData);
+            //console.info(mapData);
             //var data = mapData;
             var data = JSON.parse(mapData);
             //var data = mapData;
-            console.info(data);
+            //console.info(data);
             
             
             // 지도에 가져온 데이터로 도형들을 그립니다

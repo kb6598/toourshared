@@ -28,7 +28,7 @@
                 {
                     Session["mem_id"] = mem.Mem_id;
                     Session.Timeout = 2;
-                    Response.Redirect("/index.aspx");
+                    Response.Redirect("./index.aspx");
                 }
                 else
                 {
@@ -46,7 +46,7 @@
     {
         if(Session["mem_id"]!= null)
         {
-            Response.Redirect("/index.aspx");
+            Response.Redirect("./index.aspx");
         }
 
         this.mem_id.Attributes["onkeyPress"] = "if(event.keyCode == 13) {" + Page.GetPostBackEventReference(this.BtnLogin) + "; return false; }";       // 아이디 입력창에서 ENTER 키 누를 때 BtnLogin이 눌러지도록.
@@ -56,33 +56,33 @@
     protected void btnLogout_Click(object sender, EventArgs e)
     {
         Session.Abandon();
-        Response.Redirect("/index.aspx");
+        Response.Redirect("./index.aspx");
     }
 
     protected void btnMypage_Click(object sender, EventArgs e)
     {
-        Response.Redirect("/MyPage.aspx");
+        Response.Redirect("./MyPage.aspx");
     }
 
     protected void btnJoin_Click(object sender, EventArgs e)
     {
-        Response.Redirect("/join.aspx");
+        Response.Redirect("./join.aspx");
     }
 
     protected void btnFindIDPW_Click(object sender, EventArgs e)
     {
-        Response.Redirect("/find_idpw.aspx");
+        Response.Redirect("./find_idpw.aspx");
     }
 
 
     protected void FindPW_Click(object sender, EventArgs e)
     {
-        Response.Redirect("/find_idpw.aspx");
+        Response.Redirect("./find_idpw.aspx");
     }
 
     protected void FindID_Click(object sender, EventArgs e)
     {
-        Response.Redirect("/find_idpw.aspx");
+        Response.Redirect("./find_idpw.aspx");
     }
 
 </script>
@@ -529,7 +529,7 @@
                 <div class="nav-log">
                     <a>
                         <div class="nav-log-area">
-                            <asp:Button ID="Button1" runat="server" Text="로그인" class="nav-log-item" PostBackUrl="~/login.aspx"/>
+                            <asp:Button ID="Button1" runat="server" Text="로그인" class="nav-log-item" PostBackUrl="./login.aspx"/>
                         </div>
                     </a>
                 </div>

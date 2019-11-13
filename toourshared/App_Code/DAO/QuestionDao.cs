@@ -24,40 +24,64 @@ public class QuestionDao
         MyDB myDB = new MyDB();
         MySqlConnection con = myDB.GetCon();
 
-        string Sql = "INSERT INTO toourshared.question (qus_title,qus_content,qus_ask) VALUES(@qus_title,@qus_content,@qus_ask); select last_insert_id()";
-        MySqlCommand cmd = new MySqlCommand(Sql, con);
+        try
+        {
+            string Sql = "INSERT INTO toourshared.question (qus_title,qus_content,qus_ask) VALUES(@qus_title,@qus_content,@qus_ask); select last_insert_id()";
+            MySqlCommand cmd = new MySqlCommand(Sql, con);
 
-        cmd.Parameters.AddWithValue("@qus_title", question.Qus__title);
-        cmd.Parameters.AddWithValue("@qus_content",question.Qus_content);
-        cmd.Parameters.AddWithValue("@qus_ask", question.Qus_ask);
-        
-
-        con.Open();
-
-        cmd.ExecuteNonQuery();
-
-        result = cmd.LastInsertedId.ToString();
-
-        con.Close();
+            cmd.Parameters.AddWithValue("@qus_title", question.Qus__title);
+            cmd.Parameters.AddWithValue("@qus_content", question.Qus_content);
+            cmd.Parameters.AddWithValue("@qus_ask", question.Qus_ask);
 
 
+            con.Open();
+
+            cmd.ExecuteNonQuery();
+
+            result = cmd.LastInsertedId.ToString();
+
+            con.Close();
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            con.Close();
+
+        }
+        finally
+        {
+            con.Close();
+        }
         return result;
     }
     //public void DeleteCommentBy(mem_id)
     public DataSet SelectQusetion()
     {
+       
         MyDB myDB = new MyDB();
         MySqlConnection con = myDB.GetCon();
+        DataSet ds = null;
 
-        string sql = "Select qus_no, qus_title, qus_content, qus_ask  From toourshared.question";
+        try
+        {
+            string sql = "Select qus_no, qus_title, qus_content, qus_ask  From toourshared.question";
         MySqlCommand cmd = new MySqlCommand(sql, con); // 커맨드(sql문을 con에서 수행하기 위한 명령문) 생성 DB에서 수행시킬 명령 생성   
 
         MySqlDataAdapter ad = new MySqlDataAdapter();
         ad.SelectCommand = cmd;
-        DataSet ds = new DataSet();
+        
         ad.Fill(ds);
+    }
+         catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            con.Close();
 
-
+        }
+        finally
+        {
+            con.Close();
+        }
         return ds;
     }
 
@@ -67,7 +91,8 @@ public class QuestionDao
         MyDB mydb = new MyDB();
 
         Question result = new Question();
-        MySqlConnection con;
+        MySqlConnection con = null;
+        MySqlDataReader rd = null;
 
         try
         {
@@ -81,7 +106,7 @@ public class QuestionDao
             cmd.Parameters.AddWithValue("@qus_no", question.Qus_no);
 
             con.Open();
-            MySqlDataReader rd = cmd.ExecuteReader();
+            rd = cmd.ExecuteReader();
 
             if (rd.HasRows)
             {
@@ -106,7 +131,16 @@ public class QuestionDao
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine(ex.ToString());
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            rd.Close();
+            con.Close();
+
+        }
+
+        finally
+        {
+            rd.Close();
+            con.Close();
         }
         return result;
     }
@@ -116,7 +150,8 @@ public class QuestionDao
 
         List<Question> resultList = new List<Question>();
         Question result;
-        MySqlConnection con;
+        MySqlConnection con = null;
+        MySqlDataReader rd = null;
 
         try
         {
@@ -127,7 +162,7 @@ public class QuestionDao
 
             MySqlCommand cmd = new MySqlCommand(Sql, con);
             con.Open();
-            MySqlDataReader rd = cmd.ExecuteReader();
+            rd = cmd.ExecuteReader();
 
             while (rd.Read())
             {
@@ -150,7 +185,16 @@ public class QuestionDao
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine(ex.ToString());
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            rd.Close();
+            con.Close();
+
+        }
+
+        finally
+        {
+            rd.Close();
+            con.Close();
         }
 
 

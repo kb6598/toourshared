@@ -24,22 +24,34 @@ public class Member_BlockDao
         MyDB myDB = new MyDB();
         MySqlConnection con = myDB.GetCon();
 
-        string Sql = "INSERT INTO toourshared.member_block (mem_blo_date,mem_ble_length,mem_id) VALUES(@mem_blo_date,@mem_blo_length,@mem_id); select last_insert_id()";
-        MySqlCommand cmd = new MySqlCommand(Sql, con);
+        try
+        {
+            string Sql = "INSERT INTO toourshared.member_block (mem_blo_date,mem_ble_length,mem_id) VALUES(@mem_blo_date,@mem_blo_length,@mem_id); select last_insert_id()";
+            MySqlCommand cmd = new MySqlCommand(Sql, con);
 
-        cmd.Parameters.AddWithValue("@mem_blo_date", member_Block.Mem_blo_date);
-        cmd.Parameters.AddWithValue("@mem_blo_length", member_Block.Mem_blo_length);
-        cmd.Parameters.AddWithValue("@mem_id", member_Block.Mem_id);
+            cmd.Parameters.AddWithValue("@mem_blo_date", member_Block.Mem_blo_date);
+            cmd.Parameters.AddWithValue("@mem_blo_length", member_Block.Mem_blo_length);
+            cmd.Parameters.AddWithValue("@mem_id", member_Block.Mem_id);
 
 
-        con.Open();
+            con.Open();
 
-        cmd.ExecuteNonQuery();
+            cmd.ExecuteNonQuery();
 
-         result = cmd.LastInsertedId.ToString();
+            result = cmd.LastInsertedId.ToString();
 
-        con.Close();
+            con.Close();
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            con.Close();
 
+        }
+        finally
+        {
+            con.Close();
+        }
 
         return result;
     }
@@ -47,15 +59,27 @@ public class Member_BlockDao
     {
         MyDB myDB = new MyDB();
         MySqlConnection con = myDB.GetCon();
+        DataSet ds = null;
 
+        try { 
         string sql = "Select mem_blo_no, mem_blo_date, mem_blo_length, mem_id  From toourshared.member_block";
-        MySqlCommand cmd = new MySqlCommand(sql, con); // 커맨드(sql문을 con에서 수행하기 위한 명령문) 생성 DB에서 수행시킬 명령 생성   
+            MySqlCommand cmd = new MySqlCommand(sql, con); // 커맨드(sql문을 con에서 수행하기 위한 명령문) 생성 DB에서 수행시킬 명령 생성   
 
-        MySqlDataAdapter ad = new MySqlDataAdapter();
-        ad.SelectCommand = cmd;
-        DataSet ds = new DataSet();
-        ad.Fill(ds);
+            MySqlDataAdapter ad = new MySqlDataAdapter();
+            ad.SelectCommand = cmd;
+           
+            ad.Fill(ds);
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            con.Close();
 
+        }
+        finally
+        {
+            con.Close();
+        }
 
         return ds;
     }
@@ -66,7 +90,8 @@ public class Member_BlockDao
         MyDB mydb = new MyDB();
 
         Member_Block result = new Member_Block();
-        MySqlConnection con;
+        MySqlConnection con = null;
+        MySqlDataReader rd = null;
 
         try
         {
@@ -80,7 +105,7 @@ public class Member_BlockDao
             cmd.Parameters.AddWithValue("@mem_blo_no", member_Block.Mem_blo_no);
 
             con.Open();
-            MySqlDataReader rd = cmd.ExecuteReader();
+            rd = cmd.ExecuteReader();
 
             if (rd.HasRows)
             {
@@ -104,7 +129,16 @@ public class Member_BlockDao
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine(ex.ToString());
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            rd.Close();
+            con.Close();
+
+        }
+
+        finally
+        {
+            rd.Close();
+            con.Close();
         }
         return result;
     }

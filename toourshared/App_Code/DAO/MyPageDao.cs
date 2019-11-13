@@ -25,8 +25,10 @@ public class MyPageDao
 
         MyDB mydb = new MyDB();
         int result = 0;
+        MySqlConnection con = null;
+        
 
-        MySqlConnection con;
+
 
         try
         {
@@ -59,6 +61,13 @@ public class MyPageDao
         catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine(ex.ToString());
+            con.Close();
+           
+        }
+        finally
+        {
+          
+            con.Close();
         }
         return result;
     }
@@ -68,7 +77,8 @@ public class MyPageDao
         MyDB mydb = new MyDB();
         Travel result;
         List<Travel> resultList = new List<Travel>();
-        MySqlConnection con;
+        MySqlConnection con = null;
+        MySqlDataReader rd = null;
 
         try
         {
@@ -84,9 +94,9 @@ public class MyPageDao
 
             MySqlCommand cmd = new MySqlCommand(Sql, con);
             con.Open();
-            MySqlDataReader rd = cmd.ExecuteReader();
+            rd = cmd.ExecuteReader();
 
-            while(rd.Read())
+            while (rd.Read())
             {
                 result = new Travel();
                 result.Trv_no = rd["trv_no"].ToString();
@@ -107,11 +117,18 @@ public class MyPageDao
             rd.Close();
             con.Close();
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
-            Console.Write(e.StackTrace.ToString());
-        }
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            rd.Close();
+            con.Close();
 
+        }
+        finally
+        {
+            rd.Close();
+            con.Close();
+        }
         return resultList;
     }
 
@@ -121,8 +138,9 @@ public class MyPageDao
         MyDB mydb = new MyDB();
         Travel result;
         List<Travel> resultList = new List<Travel>();
-        MySqlConnection con;
-        
+        MySqlConnection con = null;
+        MySqlDataReader rd = null;
+
         try
         {
             con = mydb.GetCon();
@@ -143,7 +161,7 @@ public class MyPageDao
             cmd.Parameters.AddWithValue("@end", count);
 
             con.Open();
-            MySqlDataReader rd = cmd.ExecuteReader();
+            rd = cmd.ExecuteReader();
 
             while (rd.Read())
             {
@@ -173,8 +191,17 @@ public class MyPageDao
         }
         catch (Exception ex)
         {
-            Console.Write(ex.StackTrace.ToString());
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            rd.Close();
+            con.Close();
+
         }
+        finally
+        {
+            rd.Close();
+            con.Close();
+        }
+
         return resultList;
     }
 }
