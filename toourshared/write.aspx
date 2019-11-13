@@ -42,7 +42,7 @@
         // 테스트 코드
         if(HttpContext.Current.Session["mem_id"] == null)
         {
-            Session["mem_id"] = "GM";
+            Response.Redirect("./index.aspx");
         }
 
         //status -> 편집 페이지 정보
@@ -642,7 +642,8 @@
                 center: new daum.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
                 level: 3 // 지도의 확대 레벨
             };
-
+        //현재 선택한 오버레이
+        var curOverlay = Array(1);
         // 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
         //var drawingMap = new daum.maps.Map(drawingMapContainer, mapOption);
         var drawingMap = new daum.maps.Map(drawingMapContainer, drawingMap);
@@ -662,8 +663,8 @@
             // 사용자에게 도형을 그릴때, 드래그할때, 수정할때 가이드 툴팁을 표시하도록 설정합니다
             guideTooltip: ['draw', 'drag', 'edit'],
             arrowOptions: {
-                draggable: false,
-                removable: false,
+                draggable: true,
+                removable: true,
                 editable: true,
                 strokeWeight: 3,
                 strokeOpacity: 0.8,
@@ -675,7 +676,7 @@
             },
             circleOptions: {
                 draggable: true,
-                removable: false,
+                removable: true,
                 editable: true,
                 strokeColor: '#39f',
                 fillColor: '#39f',
@@ -683,7 +684,7 @@
             },
             ellipseOptions: {
                 draggable: true,
-                removable: false,
+                removable: true,
                 editable: true,
                 strokeWeight: 2,
                 strokeOpacity: 0.8,
@@ -693,8 +694,8 @@
                 fillOpacity: 0.3
             },
             markerOptions: { // 마커 옵션입니다
-                draggable: true, // 마커를 그리고 나서 드래그 가능하게 합니다
-                removable: false, // 마커를 삭제 할 수 있도록 x 버튼이 표시됩니다
+                draggable: false, // 마커를 그리고 나서 드래그 가능하게 합니다
+                removable: true, // 마커를 삭제 할 수 있도록 x 버튼이 표시됩니다
                 markerImages: [
                     null, // API에서 제공하는 기본 마커 이미지
                     {
@@ -730,7 +731,7 @@
             },
             polylineOptions: { // 선 옵션입니다
                 draggable: true, // 그린 후 드래그가 가능하도록 설정합니다
-                removable: false, // 그린 후 삭제 할 수 있도록 x 버튼이 표시됩니다
+                removable: true, // 그린 후 삭제 할 수 있도록 x 버튼이 표시됩니다
                 editable: true, // 그린 후 수정할 수 있도록 설정합니다
                 strokeColor: '#39f', // 선 색
                 hintStrokeStyle: 'dash', // 그리중 마우스를 따라다니는 보조선의 선 스타일
@@ -738,7 +739,7 @@
             },
             polygonOptions: {
                 draggable: true,
-                removable: false,
+                removable: true,
                 editable: true,
                 strokeColor: '#39f',
                 fillColor: '#39f',
@@ -800,14 +801,14 @@
         }
 
 
+        manager.addListener('select', function (data) {
 
-
-
-
-        manager.addListener('drawend',   (data) {
-            // data.target 에 그려진 오버레이 객체가 넘어온다.
-            console.info(data.target);
+            
         });
+
+
+
+
 
 
 
@@ -826,7 +827,10 @@
         // 애초에 리스너가 ExtenedMarker의 부분 요소로 들어가기 때문에
         // 같이 삭제됨
         manager.addListener('remove', function (e) {
-
+            console.info("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+            console.info(e);
+            console.info("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+            curOverlay[0] = e;
         });
         //http://localhost:49862/
 
@@ -872,11 +876,13 @@
         function closeCusOverlay() {
             customOverlay.setMap(null);
         }
+        function deleteMrker() {
+            manager.remove(curOverlay[0]);
+        }
 
 
 
-
-        var curOverlay = Array(1);
+        
 
         //-----------------------------------------------
         // 클릭시 발생하는 이벤트
