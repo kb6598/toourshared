@@ -79,79 +79,98 @@ namespace adminForm
             Report delete = new Report();
             Member_BlockDao member_BlockDao = new Member_BlockDao();
 
-
-            int selectedCellCount = dataGridView1.GetCellCount(DataGridViewElementStates.Selected);
-
-
             // trvNo를 받아와서 그 Travel의 mem_id를 가지고 그 mem_id의 state를 바꾼다.
 
             //선택한 셀들의 행을 구해오고 그행의 두번째열 trv_no의 값을 가져온다.
-            travel.Trv_no = dataGridView1.Rows[dataGridView1.SelectedCells[0].RowIndex].Cells[1].Value.ToString();
-
-            travel = travelDao.selectTravelBytrv_no(travel); // 바꿔치기
-
-            member.Mem_id = travel.Mem_id;
-
-            memberDao.UpdateMemberStateByMemId(member, 1); // 멤버 상태 바꾸고
-
-            travel.Trv_secret = "3"; // travel 객체 secret 속성 데이터 바꾸고
-
-            travelDao.UpdatetTravel(travel); // travelDao로 DB 업데이트
-
-
-            //제재 눌렀을때 선택한 행의 trv_no를 가져온다. 
-            travel.Trv_no = dataGridView1.Rows[dataGridView1.SelectedCells[0].RowIndex].Cells[1].Value.ToString();
-            try
+            if (dataGridView1.SelectedRows.Count > 0 || dataGridView1.SelectedCells.Count > 0)
             {
-                string sql = "select travel.mem_id as mem_id from toourshared.travel"
-                    + " where travel.trv_no = @trv_no";
-                string mem_id = "";
-                MySqlConnection con = myDB.GetCon();
-                MySqlCommand cmd = new MySqlCommand(sql, con);
-                cmd.Parameters.AddWithValue("@trv_no", travel.Trv_no);
-                con.Open();
-                MySqlDataReader rd = cmd.ExecuteReader();
-                while (rd.Read())
+                //선택한 행의 두번째 셀 선택시
+                if (dataGridView1.Rows[dataGridView1.SelectedCells[0].RowIndex].Cells[1].Value != null)
                 {
-                    mem_id = rd["mem_id"].ToString();
+                    travel.Trv_no = dataGridView1.Rows[dataGridView1.SelectedCells[0].RowIndex].Cells[1].Value.ToString();
+
+                    travel = travelDao.selectTravelBytrv_no(travel); // 바꿔치기
+
+                    member.Mem_id = travel.Mem_id;
+
+                    memberDao.UpdateMemberStateByMemId(member, 1); // 멤버 상태 바꾸고
+
+                    travel.Trv_secret = "3"; // travel 객체 secret 속성 데이터 바꾸고
+
+                    travelDao.UpdatetTravel(travel); // travelDao로 DB 업데이트
+
+
+                    //제재 눌렀을때 선택한 행의 trv_no를 가져온다. 
+                    travel.Trv_no = dataGridView1.Rows[dataGridView1.SelectedCells[0].RowIndex].Cells[1].Value.ToString();
+                    try
+                    {
+                        string sql = "select travel.mem_id as mem_id from toourshared.travel"
+                            + " where travel.trv_no = @trv_no";
+                        string mem_id = "";
+                        MySqlConnection con = myDB.GetCon();
+                        MySqlCommand cmd = new MySqlCommand(sql, con);
+                        cmd.Parameters.AddWithValue("@trv_no", travel.Trv_no);
+                        con.Open();
+                        MySqlDataReader rd = cmd.ExecuteReader();
+                        while (rd.Read())
+                        {
+                            mem_id = rd["mem_id"].ToString();
+                        }
+
+                        rd.Close();
+                        con.Close();
+
+                        string sql2 = "insert  into toourshared.member_block(mem_blo_date, mem_blo_length, mem_id)"
+                            + " values(now(), 3, @mem_id)";
+                        MySqlCommand cmd2 = new MySqlCommand(sql2, con);
+                        cmd2.Parameters.AddWithValue("@mem_id", mem_id);
+
+                        con.Open();
+                        cmd2.ExecuteNonQuery();
+                        con.Close();
+                    }
+
+                    catch
+                    {
+
+                    }
                 }
 
-                rd.Close();
-                con.Close();
+                //선택한 행의 첫번째 셀 선택시
+                if (dataGridView1.Rows[dataGridView1.SelectedCells[0].RowIndex].Cells[0].Value != null)
+                {
+                    //선택 행의 첫번째 rep_no 가져오기
+                    delete.Rep_no = dataGridView1.Rows[dataGridView1.SelectedCells[0].RowIndex].Cells[0].Value.ToString();
 
-                string sql2 = "insert  into toourshared.member_block(mem_blo_date, mem_blo_length, mem_id)"
-                    + " values(now(), 3, @mem_id)";
-                MySqlCommand cmd2 = new MySqlCommand(sql2, con);
-                cmd2.Parameters.AddWithValue("@mem_id", mem_id);
+                    try
+                    {
+                        string sql = "Delete from toourshared.report where rep_no = @rep_no";
+                        MySqlConnection con = myDB.GetCon();
+                        MySqlCommand cmd = new MySqlCommand(sql, con);
+                        cmd.Parameters.AddWithValue("@rep_no", delete.Rep_no);
 
-                con.Open();
-                cmd2.ExecuteNonQuery();
-                con.Close();
+                        con.Open();
+                        cmd.ExecuteNonQuery();
+                        con.Close();
+                    }
+
+                    catch (Exception ex)
+                    {
+
+                    }
+                }
+
+                //선택한 셀이 없을 경우
+                else
+                {
+                    MessageBox.Show("조회된 데이터가 없습니다.");
+                }
             }
 
-            catch
+            //선택한 행이 없을 경우
+            else
             {
-
-            }
-
-            //선택 행의 첫번째 rep_no 가져오기
-            delete.Rep_no = dataGridView1.Rows[dataGridView1.SelectedCells[0].RowIndex].Cells[0].Value.ToString();
-
-            try
-            {
-                string sql = "Delete from toourshared.report where rep_no = @rep_no";
-                MySqlConnection con = myDB.GetCon();
-                MySqlCommand cmd = new MySqlCommand(sql, con);
-                cmd.Parameters.AddWithValue("@rep_no", delete.Rep_no);
-
-                con.Open();
-                cmd.ExecuteNonQuery();
-                con.Close();
-            }
-
-            catch (Exception ex)
-            {
-
+                MessageBox.Show("선택된 행이 없습니다.");
             }
 
             After_Report();
@@ -165,36 +184,55 @@ namespace adminForm
             TravelDao travelDao = new TravelDao();
             Report delete = new Report();
 
-            int selectedCellCount = dataGridView1.GetCellCount(DataGridViewElementStates.Selected);
-
-            for (int i = 0; i < selectedCellCount; i++)
+            if (dataGridView1.SelectedRows.Count > 0 || dataGridView1.SelectedCells.Count > 0)
             {
-                //선택한 셀들의 행을 구해오고 그행의 두번째열 trv_no의 값을 가져온다.
-                inputTravel.Trv_no = dataGridView1.Rows[dataGridView1.SelectedCells[i].RowIndex].Cells[1].Value.ToString();
-                outputTravel = travelDao.selectTravelBytrv_no(inputTravel);
+                int selectedCellCount = dataGridView1.GetCellCount(DataGridViewElementStates.Selected);
 
-                outputTravel.Trv_secret = "0";
-
-                travelDao.UpdatetTravel(outputTravel);
-
-                //선택 행의 첫번째 rep_no 가져오기
-                delete.Rep_no = dataGridView1.Rows[dataGridView1.SelectedCells[i].RowIndex].Cells[0].Value.ToString();
-
-                try
+                for (int i = 0; i < selectedCellCount; i++)
                 {
-                    string sql = "Delete from toourshared.report where rep_no = @rep_no";
-                    MySqlConnection con = myDB.GetCon();
-                    MySqlCommand cmd = new MySqlCommand(sql, con);
-                    cmd.Parameters.AddWithValue("@rep_no", delete.Rep_no);
+                    if (dataGridView1.Rows[dataGridView1.SelectedCells[i].RowIndex].Cells[1].Value != null)
+                    {
+                        //선택한 셀들의 행을 구해오고 그행의 두번째열 trv_no의 값을 가져온다.
+                        inputTravel.Trv_no = dataGridView1.Rows[dataGridView1.SelectedCells[i].RowIndex].Cells[1].Value.ToString();
+                        outputTravel = travelDao.selectTravelBytrv_no(inputTravel);
 
-                    con.Open();
-                    cmd.ExecuteNonQuery();
-                    con.Close();
-                }
+                        outputTravel.Trv_secret = "0";
 
-                catch (Exception ex)
-                {
+                        travelDao.UpdatetTravel(outputTravel);
+                    }
+
+                    if (dataGridView1.Rows[dataGridView1.SelectedCells[i].RowIndex].Cells[0].Value != null)
+                    {
+                        //선택 행의 첫번째 rep_no 가져오기
+                        delete.Rep_no = dataGridView1.Rows[dataGridView1.SelectedCells[i].RowIndex].Cells[0].Value.ToString();
+
+                        try
+                        {
+                            string sql = "Delete from toourshared.report where rep_no = @rep_no";
+                            MySqlConnection con = myDB.GetCon();
+                            MySqlCommand cmd = new MySqlCommand(sql, con);
+                            cmd.Parameters.AddWithValue("@rep_no", delete.Rep_no);
+
+                            con.Open();
+                            cmd.ExecuteNonQuery();
+                            con.Close();
+                        }
+
+                        catch (Exception ex)
+                        {
+                        }
+                    }
+
+                    else
+                    {
+                        MessageBox.Show("조회된 데이터가 없습니다.");
+                    }
                 }
+            }
+
+            else
+            {
+                MessageBox.Show("선택된 행이 없습니다.");
             }
             After_Report();
         }
@@ -291,12 +329,19 @@ namespace adminForm
 
             if (dataGridView1.SelectedRows.Count > 0 || dataGridView1.SelectedCells.Count > 0) //선택한 행 또는 셀의 갯수가 1개 이상일 경우
             {
-                travel.Trv_no = dataGridView1.Rows[dataGridView1.SelectedCells[0].RowIndex].Cells[1].Value.ToString();
-                Process process = new System.Diagnostics.Process();
-                process.StartInfo = new System.Diagnostics.ProcessStartInfo(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)
-                    + "\\Internet Explorer\\iexplore.exe", "http://itbuddy.iptime.org/toourshared/board.aspx?trv_no=" + travel.Trv_no);
+                if (dataGridView1.Rows[dataGridView1.SelectedCells[0].RowIndex].Cells[1].Value != null)
+                {
+                    travel.Trv_no = dataGridView1.Rows[dataGridView1.SelectedCells[0].RowIndex].Cells[1].Value.ToString();
+                    Process process = new System.Diagnostics.Process();
+                    process.StartInfo = new System.Diagnostics.ProcessStartInfo(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)
+                        + "\\Internet Explorer\\iexplore.exe", "http://itbuddy.iptime.org/toourshared/board.aspx?trv_no=" + travel.Trv_no);
 
-                process.Start();
+                    process.Start();
+                }
+                else
+                {
+                    MessageBox.Show("조회된 데이터가 없습니다.");
+                }
             }
             
             else
