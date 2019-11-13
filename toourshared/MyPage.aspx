@@ -11,6 +11,7 @@
     string memberID; // QueryString(페이지의 주인)의 아이디를 저장할 변수
     bool pageOwner = false; // MyPage의 주인인지 아닌지 여부를 나타낼 변수
     string memberName; // MyPage 주인의 이름을 저장할 변수
+    string memberImageUrl; // MyPage 주인의 이미지가 나타날 변수
     int travelCount = 0; // MyPage 주인이 작성한 게시글의 총 수를 저장할 변수
     int followCount = 0; // MyPage 주인의 팔로우 카운트를 저장할 변수
     int followerCount = 0; // MyPage 주인의 팔로워 카운트를 저장할 변수
@@ -369,10 +370,9 @@
     {
         // 테스트 코드 이미지 업로드가 session["mem_id"]에 종속됨
 
-        if(Request.QueryString["mem_id"] == null || String.IsNullOrEmpty(Request.QueryString["mem_id"].ToString())) // mem_id 쿼리스트링이 존재하는지 체크
+        if (Request.QueryString["mem_id"] == null || String.IsNullOrEmpty(Request.QueryString["mem_id"].ToString())) // mem_id 쿼리스트링이 존재하는지 체크
         {
             // null OR empty 인 경우 index로 redirect.
-            System.Diagnostics.Debug.WriteLine("접근 형태: " + Request.QueryString["mem_id"]);
             Response.Write("<script language='javascript'>alert('접근 방법이 잘못되었습니다.');</script language='javascript'>");
             Response.Redirect("/index.aspx");
         }
@@ -384,28 +384,22 @@
             memberID = Request.QueryString["mem_id"].ToString(); // 쿼리스트링 값 memberID 변수에 담고
             member.Mem_id = memberID;
 
-            if(memberDao.IsExistByMemberID(member) == false) // 적절하지 않은 데이터의 아이디로 들어올 경우 index로 redirect 시키는 작업
+            if (memberDao.IsExistByMemberID(member) == false) // 적절하지 않은 데이터의 아이디로 들어올 경우 index로 redirect 시키는 작업
             {
-                System.Diagnostics.Debug.WriteLine("1-1");
                 Response.Write("<script language='javascript'>alert('" + member.Mem_id + "님의 페이지는 존재하지 않습니다.');</script language='javascript'>");
                 Response.Redirect("/index.aspx");
             }
 
-            System.Diagnostics.Debug.WriteLine(2);
-
-            if(HttpContext.Current.Session["mem_id"] == null) // 세션이 존재하지 않는 경우 (로그인 하지 않은 경우)
+            if (HttpContext.Current.Session["mem_id"] == null) // 세션이 존재하지 않는 경우 (로그인 하지 않은 경우)
             {
                 myID = "";
                 pageOwner = false;
-
-                System.Diagnostics.Debug.WriteLine(3);
             }
             else // 로그인 한 경우 ( 세션이 존재하는 경우 )
             {
-                System.Diagnostics.Debug.WriteLine(4);
                 myID = HttpContext.Current.Session["mem_id"].ToString();
 
-                if(HttpContext.Current.Session["mem_id"].ToString() != Request.QueryString["mem_id"].ToString()) // 로그인 한 아이디(session)와 현재 MyPage Owner(mem_id)가 다른 경우
+                if (HttpContext.Current.Session["mem_id"].ToString() != Request.QueryString["mem_id"].ToString()) // 로그인 한 아이디(session)와 현재 MyPage Owner(mem_id)가 다른 경우
                 {
                     pageOwner = false;
                 }
@@ -416,9 +410,10 @@
             }
 
             mem_id.Text = memberID; // 페이지에 주인의 아이디를 출력시키고
+            hdf_MemberID.Value = memberID; // 페이지의 히든필드에 주인의 아이디를 저장시키고 (나중에 프로필사진 편집을 위해서)
             member.Mem_id = memberID; // 페이지 주인의 아이디를 DTO에 넣고
             member = memberDao.selectMemberByMem_id(member); // DTO를 바꾼다.
-
+            
             memberName = member.Mem_name.ToString(); // 그리고 DTO 내의 사용자 이름을 구해온다.
             main_img.Value = member.Mem_img_url; // HiddenField에 회원의 메인 이미지를 넣는다.
 
@@ -669,13 +664,14 @@
     }
 
     .userImageItem .userImageStyle {
-        width: 150px;
-        height: 150px;
+        width: 100%;
+        height: 100%;
         padding: 0;
         margin: 0;
         border: none;
         cursor: pointer;
         border-radius: 100%;
+        object-fit: cover;
     }
 
     .userData {
@@ -944,16 +940,6 @@
 
     document.getElementById("defaultOpen").click();
 
-    $(function () {
-        var hdField = document.getElementById('main_img');
-        if (hdField.value != null && hdField.value != "" && hdField.value != '""') {
-            document.getElementById('mainPageImage').src = hdField.value;
-        }
-        else {
-            document.getElementById('mainPageImage').src = "./img/memberNoImage.png";
-        }
-    });
-
 </script>
 </head>
      <!-- navbar 영역 -->
@@ -1027,7 +1013,9 @@
         %>
         </ul>
     </div>
-      
+
+        <asp:HiddenField ID="hdf_MemberID" runat="server" />
+
         <div class="section">
             <!-- UserProfile -->
             <div class="section01">
@@ -1043,11 +1031,11 @@
 <%
     if (pageOwner == true)
     {
-        Response.Write("<img src=\"./img/memberNoImage.png\" ID=\"mainPageImage\" alt=\"프로필 사진\" class=\"userImageStyle\" onclick=\"document.getElementById('FileUpload_main_img').click();\" />");
+        Response.Write("<img src=\"" + main_img.Value + "\" ID=\"mainImgItem\" alt=\"프로필 사진\" class=\"userImageStyle\" onclick=\"document.getElementById('FileUpload_main_img').click();\" />");
     }
     else
     {
-        Response.Write("<img src=\"./img/memberNoImage.png\" ID=\"mainPageImage\" alt=\"프로필 사진\" class=\"userImageStyle\" />");
+        Response.Write("<img src=\"" + main_img.Value+ "\" ID=\"mainImgItem\" alt=\"프로필 사진\" class=\"userImageStyle\" />");
     }
 %>
                             </a>
@@ -1150,7 +1138,7 @@
                 formData.append('file', $('#FileUpload_main_img')[0].files[0]);
                 $.ajax({
                     type: 'post',
-                    url: 'imageUploader.ashx',
+                    url: 'memImageUploader.ashx',
                     data: formData,
                     success: function (status) {
                         if (status != 'error') {
