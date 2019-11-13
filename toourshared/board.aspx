@@ -1,5 +1,8 @@
 ﻿<%@ Page Language="C#" ValidateRequest="false" %>
 
+<%@ Import Namespace="System" %>
+<%@ Import Namespace="System.Linq" %>
+<%@ Import Namespace="Newtonsoft.Json" %>
 <%@ Import Namespace="Newtonsoft.Json.Linq" %>
 
 <!DOCTYPE html>
@@ -8,6 +11,8 @@
     //http://localhost:6118/board.aspx?trv_no=176
     protected void Page_Load(object sender, EventArgs e)
     {
+
+
         if (Request.QueryString["trv_no"] == null)
         {
             System.Diagnostics.Debug.WriteLine("지금 되는건가용?");
@@ -679,7 +684,7 @@
 
         .travel-cost {
             width: 380px;
-            height: 390px;
+            height: 200px;
             display: flex;
             flex-direction: column;
             background-color: #eee;
@@ -1017,6 +1022,32 @@
             background-color: transparent;
             color: white;
             font-size: 14px;
+        .reply-star-input .reply-star {
+            width: 50px;
+            font-size: 13px;
+            padding: 5px;
+            outline: none;
+            color: dimgray;
+            border: .5px solid rgba(0, 0, 0, .1);
+            text-align-last: center;
+        }
+
+         .map-info-items {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .map-info-items-title {
+            width: 150px;
+            height: 30px;
+            border: solid 1px;
+            padding: 10px, 5px;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .map-info-items:hover {
+            background: RGBA(0, 0, 255, .05);
         }
     </style>
 
@@ -1189,33 +1220,47 @@
                                 <root-header>여행 간 경로</root-header>
                                 <root-content>
                                     <% 
-                                        try
+                                        foreach (var map in mapList)
                                         {
-                                            //Response.Write(mapRouteCost[0]);
-                                            string str = mapRouteCost[0];
-                                            JArray ja = JArray.Parse(str);
-
+                                            JToken mapRoute = JToken.Parse(map.Map_route);
+                                            JToken route = JToken.Parse(mapRoute.ToString());
+                                            //Response.Write(route);
                                             string placename = "";
                                             string roadaddress = "";
                                             string addressname = "";
                                             string phone = "";
-                                            foreach (var item in ja)
+                                            string info = "";
+                                            string placeurl = "";
+                                            foreach (var item in route)
                                             {
                                                 placename = item["place_name"].ToString();
                                                 if (item["road_address_name"].ToString() != "undefined") roadaddress = item["road_address_name"].ToString();
+                                                if (item["address_name"].ToString() != "undefined") addressname = item["address_name"].ToString();
                                                 phone = item["phone"].ToString();
+                                                info = item["info"].ToString();
+                                                placeurl = item["place_url"].ToString();
 
-                                                Response.Write(placename + "<br />");
-                                                Response.Write(roadaddress + "<br />");
-                                                Response.Write(phone + "<br /><br />");
+                                                %>
+                                                    <root-content>
+                                                        <div class="list-group travel-cost">
+                                                            <div class="card w-100 map-info-items">
+                                                                <div class="card-header">
+                                                                    <h5 class="card-title"><% Response.Write(placename); %></h5>
+                                                                </div>
+                                                                <div class="card-body">
+                                                                    <h6 class="card-subtitle mb-2 text-muted"><% Response.Write("전화번호 : " + phone); %></h6>
+                                                                    <p class="card-text">
+                                                                        주소 : <% Response.Write("(" + roadaddress + "/" + addressname + ")"); %><br />
+                                                                        info
+                                                                        <% Response.Write(info); %>
+                                                                    </p>
+                                                                    <a href="place_link" class="card-link"><% Response.Write(placeurl); %></a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                <%
                                             }
-
                                         }
-                                        catch (Exception ex)
-                                        {
-                                            System.Diagnostics.Debug.WriteLine(ex.ToString());
-                                        }
-
                                         %>
                                 </root-content>
                             </rootitem>
@@ -1224,13 +1269,28 @@
                             <costitem>
                                 <cost-header>여행 간 경비</cost-header>
                                 <cost-content>
-                                     <% 
+                                                                       
+                                    <% 
+                                        foreach (var map in mapList)
+                                        {
+                                            JToken mapCost = JToken.Parse(map.Map_cost);
+                                            //JArray ja2 = JArray.Parse(mapCost[]["itemList"].ToString());
+                                            
+                                            //JToken costtype = mapCost["itemList"].ToString();
+                                            //Response.Write(route);
+
+                                            Response.Write(mapCost);
+
+                                        }
+
+                                        %>
+
+<%--                                     <% 
                                          try
                                          {
                                              //Response.Write(mapRouteCost[0]);
-                                             string str = mapRouteCost[1];
-                                             JArray ja = JArray.Parse(mapRouteCost[1]);
-                                             JArray ja2 = JArray.Parse(ja[2]["itemList"].ToString());
+                                             JToken ja = JToken.Parse(mapRouteCost[1]);
+                                             JToken ja2 = JToken.Parse(ja[2]["itemList"].ToString());
 
                                              string placename = "";
                                              string placename2 = "";
@@ -1251,7 +1311,7 @@
                                              System.Diagnostics.Debug.WriteLine(ex.ToString());
                                          }
 
-                                        %>
+                                        %>--%>
                                 </cost-content>
                             </costitem>
                         </div>

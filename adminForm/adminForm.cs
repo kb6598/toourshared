@@ -11,10 +11,12 @@ using MySql.Data.MySqlClient;
 using tooushared.DAO;
 using tooushared.DTO;
 using System.Diagnostics;
+using MetroFramework.Forms;
+
 
 namespace adminForm
 {
-    public partial class adminForm : Form
+    public partial class adminForm : MetroForm
     {
         MyDB myDB = new MyDB();
 
@@ -197,13 +199,13 @@ namespace adminForm
             After_Report();
         }
 
-        //계정정지 목록 조회버튼
+        //계정정지 목록 조회 버튼
         private void button4_Click(object sender, EventArgs e)
         {
             Member_BlockList();
         }
 
-        //계정정지 해제버튼
+        //계정정지 해제 버튼
         private void button5_Click(object sender, EventArgs e)
         {
             MyDB mydb = new MyDB();
@@ -279,30 +281,28 @@ namespace adminForm
             }
             catch {; }
 
-
-            //☆  →  할일을 말로 대충 풀어쓴 것
-            //string sql = "select mem_blo_date from member_block";
-            //위의 sql에서 조회된 데이터를 저장한다. ex) string Before_Report = "위의 sql데이터 값";
-            //DELETE FROM member_block WHERE Now_Time <= Before_Report + 3
-
-            //★★★  아래처럼 해야 합니다.  ★★★
-            //① sql의 조회된 값을 변수에 저장한다.
-            //② 현재 시간을 변수에 저장한다.
-            //③ 이전시간 + 3일 값이 현재시간보다 크거나 같으면 테이블에서 해당 데이터를 삭제한다.
-
             Member_BlockList();//계정 정지목록 조회
         }
 
+        //게시글 보기 버튼
         private void button6_Click(object sender, EventArgs e)
         {
             Travel travel = new Travel();
-            travel.Trv_no = dataGridView1.Rows[dataGridView1.SelectedCells[0].RowIndex].Cells[1].Value.ToString();
 
-            Process process = new System.Diagnostics.Process();
-            process.StartInfo = new System.Diagnostics.ProcessStartInfo(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)
-                + "\\Internet Explorer\\iexplore.exe", "http://itbuddy.iptime.org/toourshared/board.aspx?trv_no=" + travel.Trv_no);
+            if (dataGridView1.SelectedRows.Count > 0 || dataGridView1.SelectedCells.Count > 0) //선택한 행 또는 셀의 갯수가 1개 이상일 경우
+            {
+                travel.Trv_no = dataGridView1.Rows[dataGridView1.SelectedCells[0].RowIndex].Cells[1].Value.ToString();
+                Process process = new System.Diagnostics.Process();
+                process.StartInfo = new System.Diagnostics.ProcessStartInfo(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles)
+                    + "\\Internet Explorer\\iexplore.exe", "http://itbuddy.iptime.org/toourshared/board.aspx?trv_no=" + travel.Trv_no);
 
-            process.Start();
+                process.Start();
+            }
+            
+            else
+            {
+                MessageBox.Show("선택된 행이 없습니다.");
+            }            
         }
     }
 }
