@@ -267,13 +267,12 @@ public class FollowerDao
             MySqlCommand cmd = new MySqlCommand(Sql, con);
             con.Open();
 
-           
+            reader = cmd.ExecuteReader();
+
             if(reader.Read())
             {
                 returnInt = int.Parse(reader["cnt"].ToString());
             }
-
-            
         }
         catch (Exception ex)
         {
@@ -307,6 +306,7 @@ public class FollowerDao
             MySqlCommand cmd = new MySqlCommand(Sql, con);
             con.Open();
 
+            reader = cmd.ExecuteReader();
            
             if (reader.Read())
             {

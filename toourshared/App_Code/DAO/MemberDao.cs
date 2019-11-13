@@ -478,12 +478,9 @@ namespace tooushared.DAO
                 cmd.Parameters.AddWithValue("@mem_id", member.Mem_id);
 
                 con.Open();
-
                 cmd.ExecuteNonQuery();
 
                 result = 1;
-
-                con.Close();
             }
             catch (Exception ex)
             {
