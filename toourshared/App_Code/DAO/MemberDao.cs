@@ -481,6 +481,8 @@ namespace tooushared.DAO
                 cmd.ExecuteNonQuery();
 
                 result = 1;
+
+                
             }
             catch (Exception ex)
             {
@@ -512,6 +514,7 @@ namespace tooushared.DAO
                 MySqlCommand cmd = new MySqlCommand(Sql, con);
                 cmd.Parameters.AddWithValue("@image", member.Mem_img_url.ToString());
                 cmd.Parameters.AddWithValue("@id", member.Mem_id.ToString());
+
                 con.Open();
 
                 cmd.ExecuteNonQuery();
