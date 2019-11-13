@@ -7,7 +7,6 @@
     protected void BtnLogin_Click(object sender, EventArgs e)
     {
         MemberDao member = new MemberDao();
-
         Member mem = new Member();
 
         mem.Mem_id = mem_id.Text;
@@ -49,6 +48,9 @@
         {
             Response.Redirect("/index.aspx");
         }
+
+        this.mem_id.Attributes["onkeyPress"] = "if(event.keyCode == 13) {" + Page.GetPostBackEventReference(this.BtnLogin) + "; return false; }";       // 아이디 입력창에서 ENTER 키 누를 때 BtnLogin이 눌러지도록.
+        this.mem_pw.Attributes["onkeyPress"] = "if(event.keyCode == 13) {" + Page.GetPostBackEventReference(this.BtnLogin) + "; return false; }";      // 비밀번호 입력창에서 ENTER 키 누를 때 BtnLogin이 눌러지도록.
     }
 
     protected void btnLogout_Click(object sender, EventArgs e)
@@ -81,15 +83,6 @@
     protected void FindID_Click(object sender, EventArgs e)
     {
         Response.Redirect("/find_idpw.aspx");
-    }
-    protected void mem_id_TextChanged(object sender, EventArgs e)
-    {
-        mem_id.Attributes["onkeyPress"] = "if(event.keyCode == 13) { " + Page.GetPostBackEventReference(BtnLogin) + "; return false; }";
-    }
-
-    protected void mem_pw_TextChanged(object sender, EventArgs e)
-    {
-        mem_pw.Attributes["onkeyPress"] = "if(event.keyCode == 13) { " + Page.GetPostBackEventReference(BtnLogin) + "; return false; }";
     }
 
 </script>
@@ -576,10 +569,10 @@
             <!-- 아이디 및 패스워드 입력, 로그인 버튼-->
             <div class="area1">
                 <div class="ID">
-                    <asp:TextBox ID="mem_id" runat="server" placeholder="아이디" maxlength="15" OnTextChanged="mem_id_TextChanged"></asp:TextBox>
+                    <asp:TextBox ID="mem_id" runat="server" placeholder="아이디" maxlength="15"></asp:TextBox>
                 </div>
                 <div class="PW">
-                    <asp:TextBox ID="mem_pw" runat="server" placeholder="비밀번호" maxlength="20" TextMode="Password" OnTextChanged="mem_pw_TextChanged"></asp:TextBox>
+                    <asp:TextBox ID="mem_pw" runat="server" placeholder="비밀번호" maxlength="20" TextMode="Password"></asp:TextBox>
                 </div>
                 <div class="LOGINBTN">
                     <asp:Button ID="BtnLogin" runat="server" Text="로그인"  CssClass="LOGINBTNitem" OnClick="BtnLogin_Click" />
