@@ -355,7 +355,7 @@
             "<div class=\"boardItem\">\n" +
                 "<div class=\"article1\">\n" +
                     "<div class=\"boardImage\">\n" +
-                        "<a href = \"board.aspx?trv_no=" + travelList[i].Trv_no.ToString() + "\">\n" +
+                        "<a href = \"board.aspx?trv_no=" + travelList[i].Trv_no.ToString() + "\" onmouseover=\"getMapData("+travelList[i].Trv_no.ToString()+")\">\n" +
                             "<img src = \"" + travelMainImage + "\" alt=\"" + member.Mem_id.ToString() + "\" class=\"boardImageItem\">\n" +
                         "</a>\n" +
                     "</div>\n" +
@@ -471,23 +471,29 @@
 
         var cur_trv_no;
         function getMapData(travel_no) {
+            console.info(cur_trv_no +":"+ travel_no);
+            if (cur_trv_no != travel_no) {
 
-            $.ajax({
-                type: "GET",
-                url: "./getMaps.ashx?trv_no=" + travel_no,
-                dataType: 'json',
-                success: function (data) {
-                    if (cur_trv_no != travel_no) {
+                $.ajax({
+                    type: "GET",
+                    url: "./getMaps.ashx?trv_no=" + travel_no,
+                    dataType: 'json',
+                    success: function (data) {
+                        console.info(cur_trv_no);
+                        console.info(travel_no);
+
+                        console.info(data);
                         setMapDatas(data);
-                        cur_trv_no = travel_no;
+
+
+
                     }
 
-                }
-
-            });
-
+                });
+                cur_trv_no = travel_no;
 
 
+            }
         }
 
         var color= [ "#E53A40", "#F68657", "#EFDC05", "#58C9B9", "#a3daff", "#0080ff" , "#A593E0", "#C5C6B6", "#D09E88", "#FADAD8", "#fab1ce", "#fffff5", "#c8c8a9", "#3a5134" ];
@@ -495,11 +501,13 @@
         var icoDir = "./img/ico/marker/";
 
         function setMapDatas(data) {
-            if (data != null) {
+            if (data != null && data != "" && data != '""') {
 
-
+                
                 data.forEach(function (value, index, array) {
-                    getDataFromDrawingMap(value, color[index], color[index], icoDir + markerIco[index]);
+                    if (value != null && value != "" && value != '""') {
+                        getDataFromDrawingMap(value, color[index], color[index], icoDir + markerIco[index]);
+                    }
                 });
             }
         }
@@ -520,11 +528,13 @@
 
         function getDataFromDrawingMap(mapData, instrokeColor, infillColor, iconUrl) {
             // Drawing Manager에서 그려진 데이터 정보를 가져옵니다 
-
+            console.info(mapData);
+            //var data = mapData;
             var data = JSON.parse(mapData);
+            //var data = mapData;
             console.info(data);
-
-
+            
+            removeOverlays();
             // 지도에 가져온 데이터로 도형들을 그립니다
             // 지도에 가져온 데이터로 도형들을 그립니다
             //drawMarker(data[kakao.maps.drawing.OverlayType.MARKER]);
