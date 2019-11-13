@@ -89,6 +89,21 @@
     {
         Response.Redirect("./find_idpw.aspx");
     }
+
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        // Enter Event
+        this.find_id_mem_name.Attributes["onkeyPress"] = "if(event.keyCode == 13) {" + Page.GetPostBackEventReference(this.FindID) + "; return false; }";
+        this.find_id_mem_birth.Attributes["onkeyPress"] = "if(event.keyCode == 13) {" + Page.GetPostBackEventReference(this.FindID) + "; return false; }";
+        this.find_id_mem_phone.Attributes["onkeyPress"] = "if(event.keyCode == 13) {" + Page.GetPostBackEventReference(this.FindID) + "; return false; }";
+        this.find_id_mem_answer.Attributes["onkeyPress"] = "if(event.keyCode == 13) {" + Page.GetPostBackEventReference(this.FindID) + "; return false; }";
+
+        this.find_pw_mem_id.Attributes["onkeyPress"] = "if(event.keyCode == 13) {" + Page.GetPostBackEventReference(this.FindPW) + "; return false; }";
+        this.find_pw_mem_birth.Attributes["onkeyPress"] = "if(event.keyCode == 13) {" + Page.GetPostBackEventReference(this.FindPW) + "; return false; }";
+        this.find_pw_mem_phone.Attributes["onkeyPress"] = "if(event.keyCode == 13) {" + Page.GetPostBackEventReference(this.FindPW) + "; return false; }";
+        this.find_pw_mem_answer.Attributes["onkeyPress"] = "if(event.keyCode == 13) {" + Page.GetPostBackEventReference(this.FindPW) + "; return false; }";
+    }
+
 </script>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
