@@ -221,7 +221,8 @@ public class CommentDao
             con.Close();
 
         }
-        finally
+     
+         finally
         {
             rd.Close();
             con.Close();

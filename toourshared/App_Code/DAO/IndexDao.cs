@@ -25,7 +25,8 @@ public class IndexDao
         string[] strCols = new string[] { "trv_day_no", "trv_day_content", "trv_no" };
 
         MyDB mydb = new MyDB();
-        MySqlConnection con;
+        MySqlConnection con = null;
+        MySqlDataReader rd = null;
         try
         {
             con = mydb.GetCon();
@@ -51,8 +52,14 @@ public class IndexDao
         catch (Exception e)
         {
             Console.Write(e.StackTrace.ToString());
+            rd.Close();
+            con.Close();
         }
-
+        finally
+        {
+            rd.Close();
+            con.Close();
+        }
         return returnList;
     }
 
@@ -60,7 +67,8 @@ public class IndexDao
     {
         string returnStr = "";
         MyDB mydb = new MyDB();
-        MySqlConnection con;
+        MySqlConnection con = null;
+        MySqlDataReader rd = null;
         try
         {
             con = mydb.GetCon();
@@ -81,6 +89,13 @@ public class IndexDao
         catch(Exception e)
         {
             Console.Write(e.StackTrace.ToString());
+            rd.Close();
+            con.Close();
+        }
+        finally
+        {
+            rd.Close();
+            con.Close();
         }
 
         return returnStr;

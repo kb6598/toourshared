@@ -20,10 +20,14 @@ public class ImageDao
     public int InsertImage(Image image)
     {
         int result;
+        MyDB myDB = new MyDB();
+        MySqlConnection con = null;
+        
         try
         {
-            MyDB myDB = new MyDB();
-            MySqlConnection con = myDB.GetCon();
+           
+
+            con = myDB.GetCon();
 
             string Sql = "INSERT INTO toourshared.image (mem_id,img_view_name,image_caption)" +
                 "VALUES (@mem_id, @img_view_name, @img_caption)";
@@ -47,8 +51,15 @@ public class ImageDao
         }
         catch (Exception e)
         {
+            
+            con.Close();
+
             Console.WriteLine(e.StackTrace);
             result = -1;
+        }
+        finally
+        {
+            con.Close();
         }
 
         return result;
@@ -57,16 +68,29 @@ public class ImageDao
     public DataSet SelectImage()
     {
         MyDB myDB = new MyDB();
-        MySqlConnection con = myDB.GetCon();
+        MySqlConnection con = null;
+        DataSet ds = null;
+        try
+        {
+            con = myDB.GetCon();
+            string sql = "Select img_no,mem_id,img_view_name,img_caption  From toourshared.image";
+            MySqlCommand cmd = new MySqlCommand(sql, con); // 커맨드(sql문을 con에서 수행하기 위한 명령문) 생성 DB에서 수행시킬 명령 생성   
 
-        string sql = "Select img_no,mem_id,img_view_name,img_caption  From toourshared.image";
-        MySqlCommand cmd = new MySqlCommand(sql, con); // 커맨드(sql문을 con에서 수행하기 위한 명령문) 생성 DB에서 수행시킬 명령 생성   
+            MySqlDataAdapter ad = new MySqlDataAdapter();
+            ad.SelectCommand = cmd;
 
-        MySqlDataAdapter ad = new MySqlDataAdapter();
-        ad.SelectCommand = cmd;
-        DataSet ds = new DataSet();
-        ad.Fill(ds);
+            ad.Fill(ds);
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            con.Close();
 
+        }
+        finally
+        {
+            con.Close();
+        }
 
         return ds;
     }
@@ -77,7 +101,8 @@ public class ImageDao
         MyDB mydb = new MyDB();
 
         Image result = new Image();
-        MySqlConnection con;
+        MySqlConnection con = null;
+        MySqlDataReader rd = null;
 
         try
         {
@@ -91,7 +116,7 @@ public class ImageDao
             cmd.Parameters.AddWithValue("@img_no", image.Img_no);
 
             con.Open();
-            MySqlDataReader rd = cmd.ExecuteReader();
+            rd = cmd.ExecuteReader();
 
             if (rd.HasRows)
             {
@@ -115,7 +140,15 @@ public class ImageDao
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine(ex.ToString());
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            rd.Close();
+            con.Close();
+
+        }
+        finally
+        {
+            rd.Close();
+            con.Close();
         }
         return result;
     }
