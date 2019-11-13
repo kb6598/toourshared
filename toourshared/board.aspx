@@ -295,7 +295,7 @@
                     commentDao.InsertComment(comment); // comment 데이터 삽입
 
                     TravelDao travelDao = new TravelDao();
-                    travelDao.setTotRateByTrvNo(int.Parse(trv_no.ToString()), memberScore); // TotRate 최신화 작업
+                    travelDao.setTotRateByTrvNo(int.Parse(trv_no)); // TotRate 최신화 작업
                 }
             }
         }
@@ -1245,9 +1245,14 @@
                 <%
                     // hashtag 누르면 search.aspx?hashtag=○○○○ 로 이동
                     List<String> hashtagList = getHashTagList();
+
+
                     for (int i = 0; i < hashtagList.Count; i++)
                     {
-                        Response.Write("<a href = \"search.aspx?searchType=1&hashtag=" + hashtagList[i].ToString() + "\"><div class = \"hashtag\">" + hashtagList[i].ToString() + "</div></a>\n");
+                        string HashTagKeyword = hashtagList[i].ToString().Substring(1);
+                        string EncodedHashTag = Server.UrlEncode(HashTagKeyword);
+
+                        Response.Write("<a href = \"search.aspx?searchType=1&hashtag="+ EncodedHashTag+ "\"><div class = \"hashtag\">" + hashtagList[i].ToString() + "</div></a>\n");
                     }
                 %>
             </div>
