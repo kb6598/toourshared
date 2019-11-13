@@ -27,7 +27,15 @@
 
     protected void btnMypage_Click(object sender, EventArgs e)
     {
-        Response.Redirect("./MyPage.aspx");
+        if(Session["mem_id"] == null)
+        {
+            return;
+        }
+        else
+        {
+            string QueryString = Session["mem_id"].ToString(); // 현재 세션의 마이 페이지로 가야 하므로 세션 ToString() 받아서 redirect에 넘김
+            Response.Redirect("./MyPage.aspx?mem_id=" + QueryString);
+        }
     }
     protected void btnJoin_Click(object sender, EventArgs e)
     {
@@ -38,7 +46,6 @@
     {
         Response.Redirect("./find_idpw.aspx");
     }
-
 
     protected List<String> getTravelByTrvNo()
     {
@@ -1106,19 +1113,20 @@
             <ul class="topnavUl">
                 <li class="topnavLi">
                     <div class="nav-logo">
-                        <a href="index.aspx" class="nav-logo-item">To Our Shared</a>
+                        <a href="./index.aspx" class="nav-logo-item">To Our Shared</a>
                     </div>
                 </li>
                 <li class="topnavLi">
                     <a class="topnavLiItem">Intro</a>
                     <ul>
-                        <li><a href="#">TOUPLE</a></li>
+                        <li><a href="./index.aspx#relAndTOU">TOUPLE</a></li>
                     </ul>
                 </li>
                 <li class="topnavLi">
                     <a class="topnavLiItem">Shared</a>
                     <ul>
-                        <li><a href="search.aspx">검색</a></li>
+                        <li><a href="./search.aspx">검색</a></li>
+                        <li><a href="./write.aspx">글 쓰기</a></li>
                     </ul>
                 </li>
                 <li class="topnavLi">
@@ -1131,7 +1139,7 @@
                 <li class="topnavLi">
                     <a class="topnavLiItem">Help</a>
                     <ul>
-                        <li><a href="FAQ.aspx">자주 찾는 질문</a></li>
+                        <li><a href="./FAQ.aspx">자주 찾는 질문</a></li>
                     </ul>
                 </li>
          <% 
@@ -1142,7 +1150,7 @@
                 <div class="nav-log">
                     <a>
                         <div class="nav-log-area">
-                            <asp:Button ID="btnLogin" runat="server" Text="로그인" class="nav-log-item" PostBackUrl="~/login.aspx"/>
+                            <asp:Button ID="btnLogin" runat="server" Text="로그인" class="nav-log-item" PostBackUrl="./login.aspx"/>
                         </div>
                     </a>
                 </div>
@@ -1158,7 +1166,7 @@
             {
         %>
             <li class = "topnavLi" >
-				<a href = "#" ><% string id = Session["mem_id"].ToString(); Response.Write(id); %></a>
+				<a><% string id = Session["mem_id"].ToString(); Response.Write(id); %></a>
                 <ul>
                     <li><asp:Button ID="btnMypage" runat="server" Text="마이페이지" OnClick="btnMypage_Click" class ="navJoinBtn"/></li>
                     <li><asp:Button ID="btnLogout" runat="server" Text="로그아웃" OnClick="btnLogout_Click" class ="navFindBtn"/></li>
@@ -1205,13 +1213,13 @@
                 </div>
                 <div class="board-writer">
                     <div class="writer-Image">
-                        <a href="MyPage.aspx?mem_id=<%Response.Write(MemberList[0].ToString());%>">
+                        <a href="./MyPage.aspx?mem_id=<%Response.Write(MemberList[0].ToString());%>">
                             <img src="<%Response.Write(MemberList[12].ToString());%>" alt="writerImage" class="writer-ImageItem" />
                         </a>
                     </div>
                     <div class="writer-Text">
                         <div class="writerID">
-                            <a href="MyPage.aspx?mem_id=<%Response.Write(MemberList[0].ToString());%>">
+                            <a href="./MyPage.aspx?mem_id=<%Response.Write(MemberList[0].ToString());%>">
                                 <%Response.Write(MemberList[0].ToString());%>
                             </a>
                         </div>
@@ -1241,25 +1249,27 @@
 
                                         foreach (var map in mapList)
                                         {
-                                            JToken mapRoute = JToken.Parse(map.Map_route);
-                                            //Response.Write(route);
-                                            string placename = "";
-                                            string roadaddress = "";
-                                            string addressname = "";
-                                            string phone = "";
-                                            string info = "";
-                                            string placeurl = "";
-                                            Response.Write("<p><h4><b>" + routeDays + "일 차</b></h4></p>");
-                                            foreach (var item in mapRoute)
+                                            if (map.Map_route != "")
                                             {
-                                                placename = item["place_name"].ToString();
-                                                if (item["road_address_name"].ToString() != "undefined") roadaddress = item["road_address_name"].ToString();
-                                                if (item["address_name"].ToString() != "undefined") addressname = item["address_name"].ToString();
-                                                phone = item["phone"].ToString();
-                                                info = item["info"].ToString();
-                                                placeurl = item["place_url"].ToString();
-
-                                                %>
+                                            JToken mapRoute = JToken.Parse(map.Map_route);
+                                            
+                                                //Response.Write(route);
+                                                string placename = "";
+                                                string roadaddress = "";
+                                                string addressname = "";
+                                                string phone = "";
+                                                string info = "";
+                                                string placeurl = "";
+                                                Response.Write("<p><h4><b>" + routeDays + "일 차</b></h4></p>");
+                                                foreach (var item in mapRoute)
+                                                {
+                                                    placename = item["place_name"].ToString();
+                                                    if (item["road_address_name"].ToString() != "undefined") roadaddress = item["road_address_name"].ToString();
+                                                    if (item["address_name"].ToString() != "undefined") addressname = item["address_name"].ToString();
+                                                    phone = item["phone"].ToString();
+                                                    info = item["info"].ToString();
+                                                    placeurl = item["place_url"].ToString();
+                                       %>
                                                         <div class="list-group travel-cost">
                                                             <div class="card w-100 map-info-items">
                                                                 <div class="card-header">
@@ -1277,8 +1287,9 @@
                                                             </div>
                                                         </div>
                                                 <%
+                                                }
+                                                routeDays++;
                                             }
-                                            routeDays++;
                                         }
                                         %>
                                 </root-content>
@@ -1290,28 +1301,29 @@
                                 <cost-content>                       
                                     <%
                                     int costDays = 1;
-
                                     foreach (var map in mapList)
                                     {
-                                        JToken mapCost = JToken.Parse(map.Map_cost);
-                                        string itemlist = "";
-                                        string costtype = "";
-                                        string cost = "";
-                                        string placename = "";
-                                        string info = "";
-                                        Response.Write("<p><h4><b>" + costDays + "일 차</b></h4></p>");
-                                        foreach (var item in mapCost)
+                                        if (map.Map_cost != "")
                                         {
-                                            placename = item["place_name"].ToString();
-                                            itemlist = item["itemList"].ToString();
-                                            JToken list = JToken.Parse(itemlist);
-                                            if (!list.Equals(""))
+                                            JToken mapCost = JToken.Parse(map.Map_cost);
+                                            string itemlist = "";
+                                            string costtype = "";
+                                            string cost = "";
+                                            string placename = "";
+                                            string info = "";
+                                            Response.Write("<p><h4><b>" + costDays + "일 차</b></h4></p>");
+                                            foreach (var item in mapCost)
                                             {
-                                                foreach (var ls in list)
+                                                placename = item["place_name"].ToString();
+                                                itemlist = item["itemList"].ToString();
+                                                JToken list = JToken.Parse(itemlist);
+                                                if (!list.Equals(""))
                                                 {
-                                                    costtype = ls["costType"].ToString();
-                                                    cost = ls["cost"].ToString();
-                                                    info = ls["info"].ToString();
+                                                    foreach (var ls in list)
+                                                    {
+                                                        costtype = ls["costType"].ToString();
+                                                        cost = ls["cost"].ToString();
+                                                        info = ls["info"].ToString();
                                                 %>
                                                         <div class="list-group travel-cost">
                                                             <div class="card w-100 map-info-items">
@@ -1329,32 +1341,32 @@
                                                             </div>
                                                         </div>
                                                 <%
-                                                                }
-                                                            }
-                                                            else
-                                                            {
-                                                %>
-                                                        <div class="list-group travel-cost">
-                                                            <div class="card w-100 map-info-items">
-                                                                <div class="card-header">
-                                                                    <h5 class="card-title"><% Response.Write(placename); %></h5>
-                                                                </div>
-                                                                <div class="card-body">
-                                                                    <h6 class="card-subtitle mb-2 text-muted"><% Response.Write("타입 : " + costtype); %></h6>
-                                                                    <p class="card-text">
-                                                                        가격 : <% Response.Write("(" + cost + "원)"); %><br />
-                                                                        정보
-                                                                        <% Response.Write(info); %>
-                                                                    </p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                <%
-                                                        }
-                                
                                                     }
-                                                        costDays++;
                                                 }
+                                                else
+                                                {
+                                                %>
+                                                        <div class="list-group travel-cost">
+                                                            <div class="card w-100 map-info-items">
+                                                                <div class="card-header">
+                                                                    <h5 class="card-title"><% Response.Write(placename); %></h5>
+                                                                </div>
+                                                                <div class="card-body">
+                                                                    <h6 class="card-subtitle mb-2 text-muted"><% Response.Write("타입 : " + costtype); %></h6>
+                                                                    <p class="card-text">
+                                                                        가격 : <% Response.Write("(" + cost + "원)"); %><br />
+                                                                        정보
+                                                                        <% Response.Write(info); %>
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                <%
+                                                }
+                                                } 
+                                            costDays++;
+                                        }
+                                    }
                                                 %>
                                 </cost-content>
                             </costitem>
@@ -1386,6 +1398,8 @@
 
                     foreach (var map in mapList)
                     {
+                        if(map.Map_route != "")
+                        {
                         JToken mapRoute = JToken.Parse(map.Map_route);
                         //Response.Write(route);
                         string placename = "";
@@ -1426,8 +1440,9 @@
                                                             </div>
                                                         </div>
                                                 <%
+                                                            }
+                                                            rDays++;
                                                         }
-                                                        rDays++;
                                                     }
                                                     Response.Write(
                                                 "</content-body>\n" +
@@ -1445,6 +1460,8 @@
 
                                                     foreach (var map in mapList)
                                                     {
+                                                        if (map.Map_cost != "")
+                                                        {
                                                         JToken mapCost = JToken.Parse(map.Map_cost);
                                                         string itemlist = "";
                                                         string costtype = "";
@@ -1507,6 +1524,7 @@
                                 
                                                     }
                                                          cDays++;
+                                                    }
                                                 }
                                  Response.Write(
                                                             "</content-body>\n" +
@@ -1536,7 +1554,7 @@
                         string HashTagKeyword = hashtagList[i].ToString().Substring(1);
                         string EncodedHashTag = Server.UrlEncode(HashTagKeyword);
 
-                        Response.Write("<a href = \"search.aspx?searchType=1&hashtag="+ EncodedHashTag+ "\"><div class = \"hashtag\">" + hashtagList[i].ToString() + "</div></a>\n");
+                        Response.Write("<a href = \"./search.aspx?searchType=1&hashtag="+ EncodedHashTag+ "\"><div class = \"hashtag\">" + hashtagList[i].ToString() + "</div></a>\n");
                     }
                 %>
             </div>
