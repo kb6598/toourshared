@@ -400,7 +400,7 @@
             formData.append('file', $('#FileUpload_main_img')[0].files[0]);
             $.ajax({
                 type: 'post',
-                url: 'imageUploader.ashx',
+                url: './imageUploader.ashx',
                 data: formData,
                 success: function(status) {
                     if (status != 'error') {

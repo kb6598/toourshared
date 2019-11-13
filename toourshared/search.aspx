@@ -1,4 +1,6 @@
 ﻿<%@ Page Language="C#" %>
+<%@ Import Namespace="Newtonsoft.Json.Linq" %>
+
 
 
 <script runat="server">
@@ -109,6 +111,8 @@
         //EnterKey 누를 시 Button1_Click 이벤트 발생.
         inputText.Attributes["onkeyPress"] = "if(event.keyCode == 13) { " + Page.GetPostBackEventReference(Button1) + "; return false; }";
     }
+
+
 </script>
 
 <html>
@@ -141,6 +145,9 @@
     <!-- kakodev -->
       <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=ebcd0c1accbe0ff4bbb47bd777ef2fcf&libraries=service&libraries=services,clusterer,drawing"></script>
 
+
+    <!-- AJAX-->
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script>
 
         function rdoEvent(paramType) {
@@ -256,6 +263,7 @@
                         <div class="boardArea">
                             <div class="boardAlign">
 <%
+    List<Travel> travelList;
     Member member;
     Travel travel;
     Travel_Day travelDay;
@@ -303,7 +311,10 @@
     int limit2 = 5;
 
     // boardItem에서 구해야 할 항목 : Member(mainImage) Travel(title, main_img, mem_id, create_time, tot_rate) Trave_Day(content)
-    List<Travel> travelList = getTravelBySearchType(searchText, limit1, limit2);
+    travelList = getTravelBySearchType(searchText, limit1, limit2);
+    // 맵데이터 바인딩
+
+
 
     for (int i = 0; i < travelList.Count; i++)
     {
@@ -349,7 +360,7 @@
                         "</a>\n" +
                     "</div>\n" +
                     "<div class=\"boardContent\">" +
-                        "<a href = \"board.aspx?trv_no=" + travelList[i].Trv_no.ToString() + "\">\n" +
+                        "<a href = \"board.aspx?trv_no=" + travelList[i].Trv_no.ToString() + "\" onmouseover=\"getMapData("+travelList[i].Trv_no.ToString()+")\">\n" +
                             "<div class=\"boardTitle\">" +
                                 "<span>" + travelList[i].Trv_title.ToString() + "</span>" +
                             "</div>\n" +
@@ -452,20 +463,290 @@
         <!-- Kakao Map Area -->
         <div class="map" id="mapArea"></div>
     </div>
+        <asp:PlaceHolder ID="PlaceHolder_mapData" runat="server"></asp:PlaceHolder>
 </form>
     <script>
-        var drawingMapContainer = document.getElementById('mapArea'),
-            drawingMap = {
-                center: new kakao.maps.LatLng(37.56671, 126.98298), // 지도의 중심좌표
-                level: 4, // 지도의 확대 레벨
-                mapTypeId: kakao.maps.MapTypeId.ROADMAP // 지도종류
+
+
+
+        var cur_trv_no;
+        function getMapData(travel_no) {
+
+            $.ajax({
+                type: "GET",
+                url: "./getMaps.ashx?trv_no=" + travel_no,
+                dataType: 'json',
+                success: function (data) {
+                    if (cur_trv_no != travel_no) {
+                        setMapDatas(data);
+                        cur_trv_no = travel_no;
+                    }
+
+                }
+
+            });
+
+
+
+        }
+
+        var color= [ "#E53A40", "#F68657", "#EFDC05", "#58C9B9", "#a3daff", "#0080ff" , "#A593E0", "#C5C6B6", "#D09E88", "#FADAD8", "#fab1ce", "#fffff5", "#c8c8a9", "#3a5134" ];
+        var markerIco = [ "default_01.png", "default_02.png", "default_03.png", "default_04.png", "default_05.png", "default_06.png" , "default_07.png", "default_08.png", "default_09.png", "default_10.png", "default_11.png", "default_12.png", "default_13.png", "default_14.png" ];
+        var icoDir = "./img/ico/marker/";
+
+        function setMapDatas(data) {
+            if (data != null) {
+
+
+                data.forEach(function (value, index, array) {
+                    getDataFromDrawingMap(value, color[index], color[index], icoDir + markerIco[index]);
+                });
+            }
+        }
+
+
+        
+        // Drawing Manager에서 데이터를 가져와 도형을 표시할 아래쪽 지도 div
+        //center 좌표 계산 필요
+        var mapContainer = document.getElementById('mapArea'),
+            mapOptions = {
+                center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+                level: 3 // 지도의 확대 레벨
             };
 
-        // 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
-        //var drawingMap = new daum.maps.Map(drawingMapContainer, mapOption);
-        var drawingMap = new daum.maps.Map(drawingMapContainer, drawingMap);
+        // 지도 div와 지도 옵션으로 지도를 생성합니다
+        var map = new kakao.maps.Map(mapContainer, mapOptions),
+            overlays = []; // 지도에 그려진 도형을 담을 배열
+
+        function getDataFromDrawingMap(mapData, instrokeColor, infillColor, iconUrl) {
+            // Drawing Manager에서 그려진 데이터 정보를 가져옵니다 
+
+            var data = JSON.parse(mapData);
+            console.info(data);
 
 
+            // 지도에 가져온 데이터로 도형들을 그립니다
+            // 지도에 가져온 데이터로 도형들을 그립니다
+            //drawMarker(data[kakao.maps.drawing.OverlayType.MARKER]);
+            //drawPolyline(data[kakao.maps.drawing.OverlayType.POLYLINE]);
+            //drawRectangle(data[kakao.maps.drawing.OverlayType.RECTANGLE]);
+            //drawCircle(data[kakao.maps.drawing.OverlayType.CIRCLE]);
+            //drawPolygon(data[kakao.maps.drawing.OverlayType.POLYGON]);
+            //    drawArrow(data[kakao.maps.drawing.OverlayType.POLYLINE]);
+            //    drawEllipse(data[kakao.maps.drawing.OverlayType.ELLIPSE]);
+
+            drawMarker(data["marker"], iconUrl);
+            drawPolyline(data["polyline"], instrokeColor, infillColor);
+            drawRectangle(data["rectangle"], instrokeColor, infillColor);
+            drawCircle(data["circle"], instrokeColor, infillColor);
+            drawPolygon(data["polygon"], instrokeColor, infillColor);
+            drawEllipse(data["ellipse"], instrokeColor, infillColor);
+            drawArrow(data["arrow"], instrokeColor, infillColor);
+
+        }
+
+        // 아래 지도에 그려진 도형이 있다면 모두 지웁니다
+        function removeOverlays() {
+            var len = overlays.length, i = 0;
+
+            for (; i < len; i++) {
+                overlays[i].setMap(null);
+            }
+
+            overlays = [];
+        }
+
+
+        function drawArrow(arrow, instrokeColor, infillColor) {
+            if (arrow != [] || arrow != "" || arrow != null) {
+                var len = arrow.length, i = 0;
+
+                for (; i < len; i++) {
+                    var path = pointsToPath(arrow[i].points);
+                    var style = arrow[i].options;
+                    var polyline = new kakao.maps.Polyline({
+                        map: map,
+                        endArrow: true,
+                        path: path,
+                        strokeColor: instrokeColor,
+                        strokeOpacity: style.strokeOpacity,
+                        strokeStyle: style.strokeStyle,
+                        strokeWeight: style.strokeWeight
+                    });
+
+                    overlays.push(polyline);
+                }
+
+
+            }
+        }
+
+        function drawEllipse(ellipse, instrokeColor, infillColor) {
+            if (ellipse != [] || ellipse != "" || ellipse != null) {
+                var len = ellipse.length,
+                    i = 0;
+
+                for (; i < len; i++) {
+
+
+                    var ellipse = new kakao.maps.Ellipse({
+                        map: map,
+                        center: new daum.maps.LatLng(ellipse[i].center.y, ellipse[i].center.x),
+                        rx: ellipse[i].rx,
+                        ry: ellipse[i].ry,
+                        strokeWeight: 2,
+                        strokeColor: instrokeColor,
+                        strokeOpacity: 0.8,
+                        strokeStyle: 'solid',
+                        fillColor: infillColor,
+                        fillOpacity: 0.3
+
+                    });
+                    overlays.push(ellipse);
+
+
+                }
+            }
+        }
+        // 숫자 포멧팅
+        function pad(n, width) {
+            n = n + '';
+            return n.length >= width ? n : new Array(width - n.length + 1).join('0') + n;
+        }
+
+
+        // Drawing Manager에서 가져온 데이터 중 마커를 아래 지도에 표시하는 함수입니다
+        function drawMarker(markers, iconUrl) {
+            if (markers != [] || markers != "" || markers != null) {
+                var len = markers.length, i = 0;
+             
+                var icon =  new kakao.maps.MarkerImage(
+                    iconUrl,
+                    new kakao.maps.Size(31, 35));
+
+                for (; i < len; i++) {
+                    var marker = new kakao.maps.Marker({
+                        image: icon,
+                        map: map,
+                        position: new kakao.maps.LatLng(markers[i].y, markers[i].x),
+                        zIndex: markers[i].zIndex
+                    });
+
+                    overlays.push(marker);
+                }
+            }
+        }
+
+        // Drawing Manager에서 가져온 데이터 중 선을 아래 지도에 표시하는 함수입니다
+        function drawPolyline(lines, instrokeColor, infillColor) {
+            if (lines != [] || lines != "" || lines != null) {
+                var len = lines.length, i = 0;
+
+                for (; i < len; i++) {
+                    var path = pointsToPath(lines[i].points);
+                    var style = lines[i].options;
+                    var polyline = new kakao.maps.Polyline({
+                        map: map,
+                        path: path,
+                        strokeColor: instrokeColor,
+                        strokeOpacity: style.strokeOpacity,
+                        strokeStyle: style.strokeStyle,
+                        strokeWeight: style.strokeWeight
+                    });
+
+                    overlays.push(polyline);
+                }
+            }
+        }
+
+        // Drawing Manager에서 가져온 데이터 중 사각형을 아래 지도에 표시하는 함수입니다
+        function drawRectangle(rects, instrokeColor, infillColor) {
+            if (rects != [] || rects != "" || rects != null) {
+                var len = rects.length, i = 0;
+
+                for (; i < len; i++) {
+                    var style = rects[i].options;
+                    var rect = new kakao.maps.Rectangle({
+                        map: map,
+                        bounds: new kakao.maps.LatLngBounds(
+                            new kakao.maps.LatLng(rects[i].sPoint.y, rects[i].sPoint.x),
+                            new kakao.maps.LatLng(rects[i].ePoint.y, rects[i].ePoint.x)
+                        ),
+                        strokeColor: instrokeColor,
+                        strokeOpacity: style.strokeOpacity,
+                        strokeStyle: style.strokeStyle,
+                        strokeWeight: style.strokeWeight,
+                        fillColor: infillColor,
+                        fillOpacity: style.fillOpacity
+                    });
+
+                    overlays.push(rect);
+                }
+            }
+        }
+
+        // Drawing Manager에서 가져온 데이터 중 원을 아래 지도에 표시하는 함수입니다
+        function drawCircle(circles, instrokeColor, infillColor) {
+            if (circles != [] || circles != "" || circles != null) {
+                var len = circles.length, i = 0;
+
+                for (; i < len; i++) {
+                    var style = circles[i].options;
+                    var circle = new kakao.maps.Circle({
+                        map: map,
+                        center: new kakao.maps.LatLng(circles[i].center.y, circles[i].center.x),
+                        radius: circles[i].radius,
+                        strokeColor: instrokeColor,
+                        strokeOpacity: style.strokeOpacity,
+                        strokeStyle: style.strokeStyle,
+                        strokeWeight: style.strokeWeight,
+                        fillColor: infillColor,
+                        fillOpacity: style.fillOpacity
+                    });
+
+                    overlays.push(circle);
+                }
+            }
+        }
+
+        // Drawing Manager에서 가져온 데이터 중 다각형을 아래 지도에 표시하는 함수입니다
+        function drawPolygon(polygons, instrokeColor, infillColor) {
+            if (polygons != [] || polygons != "" || polygons != null) {
+                var len = polygons.length, i = 0;
+
+                for (; i < len; i++) {
+                    var path = pointsToPath(polygons[i].points);
+                    var style = polygons[i].options;
+                    var polygon = new kakao.maps.Polygon({
+                        map: map,
+                        path: path,
+                        strokeColor: instrokeColor,
+                        strokeOpacity: style.strokeOpacity,
+                        strokeStyle: style.strokeStyle,
+                        strokeWeight: style.strokeWeight,
+                        fillColor: infillColor,
+                        fillOpacity: style.fillOpacity
+                    });
+
+                    overlays.push(polygon);
+                }
+            }
+        }
+
+        // Drawing Manager에서 가져온 데이터 중 
+        // 선과 다각형의 꼭지점 정보를 kakao.maps.LatLng객체로 생성하고 배열로 반환하는 함수입니다 
+        function pointsToPath(points) {
+            var len = points.length,
+                path = [],
+                i = 0;
+
+            for (; i < len; i++) {
+                var latlng = new kakao.maps.LatLng(points[i].y, points[i].x);
+                path.push(latlng);
+            }
+
+            return path;
+        }
 
 
 
