@@ -192,8 +192,9 @@ namespace tooushared.DAO
 
                 con.Open();
 
-                
-                MySqlDataReader reader = cmd.ExecuteReader();
+
+                rd = cmd.ExecuteReader();
+
                 if (rd.Read())
                 {
                     count = 1;
