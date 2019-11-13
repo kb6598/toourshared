@@ -1005,6 +1005,11 @@
 <%
     if (pageOwner == true)
         Response.Write("                                <input type=\"button\" value=\"프로필 편집\" class=\"settingButton\" onclick=\"location.href = '/edit.aspx'\"/>");
+    else
+    {
+        if(Session["mem_id"] != null && Request.QueryString["mem_id"] != null)
+            Response.Write("                                <input type=\"button\" style=\"font-size: 13px;\" value=\"팔로우 신청/해제\" class=\"settingButton\" onclick=\"location.href = './requestFollow.aspx?mem_id=" + Request.QueryString["mem_id"].ToString() + "&follow=" + Session["mem_id"].ToString() + "'\"/>");
+    }
 %>
                             </div>
                         </div>

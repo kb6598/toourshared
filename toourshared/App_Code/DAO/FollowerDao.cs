@@ -20,7 +20,7 @@ public class FollowerDao
     public string InsertFollower(Follower follower)
     {
 
-        
+
         MyDB myDB = new MyDB();
         MySqlConnection con = myDB.GetCon();
         string result = "";
@@ -56,7 +56,31 @@ public class FollowerDao
         }
 
         return result;
-    }   
+    }
+
+    public void DeleteFollower(Follower follower)
+    {
+        MyDB mydb = new MyDB();
+        MySqlConnection con;
+
+        try
+        {
+            con = mydb.GetCon();
+            string Sql = "DELETE FROM toourshared.follower WHERE mem_id = @mem_id AND fol_id = @fol_id";
+
+            MySqlCommand cmd = new MySqlCommand(Sql, con);
+            cmd.Parameters.AddWithValue("@mem_id", follower.Mem_id);
+            cmd.Parameters.AddWithValue("@fol_id", follower.Fol_id);
+
+            con.Open();
+            cmd.ExecuteNonQuery();
+            con.Close();
+        }
+        catch(Exception e) {;}
+
+        return;
+    }
+
     //public void DeleteCommentBy(mem_id)
     public DataSet SelectFollwer()
     {
@@ -71,7 +95,7 @@ public class FollowerDao
 
             MySqlDataAdapter ad = new MySqlDataAdapter();
             ad.SelectCommand = cmd;
-            
+
             ad.Fill(ds);
         }
 
@@ -97,7 +121,7 @@ public class FollowerDao
 
         Follower result = new Follower();
         MySqlConnection con = null;
-        
+
         MySqlDataReader rd = null;
 
         try
@@ -123,22 +147,22 @@ public class FollowerDao
                 result.fol_no = rd["fol_no"].ToString();
                 result.Mem_id = rd["mem_id"].ToString();
                 result.Fol_id = rd["fol_id"].ToString();
-                
+
 
 
                 //lstMember.Add(tmpMemberPointer);
 
-               
+
 
             }
-         
+
 
         }
         catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine(ex.ToString());
             rd.Close();
-           
+
         }
         finally
         {
@@ -173,7 +197,7 @@ public class FollowerDao
             con.Open();
             MySqlDataReader reader = cmd.ExecuteReader();
 
-            while(reader.Read())
+            while (reader.Read())
             {
                 fol = new Follower();
                 fol.Mem_id = reader["mem_id"].ToString();
@@ -185,7 +209,7 @@ public class FollowerDao
             reader.Close();
             con.Close();
         }
-        catch (Exception e) {;}
+        catch (Exception e) {; }
 
         return returnList;
     }
@@ -196,7 +220,7 @@ public class FollowerDao
 
         List<Follower> resultList = new List<Follower>();
         Follower result;
-      
+
         MySqlConnection con = null;
 
         MySqlDataReader rd = null;
@@ -250,7 +274,7 @@ public class FollowerDao
 
         return resultList;
     }
-    
+
     // 파라미터로 받은 사용자(ID)의 팔로워 수를 반환하는 함수
     public int getFollowerCountByMemId(string ID)
     {
@@ -262,14 +286,14 @@ public class FollowerDao
         try
         {
             con = myDB.GetCon();
-            string Sql = "SELECT count(fol_id) as cnt FROM toourshared.follower WHERE mem_id = '"+ ID +"'";
+            string Sql = "SELECT count(fol_id) as cnt FROM toourshared.follower WHERE mem_id = '" + ID + "'";
 
             MySqlCommand cmd = new MySqlCommand(Sql, con);
             con.Open();
 
             reader = cmd.ExecuteReader();
 
-            if(reader.Read())
+            if (reader.Read())
             {
                 returnInt = int.Parse(reader["cnt"].ToString());
             }
@@ -293,7 +317,7 @@ public class FollowerDao
     public int getFollowCountByMemId(string ID)
     {
         MyDB myDB = new MyDB();
-        
+
         int returnInt = 0;
         MySqlConnection con = null;
         MySqlDataReader reader = null;
@@ -307,13 +331,13 @@ public class FollowerDao
             con.Open();
 
             reader = cmd.ExecuteReader();
-           
+
             if (reader.Read())
             {
                 returnInt = int.Parse(reader["cnt"].ToString());
             }
 
-            
+
         }
         catch (Exception ex)
         {
@@ -329,5 +353,39 @@ public class FollowerDao
         }
 
         return returnInt;
+    }
+
+    public bool isExistFollowerWhereMemIdANDFolId(Follower follower)
+    {
+        MyDB myDB = new MyDB();
+        MySqlConnection con;
+        int getCnt = 0;
+
+        try
+        {
+            con = myDB.GetCon();
+            string Sql = "SELECT count(*) as cnt FROM toourshared.follower WHERE mem_id = @mem_id AND fol_id = @fol_id";
+
+            MySqlCommand cmd = new MySqlCommand(Sql, con);
+            cmd.Parameters.AddWithValue("@mem_id", follower.Mem_id);
+            cmd.Parameters.AddWithValue("@fol_id", follower.Fol_id);
+
+            con.Open();
+            MySqlDataReader reader = cmd.ExecuteReader();
+
+            if(reader.Read())
+            {
+                getCnt = int.Parse(reader["cnt"].ToString());
+            }
+
+            reader.Close();
+            con.Close();
+        }
+        catch(Exception e) {;}
+
+        if (getCnt <= 0) // 데이터가 존재하지 않는 경우니까 팔로우하지 않은거고
+            return false;
+        else // 데이터가 존재하니까 팔로워한 거임. (fol_id 가 mem_id를 팔로우 한거고 mem_id는 fol_id로의 팔로워임)
+            return true;
     }
 }
