@@ -151,7 +151,7 @@ public class QuestionDao
         List<Question> resultList = new List<Question>();
         Question result;
         MySqlConnection con = null;
-        MySqlDataReader reader = null;
+        MySqlDataReader rd = null;
 
         try
         {
@@ -162,7 +162,7 @@ public class QuestionDao
 
             MySqlCommand cmd = new MySqlCommand(Sql, con);
             con.Open();
-            MySqlDataReader rd = cmd.ExecuteReader();
+            rd = cmd.ExecuteReader();
 
             while (rd.Read())
             {
@@ -186,13 +186,14 @@ public class QuestionDao
         catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
-            reader.Close();
+            rd.Close();
             con.Close();
 
         }
+
         finally
         {
-            reader.Close();
+            rd.Close();
             con.Close();
         }
 

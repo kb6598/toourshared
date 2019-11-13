@@ -171,7 +171,7 @@ public class TravelDao
 
         int result = 0;
         MySqlConnection con = null;
-        MySqlDataReader reader = null;
+        MySqlDataReader rd = null;
 
         try
         {
@@ -186,7 +186,7 @@ public class TravelDao
             cmd.Parameters.AddWithValue("@trv_no", travel.Trv_no);
 
             con.Open();
-            MySqlDataReader rd = cmd.ExecuteReader();
+            rd = cmd.ExecuteReader();
 
             if (rd.HasRows)
             {
@@ -207,13 +207,14 @@ public class TravelDao
         catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
-            reader.Close();
+            rd.Close();
             con.Close();
 
         }
+
         finally
         {
-            reader.Close();
+            rd.Close();
             con.Close();
         }
 
@@ -321,7 +322,7 @@ public class TravelDao
         List<Travel> resultList = new List<Travel>();
         Travel result;
         MySqlConnection con = null;
-        MySqlDataReader reader = null;
+        MySqlDataReader rd = null;
 
         try
         {
@@ -338,7 +339,7 @@ public class TravelDao
             cmd.Parameters.AddWithValue("@mem_id", travel.Mem_id);
 
             con.Open();
-            MySqlDataReader rd = cmd.ExecuteReader();
+            rd = cmd.ExecuteReader();
 
             while (rd.Read())
             {
@@ -371,16 +372,16 @@ public class TravelDao
         catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
-            reader.Close();
+            rd.Close();
             con.Close();
 
         }
+
         finally
         {
-            reader.Close();
+            rd.Close();
             con.Close();
         }
-
 
 
         return resultList;
@@ -1366,7 +1367,7 @@ public class TravelDao
         {
             MyDB myDB = new MyDB();
             MySqlConnection con = null;
-            MySqlDataReader rd = null;
+            MySqlDataReader reader = null;
             int returnInt = 0;
 
             try
@@ -1377,8 +1378,8 @@ public class TravelDao
                 MySqlCommand cmd = new MySqlCommand(Sql, con);
                 con.Open();
 
-                MySqlDataReader reader = cmd.ExecuteReader();
-                if(reader.Read())
+                reader = cmd.ExecuteReader();
+                if (reader.Read())
                 {
                     returnInt = int.Parse(reader["cnt"].ToString());
                 }
@@ -1389,20 +1390,22 @@ public class TravelDao
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
-                rd.Close();
+                reader.Close();
                 con.Close();
 
             }
-
             finally
             {
-                rd.Close();
+                reader.Close();
                 con.Close();
             }
-
             return returnInt;
+
+
         }
+        
     }
+     
 }
 
 
