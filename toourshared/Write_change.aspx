@@ -220,6 +220,14 @@
         BindDropDownList();
 
         BindTables();
+         if(Session["mem_id"]!= null)
+        {
+            Response.Redirect("./index.aspx");
+        }
+          if (Request.QueryString["?trv_no=100"] == null)
+        { 
+            Response.Redirect("/MyPage.aspx");
+        }
     }
 
 
