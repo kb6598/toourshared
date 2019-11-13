@@ -20,10 +20,12 @@ public class Travel_DayDao
     public string InsertTravel_Day(Travel_Day travel_day)
     {
         string result = "";
+        MySqlConnection con = null;
         try
         {
             MyDB myDB = new MyDB();
-            MySqlConnection con = myDB.GetCon();
+           
+            con = myDB.GetCon();
 
             string Sql = "INSERT INTO toourshared.travel_day (trv_day_content,trv_no)" +
                 "VALUES (@trv_day_content,@trv_no)";
@@ -44,28 +46,43 @@ public class Travel_DayDao
 
 
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
-            Console.WriteLine(e.StackTrace);
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            con.Close();
 
         }
-
+        finally
+        {
+            con.Close();
+        }
         return result;
     }
     public DataSet SelectTrvel_Day()
     {
         MyDB myDB = new MyDB();
         MySqlConnection con = myDB.GetCon();
+        DataSet ds = null;
+        try { 
 
         string sql = "Select trv_day_no, trv_day_content, trv_no  From toourshared.trvel_day";
         MySqlCommand cmd = new MySqlCommand(sql, con); // 커맨드(sql문을 con에서 수행하기 위한 명령문) 생성 DB에서 수행시킬 명령 생성   
 
         MySqlDataAdapter ad = new MySqlDataAdapter();
         ad.SelectCommand = cmd;
-        DataSet ds = new DataSet();
+        
         ad.Fill(ds);
+    }
+         catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            con.Close();
 
-
+        }
+        finally
+        {
+            con.Close();
+        }
         return ds;
     }
 
@@ -75,7 +92,8 @@ public class Travel_DayDao
         List<Travel_Day> returnList = new List<Travel_Day>();
 
         Travel_Day result;
-        MySqlConnection con;
+        MySqlConnection con = null;
+        MySqlDataReader reader = null;
 
         try
         {
@@ -87,7 +105,7 @@ public class Travel_DayDao
             cmd.Parameters.AddWithValue("@trv_no", travel_day.Trv_no);
 
             con.Open();
-            MySqlDataReader reader = cmd.ExecuteReader();
+            reader = cmd.ExecuteReader();
 
             while (reader.Read())
             {
@@ -98,8 +116,18 @@ public class Travel_DayDao
                 returnList.Add(result);
             }
         }
-        catch (Exception e) {;}
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            reader.Close();
+            con.Close();
 
+        }
+        finally
+        {
+            reader.Close();
+            con.Close();
+        }
         return returnList;
     }
 
@@ -107,7 +135,8 @@ public class Travel_DayDao
     {
         MyDB mydb = new MyDB();
         Travel_Day result = new Travel_Day();
-        MySqlConnection con;
+        MySqlConnection con = null;
+        MySqlDataReader reader = null;
 
         try
         {
@@ -119,9 +148,9 @@ public class Travel_DayDao
             cmd.Parameters.AddWithValue("@trv_no", travel_day.Trv_no);
 
             con.Open();
-            MySqlDataReader reader = cmd.ExecuteReader();
+            reader = cmd.ExecuteReader();
 
-            if(reader.Read())
+            if (reader.Read())
             {
                 result.Trv_day_no = reader["trv_day_no"].ToString();
                 result.Trv_day_content = reader["trv_day_content"].ToString();
@@ -131,7 +160,18 @@ public class Travel_DayDao
             reader.Close();
             con.Close();
         }
-        catch (Exception e) {;}
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            reader.Close();
+            con.Close();
+
+        }
+        finally
+        {
+            reader.Close();
+            con.Close();
+        }
 
         return result;
     }
@@ -142,7 +182,8 @@ public class Travel_DayDao
         MyDB mydb = new MyDB();
 
         Travel_Day result = new Travel_Day();
-        MySqlConnection con;
+        MySqlConnection con = null;
+        MySqlDataReader rd = null;
 
         try
         {
@@ -156,7 +197,7 @@ public class Travel_DayDao
             cmd.Parameters.AddWithValue("@trv_day_no", travel_Day.Trv_day_no);
 
             con.Open();
-            MySqlDataReader rd = cmd.ExecuteReader();
+             rd = cmd.ExecuteReader();
 
             if (rd.Read())
             {
@@ -168,18 +209,31 @@ public class Travel_DayDao
             rd.Close();
             con.Close();
         }
-        catch (Exception e) {;}
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            rd.Close();
+            con.Close();
+
+        }
+        finally
+        {
+            rd.Close();
+            con.Close();
+        }
+
 
         return result;
     }
 
     public int UpdatetTravel_Day(Travel_Day travel_day)
     {
-        int result;
+        int result = 0;
 
         MyDB myDB = new MyDB();
         MySqlConnection con = myDB.GetCon();
 
+        try { 
         string Sql = "UPDATE toourshared.travel_day SET trv_no =@trv_no, trv_day_content =@trv_day_content  WHERE Trv_day_no =@trv_day_no";
 
         MySqlCommand cmd = new MySqlCommand(Sql, con);
@@ -196,7 +250,17 @@ public class Travel_DayDao
 
 
         con.Close();
+    }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            con.Close();
 
+        }
+        finally
+        {
+            con.Close();
+        }
 
         return result;
     }

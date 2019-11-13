@@ -22,24 +22,36 @@ public class MapDao
 
         MyDB myDB = new MyDB();
         MySqlConnection con = myDB.GetCon();
+        string result = "";
 
-        string Sql = "INSERT INTO toourshared.map ( trv_day_no, map_data, map_route, map_cost, map_center) VALUES (@trv_day_no, @map_data, @map_route, @map_cost,@map_center)";
-        MySqlCommand cmd = new MySqlCommand(Sql, con);
+        try
+        {
+            string Sql = "INSERT INTO toourshared.map ( trv_day_no, map_data, map_route, map_cost, map_center) VALUES (@trv_day_no, @map_data, @map_route, @map_cost,@map_center)";
+            MySqlCommand cmd = new MySqlCommand(Sql, con);
 
-        cmd.Parameters.AddWithValue("@map_cost", map.Map_cost);
-        cmd.Parameters.AddWithValue("@map_data", map.Map_data);
-        cmd.Parameters.AddWithValue("@map_route", map.Map_route);
-        cmd.Parameters.AddWithValue("@trv_day_no", map.Trv_day_no);
-        cmd.Parameters.AddWithValue("@map_center", map.Map_center);
+            cmd.Parameters.AddWithValue("@map_cost", map.Map_cost);
+            cmd.Parameters.AddWithValue("@map_data", map.Map_data);
+            cmd.Parameters.AddWithValue("@map_route", map.Map_route);
+            cmd.Parameters.AddWithValue("@trv_day_no", map.Trv_day_no);
+            cmd.Parameters.AddWithValue("@map_center", map.Map_center);
 
 
-        con.Open();
+            con.Open();
 
-        cmd.ExecuteNonQuery();
+            cmd.ExecuteNonQuery();
 
-        string result = cmd.LastInsertedId.ToString();
 
-        con.Close();
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            con.Close();
+
+        }
+        finally
+        {
+            con.Close();
+        }
 
 
         return result;
@@ -47,30 +59,44 @@ public class MapDao
 
     public int UpdateMap(Map map)
     {
-        int result;
+        int result = 0;
 
         MyDB myDB = new MyDB();
         MySqlConnection con = myDB.GetCon();
 
-
-        string Sql = "UPDATE toourshared.map SET trv_day_no = @trv_day_no, map_data = @map_data, map_route = @map_route, map_cost = @map_cost, map_center=@map_center WHERE map_no = @map_no";
-
-
-        MySqlCommand cmd = new MySqlCommand(Sql, con);
-
-        cmd.Parameters.AddWithValue("@map_no", map.Map_no);
-        cmd.Parameters.AddWithValue("@map_cost", map.Map_cost);
-        cmd.Parameters.AddWithValue("@map_data", map.Map_data);
-        cmd.Parameters.AddWithValue("@map_route", map.Map_route);
-        cmd.Parameters.AddWithValue("@map_center", map.Map_center);
-        cmd.Parameters.AddWithValue("@trv_day_no", map.Trv_day_no);
-
-        con.Open();
-
-        result = cmd.ExecuteNonQuery();
+        try
+        {
 
 
-        con.Close();
+            string Sql = "UPDATE toourshared.map SET trv_day_no = @trv_day_no, map_data = @map_data, map_route = @map_route, map_cost = @map_cost, map_center=@map_center WHERE map_no = @map_no";
+
+
+            MySqlCommand cmd = new MySqlCommand(Sql, con);
+
+            cmd.Parameters.AddWithValue("@map_no", map.Map_no);
+            cmd.Parameters.AddWithValue("@map_cost", map.Map_cost);
+            cmd.Parameters.AddWithValue("@map_data", map.Map_data);
+            cmd.Parameters.AddWithValue("@map_route", map.Map_route);
+            cmd.Parameters.AddWithValue("@map_center", map.Map_center);
+            cmd.Parameters.AddWithValue("@trv_day_no", map.Trv_day_no);
+
+            con.Open();
+
+            result = cmd.ExecuteNonQuery();
+
+
+        
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            con.Close();
+
+        }
+        finally
+        {
+            con.Close();
+        }
 
 
         return result;
@@ -78,30 +104,41 @@ public class MapDao
 
     public int UpdateMapByTrvDayNo(Map map)
     {
-        int result;
+        int result = 0;
 
         MyDB myDB = new MyDB();
         MySqlConnection con = myDB.GetCon();
 
-
-        string Sql = "UPDATE toourshared.map SET map_data = @map_data, map_route = @map_route, map_cost = @map_cost, map_center = @map_center WHERE trv_day_no = @trv_day_no";
-
-
-        MySqlCommand cmd = new MySqlCommand(Sql, con);
-
-        cmd.Parameters.AddWithValue("@map_cost", map.Map_cost);
-        cmd.Parameters.AddWithValue("@map_data", map.Map_data);
-        cmd.Parameters.AddWithValue("@map_route", map.Map_route);
-        cmd.Parameters.AddWithValue("@map_center", map.Map_center);
-        cmd.Parameters.AddWithValue("@trv_day_no", map.Trv_day_no);
-
-        con.Open();
-
-        result = cmd.ExecuteNonQuery();
+        try
+        {
+            string Sql = "UPDATE toourshared.map SET map_data = @map_data, map_route = @map_route, map_cost = @map_cost, map_center = @map_center WHERE trv_day_no = @trv_day_no";
 
 
-        con.Close();
+            MySqlCommand cmd = new MySqlCommand(Sql, con);
 
+            cmd.Parameters.AddWithValue("@map_cost", map.Map_cost);
+            cmd.Parameters.AddWithValue("@map_data", map.Map_data);
+            cmd.Parameters.AddWithValue("@map_route", map.Map_route);
+            cmd.Parameters.AddWithValue("@map_center", map.Map_center);
+            cmd.Parameters.AddWithValue("@trv_day_no", map.Trv_day_no);
+
+            con.Open();
+
+            result = cmd.ExecuteNonQuery();
+
+
+     
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            con.Close();
+
+        }
+        finally
+        {
+            con.Close();
+        }
 
         return result;
     }
@@ -111,16 +148,28 @@ public class MapDao
     public DataSet SelectMap()
     {
         MyDB myDB = new MyDB();
-        MySqlConnection con = myDB.GetCon();
+        MySqlConnection con = null;
+        DataSet ds = null;
+        try {
+            con = myDB.GetCon();
 
         string sql = "SELECT map_no,trv_day_no, map_data, map_route, map_cost, map_center FROM toourshared.map";
         MySqlCommand cmd = new MySqlCommand(sql, con); // 커맨드(sql문을 con에서 수행하기 위한 명령문) 생성 DB에서 수행시킬 명령 생성   
-
+            con.Open();
         MySqlDataAdapter ad = new MySqlDataAdapter();
         ad.SelectCommand = cmd;
-        DataSet ds = new DataSet();
+        ds = new DataSet();
         ad.Fill(ds);
-
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            con.Close();
+        }
+        finally
+        {
+            con.Close();
+        }
 
         return ds;
     }
@@ -130,9 +179,10 @@ public class MapDao
     {
 
         MyDB mydb = new MyDB();
-
+        MySqlConnection con = null;
+        MySqlDataReader rd = null;
         Map result = new Map();
-        MySqlConnection con;
+       
 
         try
         {
@@ -146,7 +196,7 @@ public class MapDao
             cmd.Parameters.AddWithValue("@map_no", map.Map_no);
 
             con.Open();
-            MySqlDataReader rd = cmd.ExecuteReader();
+            rd = cmd.ExecuteReader();
 
             if (rd.HasRows)
             {
@@ -162,16 +212,24 @@ public class MapDao
 
                 //lstMember.Add(tmpMemberPointer);
 
-                return result;
+
 
             }
-            rd.Close();
-            con.Close();
+   
 
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine(ex.ToString());
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            rd.Close();
+            con.Close();
+
+        }
+
+        finally
+        {
+            rd.Close();
+            con.Close();
         }
         return result;
     }
@@ -179,9 +237,10 @@ public class MapDao
     {
 
         MyDB mydb = new MyDB();
-
+        MySqlConnection con = null;
+        MySqlDataReader rd = null;
         Map result = new Map();
-        MySqlConnection con;
+        
 
         try
         {
@@ -195,7 +254,7 @@ public class MapDao
             cmd.Parameters.AddWithValue("@trv_day_no", map.Trv_day_no);
 
             con.Open();
-            MySqlDataReader rd = cmd.ExecuteReader();
+            rd = cmd.ExecuteReader();
 
             if (rd.Read())
             {
@@ -210,22 +269,26 @@ public class MapDao
 
 
                 //lstMember.Add(tmpMemberPointer);
-                rd.Close();
-                con.Close();
-                return result;
+
 
             }
-            rd.Close();
-            con.Close();
+
 
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine(ex.ToString());
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            rd.Close();
+            con.Close();
 
         }
 
-        
+        finally
+        {
+            rd.Close();
+            con.Close();
+        }
+
         return result;
     }
 
@@ -235,9 +298,11 @@ public class MapDao
 
         MyDB mydb = new MyDB();
         Map result = new Map();
+        MySqlConnection con = null;
+        MySqlDataReader rd = null;
 
         List<Map> resultList = new List<Map>();
-        MySqlConnection con;
+       
 
         try
         {
@@ -250,7 +315,7 @@ public class MapDao
             cmd.Parameters.AddWithValue("@trv_no", travelNo);
 
             con.Open();
-            MySqlDataReader rd = cmd.ExecuteReader();
+            rd = cmd.ExecuteReader();
 
             if (rd.Read())
             {
@@ -265,18 +330,24 @@ public class MapDao
 
                 resultList.Add(result);
                 //lstMember.Add(tmpMemberPointer);
-                rd.Close();
-                con.Close();
+
 
             }
-            rd.Close();
-            con.Close();
+
 
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine(ex.ToString());
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            rd.Close();
+            con.Close();
 
+        }
+
+        finally
+        {
+            rd.Close();
+            con.Close();
         }
 
 

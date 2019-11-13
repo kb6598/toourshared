@@ -24,10 +24,11 @@ public class TravelDao
     public string InsertTravel(Travel travel)
     {
         string result = "";
+        MySqlConnection con = null;
         try
         {
             MyDB myDB = new MyDB();
-            MySqlConnection con = myDB.GetCon();
+            con = myDB.GetCon();
 
             string Sql = "INSERT INTO toourshared.travel (trv_secret, trv_views, trv_tot_rate, trv_main_img, trv_title, trv_tag, trv_create_time, loc_name, mem_id) " +
                 "VALUES (@trv_secret, @trv_views, @trv_tot_rate, @trv_main_img, @trv_title, @trv_tag, @trv_create_time, @loc_name, @mem_id)";
@@ -56,10 +57,15 @@ public class TravelDao
 
 
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
-            Console.WriteLine(e.StackTrace);
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            con.Close();
 
+        }
+        finally
+        {
+            con.Close();
         }
 
         return result;
@@ -69,17 +75,27 @@ public class TravelDao
     {
         MyDB myDB = new MyDB();
         MySqlConnection con = myDB.GetCon();
-
+        DataSet ds = null;
+        try {
         string sql = "Select trv_no, trv_secret, trv_views, trv_tot_rate, trv_main_img, trv_title, trv_tag," +
             "trv_timestamp, trv_create_time, loc_name,mem_id From toourshared.travel";
         MySqlCommand cmd = new MySqlCommand(sql, con); // 커맨드(sql문을 con에서 수행하기 위한 명령문) 생성 DB에서 수행시킬 명령 생성   
 
         MySqlDataAdapter ad = new MySqlDataAdapter();
         ad.SelectCommand = cmd;
-        DataSet ds = new DataSet();
+        
         ad.Fill(ds);
+    }
+         catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            con.Close();
 
-
+        }
+        finally
+        {
+            con.Close();
+        }
         return ds;
     }
 
@@ -89,7 +105,8 @@ public class TravelDao
         MyDB mydb = new MyDB();
 
         Travel result = new Travel();
-        MySqlConnection con;
+        MySqlConnection con = null;
+        MySqlDataReader rd = null;
 
         try
         {
@@ -104,7 +121,7 @@ public class TravelDao
             cmd.Parameters.AddWithValue("@trv_no", travel.Trv_no);
 
             con.Open();
-            MySqlDataReader rd = cmd.ExecuteReader();
+            rd = cmd.ExecuteReader();
 
             if (rd.HasRows)
             {
@@ -131,9 +148,17 @@ public class TravelDao
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine(ex.ToString());
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            rd.Close();
+            con.Close();
+
         }
 
+        finally
+        {
+            rd.Close();
+            con.Close();
+        }
 
 
         return result;
@@ -145,7 +170,8 @@ public class TravelDao
         MyDB mydb = new MyDB();
 
         int result = 0;
-        MySqlConnection con;
+        MySqlConnection con = null;
+        MySqlDataReader rd = null;
 
         try
         {
@@ -160,7 +186,7 @@ public class TravelDao
             cmd.Parameters.AddWithValue("@trv_no", travel.Trv_no);
 
             con.Open();
-            MySqlDataReader rd = cmd.ExecuteReader();
+            rd = cmd.ExecuteReader();
 
             if (rd.HasRows)
             {
@@ -180,7 +206,16 @@ public class TravelDao
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine(ex.ToString());
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            rd.Close();
+            con.Close();
+
+        }
+
+        finally
+        {
+            rd.Close();
+            con.Close();
         }
 
 
@@ -195,9 +230,10 @@ public class TravelDao
 
         DataSet result = new DataSet();
         MySqlConnection con;
-
+        DataSet ds = null;
         con = mydb.GetCon();
 
+        try { 
         string Sql = "SELECT * FROM toourshared.travel where mem_id=@mem_id";
 
 
@@ -207,10 +243,19 @@ public class TravelDao
 
         MySqlDataAdapter ad = new MySqlDataAdapter();
         ad.SelectCommand = cmd;
-        DataSet ds = new DataSet();
+        
         ad.Fill(ds);
+    }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            con.Close();
 
-
+        }
+        finally
+        {
+            con.Close();
+        }
         return ds;
     }
 
@@ -223,7 +268,8 @@ public class TravelDao
 
         MyDB mydb = new MyDB();
         Travel result = new Travel();
-        MySqlConnection con;
+        MySqlConnection con = null;
+        MySqlDataReader rd = null;
 
         try
         {
@@ -232,9 +278,9 @@ public class TravelDao
             MySqlCommand cmd = new MySqlCommand(Sql, con);
 
             con.Open();
-            MySqlDataReader rd = cmd.ExecuteReader();
+            rd = cmd.ExecuteReader();
 
-            if(rd.Read())
+            if (rd.Read())
             {
                 result.Trv_no = rd["trv_no"].ToString();
                 result.Trv_secret = rd["trv_secret"].ToString();
@@ -252,27 +298,40 @@ public class TravelDao
             rd.Close();
             con.Close();
         }
-        catch (Exception ex){;}
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            rd.Close();
+            con.Close();
+
+        }
+
+        finally
+        {
+            rd.Close();
+            con.Close();
+        }
 
         return result;
     }
 
-    public List<Travel> selectTravelListByMem_id(Travel travel)
+    public List<Travel> selectTravelListByMem_id(Travel travel, int limit1 = -1, int limit2 = -1)
     {
         MyDB mydb = new MyDB();
 
         List<Travel> resultList = new List<Travel>();
         Travel result;
-        MySqlConnection con;
+        MySqlConnection con = null;
+        MySqlDataReader rd = null;
+        string Sql = "";
 
         try
         {
-
-
-
             con = mydb.GetCon();
-
-            string Sql = "SELECT * FROM toourshared.travel where mem_id=@mem_id";
+            if (limit1 != -1 && limit2 != -1)
+                Sql = "SELECT * FROM toourshared.travel WHERE mem_id = @mem_id ORDER BY trv_create_time DESC LIMIT " + limit1 + ", " + limit2;
+            else
+                Sql = "SELECT * FROM toourshared.travel WHERE mem_id = @mem_id";
 
 
             MySqlCommand cmd = new MySqlCommand(Sql, con);
@@ -280,7 +339,7 @@ public class TravelDao
             cmd.Parameters.AddWithValue("@mem_id", travel.Mem_id);
 
             con.Open();
-            MySqlDataReader rd = cmd.ExecuteReader();
+            rd = cmd.ExecuteReader();
 
             while (rd.Read())
             {
@@ -312,9 +371,17 @@ public class TravelDao
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine(ex.ToString());
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            rd.Close();
+            con.Close();
+
         }
 
+        finally
+        {
+            rd.Close();
+            con.Close();
+        }
 
 
         return resultList;
@@ -322,11 +389,12 @@ public class TravelDao
 
     public int UpdatetTravel(Travel travel)
     {
-        int result;
+        int result=0;
 
         MyDB myDB = new MyDB();
         MySqlConnection con = myDB.GetCon();
 
+        try { 
         string Sql = "UPDATE toourshared.travel SET trv_secret =@trv_secret, trv_views =@trv_views, trv_tot_rate =@trv_tot_rate, trv_main_img =@trv_main_img, trv_title =@trv_title, trv_tag =@trv_tag, trv_timestamp =@trv_timestamp, trv_create_time =@trv_create_time, loc_name =@loc_name, mem_id =@mem_id  WHERE trv_no =@trv_no";
 
         MySqlCommand cmd = new MySqlCommand(Sql, con);
@@ -346,7 +414,17 @@ public class TravelDao
         con.Open();
         result = cmd.ExecuteNonQuery();
         con.Close();
+    }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            con.Close();
 
+        }
+        finally
+        {
+            con.Close();
+        }
         return result;
     }
 
@@ -355,7 +433,8 @@ public class TravelDao
         MyDB mydb = new MyDB();
         Travel travel;
         List<Travel> returnList = new List<Travel>();
-        MySqlConnection con;
+        MySqlConnection con = null;
+        MySqlDataReader reader = null;
 
         try
         {
@@ -374,7 +453,7 @@ public class TravelDao
             MySqlCommand cmd = new MySqlCommand(Sql, con);
             con.Open();
 
-            MySqlDataReader reader = cmd.ExecuteReader();
+            reader = cmd.ExecuteReader();
 
             while (reader.Read())
             {
@@ -397,7 +476,18 @@ public class TravelDao
             reader.Close();
             con.Close();
         }
-        catch (Exception e) {; }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            reader.Close();
+            con.Close();
+
+        }
+        finally
+        {
+            reader.Close();
+            con.Close();
+        }
 
         return returnList;
     }
@@ -407,7 +497,8 @@ public class TravelDao
         MyDB mydb = new MyDB();
         Travel travel;
         List<Travel> returnList = new List<Travel>();
-        MySqlConnection con;
+        MySqlConnection con = null;
+        MySqlDataReader reader = null;
 
         try
         {
@@ -426,7 +517,7 @@ public class TravelDao
             MySqlCommand cmd = new MySqlCommand(Sql, con);
             con.Open();
 
-            MySqlDataReader reader = cmd.ExecuteReader();
+            reader = cmd.ExecuteReader();
 
             while (reader.Read())
             {
@@ -449,7 +540,19 @@ public class TravelDao
             reader.Close();
             con.Close();
         }
-        catch (Exception e) {; }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            reader.Close();
+            con.Close();
+
+        }
+        finally
+        {
+            reader.Close();
+            con.Close();
+        }
+
 
         return returnList;
     }
@@ -459,7 +562,8 @@ public class TravelDao
         MyDB mydb = new MyDB();
         Travel travel;
         List<Travel> returnList = new List<Travel>();
-        MySqlConnection con;
+        MySqlConnection con = null;
+        MySqlDataReader reader = null;
 
         try
         {
@@ -478,7 +582,7 @@ public class TravelDao
             MySqlCommand cmd = new MySqlCommand(Sql, con);
             con.Open();
 
-            MySqlDataReader reader = cmd.ExecuteReader();
+            reader = cmd.ExecuteReader();
 
             while (reader.Read())
             {
@@ -501,7 +605,18 @@ public class TravelDao
             reader.Close();
             con.Close();
         }
-        catch (Exception e) {; }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            reader.Close();
+            con.Close();
+
+        }
+        finally
+        {
+            reader.Close();
+            con.Close();
+        }
 
         return returnList;
     }
@@ -512,7 +627,8 @@ public class TravelDao
 
         List<Travel> resultList = new List<Travel>();
         Travel result;
-        MySqlConnection con;
+        MySqlConnection con = null;
+        MySqlDataReader rd = null;
 
         try
         {
@@ -526,7 +642,7 @@ public class TravelDao
             cmd.Parameters.AddWithValue("@count", count);
 
             con.Open();
-            MySqlDataReader rd = cmd.ExecuteReader();
+            rd = cmd.ExecuteReader();
 
             while (rd.Read())
             {
@@ -558,7 +674,15 @@ public class TravelDao
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine(ex.ToString());
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            rd.Close();
+            con.Close();
+
+        }
+        finally
+        {
+            rd.Close();
+            con.Close();
         }
 
 
@@ -571,7 +695,8 @@ public class TravelDao
 
         List<Travel> resultList = new List<Travel>();
         Travel result;
-        MySqlConnection con;
+        MySqlConnection con = null;
+        MySqlDataReader rd = null;
         try
         {
 
@@ -590,7 +715,7 @@ public class TravelDao
             cmd.Parameters.AddWithValue("@count", count);
 
             con.Open();
-            MySqlDataReader rd = cmd.ExecuteReader();
+            rd = cmd.ExecuteReader();
 
             while (rd.Read())
             {
@@ -619,7 +744,15 @@ public class TravelDao
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine(ex.ToString());
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            rd.Close();
+            con.Close();
+
+        }
+        finally
+        {
+            rd.Close();
+            con.Close();
         }
 
 
@@ -633,7 +766,8 @@ public class TravelDao
 
         List<Travel> resultList = new List<Travel>();
         Travel result;
-        MySqlConnection con;
+        MySqlConnection con = null;
+        MySqlDataReader rd = null;
 
         try
         {
@@ -642,7 +776,7 @@ public class TravelDao
 
             MySqlCommand cmd = new MySqlCommand(Sql, con);
             con.Open();
-            MySqlDataReader rd = cmd.ExecuteReader();
+            rd = cmd.ExecuteReader();
 
             while (rd.Read())
             {
@@ -674,9 +808,16 @@ public class TravelDao
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine(ex.ToString());
-        }
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            rd.Close();
+            con.Close();
 
+        }
+        finally
+        {
+            rd.Close();
+            con.Close();
+        }
         return resultList;
     }
 
@@ -687,7 +828,8 @@ public class TravelDao
         int returnInt = 0;
         String Sql = "";
         MyDB mydb = new MyDB();
-        MySqlConnection con;
+        MySqlConnection con = null;
+        MySqlDataReader reader = null;
 
         try
         {
@@ -700,7 +842,7 @@ public class TravelDao
             MySqlCommand cmd = new MySqlCommand(Sql, con);
             con.Open();
 
-            MySqlDataReader reader = cmd.ExecuteReader();
+            reader = cmd.ExecuteReader();
             if (reader.Read())
             {
                 returnInt = int.Parse(reader["cnt"].ToString());
@@ -710,7 +852,18 @@ public class TravelDao
             con.Close();
 
         }
-        catch (Exception e) {; }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            reader.Close();
+            con.Close();
+
+        }
+        finally
+        {
+            reader.Close();
+            con.Close();
+        }
 
         return returnInt;
     }
@@ -722,7 +875,8 @@ public class TravelDao
         int returnInt = 0;
         String Sql = "";
         MyDB mydb = new MyDB();
-        MySqlConnection con;
+        MySqlConnection con = null;
+        MySqlDataReader reader = null;
 
         try
         {
@@ -735,7 +889,7 @@ public class TravelDao
             MySqlCommand cmd = new MySqlCommand(Sql, con);
             con.Open();
 
-            MySqlDataReader reader = cmd.ExecuteReader();
+            reader = cmd.ExecuteReader();
             if (reader.Read())
             {
                 returnInt = int.Parse(reader["cnt"].ToString());
@@ -745,7 +899,18 @@ public class TravelDao
             con.Close();
 
         }
-        catch (Exception e) {; }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            reader.Close();
+            con.Close();
+
+        }
+        finally
+        {
+            reader.Close();
+            con.Close();
+        }
 
         return returnInt;
     }
@@ -757,7 +922,8 @@ public class TravelDao
         int returnInt = 0;
         String Sql = "";
         MyDB mydb = new MyDB();
-        MySqlConnection con;
+        MySqlConnection con = null;
+        MySqlDataReader reader = null;
 
         try
         {
@@ -769,8 +935,7 @@ public class TravelDao
 
             MySqlCommand cmd = new MySqlCommand(Sql, con);
             con.Open();
-
-            MySqlDataReader reader = cmd.ExecuteReader();
+            reader = cmd.ExecuteReader();
             if (reader.Read())
             {
                 returnInt = int.Parse(reader["trvNoCnt"].ToString());
@@ -780,7 +945,18 @@ public class TravelDao
             con.Close();
 
         }
-        catch (Exception e) {; }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            reader.Close();
+            con.Close();
+
+        }
+        finally
+        {
+            reader.Close();
+            con.Close();
+        }
 
         return returnInt;
     }
@@ -792,7 +968,8 @@ public class TravelDao
         int returnInt = 0;
         String Sql = "";
         MyDB mydb = new MyDB();
-        MySqlConnection con;
+        MySqlConnection con = null;
+        MySqlDataReader reader = null;
 
         try
         {
@@ -805,7 +982,7 @@ public class TravelDao
             MySqlCommand cmd = new MySqlCommand(Sql, con);
             con.Open();
 
-            MySqlDataReader reader = cmd.ExecuteReader();
+            reader = cmd.ExecuteReader();
             if (reader.Read())
             {
                 returnInt = int.Parse(reader["trvNo"].ToString());
@@ -815,7 +992,18 @@ public class TravelDao
             con.Close();
 
         }
-        catch (Exception e) {; }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            reader.Close();
+            con.Close();
+
+        }
+        finally
+        {
+            reader.Close();
+            con.Close();
+        }
 
         return returnInt;
     }
@@ -828,7 +1016,8 @@ public class TravelDao
         string Sql;
         Travel travel;
         List<Travel> returnList = new List<Travel>();
-        MySqlConnection con;
+        MySqlConnection con = null;
+        MySqlDataReader reader = null;
         MySqlCommand cmd;
         int testTmp = 0;
 
@@ -853,7 +1042,7 @@ public class TravelDao
             cmd = new MySqlCommand(Sql, con);
 
             con.Open();
-            MySqlDataReader reader = cmd.ExecuteReader();
+            reader = cmd.ExecuteReader();
 
             while (reader.Read())
             {
@@ -880,7 +1069,19 @@ public class TravelDao
             reader.Close();
             con.Close();
         }
-        catch (Exception e) {; }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            reader.Close();
+            con.Close();
+
+        }
+        finally
+        {
+            reader.Close();
+            con.Close();
+        }
+
 
         return returnList;
     }
@@ -893,7 +1094,8 @@ public class TravelDao
         string Sql = "";
         Travel travel;
         List<Travel> returnList = new List<Travel>();
-        MySqlConnection con;
+        MySqlConnection con = null;
+        MySqlDataReader reader = null;
 
         try
         {
@@ -911,7 +1113,7 @@ public class TravelDao
             MySqlCommand cmd = new MySqlCommand(Sql, con);
             con.Open();
 
-            MySqlDataReader reader = cmd.ExecuteReader();
+            reader = cmd.ExecuteReader();
             while (reader.Read())
             {
                 travel = new Travel();
@@ -933,7 +1135,19 @@ public class TravelDao
             reader.Close();
             con.Close();
         }
-        catch (Exception e) {; }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            reader.Close();
+            con.Close();
+
+        }
+        finally
+        {
+            reader.Close();
+            con.Close();
+        }
+
 
         return returnList;
     }
@@ -946,7 +1160,8 @@ public class TravelDao
         string Sql = "";
         Travel travel;
         List<Travel> returnList = new List<Travel>();
-        MySqlConnection con;
+        MySqlConnection con = null;
+        MySqlDataReader reader = null;
 
         try
         {
@@ -959,7 +1174,7 @@ public class TravelDao
             MySqlCommand cmd = new MySqlCommand(Sql, con);
             con.Open();
 
-            MySqlDataReader reader = cmd.ExecuteReader();
+            reader = cmd.ExecuteReader();
             while (reader.Read())
             {
                 travel = new Travel();
@@ -981,7 +1196,18 @@ public class TravelDao
             reader.Close();
             con.Close();
         }
-        catch (Exception e) {; }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            reader.Close();
+            con.Close();
+
+        }
+        finally
+        {
+            reader.Close();
+            con.Close();
+        }
 
         return returnList;
     }
@@ -994,7 +1220,8 @@ public class TravelDao
         string Sql = "";
         Travel travel;
         List<Travel> returnList = new List<Travel>();
-        MySqlConnection con;
+        MySqlConnection con = null;
+        MySqlDataReader reader = null;
 
         try
         {
@@ -1007,7 +1234,7 @@ public class TravelDao
             MySqlCommand cmd = new MySqlCommand(Sql, con);
             con.Open();
 
-            MySqlDataReader reader = cmd.ExecuteReader();
+            reader = cmd.ExecuteReader();
             while (reader.Read())
             {
                 travel = new Travel();
@@ -1029,7 +1256,18 @@ public class TravelDao
             reader.Close();
             con.Close();
         }
-        catch (Exception e) {; }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            reader.Close();
+            con.Close();
+
+        }
+        finally
+        {
+            reader.Close();
+            con.Close();
+        }
 
         return returnList;
     }
@@ -1040,7 +1278,8 @@ public class TravelDao
         List<Travel> resultList = new List<Travel>();
         Travel result;
 
-        MySqlConnection con;
+        MySqlConnection con = null;
+        MySqlDataReader rd = null;
 
         try
         {
@@ -1051,7 +1290,7 @@ public class TravelDao
 
             MySqlCommand cmd = new MySqlCommand(Sql, con);
             con.Open();
-            MySqlDataReader rd = cmd.ExecuteReader();
+            rd = cmd.ExecuteReader();
 
             while (rd.Read())
             {
@@ -1069,7 +1308,15 @@ public class TravelDao
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine(ex.ToString());
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            rd.Close();
+            con.Close();
+
+        }
+        finally
+        {
+            rd.Close();
+            con.Close();
         }
 
 
@@ -1085,7 +1332,7 @@ public class TravelDao
         CommentDao commentDao = new CommentDao();
 
         MyDB mydb = new MyDB();
-        MySqlConnection con;
+        MySqlConnection con = null;
 
         try
         {
@@ -1097,7 +1344,16 @@ public class TravelDao
             cmd.ExecuteNonQuery();
             con.Close();
         }
-        catch (Exception e) {;}
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            con.Close();
+
+        }
+        finally
+        {
+            con.Close();
+        }
     }
 
     // 아이디를 받으면 그 아이디가 작성한 게시글의 카운트를 반환하는 함수
@@ -1110,7 +1366,8 @@ public class TravelDao
         else
         {
             MyDB myDB = new MyDB();
-            MySqlConnection con;
+            MySqlConnection con = null;
+            MySqlDataReader reader = null;
             int returnInt = 0;
 
             try
@@ -1121,8 +1378,8 @@ public class TravelDao
                 MySqlCommand cmd = new MySqlCommand(Sql, con);
                 con.Open();
 
-                MySqlDataReader reader = cmd.ExecuteReader();
-                if(reader.Read())
+                reader = cmd.ExecuteReader();
+                if (reader.Read())
                 {
                     returnInt = int.Parse(reader["cnt"].ToString());
                 }
@@ -1130,11 +1387,25 @@ public class TravelDao
                 reader.Close();
                 con.Close();
             }
-            catch (Exception e) {; }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+                reader.Close();
+                con.Close();
 
+            }
+            finally
+            {
+                reader.Close();
+                con.Close();
+            }
             return returnInt;
+
+
         }
+        
     }
+     
 }
 
 

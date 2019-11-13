@@ -25,7 +25,8 @@ public class IndexDao
         string[] strCols = new string[] { "trv_day_no", "trv_day_content", "trv_no" };
 
         MyDB mydb = new MyDB();
-        MySqlConnection con;
+        MySqlConnection con = null;
+        MySqlDataReader rd = null;
         try
         {
             con = mydb.GetCon();
@@ -33,26 +34,31 @@ public class IndexDao
 
             MySqlCommand cmd = new MySqlCommand(Sql, con);
             con.Open();
-            MySqlDataReader reader = cmd.ExecuteReader();
+            rd = cmd.ExecuteReader();
 
-            while (reader.Read())
+            while (rd.Read())
             {
-                String trv_day_no = reader["trv_day_no"].ToString();
-                String trv_day_content = reader["trv_day_content"].ToString();
-                String trv_no2 = reader["trv_no"].ToString();
+                String trv_day_no = rd["trv_day_no"].ToString();
+                String trv_day_content = rd["trv_day_content"].ToString();
+                String trv_no2 = rd["trv_no"].ToString();
                 returnList.Add(trv_day_no);
                 returnList.Add(trv_day_content);
                 returnList.Add(trv_no2);
             }
 
-            reader.Close();
-            con.Close();
+
         }
         catch (Exception e)
         {
             Console.Write(e.StackTrace.ToString());
+            rd.Close();
+            con.Close();
         }
-
+        finally
+        {
+            rd.Close();
+            con.Close();
+        }
         return returnList;
     }
 
@@ -60,7 +66,8 @@ public class IndexDao
     {
         string returnStr = "";
         MyDB mydb = new MyDB();
-        MySqlConnection con;
+        MySqlConnection con = null;
+        MySqlDataReader rd = null;
         try
         {
             con = mydb.GetCon();
@@ -68,19 +75,25 @@ public class IndexDao
 
             MySqlCommand cmd = new MySqlCommand(Sql, con);
             con.Open();
-            MySqlDataReader reader = cmd.ExecuteReader();
+            rd = cmd.ExecuteReader();
 
-            while(reader.Read())
+            while(rd.Read())
             {
-                returnStr = reader["mem_img_url"].ToString();
+                returnStr = rd["mem_img_url"].ToString();
             }
 
-            reader.Close();
-            con.Close();
+
         }
         catch(Exception e)
         {
             Console.Write(e.StackTrace.ToString());
+            rd.Close();
+            con.Close();
+        }
+        finally
+        {
+            rd.Close();
+            con.Close();
         }
 
         return returnStr;

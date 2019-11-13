@@ -24,11 +24,12 @@ public class ReportDao
         MyDB myDB = new MyDB();
         MySqlConnection con = myDB.GetCon();
 
+        try { 
         string Sql = "INSERT INTO toourshared.report (trv_no,rep_timestap,rep_mem_id, rep_reason) VALUES(@trv_no,@rep_timestap,@rep_mem_id, @rep_reason); select last_insert_id()";
         MySqlCommand cmd = new MySqlCommand(Sql, con);
 
         cmd.Parameters.AddWithValue("@trv_no", report.Trv_no);
-        cmd.Parameters.AddWithValue("@rep_timestap",report.Rep_timestap);
+        cmd.Parameters.AddWithValue("@rep_timestap", report.Rep_timestap);
         cmd.Parameters.AddWithValue("@rep_mem_id", report.Rep_mem_id);
         cmd.Parameters.AddWithValue("@rep_reason", report.Rep_reason);
 
@@ -37,10 +38,20 @@ public class ReportDao
 
         cmd.ExecuteNonQuery();
 
-         result = cmd.LastInsertedId.ToString();
+        result = cmd.LastInsertedId.ToString();
 
         con.Close();
+    }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            con.Close();
 
+        }
+        finally
+        {
+            con.Close();
+        }
 
         return result;
     }
@@ -48,16 +59,27 @@ public class ReportDao
     {
         MyDB myDB = new MyDB();
         MySqlConnection con = myDB.GetCon();
+        DataSet ds = null;
 
+        try { 
         string sql = "Select rep_no, trv_no, rep_timestamp, rep_mem_id  From toourshared.report";
         MySqlCommand cmd = new MySqlCommand(sql, con); // 커맨드(sql문을 con에서 수행하기 위한 명령문) 생성 DB에서 수행시킬 명령 생성   
 
         MySqlDataAdapter ad = new MySqlDataAdapter();
         ad.SelectCommand = cmd;
-        DataSet ds = new DataSet();
+        
         ad.Fill(ds);
+    }
+         catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            con.Close();
 
-
+        }
+        finally
+        {
+            con.Close();
+        }
         return ds;
     }
     
@@ -68,7 +90,8 @@ public class ReportDao
         MyDB mydb = new MyDB();
 
         Report result = new Report();
-        MySqlConnection con;
+        MySqlConnection con = null;
+        MySqlDataReader rd = null;
 
         try
         {
@@ -82,7 +105,7 @@ public class ReportDao
             cmd.Parameters.AddWithValue("@rep_no", report.Rep_no);
 
             con.Open();
-            MySqlDataReader rd = cmd.ExecuteReader();
+            rd = cmd.ExecuteReader();
 
             if (rd.HasRows)
             {
@@ -107,7 +130,16 @@ public class ReportDao
         }
         catch (Exception ex)
         {
-            System.Diagnostics.Debug.WriteLine(ex.ToString());
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            rd.Close();
+            con.Close();
+
+        }
+
+        finally
+        {
+            rd.Close();
+            con.Close();
         }
         return result;
     }

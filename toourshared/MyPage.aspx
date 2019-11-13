@@ -15,31 +15,280 @@
     int travelCount = 0; // MyPage 주인이 작성한 게시글의 총 수를 저장할 변수
     int followCount = 0; // MyPage 주인의 팔로우 카운트를 저장할 변수
     int followerCount = 0; // MyPage 주인의 팔로워 카운트를 저장할 변수
+    string pageType = ""; // MyPage 게시글 타입을 저장할 변수
     //============================
 
     // 로그아웃 눌렀을 때 발생할 이벤트
     protected void btnLogout_Click(object sender, EventArgs e)
     {
         Session.Abandon();
-        Response.Redirect("/index.aspx");
-    }
-
-    // 마이페이지 눌렀을 때 발생할 이벤트
-    protected void btnMypage_Click(object sender, EventArgs e)
-    {
-        Response.Redirect("/MyPage.aspx");
+        Response.Redirect("./index.aspx");
     }
 
     // 회원가입 눌렀을 때 발생할 이벤트
     protected void btnJoin_Click(object sender, EventArgs e)
     {
-        Response.Redirect("/join.aspx");
+        Response.Redirect("./join.aspx");
     }
 
     // 계정찾기 눌렀을 때 발생할 이벤트
     protected void btnFindIDPW_Click(object sender, EventArgs e)
     {
-        Response.Redirect("/find_idpw.aspx");
+        Response.Redirect("./find_idpw.aspx");
+    }
+
+    //My Travels에 뿌려줄 양식
+    protected string MyTravels()
+    {
+        if (Request.QueryString["mem_id"] == null)
+        {
+            return "";
+        }
+        else
+        {
+            string returnStr = "";
+            string memberID = Request.QueryString["mem_id"].ToString(); // 현재 QueryString(mem_id)을 불러 변수에 담는다.
+            Travel travel = new Travel();
+            TravelDao travelDao = new TravelDao();
+
+            travel.Mem_id = memberID;
+            List<Travel> travelList = new List<Travel>();
+            travelList = travelDao.selectTravelListByMem_id(travel, 0, 15); // 해당 아이디의 Travel들을 List형식으로 반환하는 함수를 통해 모든 게시글들을 긁어온다.
+
+            Like Like = new Like();
+            LikeDao likeDao = new LikeDao();
+
+            Comment comment = new Comment();
+            CommentDao commentDao = new CommentDao();
+
+            returnStr += "" +
+                "<table>\n" +
+                "   <tr>\n";
+
+            int trCount = 0;
+
+            for (int i = 0; i < travelList.Count; i++)
+            {
+                string trvNo = travelList[i].Trv_no.ToString(); // index에 해당하는 Travel의 trv_no를 trvNo에 담고,
+                string trvTotalRate = travelList[i].Trv_tot_rate.ToString(); // index에 해당하는 Travel의 trv_tot_rate를 trvTotalRate에 담고,
+
+                Like.Trv_no = trvNo;
+                string LikeCount = likeDao.selectLikeCountByTrvNo(Like).ToString(); // index에 해당하는 Travel의 like Count를 LikeCount에 담고,
+
+                travel = travelList[i];
+                string CommentCount = commentDao.selectCommentCountByTrvNo(travel).ToString(); // index에 해당하는 Travel의 comment Count를 CommentCount에 담고
+
+                string travelImage = travel.Trv_main_img.ToString();
+                if (string.IsNullOrEmpty(travelImage) || travelImage == "noImage")
+                    travelImage = "./img/noImage.png";
+
+                returnStr += "" +
+                "		<td>\n" +
+                "			<a href = \"./board.aspx?trv_no=" + trvNo.ToString() + "\">\n" +
+                "				<div class = \"tableContainer\" >\n" +
+                "				<img src = \"" + travelImage + "\" alt= \"NoImage\" />\n" +
+                "					<div class = \"tableOverlay\">\n" +
+                "						<div class = \"tableText\">\n" +
+                "							<div class = \"tableAlign\">\n" +
+                "								<div class = \"star\">\n" +
+                "									<span>⭐</span>" + trvTotalRate.ToString() + "\n" +
+                "								</div>\n" +
+                "								<div class = \"good\">\n" +
+                "									<span>👍</span>" + LikeCount.ToString() + "\n" +
+                "								</div>\n" +
+                "								<div class = \"reply\">\n" +
+                "									<span>💬</span>" + CommentCount.ToString() + "\n" +
+                "								</div>\n" +
+                "							</div>\n" +
+                "						</div>\n" +
+                "					</div>\n" +
+                "				</div>\n" +
+                "			</a>\n" +
+                "		</td>\n";
+
+                trCount++;
+                if (trCount >= 3)
+                {
+                    trCount = 0;
+                    returnStr += "    </tr>\n <tr>\n";
+                }
+            }
+
+            returnStr += "    </tr>\n</table>";
+            return returnStr;
+        }
+    }
+
+    //My Reviews에 뿌려줄 양식
+    protected string MyReviews()
+    {
+        if (Request.QueryString["mem_id"] == null)
+        {
+            return "";
+        }
+        else
+        {
+            string returnStr = "";
+            string memberID = Request.QueryString["mem_id"].ToString(); // 현재 QueryString(mem_id)을 불러 변수에 담는다.
+            Travel travel = new Travel();
+            TravelDao travelDao = new TravelDao();
+
+            Comment comment = new Comment();
+            CommentDao commentDao = new CommentDao();
+
+            List<Travel> travelList = new List<Travel>();
+            List<Comment> commentList = new List<Comment>();
+
+            comment.Mem_id = memberID;
+            commentList = commentDao.selectCommentListByMem_id(comment, 0, 15); // 해당 아이디의 Travel들을 List형식으로 반환하는 함수를 통해 모든 게시글들을 긁어온다.
+
+            Like Like = new Like();
+            LikeDao likeDao = new LikeDao();
+
+            returnStr += "" +
+                "<table>\n" +
+                "   <tr>\n";
+
+            int trCount = 0;
+
+            for (int i = 0; i < commentList.Count; i++)
+            {
+                string trvNo = commentList[i].Trv_no.ToString(); // index에 해당하는 comment의 trv_no를 trvNo에 담고,
+
+                string cmtContent = commentList[i].Cmt_content.ToString(); // 댓글 불러오고
+
+                travel.Trv_no = trvNo.ToString();
+                travel = travelDao.selectTravelBytrv_no(travel);
+                string trvTotRate = travel.Trv_tot_rate.ToString(); // 평점을 불러오고,
+
+                string CommentCount = commentDao.selectCommentCountByTrvNo(travel).ToString(); // 댓글 수 불러오고
+
+                Like.Trv_no = trvNo;
+                string LikeCount = likeDao.selectLikeCountByTrvNo(Like).ToString(); // 추천 수 불러오고
+
+
+                string travelImage = travel.Trv_main_img.ToString();
+                if (string.IsNullOrEmpty(travelImage) || travelImage == "noImage")
+                    travelImage = "./img/noImage.png";
+
+                returnStr += "" +
+                "		<td>\n" +
+                "			<a href = \"./board.aspx?trv_no=" + trvNo.ToString() + "\">\n" +
+                "				<div class = \"tableContainer\" >\n" +
+                "				<img src = \"" + travelImage + "\" alt= \"NoImage\" />\n" +
+                "					<div class = \"tableOverlay\">\n" +
+                "						<div class = \"tableText\">\n" +
+                "							<div class = \"tableAlign\">\n" +
+                "								<div class = \"star\">\n" +
+                "									<span>⭐</span>" + trvTotRate.ToString() + " <span>👍</span>" + LikeCount.ToString() + " <span>💬</span>" + CommentCount.ToString() + "\n" +
+                "								</div>\n" +
+                "								<div class = \"cmtContent\">\n" +
+                "                                   <span style=\"font-size: 13px; display: flex; justify-content: center;\">" + cmtContent.ToString() + "</span>\n" +
+                "								</div>\n" +
+                "							</div>\n" +
+                "						</div>\n" +
+                "					</div>\n" +
+                "				</div>\n" +
+                "			</a>\n" +
+                "		</td>\n";
+
+                trCount++;
+                if (trCount >= 3)
+                {
+                    trCount = 0;
+                    returnStr += "    </tr>\n <tr>\n";
+                }
+            }
+
+            returnStr += "    </tr>\n</table>";
+            return returnStr;
+        }
+    }
+
+    //Following Touple에 뿌려줄 양식
+    protected string FollowingTouples()
+    {
+        if (Request.QueryString["mem_id"] == null)
+        {
+            return "";
+        }
+        else
+        {
+            string returnStr = "";
+            string memberID = Request.QueryString["mem_id"].ToString(); // 현재 QueryString(mem_id)을 불러 변수에 담는다.
+
+            Follower follower = new Follower();
+            FollowerDao followerDao = new FollowerDao();
+            List<Follower> lists = new List<Follower>();
+
+            follower.Mem_id = memberID;
+            lists = followerDao.selectFollowListByMemID(follower, 1);
+
+            Travel travel = new Travel();
+            Like like = new Like();
+            Comment comment = new Comment();
+            TravelDao travelDao = new TravelDao();
+            LikeDao likeDao = new LikeDao();
+            CommentDao commentDao = new CommentDao();
+
+            returnStr += "" +
+                "<table>\n" +
+                "   <tr>\n";
+
+            int trCount = 0;
+
+            for (int i = 0; i < lists.Count; i++)
+            {
+                string memID = lists[i].Mem_id.ToString(); // index에 해당하는 Follower의 Mem_id를 memID 변수에 담고,
+                travel.Mem_id = memID;
+                travel = travelDao.selectTravelByMemID(travel); // memID를 travel DTO에 담고 이를 파라미터로 넘겨 새로운 travel 객체를 반환받고
+
+                string totRate = travel.Trv_tot_rate.ToString(); // travel 객체의 평점을 받고,
+
+                like.Trv_no = travel.Trv_no; // trv_no를 like DTO에 담고
+                string likeCount = likeDao.selectLikeCountByTrvNo(like).ToString(); // like DTO를 파라미터로 넘겨 likeCount 값을 받고
+
+                string commentCount = commentDao.selectCommentCountByTrvNo(travel).ToString(); // travel DTO를 파라미터로 넘겨 commentCount 값을 받고
+
+                string travelImage = travel.Trv_main_img.ToString(); // travel 객체의 메인 사진을 변수에 담고,
+                if (string.IsNullOrEmpty(travelImage) || travelImage == "noImage") // null OR empty OR noImage인 경우
+                    travelImage = "./img/noImage.png"; // 기본 noImage로 대체.
+
+                returnStr += "" +
+                "		<td>\n" +
+                "			<a href = \"./board.aspx?trv_no=" + travel.Trv_no + "\">\n" +
+                "				<div class = \"tableContainer\" >\n" +
+                "				<img src = \"" + travelImage + "\" alt= \"NoImage\" />\n" +
+                "					<div class = \"tableOverlay\">\n" +
+                "						<div class = \"tableText\">\n" +
+                "							<div class = \"tableAlign\">\n" +
+                "								<div class = \"star\">\n" +
+                "									<span>⭐</span>" + totRate.ToString() + "\n" +
+                "								</div>\n" +
+                "								<div class = \"good\">\n" +
+                "									<span>👍</span>" + likeCount.ToString() + "\n" +
+                "								</div>\n" +
+                "								<div class = \"reply\">\n" +
+                "									<span>💬</span>" + commentCount.ToString() + "\n" +
+                "								</div>\n" +
+                "							</div>\n" +
+                "						</div>\n" +
+                "					</div>\n" +
+                "				</div>\n" +
+                "			</a>\n" +
+                "		</td>\n";
+
+                trCount++;
+                if (trCount >= 3)
+                {
+                    trCount = 0;
+                    returnStr += "    </tr>\n <tr>\n";
+                }
+            }
+
+            returnStr += "    </tr>\n</table>";
+            return returnStr;
+        }
     }
 
     protected List<Travel> getArticleList(string mem_id)
@@ -54,315 +303,6 @@
 
 
         return resultList;
-
-    }
-
-    protected void Bind_Table_Travel()
-    {
-        List<Travel> resultList = getArticleList("billip");
-
-        TableRow tmpTableRow_article;
-        TableCell tmpTableCell_article1;
-        TableCell tmpTableCell_article2;
-        TableCell tmpTableCell_article3;
-
-
-        for (int i = 0; i < resultList.Count - 1; i++)
-        {
-
-
-            tmpTableCell_article1 = new TableCell();
-            tmpTableCell_article1.Text = "<a href = \"#\" alt = \"bg2\">" +
-                                            "<div class = \"tableContainer\" >" +
-                                            "<img src = \"" + resultList[i].Trv_main_img + "\" alt= \"" + resultList[i].Trv_title + "\" >" +
-                                                "<div class = \"tableOverlay\" >" +
-                                                    "<div class = \"tableText\" >" +
-                                                        "<div class = \"tableAlign\">" +
-                                                            "<div class = \"star\">" +
-                                                                "<span>☆</span>" + resultList[i].Trv_tot_rate +
-                                                            "</div>" +
-                                                            "<div class = \"good\">" +
-                                                                "<span><i class= \"far fa-thumbs-up\" ></i></span> x3" +
-                                                            "</div>" +
-                                                            "<div class = \"reply\">" +
-                                                                "<span><i class= \"fa fa-comment-o\" ></i></span> x5" +
-                                                            "</div>" +
-                                                        "</div>" +
-                                                    "</div>" +
-                                                "</div>" +
-                                            "</div>" +
-                                        "</a>";
-            i++;
-            if (i == resultList.Count)
-            {
-                tmpTableRow_article = new TableRow();
-                tmpTableRow_article.Cells.Add(tmpTableCell_article1);
-
-                Table_travel.Rows.Add(tmpTableRow_article);
-                break;
-            }
-            tmpTableCell_article2 = new TableCell();
-            tmpTableCell_article2.Text = "<a href = \"#\" alt = \"bg2\">" +
-                                            "<div class = \"tableContainer\" >" +
-                                            "<img src = \"" + resultList[i].Trv_main_img + "\" alt= \"" + resultList[i].Trv_title + "\" >" +
-                                                "<div class = \"tableOverlay\" >" +
-                                                    "<div class = \"tableText\" >" +
-                                                        "<div class = \"tableAlign\">" +
-                                                            "<div class = \"star\">" +
-                                                                "<span>☆</span>" + resultList[i].Trv_tot_rate +
-                                                            "</div>" +
-                                                            "<div class = \"good\">" +
-                                                                "<span><i class= \"far fa-thumbs-up\" ></i></span> x3" +
-                                                            "</div>" +
-                                                            "<div class = \"reply\">" +
-                                                                "<span><i class= \"fa fa-comment-o\" ></i></span> x5" +
-                                                            "</div>" +
-                                                        "</div>" +
-                                                    "</div>" +
-                                                "</div>" +
-                                            "</div>" +
-                                        "</a>";
-            i++;
-            if (i == resultList.Count)
-            {
-                tmpTableRow_article = new TableRow();
-                tmpTableRow_article.Cells.Add(tmpTableCell_article1);
-                tmpTableRow_article.Cells.Add(tmpTableCell_article2);
-
-                Table_travel.Rows.Add(tmpTableRow_article);
-                break;
-            }
-            tmpTableCell_article3 = new TableCell();
-            tmpTableCell_article3.Text = "<a href = \"#\" alt = \"bg2\">" +
-                                            "<div class = \"tableContainer\" >" +
-                                            "<img src = \"" + resultList[i].Trv_main_img + "\" alt= \"" + resultList[i].Trv_title + "\" >" +
-                                                "<div class = \"tableOverlay\" >" +
-                                                    "<div class = \"tableText\" >" +
-                                                        "<div class = \"tableAlign\">" +
-                                                            "<div class = \"star\">" +
-                                                                "<span>☆</span>" + resultList[i].Trv_tot_rate +
-                                                            "</div>" +
-                                                            "<div class = \"good\">" +
-                                                                "<span><i class= \"far fa-thumbs-up\" ></i></span> x3" +
-                                                            "</div>" +
-                                                            "<div class = \"reply\">" +
-                                                                "<span><i class= \"fa fa-comment-o\" ></i></span> x5" +
-                                                            "</div>" +
-                                                        "</div>" +
-                                                    "</div>" +
-                                                "</div>" +
-                                            "</div>" +
-                                        "</a>";
-
-
-            tmpTableRow_article = new TableRow();
-            tmpTableRow_article.Cells.Add(tmpTableCell_article1);
-            tmpTableRow_article.Cells.Add(tmpTableCell_article2);
-            tmpTableRow_article.Cells.Add(tmpTableCell_article3);
-            Table_travel.Rows.Add(tmpTableRow_article);
-        }
-    }
-
-    protected List<Comment> getReviewsList(string mem_id)
-    {
-        List<Comment> resultList;
-        Comment Input = new Comment();
-        CommentDao dao = new CommentDao();
-
-        Input.Mem_id = mem_id;
-        resultList = dao.selectCommentListByMem_id(Input);
-        //resultDataset = travelDao.SelectTravel();
-
-
-        return resultList;
-    }
-
-    protected string getTrv_Main_Img(string trv_no)
-    {
-        string result;
-        Travel Input = new Travel();
-        Travel output = new Travel();
-        TravelDao dao = new TravelDao();
-
-        Input.Trv_no = trv_no;
-        output = dao.selectTravelBytrv_no(Input);
-
-        result = output.Trv_main_img;
-
-        return result;
-    }
-
-    protected void Bind_Table_MyReviews()
-    {
-        List<Comment> resultList = getReviewsList("billip");
-
-        TableRow tmpTableRow_article;
-        TableCell tmpTableCell_article1;
-        TableCell tmpTableCell_article2;
-        TableCell tmpTableCell_article3;
-
-
-        for (int i = 0; i < resultList.Count - 1; i++)
-        {
-            tmpTableCell_article1 = new TableCell();
-            tmpTableCell_article1.Text = "<a href = \"#\" alt = \"bg2\">" +
-                                            "<div class = \"tableContainer\" >" +
-                                            "<img src = \"" + getTrv_Main_Img(resultList[i].Trv_no) + "\" alt= \""+ resultList[i].Cmt_no + "\" >" +
-                                                "<div class = \"tableOverlay\" >" +
-                                                    "<div class = \"tableText\" >" +
-                                                        "<div class = \"tableAlign\">" +
-                                                            "<div class = \"star\">" +
-                                                                "<span>☆</span>" + resultList[i].Cmt_rate +
-                                                            "</div>" +
-                                                            "<div class = \"good\">" +
-                                                                "<span><i class= \"far fa-thumbs-up\" ></i></span>" +resultList[i].Cmt_content+
-                                                            "</div>" +
-                                                            "<div class = \"reply\">" +
-                                                                "<span><i class= \"fa fa-comment-o\" ></i></span> " + resultList[i].Cmt_timestamp+
-                                                            "</div>" +
-                                                        "</div>" +
-                                                    "</div>" +
-                                                "</div>" +
-                                            "</div>" +
-                                        "</a>";
-            i++;
-            if (i == resultList.Count)
-            {
-                tmpTableRow_article = new TableRow();
-                tmpTableRow_article.Cells.Add(tmpTableCell_article1);
-
-                Table_travel.Rows.Add(tmpTableRow_article);
-                break;
-            }
-            tmpTableCell_article2 = new TableCell();
-            tmpTableCell_article2.Text = "<a href = \"#\" alt = \"bg2\">" +
-                                            "<div class = \"tableContainer\" >" +
-                                            "<img src = \"" + getTrv_Main_Img(resultList[i].Trv_no) + "\" alt= \""+ resultList[i].Cmt_no + "\" >" +
-                                                "<div class = \"tableOverlay\" >" +
-                                                    "<div class = \"tableText\" >" +
-                                                        "<div class = \"tableAlign\">" +
-                                                            "<div class = \"star\">" +
-                                                                "<span>☆</span>" + resultList[i].Cmt_rate +
-                                                            "</div>" +
-                                                            "<div class = \"good\">" +
-                                                                "<span><i class= \"far fa-thumbs-up\" ></i></span>" +resultList[i].Cmt_content+
-                                                            "</div>" +
-                                                            "<div class = \"reply\">" +
-                                                                "<span><i class= \"fa fa-comment-o\" ></i></span> " + resultList[i].Cmt_timestamp+
-                                                            "</div>" +
-                                                        "</div>" +
-                                                    "</div>" +
-                                                "</div>" +
-                                            "</div>" +
-                                        "</a>";
-            i++;
-            if (i == resultList.Count)
-            {
-                tmpTableRow_article = new TableRow();
-                tmpTableRow_article.Cells.Add(tmpTableCell_article1);
-                tmpTableRow_article.Cells.Add(tmpTableCell_article2);
-
-                Table_travel.Rows.Add(tmpTableRow_article);
-                break;
-            }
-            tmpTableCell_article3 = new TableCell();
-            tmpTableCell_article3.Text = "<a href = \"#\" alt = \"bg2\">" +
-                                            "<div class = \"tableContainer\" >" +
-                                            "<img src = \"" + getTrv_Main_Img(resultList[i].Trv_no) + "\" alt= \""+ resultList[i].Cmt_no + "\" >" +
-                                                "<div class = \"tableOverlay\" >" +
-                                                    "<div class = \"tableText\" >" +
-                                                        "<div class = \"tableAlign\">" +
-                                                            "<div class = \"star\">" +
-                                                                "<span>☆</span>" + resultList[i].Cmt_rate +
-                                                            "</div>" +
-                                                            "<div class = \"good\">" +
-                                                                "<span><i class= \"far fa-thumbs-up\" ></i></span>" +resultList[i].Cmt_content+
-                                                            "</div>" +
-                                                            "<div class = \"reply\">" +
-                                                                "<span><i class= \"fa fa-comment-o\" ></i></span> " + resultList[i].Cmt_timestamp+
-                                                            "</div>" +
-                                                        "</div>" +
-                                                    "</div>" +
-                                                "</div>" +
-                                            "</div>" +
-                                        "</a>";
-
-
-            tmpTableRow_article = new TableRow();
-            tmpTableRow_article.Cells.Add(tmpTableCell_article1);
-            tmpTableRow_article.Cells.Add(tmpTableCell_article2);
-            tmpTableRow_article.Cells.Add(tmpTableCell_article3);
-            Table_MyReviews.Rows.Add(tmpTableRow_article);
-        }
-    }
-
-    protected List<Travel> getFollowersTravelList(string mem_id ,int start, int count)
-    {
-        Member input = new Member();
-        List<Travel> resultList= new List<Travel>();
-        MyPageDao dao = new MyPageDao();
-        input.Mem_id = mem_id;
-
-        resultList = dao.Test();
-
-        return resultList;
-    }
-
-    protected string testing()
-    {
-        int start = 0, count = 7;
-        List < Travel >  resultList = getFollowersTravelList("milk9503",start, count);
-
-        int indexCount = 0;
-        int trCount = 0;
-        String returnStr = "<table>\n   <tr>\n";
-
-        Boolean debugTest = false;
-
-        for (int i = 0; i < resultList.Count; i++)
-        {
-            returnStr += "      <td>\n" +
-                    "           <a href = \"#\" alt = \"bg2\">\n" +
-            "           <div class = \"tableContainer\" >\n";
-
-            if(resultList[indexCount].Trv_main_img == "noImage")
-            {
-                returnStr += "               " + resultList[indexCount].Trv_main_img.ToString() + " " + System.IO.File.Exists(resultList[indexCount].Trv_main_img) + " <br/><img src = \"./img/memerNoImage.png\" alt= \"" + resultList[indexCount].Trv_title + "\" >\n";
-            }
-            else
-            {
-                returnStr += "               " + resultList[indexCount].Trv_main_img.ToString() + "<br/><img src = \"" + resultList[indexCount].Trv_main_img + "\" alt= \"" + resultList[indexCount].Trv_title + "\" >\n";
-            }
-
-            returnStr += "                   <div class = \"tableOverlay\" >\n" +
-            "                       <div class = \"tableText\" >\n" +
-            "                           <div class = \"tableAlign\">\n" +
-            "                               <div class = \"star\">\n" +
-            "                                   <span>☆</span>" + resultList[indexCount++].Trv_tot_rate + "\n" +
-            "                               </div>\n" +
-            "                               <div class = \"good\">\n" +
-            "                                   <span><i class= \"far fa-thumbs-up\" ></i></span> x3\n" +
-            "                               </div>\n" +
-            "                               <div class = \"reply\">\n" +
-            "                                   <span><i class= \"fa fa-comment-o\" ></i></span> x5\n" +
-            "                               </div>\n" +
-            "                       </div>\n" +
-            "                   </div>\n" +
-            "                   </div>\n" +
-            "               </div>\n" +
-            "           </a>\n" +
-            "       </td>\n";
-
-            trCount++;
-            if (trCount == 3)
-            {
-                trCount = 0;
-                returnStr += "  </tr>\n <tr>\n";
-            }
-        }
-
-        returnStr += "  </tr>\n</table>";
-        return returnStr;
 
     }
 
@@ -413,7 +353,7 @@
             hdf_MemberID.Value = memberID; // 페이지의 히든필드에 주인의 아이디를 저장시키고 (나중에 프로필사진 편집을 위해서)
             member.Mem_id = memberID; // 페이지 주인의 아이디를 DTO에 넣고
             member = memberDao.selectMemberByMem_id(member); // DTO를 바꾼다.
-            
+
             memberName = member.Mem_name.ToString(); // 그리고 DTO 내의 사용자 이름을 구해온다.
             main_img.Value = member.Mem_img_url; // HiddenField에 회원의 메인 이미지를 넣는다.
 
@@ -423,10 +363,18 @@
             FollowerDao followerDao = new FollowerDao(); // follower DAO 객체를 생성하고
             followerCount = followerDao.getFollowerCountByMemId(memberID); // 팔로워 카운트를 구한 뒤
             followCount = followerDao.getFollowCountByMemId(memberID); // 팔로우 카운트를 구해온다.
-        }
 
-        Bind_Table_Travel();
-        Bind_Table_MyReviews();
+            if(Request.QueryString["type"] == null)
+            {
+                pageType = "1";
+            }
+            else
+            {
+                pageType = Request.QueryString["type"].ToString();
+            }
+
+            MyPageViews.ActiveViewIndex = (int.Parse(pageType) - 1); // MultiView는 인덱스가 0부터 시작하기 때문에..
+        }
     }
 
 </script>
@@ -767,25 +715,32 @@
         outline: none;
         cursor: pointer;
         padding: 14px 16px;
-        width: auto;
+        width: 160px;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
         background-color: transparent;
         transition-duration: .2s;
     }
 
         /* get → border-top */
         .boardTapOpen:hover {
-            margin-top: -2px;
-            border-top: 3px solid #2e2e2e;
+            margin-top: -3px;
+            border-top: 5px solid rgba(255, 91, 0, 1);
+            text-decoration: none;
         }
 
         .active{
-            margin-top: -2px;
-            border-top: 3px solid #2e2e2e;
+            margin-top: -3px;
+            border-top: 5px solid rgba(255, 69, 0, 1);
+            font-weight: 700;
         }
 
     .boardTapTxt {
         color: white;
-        font-size: 15px;
+        font-size: 13px;
+        font-family: 'Noto Sans KR', sans-serif;
     }
 
     .boardContents {
@@ -794,7 +749,6 @@
     }
 
     .boardItem {
-        display: none;
         width: 935px;
         height: auto;
         color: #262626;
@@ -843,6 +797,7 @@
         overflow: hidden;
         width: 293px;
         height: 0;
+        transition-duration: .5s;
     }
 
     .tableContainer:hover .tableOverlay {
@@ -913,22 +868,6 @@
         }
     }
 
-    /* Tab 이벤트 */
-    function openPage(pageName, elmnt) {
-        var i, boardItem, boardTapOpens;
-        boardItem = document.getElementsByClassName("boardItem");
-
-        for (i = 0; i < boardItem.length; i++) {
-            boardItem[i].style.display = "none";
-        }
-
-        boardTapOpens = document.getElementsByClassName("boardTapOpen");
-        document.getElementById(pageName).style.display = "block";
-        document.getElementById("boardItemDefault").style.display = "none";
-    }
-
-    document.getElementById("defaultOpen").click();
-
 </script>
 </head>
      <!-- navbar 영역 -->
@@ -974,7 +913,7 @@
                 <div class="nav-log">
                     <a>
                         <div class="nav-log-area">
-                            <asp:Button ID="btnLogin" runat="server" Text="로그인" CssClass="nav-log-item" PostBackUrl="~/login.aspx"/>
+                            <asp:Button ID="btnLogin" runat="server" Text="로그인" CssClass="nav-log-item" PostBackUrl="./login.aspx" />
                         </div>
                     </a>
                 </div>
@@ -990,11 +929,9 @@
             {
         %>
             <li class = "topnavLi" >
-				<a href = "#" ><% string id = Session["mem_id"].ToString(); Response.Write(id); %></a>
+				<a><% string id = Session["mem_id"].ToString(); Response.Write(id); %></a>
                 <ul>
-                    <li><asp:Button ID="btnMypage" runat="server" Text="마이페이지" OnClick="btnMypage_Click" class="navJoinBtn"/></li>
                     <li><asp:Button ID="btnLogout" runat="server" Text="로그아웃" OnClick="btnLogout_Click" class="navFindBtn"/></li>
-
                 </ul>
             </li>
         <% 
@@ -1071,43 +1008,58 @@
 
                 <!-- boardTap -->
                 <div class="boardTap">
-                    <a
-                        class="boardTapOpen active" onclick="openPage('MyTravels', this)">
-                        <span class="boardTapTxt">▦ My Travels</span>
-                    </a>
-                    <a class="boardTapOpen" onclick="openPage('MyReviews', this)">
-                        <span class="boardTapTxt">▦ My Reviews</span>
-                    </a>
-                    <a class="boardTapOpen" onclick="openPage('FollowingTouple', this)">
-                        <span class="boardTapTxt">▦ Following Touple</span>
-                    </a>
+<%
+    string active1State = "";
+    string active2State = "";
+    string active3State = "";
+
+    if (pageType == "1") active1State = " active";
+    else if (pageType == "2") active2State = " active";
+    else if (pageType == "3") active3State = " active";
+
+%>
+                        <a href = "./MyPage.aspx?mem_id=<%Response.Write(Request.QueryString["mem_id"].ToString());%>&type=1" class="boardTapOpen<%Response.Write(active1State);%>">
+                            <span class="boardTapTxt">▦ My Travels</span>
+                        </a>
+                        <a href = "./MyPage.aspx?mem_id=<%Response.Write(Request.QueryString["mem_id"].ToString());%>&type=2" class="boardTapOpen<%Response.Write(active2State);%>">
+                            <span class="boardTapTxt">▦ My Reviews</span>
+                        </a>
+                        <a href = "./MyPage.aspx?mem_id=<%Response.Write(Request.QueryString["mem_id"].ToString());%>&type=3" class="boardTapOpen<%Response.Write(active3State);%>">
+                            <span class="boardTapTxt">▦ Following Touple</span>
+                        </a>
                 </div>
+
             </div>
 
             <!-- boardContents -->
             <div class="boardContents">
-                <div id="boardItemDefault">
-                    <div>작성된 게시글이 없습니다.</div>
-                </div>
-                <div id="MyTravels" class="boardItem">
-                    <div class="boardItemContent">
+                <asp:MultiView ID="MyPageViews" runat="server" ActiveViewIndex="0">
 
-                        <asp:Table ID="Table_travel" runat="server">
-                        </asp:Table>
+                    <asp:View ID="MyTravelsView" runat="server">
+                        <!-- My Travels -->
+                        <div id="MyTravels" class="boardItem">
+                            <%Response.Write(MyTravels());%>
+                        </div>
+                    </asp:View>
 
-                    </div>
-                </div>
-                <div id="MyReviews" class="boardItem">
+                    <asp:View ID="MyReviewsView" runat="server">
+                        <!-- My ReViews -->
+                        <div id="MyReviews" class="boardItem">
+                            <%Response.Write(MyReviews());%>
+                        </div>
+                    </asp:View>
 
-                        <asp:Table ID="Table_MyReviews" runat="server">
-                        </asp:Table>
-                </div>
-                <div id="FollowingTouple" class="boardItem">
-                    <% Response.Write(testing()); %>
-                </div>
+                    <asp:View ID="MyFollowersView" runat="server">
+                        <!-- Following Touple -->
+                        <div id="FollowingTouple" class="boardItem">
+                            <%Response.Write(FollowingTouples());%>
+                        </div>
+                    </asp:View>
+
+                </asp:MultiView>
             </div>
-        </div>
 
+        </div>
     </form>
 
 

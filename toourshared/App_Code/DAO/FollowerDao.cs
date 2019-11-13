@@ -23,39 +23,68 @@ public class FollowerDao
         
         MyDB myDB = new MyDB();
         MySqlConnection con = myDB.GetCon();
+        string result = "";
+        try
+        {
 
-        string Sql = "INSERT INTO toourshared.follower (mem_id,fol_id) VALUES(@mem_id,@fol_id); select last_insert_id()";
-        MySqlCommand cmd = new MySqlCommand(Sql, con);
+            string Sql = "INSERT INTO toourshared.follower (mem_id,fol_id) VALUES(@mem_id,@fol_id); select last_insert_id()";
+            MySqlCommand cmd = new MySqlCommand(Sql, con);
 
-        cmd.Parameters.AddWithValue("@mem_id", follower.Mem_id);
-        cmd.Parameters.AddWithValue("@fol_id", follower.Fol_id);
-        
+            cmd.Parameters.AddWithValue("@mem_id", follower.Mem_id);
+            cmd.Parameters.AddWithValue("@fol_id", follower.Fol_id);
 
 
-        con.Open();
 
-        cmd.ExecuteNonQuery();
+            con.Open();
 
-        string result = cmd.LastInsertedId.ToString();
+            cmd.ExecuteNonQuery();
 
-        con.Close();
+            result = cmd.LastInsertedId.ToString();
 
+
+        }
+
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            con.Close();
+
+        }
+        finally
+        {
+            con.Close();
+        }
 
         return result;
-    }
+    }   
     //public void DeleteCommentBy(mem_id)
     public DataSet SelectFollwer()
     {
         MyDB myDB = new MyDB();
         MySqlConnection con = myDB.GetCon();
+        DataSet ds = null;
+        try
+        {
 
-        string sql = "Select fol_no, mem_id, fol_id  From toourshared.follwer";
-        MySqlCommand cmd = new MySqlCommand(sql, con); // 커맨드(sql문을 con에서 수행하기 위한 명령문) 생성 DB에서 수행시킬 명령 생성   
+            string sql = "Select fol_no, mem_id, fol_id  From toourshared.follwer";
+            MySqlCommand cmd = new MySqlCommand(sql, con); // 커맨드(sql문을 con에서 수행하기 위한 명령문) 생성 DB에서 수행시킬 명령 생성   
 
-        MySqlDataAdapter ad = new MySqlDataAdapter();
-        ad.SelectCommand = cmd;
-        DataSet ds = new DataSet();
-        ad.Fill(ds);
+            MySqlDataAdapter ad = new MySqlDataAdapter();
+            ad.SelectCommand = cmd;
+            
+            ad.Fill(ds);
+        }
+
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            con.Close();
+
+        }
+        finally
+        {
+            con.Close();
+        }
 
 
         return ds;
@@ -67,7 +96,9 @@ public class FollowerDao
         MyDB mydb = new MyDB();
 
         Follower result = new Follower();
-        MySqlConnection con;
+        MySqlConnection con = null;
+        
+        MySqlDataReader rd = null;
 
         try
         {
@@ -81,7 +112,9 @@ public class FollowerDao
             cmd.Parameters.AddWithValue("@fol_no", follower.fol_no);
 
             con.Open();
-            MySqlDataReader rd = cmd.ExecuteReader();
+            rd = cmd.ExecuteReader();
+
+
 
             if (rd.HasRows)
             {
@@ -95,18 +128,66 @@ public class FollowerDao
 
                 //lstMember.Add(tmpMemberPointer);
 
-                return result;
+               
 
             }
-            rd.Close();
-            con.Close();
+         
 
         }
         catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine(ex.ToString());
+            rd.Close();
+           
         }
+        finally
+        {
+            rd.Close();
+            con.Close();
+        }
+
         return result;
+    }
+
+    public List<Follower> selectFollowListByMemID(Follower follower, int defaultNum = -1)
+    {
+        MyDB mydb = new MyDB();
+        List<Follower> returnList = new List<Follower>();
+
+        Follower fol;
+        MySqlConnection con;
+        string Sql = "";
+
+        try
+        {
+            con = mydb.GetCon();
+
+            if (defaultNum == -1)
+                Sql = "SELECT * FROM toourshared.follower where fol_id = @mem_id";
+            else
+                Sql = "SELECT * FROM toourshared.follower WHERE fol_id = @mem_id ORDER BY fol_no DESC LIMIT 0, 15";
+
+            MySqlCommand cmd = new MySqlCommand(Sql, con);
+            cmd.Parameters.AddWithValue("@mem_id", follower.Mem_id);
+
+            con.Open();
+            MySqlDataReader reader = cmd.ExecuteReader();
+
+            while(reader.Read())
+            {
+                fol = new Follower();
+                fol.Mem_id = reader["mem_id"].ToString();
+                fol.Fol_id = reader["fol_id"].ToString();
+
+                returnList.Add(fol);
+            }
+
+            reader.Close();
+            con.Close();
+        }
+        catch (Exception e) {;}
+
+        return returnList;
     }
 
     public List<Follower> selectFollwerListByMem_id(Follower follower)
@@ -115,8 +196,10 @@ public class FollowerDao
 
         List<Follower> resultList = new List<Follower>();
         Follower result;
-        MySqlConnection con;
+      
+        MySqlConnection con = null;
 
+        MySqlDataReader rd = null;
         try
         {
 
@@ -132,7 +215,7 @@ public class FollowerDao
             cmd.Parameters.AddWithValue("@mem_id", follower.Mem_id);
 
             con.Open();
-            MySqlDataReader rd = cmd.ExecuteReader();
+            rd = cmd.ExecuteReader();
 
             while (rd.Read())
             {
@@ -154,6 +237,13 @@ public class FollowerDao
         catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine(ex.ToString());
+            rd.Close();
+            con.Close();
+        }
+        finally
+        {
+            rd.Close();
+            con.Close();
         }
 
 
@@ -165,8 +255,9 @@ public class FollowerDao
     public int getFollowerCountByMemId(string ID)
     {
         MyDB myDB = new MyDB();
-        MySqlConnection con;
         int returnInt = 0;
+        MySqlConnection con = null;
+        MySqlDataReader reader = null;
 
         try
         {
@@ -176,17 +267,26 @@ public class FollowerDao
             MySqlCommand cmd = new MySqlCommand(Sql, con);
             con.Open();
 
-            MySqlDataReader reader = cmd.ExecuteReader();
+           
             if(reader.Read())
             {
                 returnInt = int.Parse(reader["cnt"].ToString());
             }
 
+            
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            reader.Close();
+            con.Close();
+
+        }
+        finally
+        {
             reader.Close();
             con.Close();
         }
-        catch (Exception e) {;}
-
         return returnInt;
     }
 
@@ -194,8 +294,10 @@ public class FollowerDao
     public int getFollowCountByMemId(string ID)
     {
         MyDB myDB = new MyDB();
-        MySqlConnection con;
+        
         int returnInt = 0;
+        MySqlConnection con = null;
+        MySqlDataReader reader = null;
 
         try
         {
@@ -205,16 +307,26 @@ public class FollowerDao
             MySqlCommand cmd = new MySqlCommand(Sql, con);
             con.Open();
 
-            MySqlDataReader reader = cmd.ExecuteReader();
+           
             if (reader.Read())
             {
                 returnInt = int.Parse(reader["cnt"].ToString());
             }
 
+            
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+            reader.Close();
+            con.Close();
+
+        }
+        finally
+        {
             reader.Close();
             con.Close();
         }
-        catch (Exception e) {; }
 
         return returnInt;
     }
