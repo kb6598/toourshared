@@ -13,7 +13,15 @@
 
     protected void btnMypage_Click(object sender, EventArgs e)
     {
-        Response.Redirect("./MyPage.aspx");
+        if(Session["mem_id"] == null)
+        {
+            return;
+        }
+        else
+        {
+            string QueryString = Session["mem_id"].ToString(); // 현재 세션의 마이 페이지로 가야 하므로 세션 ToString() 받아서 redirect에 넘김
+            Response.Redirect("./MyPage.aspx?mem_id=" + QueryString);
+        }
     }
 
     protected void btnJoin_Click(object sender, EventArgs e)
@@ -1166,7 +1174,7 @@
             {
         %>
             <li class = "topnavLi" >
-				<a href = "#" ><% string id = Session["mem_id"].ToString(); Response.Write(id); %></a>
+				<a><% string id = Session["mem_id"].ToString(); Response.Write(id); %></a>
                 <ul>
                     <li><asp:Button ID="btnMypage" runat="server" Text="마이페이지" OnClick="btnMypage_Click" class ="navJoinBtn"/></li>
                     <li><asp:Button ID="btnLogout" runat="server" Text="로그아웃" OnClick="btnLogout_Click" class ="navFindBtn"/></li>
