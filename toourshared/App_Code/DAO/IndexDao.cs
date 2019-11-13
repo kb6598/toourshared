@@ -79,7 +79,7 @@ public class IndexDao
 
             while(rd.Read())
             {
-                returnStr = reader["mem_img_url"].ToString();
+                returnStr = rd["mem_img_url"].ToString();
             }
 
 
