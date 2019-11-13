@@ -26,8 +26,9 @@ public class MyPageDao
         MyDB mydb = new MyDB();
         int result = 0;
         MySqlConnection con = null;
+        
 
-     
+
 
         try
         {
@@ -61,9 +62,11 @@ public class MyPageDao
         {
             System.Diagnostics.Debug.WriteLine(ex.ToString());
             con.Close();
+           
         }
         finally
         {
+          
             con.Close();
         }
         return result;
