@@ -15,6 +15,25 @@
         }
         bindMapData();
     }
+     protected void btnLogout_Click(object sender, EventArgs e)
+    {
+        Session.Abandon();
+        Response.Redirect("/index.aspx");
+    }
+
+    protected void btnMypage_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("/MyPage.aspx");
+    }
+    protected void btnJoin_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("/join.aspx");
+    }
+
+    protected void btnFindIDPW_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("/find_idpw.aspx");
+    }
 
 
     protected List<String> getTravelByTrvNo()
@@ -497,6 +516,8 @@
             color: white;
             background-color: transparent;
         }
+        
+        
 
         /* 창 크기 조절 시 nav display none 설정 */
         @media only screen and (max-width: 1600px) {
@@ -977,6 +998,26 @@
                 border: .5px solid rgba(0, 0, 0, .1);
                 text-align-last: center;
             }
+            .navJoinBtn{
+            border: none;
+            outline: none;
+            background-color: transparent;
+            color: white;
+            font-size: 14px;
+            padding-bottom: 20px;
+        }
+
+        .navFindBtn:hover, .navJoinBtn:hover{
+            font-weight: bold;
+        }
+
+        .navFindBtn{
+            border: none;
+            outline: none;
+            background-color: transparent;
+            color: white;
+            font-size: 14px;
+        }
     </style>
 
     <script>
@@ -1045,21 +1086,42 @@
                         <li><a href="FAQ.aspx">자주 찾는 질문</a></li>
                     </ul>
                 </li>
-                <li class="topnavLi">
-                    <% if (Session["mem_id"] != null)
-                        {%>
-                    <a href="#"><% string id = Session["mem_id"].ToString(); Response.Write(id); %></a>
-                    <ul>
-                        <li>
-                            <asp:Button ID="btnMypage" runat="server" Text="마이페이지" /></li>
-                        <li>
-                            <asp:Button ID="btnLogout" runat="server" Text="로그아웃" /></li>
+         <% 
+            if (IsLogin.isLogin() == false)
+            {
+        %>
+            <li class="topnavLi">
+                <div class="nav-log">
+                    <a>
+                        <div class="nav-log-area">
+                            <asp:Button ID="btnLogin" runat="server" Text="로그인" class="nav-log-item" PostBackUrl="~/login.aspx"/>
+                        </div>
+                    </a>
+                </div>
+                <ul>
+                    <br />
+                    <li><asp:Button ID="btnJoin" runat="server" Text="회원가입" OnClick="btnJoin_Click" class ="navJoinBtn"/></li>
+                    <li><asp:Button ID="btnFindIDPW" runat="server" Text="계정찾기" OnClick="btnFindIDPW_Click" class ="navFindBtn" /></li>
+                </ul>
+            </li>
+        <%  
+            }
+            else
+            {
+        %>
+            <li class = "topnavLi" >
+				<a href = "#" ><% string id = Session["mem_id"].ToString(); Response.Write(id); %></a>
+                <ul>
+                    <li><asp:Button ID="btnMypage" runat="server" Text="마이페이지" OnClick="btnMypage_Click" class ="navJoinBtn"/></li>
+                    <li><asp:Button ID="btnLogout" runat="server" Text="로그아웃" OnClick="btnLogout_Click" class ="navFindBtn"/></li>
 
-                    </ul>
-                    <%} %>
-                </li>
-            </ul>
-        </div>
+                </ul>
+            </li>
+        <% 
+            }
+        %>
+        </ul>
+    </div>
         <%
             // ============== Data Init ================
 
