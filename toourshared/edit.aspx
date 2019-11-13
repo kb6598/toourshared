@@ -9,7 +9,7 @@
         if (Session["mem_id"] == null)
         {
             MessageBox.Show("접근 할 수 없습니다.", this.Page);
-            Response.Redirect("/index.aspx");
+            Response.Redirect("./index.aspx");
         }
         else
         {
@@ -39,12 +39,12 @@
     protected void btnLogout_Click(object sender, EventArgs e)
     {
         Session.Abandon();
-        Response.Redirect("/index.aspx");
+        Response.Redirect("./index.aspx");
     }
 
     protected void btnMypage_Click(object sender, EventArgs e)
     {
-        Response.Redirect("/MyPage.aspx");
+        Response.Redirect("./MyPage.aspx");
     }
 
 
@@ -76,11 +76,11 @@
             int check = member.UpdatetMember(mem);
             if(check == 1)
             {
-                Response.Write("<script language=javascript>alert('정상적으로 수정이 완료되었습니다.'); location.replace('/MyPage.aspx');</script language=javascript>");
+                Response.Write("<script language=javascript>alert('정상적으로 수정이 완료되었습니다.'); location.replace('./MyPage.aspx');</script language=javascript>");
             }
             else
             {
-                Response.Write("<script language=javascript>alert('수정이 정상적으로 되지 않았습니다.'); location.replace('/MyPage.aspx');</script language=javascript>");
+                Response.Write("<script language=javascript>alert('수정이 정상적으로 되지 않았습니다.'); location.replace('./MyPage.aspx');</script language=javascript>");
             }
             
         }

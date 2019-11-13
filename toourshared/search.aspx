@@ -55,7 +55,7 @@
     {
         if (Request.QueryString["searchType"] == null)
         {
-            Response.Redirect("search.aspx?searchType=1");
+            Response.Redirect("./search.aspx?searchType=1");
         }
         else
         {
@@ -73,6 +73,7 @@
             inputText.Text = HashTag.ToString();
             search(1); // hashTag로 search 실행 시 
         }
+
     }
 
     protected void search(int n = 0)
@@ -164,7 +165,7 @@
         }
         %>
 
-            window.location.href = "search.aspx?searchType=" + paramType + hashtag;
+            window.location.href = "./search.aspx?searchType=" + paramType + hashtag;
         }
 
         function sidebarSwitch() {
@@ -355,12 +356,12 @@
             "<div class=\"boardItem\">\n" +
                 "<div class=\"article1\">\n" +
                     "<div class=\"boardImage\">\n" +
-                        "<a href = \"board.aspx?trv_no=" + travelList[i].Trv_no.ToString() + "\" onmouseover=\"getMapData("+travelList[i].Trv_no.ToString()+")\">\n" +
+                        "<a href = \"./board.aspx?trv_no=" + travelList[i].Trv_no.ToString() + "\" onmouseover=\"getMapData("+travelList[i].Trv_no.ToString()+")\">\n" +
                             "<img src = \"" + travelMainImage + "\" alt=\"" + member.Mem_id.ToString() + "\" class=\"boardImageItem\">\n" +
                         "</a>\n" +
                     "</div>\n" +
                     "<div class=\"boardContent\">" +
-                        "<a href = \"board.aspx?trv_no=" + travelList[i].Trv_no.ToString() + "\" onmouseover=\"getMapData("+travelList[i].Trv_no.ToString()+")\">\n" +
+                        "<a href = \"./board.aspx?trv_no=" + travelList[i].Trv_no.ToString() + "\" onmouseover=\"getMapData("+travelList[i].Trv_no.ToString()+")\">\n" +
                             "<div class=\"boardTitle\">" +
                                 "<span>" + travelList[i].Trv_title.ToString() + "</span>" +
                             "</div>\n" +
@@ -375,12 +376,12 @@
                 "<div class=\"article2\">\n" +
                     "<div class=\"boardUser\">\n" +
                         "<div class=\"boardUserImage\">\n" +
-                            "<a href = \"MyPage.aspx?mem_id=" + member.Mem_id.ToString() + "\">\n" +
+                            "<a href = \"./MyPage.aspx?mem_id=" + member.Mem_id.ToString() + "\">\n" +
                                 "<img src=\"" + userMainImage + "\" alt=\"" + member.Mem_id.ToString() + "\" class=\"userImageItem\">\n" +
                             "</a>\n" +
                         "</div>\n" +
                         "<div class=\"boardUserId\">\n" +
-                            "<a href = \"MyPage.aspx?mem_id=" + member.Mem_id.ToString() + "\">\n" +
+                            "<a href = \"./MyPage.aspx?mem_id=" + member.Mem_id.ToString() + "\">\n" +
                                 "<span>" + member.Mem_id.ToString() + "</span>\n" +
                             "</a>\n" +
                             "<div class=\"boardUserTime\">\n" +
