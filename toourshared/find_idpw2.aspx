@@ -383,15 +383,7 @@
             background-color: darkorange;
         }
         
-        .footer {
-            width: 100%;
-            height: 250px;
-            color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #272625;
-        }
+
         .navJoinBtn{
             border: none;
             outline: none;
@@ -572,9 +564,6 @@
         </div>
     </div>
 
-    <div class="footer">
-        바닥글
-    </div>
 </form>
 </body>
 </html>

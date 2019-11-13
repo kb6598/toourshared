@@ -13,7 +13,15 @@
 
     protected void btnMypage_Click(object sender, EventArgs e)
     {
-        Response.Redirect("./MyPage.aspx");
+        if(Session["mem_id"] == null)
+        {
+            return;
+        }
+        else
+        {
+            string QueryString = Session["mem_id"].ToString(); // 현재 세션의 마이 페이지로 가야 하므로 세션 ToString() 받아서 redirect에 넘김
+            Response.Redirect("./MyPage.aspx?mem_id=" + QueryString);
+        }
     }
 
     protected void btnJoin_Click(object sender, EventArgs e)
@@ -26,8 +34,7 @@
         Response.Redirect("./find_idpw.aspx");
     }
 
-    // 최신순, 평점순, 구독자순
-    // 불러올 데이터: 작성자 메인이미지, 아이디, 작성시간, 게시글 메인이미지
+
     //최신순
     protected string orderByTime()
     {
@@ -220,6 +227,7 @@
         return returnStr;
     }
 
+    // 구독자 순
     protected string orderByFollower()
     {
         string memberMainImage = ""; // 작성자 메인 이미지
@@ -334,6 +342,17 @@
             return returnStr;
         }
     }
+
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        this.inpTxt.Attributes["onkeyPress"] = "if(event.keyCode == 13) {" + Page.GetPostBackEventReference(this.inputBtn) + "; return false; }";       // 아이디 입력창에서 ENTER 키 누를 때 BtnLogin이 눌러지도록.
+    }
+
+    // 검색 창 옆에 있는 버튼 눌렀을 경우 발생할 이벤트
+    protected void inputBtn_Click(object sender, EventArgs e)
+    {
+        System.Diagnostics.Debug.WriteLine(TimeLib.GetTimeStamp());
+    }
 </script>
 
 <html>
@@ -368,6 +387,8 @@
             /* 전체 배경색 */
             background-color: #00b9f1;
             background-repeat: no-repeat;
+            animation: animBackColor 5s infinite;
+            animation-direction: alternate;
         }
 
         .topnavUl {
@@ -620,7 +641,7 @@
 
         .section01-inputText1 {
             width: 450px;
-            padding: 15px 150px 18px 17px;
+            padding: 15px 15px 18px 17px;
             border: none;
             line-height: 17px;
             font-size: 14px;
@@ -629,6 +650,7 @@
             outline: none;
             border-top-left-radius: 5px;
             border-bottom-left-radius: 5px;
+            font-family: 'Noto Sans KR', sans-serif;
         }
 
         .section01-inputButton1 {
@@ -1055,10 +1077,11 @@
             cursor: default;
         }
 
-        .footer {
-            width: 100%;
-            height: 250px;
-            background-color: #272625;
+        @keyframes animBackColor
+        {
+                0% { background-color: rgb(0, 185, 241); }
+                50% { background-color: rgb(0, 162, 208); }
+                100% { background-color: rgb(0, 141, 183); }
         }
 
     </style>
@@ -1095,11 +1118,11 @@
 
         /* 버튼 VALUE 효과 */
         $(function() {
-            $('#inpBtn').hover(function() {
-                $('#inpBtn').val("🌝");
+            $('#inputBtn').hover(function() {
+                $('#inputBtn').val("🌝");
             }, function() {
                 // on mouseout, reset the background colour
-                $('#inpBtn').val("🌞");
+                $('#inputBtn').val("🌞");
             });
         });
 
@@ -1166,7 +1189,7 @@
             {
         %>
             <li class = "topnavLi" >
-				<a href = "#" ><% string id = Session["mem_id"].ToString(); Response.Write(id); %></a>
+				<a><% string id = Session["mem_id"].ToString(); Response.Write(id); %></a>
                 <ul>
                     <li><asp:Button ID="btnMypage" runat="server" Text="마이페이지" OnClick="btnMypage_Click" class ="navJoinBtn"/></li>
                     <li><asp:Button ID="btnLogout" runat="server" Text="로그아웃" OnClick="btnLogout_Click" class ="navFindBtn"/></li>
@@ -1195,10 +1218,10 @@
             </div>
             <div class="section01-input">
                 <div>
-                    <input type="text" placeholder="지역 명을 입력하세요.." class="section01-inputText1" />
+                    <asp:TextBox ID="inpTxt" runat="server" Placeholder="키워드를 입력해보세요! ex) 커피, 제주도" CssClass="section01-inputText1"/>
                 </div>
                 <div>
-                    <input type="button" value="🌞" id="inpBtn" class="section01-inputButton1" />
+                    <asp:Button ID="inputBtn" runat="server" Text="🌞" CssClass="section01-inputButton1" OnClick="inputBtn_Click"/>
                 </div>
             </div>
         </div>
@@ -1450,13 +1473,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <!-- 바닥글 영역 -->
-    <div class="footer">
-        <div class="footerText" style="color: white; text-align: center; height: 100%; padding: 120px 0px;">
-            바 닥 글
         </div>
     </div>
 </form>

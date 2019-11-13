@@ -89,6 +89,21 @@
     {
         Response.Redirect("./find_idpw.aspx");
     }
+
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        // Enter Event
+        this.find_id_mem_name.Attributes["onkeyPress"] = "if(event.keyCode == 13) {" + Page.GetPostBackEventReference(this.FindID) + "; return false; }";
+        this.find_id_mem_birth.Attributes["onkeyPress"] = "if(event.keyCode == 13) {" + Page.GetPostBackEventReference(this.FindID) + "; return false; }";
+        this.find_id_mem_phone.Attributes["onkeyPress"] = "if(event.keyCode == 13) {" + Page.GetPostBackEventReference(this.FindID) + "; return false; }";
+        this.find_id_mem_answer.Attributes["onkeyPress"] = "if(event.keyCode == 13) {" + Page.GetPostBackEventReference(this.FindID) + "; return false; }";
+
+        this.find_pw_mem_id.Attributes["onkeyPress"] = "if(event.keyCode == 13) {" + Page.GetPostBackEventReference(this.FindPW) + "; return false; }";
+        this.find_pw_mem_birth.Attributes["onkeyPress"] = "if(event.keyCode == 13) {" + Page.GetPostBackEventReference(this.FindPW) + "; return false; }";
+        this.find_pw_mem_phone.Attributes["onkeyPress"] = "if(event.keyCode == 13) {" + Page.GetPostBackEventReference(this.FindPW) + "; return false; }";
+        this.find_pw_mem_answer.Attributes["onkeyPress"] = "if(event.keyCode == 13) {" + Page.GetPostBackEventReference(this.FindPW) + "; return false; }";
+    }
+
 </script>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -426,16 +441,6 @@
             background-color: #bd1550;
             transition-duration: .5s;
         }
-
-        .footer {
-            width: 100%;
-            height: 250px;
-            color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #272625;
-        }
         .navJoinBtn{
             border: none;
             outline: none;
@@ -675,9 +680,6 @@
             </div>
         </div>
     </div>
-    
-    <!-- footer 영역 -->
-    <div class ="footer">바닥글</div>
 </form>
 </body>
 </html>

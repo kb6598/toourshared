@@ -11,34 +11,32 @@
     //http://localhost:6118/board.aspx?trv_no=176
     protected void Page_Load(object sender, EventArgs e)
     {
-
-
         if (Request.QueryString["trv_no"] == null)
         {
             System.Diagnostics.Debug.WriteLine("지금 되는건가용?");
-            Response.Redirect("/index.aspx");
+            Response.Redirect("./index.aspx");
         }
         bindMapData();
     }
 
-     protected void btnLogout_Click(object sender, EventArgs e)
+    protected void btnLogout_Click(object sender, EventArgs e)
     {
         Session.Abandon();
-        Response.Redirect("/index.aspx");
+        Response.Redirect("./index.aspx");
     }
 
     protected void btnMypage_Click(object sender, EventArgs e)
     {
-        Response.Redirect("/MyPage.aspx");
+        Response.Redirect("./MyPage.aspx");
     }
     protected void btnJoin_Click(object sender, EventArgs e)
     {
-        Response.Redirect("/join.aspx");
+        Response.Redirect("./join.aspx");
     }
 
     protected void btnFindIDPW_Click(object sender, EventArgs e)
     {
-        Response.Redirect("/find_idpw.aspx");
+        Response.Redirect("./find_idpw.aspx");
     }
 
 
@@ -110,7 +108,6 @@
 
         return resultList;
     }
-
 
     protected int getLikeCountByTrvNo()
     {
@@ -197,7 +194,6 @@
         return returnInt;
     }
 
-
     protected List<Map> getMapByTrvDayNo()
     {
         List<Map> mapList = new List<Map>();
@@ -278,6 +274,26 @@
         returnStr = returnStr.Replace(">", "&gt");
 
         return returnStr;
+    }
+
+    protected void boardReport(Travel travel)
+    {
+        if(Session["mem_id"] == null) // 로그인하지 않은 경우
+        {
+            Response.Write("<script language='javascript'>alert('로그인 후 이용해주세요.');</script language='javascript'>");
+        }
+        else
+        {
+            if(Request.QueryString["trv_no"] == null) // trv_no가 존재하지 않는 경우
+            {
+                Response.Write("<script language='javascript'>alert('해당 게시글은 신고할 수 없습니다. 새로고침 후 다시 시도해주세요.');</script language='javascript'>");
+            }
+
+            string MemID = Session["mem_id"].ToString();
+            string trvNo = Request.QueryString["trv_no"].ToString();
+
+            
+        }
     }
 
     protected void Button1_Click(object sender, EventArgs e)

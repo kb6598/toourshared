@@ -85,6 +85,11 @@
         Response.Redirect("./find_idpw.aspx");
     }
 
+    protected void JoinBtn_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("./join.aspx");
+    }
+
 </script>
  <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -441,12 +446,6 @@
             background-color: darkorange;
         }
 
-        .footer {
-            width: 100%;
-            height: 250px;
-            background-color: #272625;
-        }
-
         .navJoinBtn{
             border: none;
             outline: none;
@@ -597,17 +596,10 @@
                     <span>아직 회원이 아니신가요?</span>
                 </div>
                 <div class="joinBtn">
-                    <a href="#">
-                        <asp:Button ID="JoinBtn" runat="server" Text="회원가입" class="joinBtnItem" />
-                    </a>
+                    <asp:Button ID="JoinBtn" runat="server" Text="회원가입" class="joinBtnItem" OnClick="JoinBtn_Click" />
                 </div>
             </div>
         </div>
-    </div>
-
-    <!-- footer 영역 -->
-    <div class="footer">
-        a
     </div>
         </form>
 </body>

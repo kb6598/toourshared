@@ -643,11 +643,7 @@
             </div>
         </div>
     </div>
-    
-    <!-- footer 영역 -->
-    <div class="footer">
-        바닥글
-    </div>
+
     </form>
 </body>
 
