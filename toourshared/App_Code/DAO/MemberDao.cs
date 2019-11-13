@@ -181,6 +181,7 @@ namespace tooushared.DAO
             MySqlConnection con = myDB.GetCon();
             MySqlDataReader rd = null;
             int count = 0;
+
             try
             {
                 string Sql = "Select * From toourshared.member Where mem_id = @mem_id and mem_pw=@mem_pw";
@@ -195,8 +196,6 @@ namespace tooushared.DAO
                 MySqlDataReader reader = cmd.ExecuteReader();
                 if (rd.Read())
                 {
-                    
-                  
                     count = 1;
                 }
                 else
@@ -208,13 +207,13 @@ namespace tooushared.DAO
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
-                con.Close();
                 rd.Close();
+                con.Close();
             }
             finally
             {
-                con.Close();
                 rd.Close();
+                con.Close();
             }
             return count;
         }
@@ -356,11 +355,13 @@ namespace tooushared.DAO
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+                rd.Close();
                 con.Close();
 
             }
             finally
             {
+                rd.Close();
                 con.Close();
             }
             return FindPW;
@@ -433,6 +434,7 @@ namespace tooushared.DAO
                    
                 }
 
+                rd.Close();
                 con.Close();
 
             }
