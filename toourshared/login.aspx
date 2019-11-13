@@ -85,6 +85,11 @@
         Response.Redirect("./find_idpw.aspx");
     }
 
+    protected void JoinBtn_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("./join.aspx");
+    }
+
 </script>
  <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -591,9 +596,7 @@
                     <span>아직 회원이 아니신가요?</span>
                 </div>
                 <div class="joinBtn">
-                    <a href="./join.aspx">
-                        <asp:Button ID="JoinBtn" runat="server" Text="회원가입" class="joinBtnItem" />
-                    </a>
+                    <asp:Button ID="JoinBtn" runat="server" Text="회원가입" class="joinBtnItem" OnClick="JoinBtn_Click" />
                 </div>
             </div>
         </div>

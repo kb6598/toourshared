@@ -6,9 +6,71 @@
 
     protected void Page_Load(object sender, EventArgs e)
     {
+        if (Session["mem_id"] == null)
+        {
+            Response.Write("<script language='javascript'>alert('비 정상적인 접근 방법 입니다.'); this.close(); </script language='javascript'>");
+        }
+        else
+        {
+            if(Request.QueryString["trv_no"] == null)
+            {
+                Response.Write("<script language='javascript'>alert('비 정상적인 접근 방법 입니다.'); this.close(); </script language='javascript'>");
+            }
+        }
     }
 
 
+    protected void Button1_Click(object sender, EventArgs e)
+    {
+        if (Session["mem_id"] == null)
+        {
+            Response.Write("<script language='javascript'>alert('비 정상적인 접근 방법 입니다.'); this.close(); </script language='javascript'>");
+        }
+        else
+        {
+            if(Request.QueryString["trv_no"] == null)
+            {
+                Response.Write("<script language='javascript'>alert('비 정상적인 접근 방법 입니다.'); this.close(); </script language='javascript'>");
+            }
+            else
+            {
+                string reportReason = TextBox1.Text.ToString();
+
+                if(string.IsNullOrEmpty(reportReason))
+                {
+                    Response.Write("<script language='javascript'>alert('신고 사유를 입력해주세요.'); </script language='javascript'>");
+                }
+                else
+                {
+                    string MemID = Session["mem_id"].ToString();
+                    string trvNo = Request.QueryString["trv_no"].ToString();
+
+                    Report report = new Report();
+                    ReportDao reportDao = new ReportDao();
+
+                    report.Trv_no = trvNo;
+                    report.Rep_timestap = TimeLib.GetTimeStamp();
+                    report.Rep_mem_id = MemID;
+                    report.Rep_reason = reportReason;
+
+                    if(reportDao.IsExistReportWhereMemIDByTrvNo(report) == true) // 이미 해당 게시글을 신고한 기록이 있는 경우
+                    {
+                        Response.Write("<script language='javascript'>alert('이미 신고한 기록이 존재합니다.'); this.close(); </script language='javascript'>");
+                    }
+                    else
+                    {
+                        reportDao.InsertReport(report);
+                        Response.Write("<script language='javascript'>alert('게시글이 신고되었습니다.\r\n해당 게시글은 운영자의 판단에 따라 조치될 예정입니다.'); this.close(); </script language='javascript'>");
+                    }
+                }
+            }
+        }
+    }
+
+    protected void Button2_Click(object sender, EventArgs e)
+    {
+        Response.Write("<script language='javascript'>this.close(); </script language='javascript'>");
+    }
 </script>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -132,8 +194,8 @@
                         <asp:TextBox ID="TextBox1" class="contentsText" runat="server" MaxLength="50" autocomplete="off" />
                     </div>
                     <div class = "contentsBtnArea">
-                        <asp:Button ID="Button1" runat="server" Text="신고하기" CssClass="reportBtn"/>
-                        <asp:Button ID="Button2" runat="server" Text="취소" CssClass="reportBtn"/>
+                        <asp:Button ID="Button1" runat="server" Text="신고하기" CssClass="reportBtn" OnClick="Button1_Click"/>
+                        <asp:Button ID="Button2" runat="server" Text="취소" CssClass="reportBtn" OnClick="Button2_Click"/>
                     </div>
                 </div>
             </div>

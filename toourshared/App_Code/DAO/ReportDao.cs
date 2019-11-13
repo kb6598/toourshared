@@ -33,7 +33,6 @@ public class ReportDao
         cmd.Parameters.AddWithValue("@rep_mem_id", report.Rep_mem_id);
         cmd.Parameters.AddWithValue("@rep_reason", report.Rep_reason);
 
-
         con.Open();
 
         cmd.ExecuteNonQuery();
@@ -55,6 +54,7 @@ public class ReportDao
 
         return result;
     }
+
     public DataSet SelectReport()
     {
         MyDB myDB = new MyDB();
@@ -83,7 +83,6 @@ public class ReportDao
         return ds;
     }
     
-
     public Report selectReportByrep_no(Report report)
     {
 
@@ -142,5 +141,41 @@ public class ReportDao
             con.Close();
         }
         return result;
+    }
+
+    public bool IsExistReportWhereMemIDByTrvNo(Report report)
+    {
+        //rep_no, trv_no, rep_timestamp, rep_mem_id, rep_reason
+        MyDB myDB = new MyDB();
+        MySqlConnection con;
+
+        int getCnt = 0;
+
+        try
+        {
+            con = myDB.GetCon();
+            string Sql = "SELECT count(*) as CNT FROM toourshared.report WHERE trv_no = @trv_no AND rep_mem_id = @mem_id";
+
+            MySqlCommand cmd = new MySqlCommand(Sql, con);
+            cmd.Parameters.AddWithValue("@trv_no", report.Trv_no);
+            cmd.Parameters.AddWithValue("@mem_id", report.Rep_mem_id);
+
+            con.Open();
+            MySqlDataReader reader = cmd.ExecuteReader();
+
+            if(reader.Read())
+            {
+                getCnt = int.Parse(reader["cnt"].ToString());
+            }
+
+            reader.Close();
+            con.Close();
+        }
+        catch (Exception e) {;}
+
+        if (getCnt <= 0) // 데이터 없는거고
+            return false;
+        else // 데이터 있는거고
+            return true;
     }
 }
