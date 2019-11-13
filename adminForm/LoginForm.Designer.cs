@@ -1,6 +1,6 @@
 ﻿namespace adminForm
 {
-    partial class Form1
+    partial class LoginForm
     {
         /// <summary>
         /// 필수 디자이너 변수입니다.
@@ -78,7 +78,7 @@
             this.Login_btn.UseVisualStyleBackColor = true;
             this.Login_btn.Click += new System.EventHandler(this.Login_btn_Click);
             // 
-            // Form1
+            // LoginForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -88,8 +88,8 @@
             this.Controls.Add(this.PW_lb);
             this.Controls.Add(this.ID_txt);
             this.Controls.Add(this.ID_lb);
-            this.Name = "Form1";
-            this.Text = "Form1";
+            this.Name = "LoginForm";
+            this.Text = "Login";
             this.ResumeLayout(false);
             this.PerformLayout();
 
