@@ -321,13 +321,9 @@ public class TravelDao
 
         List<Travel> resultList = new List<Travel>();
         Travel result;
-<<<<<<< HEAD
-        MySqlConnection con;
-        string Sql = "";
-=======
         MySqlConnection con = null;
         MySqlDataReader rd = null;
->>>>>>> f89aaf1f574ed44dfaf0702f1e02d3e6f4125a2a
+        string Sql = "";
 
         try
         {

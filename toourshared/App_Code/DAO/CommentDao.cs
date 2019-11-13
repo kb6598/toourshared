@@ -327,6 +327,8 @@ public class CommentDao
         Comment result;
         MySqlConnection con = null;
         MySqlDataReader rd= null;
+        string Sql = "";
+
         try
         {
                        
