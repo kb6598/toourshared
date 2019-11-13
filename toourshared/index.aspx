@@ -376,6 +376,8 @@
             /* 전체 배경색 */
             background-color: #00b9f1;
             background-repeat: no-repeat;
+            animation: animBackColor 5s infinite;
+            animation-direction: alternate;
         }
 
         .topnavUl {
@@ -1063,6 +1065,13 @@
             cursor: default;
         }
 
+        @keyframes animBackColor
+        {
+                0% { background-color: rgb(0, 185, 241); }
+                50% { background-color: rgb(0, 162, 208); }
+                100% { background-color: rgb(0, 141, 183); }
+        }
+
     </style>
 
     <script language="javascript">
@@ -1197,7 +1206,7 @@
             </div>
             <div class="section01-input">
                 <div>
-                    <input type="text" placeholder="지역 명을 입력하세요.." class="section01-inputText1" />
+                    <input type="text" placeholder="키워드를 입력해보세요! ex) 제주도, 맛집" class="section01-inputText1" />
                 </div>
                 <div>
                     <input type="button" value="🌞" id="inpBtn" class="section01-inputButton1" />
