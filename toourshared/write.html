@@ -24,32 +24,33 @@
 
 
     <!-- JS -->
-    <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+
     <script src='https://www.google.com/recaptcha/api.js'></script>
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=ebcd0c1accbe0ff4bbb47bd777ef2fcf&libraries=service&libraries=services,clusterer,drawing"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
-
-
+    <!-- ajax
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js" type="text/javascript"></script>
+        -->
     <!-- summernote-->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" type="text/javascript"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote-lite.css" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote-lite.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote-lite.js" type="text/javascript"></script>
 
 
-    <!--파일 업로드
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
--->
+
+
+
     <link rel="stylesheet" href="./css/write.css" />
     <style>
         // summer note 이미지 삽입시 뜨는 창 스타일 처리
         .note-modal-content {
             margin-top: 30%;
         }
-        
-        
-        .travelRoute-content, .cost-body{
-           
+
+
+        .travelRoute-content,
+        .cost-body {
             overflow: auto;
         }
     </style>
@@ -57,7 +58,7 @@
 
     <script>
         /* scroll할 때 발생할 이벤트 */
-        window.onscroll = function() {
+        window.onscroll = function () {
             scrollFunction();
         }
 
@@ -73,11 +74,12 @@
         }
 
         /* TextArea Summernote */
-        $(document).ready(function() {
+        $(document).ready(function () {
             $('#article').summernote({
                 height: 600, //set editable area's height
             });
         });
+
     </script>
 </head>
 
@@ -265,7 +267,7 @@
             <!-- 중앙 영역 2 -->
             <div class="taArea">
                 <div class="form-group">
-                    <textarea name="article" rows="2" cols="20" id="article" type="text" name="article" onkeyup="tmpSaveByEnter()">
+                    <textarea name="article" rows="2" cols="20" id="article" type="text" name="article">
 </textarea>
                 </div>
             </div>
@@ -362,6 +364,11 @@
   
 -->
     <script>
+
+    </script>
+
+
+    <script>
         //사용자 편의 기능 
 
         // 자동 저장 액션 5분마다 / 300초
@@ -388,7 +395,7 @@
             if (window.event.keyCode == 13) {
                 tmpSave(false);
             }
-          
+
         }
 
 
@@ -418,6 +425,7 @@
             }
 
         }
+
     </script>
 
     <script>
@@ -461,6 +469,7 @@
             }
 
         });
+
     </script>
 
 
@@ -471,11 +480,25 @@
                 center: new daum.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
                 level: 3 // 지도의 확대 레벨
             };
-        //현재 선택한 오버레이
-        var curOverlay = Array(1);
+        
         // 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
         //var drawingMap = new daum.maps.Map(drawingMapContainer, mapOption);
         var drawingMap = new daum.maps.Map(drawingMapContainer, drawingMap);
+
+
+        // 지도 타입 변경 컨트롤을 생성한다
+        var mapTypeControl = new kakao.maps.MapTypeControl();
+
+        // 지도의 상단 우측에 지도 타입 변경 컨트롤을 추가한다
+        drawingMap.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
+
+        // 지도에 확대 축소 컨트롤을 생성한다
+        var zoomControl = new kakao.maps.ZoomControl();
+
+        // 지도의 우측에 확대 축소 컨트롤을 추가한다
+        drawingMap.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
+
+
 
         var options = { // Drawing Manager를 생성할 때 사용할 옵션입니다
             map: drawingMap, // Drawing Manager로 그리기 요소를 그릴 map 객체입니다
@@ -690,7 +713,7 @@
 
 
 
-        
+
         //-----------------------------------------------
         // 클릭시 발생하는 이벤트
         //----------------------------------------------
@@ -708,7 +731,7 @@
             console.info("-------------------------------------------- 현재 마커는");
             console.info(this);
             var curMkrOrder = this._order;
-            
+            var trvRoute = getTravelRouteByOrder(curMkrOrder);
 
             //----좌표값으로 주소를 가져옴
             geocoder.coord2Address(coord_WCONGNAMUL.wcongnamulX, coord_WCONGNAMUL.wcongnamulY, function(result, status) {
@@ -736,16 +759,16 @@
 
 
                                 '<div class="card card-cus" style="width:300px;">' +
-                                    '<div class="card-header">' +
-                                        '<div class="card-title">' +
-                                            '<input class="form-control card-input" type="text" placeholder="장소 이름" value="" />' +
-                                        '</div>' +
-                                        '<div class="card-close">' +
-                                            '<div class="closeBtn" onclick="closeCusOverlay()">' +
-                                                '<span>×</span>' +
-                                            '</div>' +
-                                        '</div>' +
-                                    '</div>' +
+                                '<div class="card-header">' +
+                                '<div class="card-title">' +
+                                '<input id="cuov-name" class="form-control card-input" type="text" placeholder="장소 이름" value="' + trvRoute.place_name + '" />' +
+                                '</div>' +
+                                '<div class="card-close">' +
+                                '<div class="closeBtn" onclick="closeCusOverlay()">' +
+                                '<span>×</span>' +
+                                '</div>' +
+                                '</div>' +
+                                '</div>' +
                                 '<div class="card-body">' +
                                 '<blockquote class="blockquote mb-0">';
 
@@ -763,7 +786,7 @@
                             } else {
                                 content += '<div class="card-addBtn" onclick=\'searchPlacesByAddress("' + result[0].address.road_address_name + '")\'>주소로 검색</div>'
                             }
-                            content += '<div class="btn btn-danger btn-sm" onclick="removeMarkNTrvRouteByOrder('+curMkrOrder+')">삭제</div>' +
+                            content += '<div class="btn btn-danger btn-sm" onclick="removeMarkNTrvRouteByOrder(' + curMkrOrder + ')">삭제</div>' +
                                 '</td>' +
                                 '</tr></table>' +
                                 '</div>';
@@ -1389,8 +1412,8 @@
                 }
 
             });
-            
-        
+
+
 
 
             var markers = manager.getOverlays([kakao.maps.drawing.OverlayType.MARKER]);
@@ -1401,12 +1424,23 @@
             });
         }
 
-        
-        function getTravelRouteByOrder(order){
+
+        function getTravelRouteByOrder(order) {
             TravelRouteList.forEach(function(val, idx, arr) {
                 if (val.order == order) {
                     return TravelRouteList[idx];
-                    
+
+                }
+
+            });
+            return {};
+        }
+
+        function setTravelRouteNameByOrder(order, name) {
+            TravelRouteList.forEach(function(val, idx, arr) {
+                if (val.order == order) {
+                    TravelRouteList[idx].setName(name);
+
                 }
 
             });
@@ -2116,10 +2150,61 @@
         //------------------------------------
 
 
+        function HashTagCheck() {
+            var str = document.getElementById('hashtag').value;
+            var falseStr = "";
+            var pattern_num = /[0-9]/; // 숫자 
+            var pattern_eng = /[a-zA-Z]/; // 문자 
+            var pattern_spc = /[# }]/; // 특수문자
+            var pattern_kor = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/; // 한글체크
 
+            // 한글, 영문, 숫자, #, 스페이스바는 입력이 가능하지만 나머지는 입력할 수 없고,
+            // 입력된 글자가 있는 경우 #은 무조건 하나 이상 들어가 있어야 함.
+
+            if (str != "") {
+                if (!str.includes("#")) {
+                    // 입력 문자열에 #이 존재하지 않는 경우
+                    alert('해쉬태그는 #으로 시작해야 합니다. 1');
+                    return;
+                } else {
+                    for (var i = 0; i < str.length; i++) {
+                        var chr = str.charAt(i);
+
+                        if (pattern_num.test(chr) || pattern_eng.test(chr) || pattern_spc.test(chr) || pattern_kor.test(chr))
+                            continue;
+                        else
+                            falseStr += chr + ', ';
+                    }
+
+                    if (falseStr != "") {
+                        alert('해시태그 조건에 맞춰 입력해주세요. 2\n오류 원인: ' + falseStr);
+                        return;
+                    } else {
+                        var strArray;
+                        var strSplit = str.split(' ');
+                        var hashTagArray = "";
+
+                        for (var i in strSplit) {
+                            if (strSplit[i].startsWith("#") == false) {
+                                alert('해시태그 조건에 맞춰 입력해주세요. 3');
+                                return;
+                            } else {
+                                hashTagArray += strSplit[i] + " ";
+                            }
+                        }
+
+                        alert(hashTagArray + "이다!"); // 정상적으로 불러온 경우 hashTagArray를 불러오면 그 태그들을 불러옴.
+                        // ex) '#가나 #다라 #마바 #사아자 #파하하하하'
+                    }
+                }
+            }
+        }
 
 
         function gotoDay() {
+            
+            
+            
             var form = document.createElement("form");
             addDataAtForm(form);
 
@@ -2137,7 +2222,7 @@
 
 
         function tmpSave(alFlg) {
-
+            
 
             var form = document.createElement("form");
             addDataAtForm(form);
@@ -2168,6 +2253,7 @@
         }
 
         function addDay() {
+            
             var form = document.createElement("form");
             addDataAtForm(form);
             form.setAttribute('action', "Write_addDay.aspx");
@@ -2175,6 +2261,7 @@
         }
 
         function endWrite() {
+            if(HashTagCheck() == false) return;
             var form = document.createElement("form");
             addDataAtForm(form);
             form.setAttribute('action', "Write_endWrite.aspx");
@@ -2808,6 +2895,9 @@
         //-----------------------------------
         //----------- CommonFUnction End
         //-----------------------------------
+
     </script>
 
-</body></html>
+</body>
+
+</html>
