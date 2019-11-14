@@ -397,6 +397,8 @@
 
                     TravelDao travelDao = new TravelDao();
                     travelDao.setTotRateByTrvNo(int.Parse(trv_no)); // TotRate 최신화 작업
+                    replyWriteText.Text = "";
+
                 }
             }
         }
@@ -1366,7 +1368,7 @@
     int costDays = 1;
     foreach (var map in mapList)
     {
-        if (map.Map_cost != "")
+        if(!string.IsNullOrEmpty(map.Map_cost))
         {
             JToken mapCost = JToken.Parse(map.Map_cost);
             string itemlist = "";
@@ -1461,7 +1463,7 @@
 
         foreach (var map in mapList)
         {
-            if (map.Map_route != "")
+            if(!string.IsNullOrEmpty(map.Map_route))
             {
                 JToken mapRoute = JToken.Parse(map.Map_route);
                 //Response.Write(route);
@@ -1523,7 +1525,7 @@
 
     foreach (var map in mapList)
     {
-        if (map.Map_cost != "")
+        if(!string.IsNullOrEmpty(map.Map_cost))
         {
             JToken mapCost = JToken.Parse(map.Map_cost);
             string itemlist = "";
