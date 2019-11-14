@@ -100,11 +100,6 @@
 
 
         }
-        Dictionary<string, string> readWriteStatus = SessionLib.getWriteStatus();
-        foreach (var item in readWriteStatus)
-        {
-            Response.Write(item.Key + " : " + item.Value + "<br/>");
-        }
 
     }
     protected void BindTables()
@@ -311,19 +306,19 @@
             <ul class="topnavUl">
                 <li class="topnavLi">
                     <div class="nav-logo">
-                        <a href="index.aspx" class="nav-logo-item">To Our Shared</a>
+                        <a href="./index.aspx" class="nav-logo-item">To Our Shared</a>
                     </div>
                 </li>
                 <li class="topnavLi">
                     <a>Intro</a>
                     <ul>
-                        <li><a href="#">TOUPLE</a></li>
+                        <li><a href="./index.aspx#relAndTOU">TOUPLE</a></li>
                     </ul>
                 </li>
                 <li class="topnavLi">
                     <a>Shared</a>
                     <ul>
-                        <li><a href="search.aspx">검색</a></li>
+                        <li><a href="./search.aspx">검색</a></li>
                     </ul>
                 </li>
                 <li class="topnavLi">
@@ -336,7 +331,7 @@
                 <li class="topnavLi">
                     <a>Help</a>
                     <ul>
-                        <li><a href="FAQ.aspx">자주 찾는 질문</a></li>
+                        <li><a href="./FAQ.aspx">자주 찾는 질문</a></li>
                     </ul>
                 </li>
                 <% 
@@ -354,9 +349,9 @@
                     <ul>
                         <br />
                         <li>
-                            <asp:Button ID="btnJoin" runat="server" Text="회원가입" OnClick="btnJoin_Click" /></li>
+                            <asp:Button ID="btnJoin" runat="server" Text="회원가입" OnClick="btnJoin_Click" class="navJoinBtn"/></li>
                         <li>
-                            <asp:Button ID="btnFindIDPW" runat="server" Text="계정찾기" OnClick="btnFindIDPW_Click" /></li>
+                            <asp:Button ID="btnFindIDPW" runat="server" Text="계정찾기" OnClick="btnFindIDPW_Click" class="navFindBtn" /></li>
                     </ul>
                 </li>
                 <%  
@@ -368,9 +363,9 @@
                     <a href="#"><% string id = Session["mem_id"].ToString(); Response.Write(id); %></a>
                     <ul>
                         <li>
-                            <asp:Button ID="btnMypage" runat="server" Text="마이페이지" OnClick="btnMypage_Click" /></li>
+                            <asp:Button ID="btnMypage" runat="server" Text="마이페이지" OnClick="btnMypage_Click" class="navJoinBtn" /></li>
                         <li>
-                            <asp:Button ID="btnLogout" runat="server" Text="로그아웃" OnClick="btnLogout_Click" /></li>
+                            <asp:Button ID="btnLogout" runat="server" Text="로그아웃" OnClick="btnLogout_Click" class="navFindBtn"/></li>
 
                     </ul>
                 </li>
@@ -602,9 +597,6 @@
  <script src="./javascript/write.js"></script>
   
 -->
-                   <script>
-    </script>
-
 
     <script>
         //사용자 편의 기능 
@@ -947,9 +939,9 @@
             var coord_WCONGNAMUL = getWCONGNAMULFromOverlay(this);
             console.info("-------------------------------------------- 현재 마커는");
             console.info(this);
+
             var curMkrOrder = this._order;
             var trvRoute = getTravelRouteByOrder(curMkrOrder);
-
             //----좌표값으로 주소를 가져옴
             geocoder.coord2Address(coord_WCONGNAMUL.wcongnamulX, coord_WCONGNAMUL.wcongnamulY, function(result, status) {
 
@@ -959,7 +951,6 @@
 
                     var content = "<div>ok</div>";
                     var keyword = document.getElementById('keyword');
-
 
 
                     //주소가 있다면 검색
@@ -978,7 +969,7 @@
                                 '<div class="card card-cus" style="width:300px;">' +
                                 '<div class="card-header">' +
                                 '<div class="card-title">' +
-                                '<input id="cuov-name" class="form-control card-input" type="text" placeholder="장소 이름" value="' + trvRoute.place_name + '" />' +
+                                trvRoute.place_name +
                                 '</div>' +
                                 '<div class="card-close">' +
                                 '<div class="closeBtn" onclick="closeCusOverlay()">' +
@@ -1468,11 +1459,13 @@
                 setTravelRouteItemInfo(index);
                 setTravelRouteItemName(index);
 
-                refreashTravelRoute();
+                
             });
+            
+            refreashTravelRoute();
         }
 
-        
+
 
 
 
@@ -1659,14 +1652,16 @@
 
 
         function getTravelRouteByOrder(order) {
-            TravelRouteList.forEach(function(val, idx, arr) {
-                if (val.order == order) {
-                    return TravelRouteList[idx];
-
+            
+            var result;
+            TravelRouteList.forEach(function(val,idx,arr){
+                if(TravelRouteList[idx].order == order){
+                    result =  TravelRouteList[idx];
                 }
-
             });
-            return {};
+            
+            return result;
+            
         }
 
         function setTravelRouteNameByOrder(order, name) {
@@ -2515,7 +2510,7 @@
 
         function getLocName() {
 
-            var firstAddress = "";
+
 
             var items = getTravelRouteData();
             if (items != null && items != [] && items.length != 0) {
@@ -2530,7 +2525,8 @@
                 }
 
                 var addresstokens = address.split(' ');
-                firstAddress = addresstokens[0];
+                addresstokens[0];
+                LocName.setAttribute("value", addresstokens[0]);
             } else {
 
                 //현재 지도의 중앙부분의 주소를 가져와 가장 앞 주소(시/도)만 사용
@@ -2539,14 +2535,15 @@
                     if (status === kakao.maps.services.Status.OK) {
                         //주소가 있다면 검색
                         if (result[0] != null) {
+                            console.info(result[0]);
 
-                            //LocName.setAttribute("value", result[0].address.region_1depth_name);
+                            LocName.setAttribute("value", result[0].address.region_1depth_name);
                         }
                     }
                 });
             }
 
-            console.info(firstAddress);
+
 
         }
 
@@ -2555,6 +2552,10 @@
 
         // 다음페이지로 markers, polyline, rect, circle, polygon 보내는 기능
         function addDataAtForm(form) {
+            
+            
+
+            
 
             //var title = document.getElementById("title").value;
             //var article = document.getElementById("article").value;
@@ -2609,23 +2610,18 @@
 
             // -- TravelRouteList중 중간 노드의 주소를 가져와 파싱하여 가장 앞 주소(시/도)ㄴ만 가져온다.
 
-            var firstAddress = "";
+            
+            var LocName = document.createElement("input"); // input 엘리멘트 생성
+            LocName.setAttribute("type", "hidden"); // type 속성을 hidden으로 설정
+            LocName.setAttribute("name", "loc_name"); // name 속성을 'stadium'으로 설정
 
-            var items = getTravelRouteData();
-            if (items != null && items != [] && items.length != 0) {
+            form.appendChild(LocName);
 
-                var itemsMiddle = Math.floor(items.length / 2);
-                var address = "";
 
-                if (items[itemsMiddle].address_name != null) {
-                    address = items[itemsMiddle].address_name;
-                } else {
-                    address = items[itemsMiddle].road_address_name;
-                }
 
-                var addresstokens = address.split(' ');
-                firstAddress = addresstokens[0];
-            } else {
+
+                  
+     
 
                 //현재 지도의 중앙부분의 주소를 가져와 가장 앞 주소(시/도)만 사용
                 var coord = drawingMap.getCenter();
@@ -2633,20 +2629,21 @@
                     if (status === kakao.maps.services.Status.OK) {
                         //주소가 있다면 검색
                         if (result[0] != null) {
+                            console.info(result[0]);
 
                             LocName.setAttribute("value", result[0].address.region_1depth_name);
                         }
                     }
                 });
-            }
+  
+
+            
 
 
 
-            var LocName = document.createElement("input"); // input 엘리멘트 생성
-            LocName.setAttribute("type", "hidden"); // type 속성을 hidden으로 설정
-            LocName.setAttribute("name", "loc_name"); // name 속성을 'stadium'으로 설정
-            //LocName.setAttribute("value", tmpLocName); // value 속성을 삽입
-            form.appendChild(LocName);
+
+
+
 
             var map_center = drawingMap.getCenter();
             var mapCenter = document.createElement("input"); // input 엘리멘트 생성
@@ -2656,6 +2653,7 @@
             form.appendChild(mapCenter);
 
 
+          
 
 
 
