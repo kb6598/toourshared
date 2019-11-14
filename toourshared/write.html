@@ -24,22 +24,23 @@
 
 
     <!-- JS -->
-    <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+
     <script src='https://www.google.com/recaptcha/api.js'></script>
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=ebcd0c1accbe0ff4bbb47bd777ef2fcf&libraries=service&libraries=services,clusterer,drawing"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
-
-
+    <!-- ajax
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js" type="text/javascript"></script>
+        -->
     <!-- summernote-->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" type="text/javascript"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote-lite.css" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote-lite.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote-lite.js" type="text/javascript"></script>
 
 
-    <!--파일 업로드
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
--->
+
+
+
     <link rel="stylesheet" href="./css/write.css" />
     <style>
         // summer note 이미지 삽입시 뜨는 창 스타일 처리
@@ -50,16 +51,14 @@
 
         .travelRoute-content,
         .cost-body {
-
             overflow: auto;
         }
-
     </style>
 
 
     <script>
         /* scroll할 때 발생할 이벤트 */
-        window.onscroll = function() {
+        window.onscroll = function () {
             scrollFunction();
         }
 
@@ -75,7 +74,7 @@
         }
 
         /* TextArea Summernote */
-        $(document).ready(function() {
+        $(document).ready(function () {
             $('#article').summernote({
                 height: 600, //set editable area's height
             });

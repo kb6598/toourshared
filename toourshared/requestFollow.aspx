@@ -8,7 +8,7 @@
     {
         if (Session["mem_id"] == null || Request.QueryString["mem_id"] == null || Request.QueryString["follow"] == null)
         {
-            Response.Write("<script language='javascript'>alert('비 정상적인 접근 방법 입니다.'); this.close(); </script language='javascript'>");
+            Response.Write("<script language='javascript'>alert('비 정상적인 접근 방법 입니다.'); history.go(-1); </script language='javascript'>");
         }
         else
         {
@@ -18,7 +18,7 @@
 
             if(LoginID == MyPageID || MyPageID == followID) // 로그인한 사람의 아이디와 MyPAGE의 아이디가 같은 경우는 본인을 팔로우 하는 거고, MyPageID와 팔로우 아이디가 같은 경우도 동일한 경우임
             {
-                Response.Write("<script language='javascript'>alert('비 정상적인 접근 방법 입니다.'); this.close(); </script language='javascript'>");
+                Response.Write("<script language='javascript'>alert('비 정상적인 접근 방법 입니다.'); history.go(-1); </script language='javascript'>");
             }
             else
             {

@@ -233,19 +233,17 @@
     <title>TO OUR SHARED : 글 작성 #일차</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- Font -->
-    <link href="https://fonts.googleapis.com/css?family=Mansalva|Nanum+Gothic|Nanum+Myeongjo|Noto+Sans+KR|Lora|East+Sea+Dokdo|Jua&display=swap" rel="stylesheet">
+       <!-- Font -->
+    <link href="https://fonts.googleapis.com/css?family=Mansalva|Nanum+Gothic|Nanum+Myeongjo|Noto+Sans+KR|Lora|East+Sea+Dokdo|Jua&amp;display=swap" rel="stylesheet" />
 
     <!-- ICON -->
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
 
     <!-- Bootstrap -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
 
-    <!-- summerNote -->
-    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.11/dist/summernote-bs4.min.css" rel="stylesheet" />
+
 
     <!-- JS -->
     <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
@@ -253,13 +251,30 @@
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=ebcd0c1accbe0ff4bbb47bd777ef2fcf&libraries=service&libraries=services,clusterer,drawing"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bs4-summernote@0.8.10/dist/summernote-bs4.min.js"></script>
 
-    <!--파일 업로드
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
--->    <link rel="stylesheet" href="./css/write.css">
-    <style>
 
+
+    <!-- ajax
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js" type="text/javascript"></script>
+        -->
+    <!-- summernote-->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" type="text/javascript"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote-lite.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote-lite.js" type="text/javascript"></script>
+
+   <link rel="stylesheet" href="./css/write.css">
+  <style>
+        // summer note 이미지 삽입시 뜨는 창 스타일 처리
+        .note-modal-content {
+            margin-top: 30%;
+        }
+
+
+        .travelRoute-content,
+        .cost-body {
+
+            overflow: auto;
+        }
 
     </style>
 
@@ -373,7 +388,7 @@
             <div class="TitleArea">
                 <div class="TitleAlign">
 
-                    <asp:TextBox ID="title"  runat="server" type="text" placeholder="게시글의 제목을 정해주세요." autocomplete="off"/>
+                    <asp:TextBox ID="title"  runat="server" type="text" placeholder="게시글의 제목을 정해주세요." autocomplete="off" onkeyup="tmpSaveByEnter()"/>
                 </div>
                 <div class="TitleSub">
                     <div class="SubItem">
@@ -495,7 +510,7 @@
             <!-- 중앙 영역 2 -->
             <div class="taArea">
                 <div class="form-group">
-                    <asp:TextBox ID="article" runat="server" TextMode="MultiLine" type="text"  name="article"></asp:TextBox>
+                    <asp:TextBox ID="article" runat="server" TextMode="MultiLine" type="text"  name="article" onkeyup="tmpSaveByEnter()"></asp:TextBox>
                 </div>
             </div>
 
@@ -524,7 +539,7 @@
 
             <!-- 해쉬태그 영역 -->
             <div class="hashArea">
-                <asp:TextBox ID="hashtag" runat="server" type="text" placeholder="해쉬태그를 입력하세요. (ex : #여행 #추억) (스페이스바로 구분지어 주세요.)" class="hashAreaItem" />
+                <asp:TextBox ID="hashtag" runat="server" type="text" placeholder="해쉬태그를 입력하세요. (ex : #여행 #추억) (스페이스바로 구분지어 주세요.)" class="hashAreaItem" onkeyup="tmpSaveByEnter()"/>
             </div>
 
             <!-- 하단부 영역 -->
@@ -554,8 +569,9 @@
                         <div id="menu_wrap" class="bg_white">
                             <div class="option">
                                 <div>
-                                    키워드 :
-                                <input id="keyword" value="" type="text" onkeyup="searchPlacesByEnter();"/>
+                                 
+키워드 :
+                                    <input id="keyword" value="" type="text" onkeyup="searchPlacesByEnter();" />
                                     <div class="btn btn-secondary" onclick="searchPlaces();">검색하기</div>
                                 </div>
                             </div>
@@ -590,34 +606,67 @@
  <script src="./javascript/write.js"></script>
   
 -->  
-  <script>
-      
-      
+  
+    <script>
+        //사용자 편의 기능 
 
-      
-      
-      //윈도우에서 엔터 백스페이스 막기
-      window.onkeydown = function() {
-	var kcode = event.keyCode;
-	if(window.event.keyCode == 13 || kcode == 116) event.returnValue = false;
-    }
+        // 자동 저장 액션 5분마다 / 300초
+        setInterval(function() {
+            tmpSave(false);
+        }, 300000);
 
 
 
-         function searchPlacesByEnter(){
-             var kcode = event.keyCode;
-	if(window.event.keyCode == 13 ){
-        searchPlaces();
-    }
-        
-            
-            
+        //윈도우에서 엔터 백스페이스 막기
+        window.onkeydown = function() {
+            var kcode = event.keyCode;
+            if (window.event.keyCode == 13 || kcode == 116) event.returnValue = false;
         }
 
 
 
-  </script>
-    
+
+
+
+        //엔터키를 통한 임시저장
+        function tmpSaveByEnter() {
+            var kcode = event.keyCode;
+            if (window.event.keyCode == 13) {
+                tmpSave(false);
+            }
+
+        }
+
+
+
+        function searchPlacesByEnter() {
+            var kcode = event.keyCode;
+            if (window.event.keyCode == 13) {
+                searchPlaces();
+            }
+        }
+
+
+        function setTravelRouteItemInfoByEnter(index) {
+
+            var kcode = event.keyCode;
+            if (window.event.keyCode == 13) {
+                setTravelRouteItemInfo(index);
+            }
+
+        }
+
+
+        function setTravelRouteItemNameByEnter(index) {
+            var kcode = event.keyCode;
+            if (window.event.keyCode == 13) {
+                setTravelRouteItemName(index);
+            }
+
+        }
+
+    </script>
+
     <script>
         //이미지 업로드 AJAX
         function sendFile(file) {
@@ -659,23 +708,36 @@
             }
 
         });
-        
 
     </script>
 
 
     <script>
         // Drawing Manager로 도형을 그릴 지도 div
-    var drawingMapContainer = document.getElementById('drawingMap'),
+        var drawingMapContainer = document.getElementById('drawingMap'),
             drawingMap = {
                 center: new daum.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
                 level: 3 // 지도의 확대 레벨
             };
-        //현재 선택한 오버레이
-        var curOverlay = Array(1);
+        
         // 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
         //var drawingMap = new daum.maps.Map(drawingMapContainer, mapOption);
         var drawingMap = new daum.maps.Map(drawingMapContainer, drawingMap);
+
+
+        // 지도 타입 변경 컨트롤을 생성한다
+        var mapTypeControl = new kakao.maps.MapTypeControl();
+
+        // 지도의 상단 우측에 지도 타입 변경 컨트롤을 추가한다
+        drawingMap.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
+
+        // 지도에 확대 축소 컨트롤을 생성한다
+        var zoomControl = new kakao.maps.ZoomControl();
+
+        // 지도의 우측에 확대 축소 컨트롤을 추가한다
+        drawingMap.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
+
+
 
         var options = { // Drawing Manager를 생성할 때 사용할 옵션입니다
             map: drawingMap, // Drawing Manager로 그리기 요소를 그릴 map 객체입니다
@@ -874,22 +936,22 @@
         function closeCusOverlay() {
             customOverlay.setMap(null);
         }
-        
+
         manager.addListener('drawend', function(data) {
             console.log('drawend', data);
-            if(data.overlayType == 'marker'){
-                
-                
-                
-                pushTravelRouteItem("","","","","","","");
+            if (data.overlayType == 'marker') {
+
+
+
+                pushTravelRouteItem("", "", "", "", "", "", "");
             }
         });
-        
-
-        
 
 
-    
+
+
+
+
 
         //-----------------------------------------------
         // 클릭시 발생하는 이벤트
@@ -905,7 +967,10 @@
             //---- 오버레이 타입마다 좌표가 존재하는 위치가 다름
 
             var coord_WCONGNAMUL = getWCONGNAMULFromOverlay(this);
-            
+            console.info("-------------------------------------------- 현재 마커는");
+            console.info(this);
+            var curMkrOrder = this._order;
+            var trvRoute = getTravelRouteByOrder(curMkrOrder);
 
             //----좌표값으로 주소를 가져옴
             geocoder.coord2Address(coord_WCONGNAMUL.wcongnamulX, coord_WCONGNAMUL.wcongnamulY, function(result, status) {
@@ -927,15 +992,15 @@
                             //                                ps.keywordSearch(keyword.value, placesSearchByStateChange);
                             //                                $('#searchPlaceModal').modal('show');
 
-                            
-                             
+
+
                             content =
 
 
                                 '<div class="card card-cus" style="width:300px;">' +
                                 '<div class="card-header">' +
                                 '<div class="card-title">' +
-                                '<input class="form-control card-input" type="text" placeholder="장소 이름" value="" />' +
+                                '<input id="cuov-name" class="form-control card-input" type="text" placeholder="장소 이름" value="' + trvRoute.place_name + '" />' +
                                 '</div>' +
                                 '<div class="card-close">' +
                                 '<div class="closeBtn" onclick="closeCusOverlay()">' +
@@ -960,12 +1025,12 @@
                             } else {
                                 content += '<div class="card-addBtn" onclick=\'searchPlacesByAddress("' + result[0].address.road_address_name + '")\'>주소로 검색</div>'
                             }
-                            content +=
+                            content += '<div class="btn btn-danger btn-sm" onclick="removeMarkNTrvRouteByOrder(' + curMkrOrder + ')">삭제</div>' +
                                 '</td>' +
                                 '</tr></table>' +
                                 '</div>';
 
-                                
+
                         }
                     }
 
@@ -993,6 +1058,8 @@
 
 
         }
+
+
 
 
         function getWCONGNAMULFromOverlay(overlay) {
@@ -1031,7 +1098,10 @@
 
 
         // 검색 시스템
+        function openCatego() {
 
+            $('.dropdown-toggle').dropdown('show');
+        }
 
 
         var find_AroundMarkers = [];
@@ -1107,7 +1177,7 @@
         function placesSearchByAddressCB(data, status, pagination) {
             if (status === kakao.maps.services.Status.OK) {
 
-                
+
                 // 정상적으로 검색이 완료됐으면
                 // 검색 목록과 마커를 표출합니다
                 displayPlaces(data);
@@ -1117,22 +1187,22 @@
                 $('#searchPlaceModal').modal('show');
             } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
 
-//                alert('검색 결과가 존재하지 않아 더 넓은 주소로 찾습니다.');
-//                var keyword = document.getElementById('keyword');
-//                var keywordArr = keyword.value.split(' ');
-//
-//                console.info(keywordArr);
-//                var str = "";
-//
-//                for (var i = 0; i < keywordArr.length - 1; i++) {
-//                    str += keywordArr[i] + " ";
-//                }
-//
-//
-//
-//                //console.info(str);
-//                keyword.value = str;
-//                ps.keywordSearch(keyword.value, placesSearchByAddressCB);
+                //                alert('검색 결과가 존재하지 않아 더 넓은 주소로 찾습니다.');
+                //                var keyword = document.getElementById('keyword');
+                //                var keywordArr = keyword.value.split(' ');
+                //
+                //                console.info(keywordArr);
+                //                var str = "";
+                //
+                //                for (var i = 0; i < keywordArr.length - 1; i++) {
+                //                    str += keywordArr[i] + " ";
+                //                }
+                //
+                //
+                //
+                //                //console.info(str);
+                //                keyword.value = str;
+                //                ps.keywordSearch(keyword.value, placesSearchByAddressCB);
                 return;
 
             } else if (status === kakao.maps.services.Status.ERROR) {
@@ -1355,33 +1425,7 @@
                 '</div>' +
                 '</div>';
 
-            //console.info(place);
 
-
-            //            var content =
-            //                '<div class="card">' +
-            //                '<div class="card-header">' +
-            //                place.place_name +
-            //                '<div class="btn btn-link" onclick="closeOverlay()" title="닫기" style="float: right">X</div>' +
-            //                '</div>' +
-            //                '<blockquote class="blockquote mb-0">';
-            //
-            //            if (place.road_address_name != null) {
-            //                content += '<li class="card-body-li">' + place.road_address_name + '</li>';
-            //            }
-            //            if (place.address_name != null) {
-            //                content += '<li class="card-body-li">' + place.address_name + '</li>';
-            //            }
-            //            if (place.phone != null) {
-            //                content += '<li class="card-body-li">' + place.phone + '</li>';
-            //            }
-            //            if (place.place_url != null) {
-            //                content += '<li class="card-body-li"><a href="' + place.place_url + '" target="_blank" class="link">상세페이지</a></li>';
-            //            }
-            //            content +=
-            //                '<div class="btn btn-secondary" onclick=\'pushTravelRouteItem("' + place.place_name + '","' + place.road_address_name + '","' + place.ddress_name + '","' + place.phone + '","' + place.place_url + '","' + place.x + '","' + place.y + '")\'>여행경로에 추가</div>' +
-            //                '</blockquote>' +
-            //                '</div>';
 
             infowindow.setContent(content);
             infowindow.open(drawingMap, marker);
@@ -1402,7 +1446,7 @@
         //------------------------------------
         //----------TravelRouteItem and travelRouteList Start
         //------------------------------------
-            var TravelOrder = 0;
+        var TravelOrder = 0;
         class TravelRouteItem {
             constructor(place_name, road_address_name, address_name, phone, place_url, x, y) {
                 this.place_name = place_name;
@@ -1464,10 +1508,7 @@
                     ' <table>' +
                     ' <tr>' +
                     ' <td>' +
-                    ' <input id="addTravelRoute_place_name_' + index + '" class="form-control form-control-sm" type="text" placeholder="장소 이름" value="' + currentValue.place_name + '" style="width:130px;" />' +
-                    ' </td>' +
-                    ' <td>' +
-                    ' <div class="btn btn-secondary btn-sm" onclick="setTravelRouteItemName(' + index + ')">이름변경</div>' +
+                    ' <input id="addTravelRoute_place_name_' + index + '" class="form-control" type="text" placeholder="장소 이름" value="' + currentValue.place_name + '" />' +
                     ' </td>' +
                     ' <td>' +
                     ' <div class="btn btn-danger btn-sm" onclick="removeTravelRouteItem(' + index + ')"> x </div>' +
@@ -1480,10 +1521,7 @@
                     '<table>' +
                     '<tr>' +
                     '<td>' +
-                    ' <textarea id="addTravelRoute_info_' + index + '" class="form-control form-control-sm" type="text" placeholder="설명" rows="3" >' + currentValue.info + '</textarea>' +
-                    '</td>' +
-                    '<td style="vertical-align:top">' +
-                    ' <div class="btn btn-secondary btn-sm" onclick="setTravelRouteItemInfo(' + index + ')" >설명저장</div>' +
+                    ' <textarea id="addTravelRoute_info_' + index + '" class="form-control" type="text" placeholder="설명" rows="3" style="resize: none;overflow: auto;">' + currentValue.info + '</textarea>' +
                     '</td>' +
                     '</tr>' +
                     '</table>';
@@ -1531,22 +1569,32 @@
             dragAndDropAction();
 
         }
-        
-         function AddMarkerWithTravelRouteItem(place_name, road_address_name, address_name, phone, place_url, x, y) {
-             pushTravelRouteItem(place_name, road_address_name, address_name, phone, place_url, x, y);
-            
-             var position = new kakao.maps.LatLng(y, x);
-             manager.put(kakao.maps.drawing.OverlayType.MARKER, position, 0);
-             
+
+
+
+
+
+
+
+        function AddMarkerWithTravelRouteItem(place_name, road_address_name, address_name, phone, place_url, x, y) {
+            pushTravelRouteItem(place_name, road_address_name, address_name, phone, place_url, x, y);
+
+            var position = new kakao.maps.LatLng(y, x);
+            manager.put(kakao.maps.drawing.OverlayType.MARKER, position, 0);
+
+            ///글작성 
+            closeAllOverlay();
+            closeAllSearchedMarkers();
+
 
         }
 
-        
-        
-        
-        
-        
-        
+
+
+
+
+
+
 
         function pushTravelRouteItem(place_name, road_address_name, address_name, phone, place_url, x, y) {
 
@@ -1558,32 +1606,85 @@
 
         }
 
-        
-        
-  
-
+        // TravelROute 삭제시 마커도 같이 삭제되도록 하는 함수
         function removeTravelRouteItem(index) {
             var removingOrder = TravelRouteList[index].order;
-            checkMarkerNRemove(removingOrder);            
+            checkMarkerNRemove(removingOrder);
             TravelRouteList.splice(index, 1);
-            removeCostItemParent(index);            
+            removeCostItemParent(index);
             refreashTravelRoute();
 
+        }
 
+
+
+        // TravelROute 삭제함수
+        function removeTravelRouteItem(index) {
+            var removingOrder = TravelRouteList[index].order;
+            checkMarkerNRemove(removingOrder);
+            TravelRouteList.splice(index, 1);
+            removeCostItemParent(index);
+            refreashTravelRoute();
 
         }
-        
+
         // manger의 마커의 order의 값을 비교하여 삭제 
-        
-        function checkMarkerNRemove(order){
+
+        function checkMarkerNRemove(order) {
             var markers = manager.getOverlays([kakao.maps.drawing.OverlayType.MARKER]);
-            markers.marker.forEach(function(value,idx,arr){ 
-                if(value._order == order){
+            markers.marker.forEach(function(value, idx, arr) {
+                if (value._order == order) {
                     manager.remove(value);
                 }
             });
         }
 
+
+
+        // order를 입력받아 travelRoute와 marker 삭제
+        function removeMarkNTrvRouteByOrder(order) {
+            TravelRouteList.forEach(function(val, idx, arr) {
+                if (val.order == order) {
+                    TravelRouteList.splice(idx, 1);
+                    removeCostItemParent(idx);
+                    refreashTravelRoute();
+                }
+
+            });
+
+
+
+
+            var markers = manager.getOverlays([kakao.maps.drawing.OverlayType.MARKER]);
+            markers.marker.forEach(function(value, idx, arr) {
+                if (value._order == order) {
+                    manager.remove(value);
+                }
+            });
+        }
+
+
+        function getTravelRouteByOrder(order) {
+            TravelRouteList.forEach(function(val, idx, arr) {
+                if (val.order == order) {
+                    return TravelRouteList[idx];
+
+                }
+
+            });
+            return {};
+        }
+
+        function setTravelRouteNameByOrder(order, name) {
+            TravelRouteList.forEach(function(val, idx, arr) {
+                if (val.order == order) {
+                    TravelRouteList[idx].setName(name);
+
+                }
+
+            });
+            return [];
+        }
 
 
 
@@ -2288,10 +2389,61 @@
         //------------------------------------
 
 
+        function HashTagCheck() {
+            var str = document.getElementById('hashtag').value;
+            var falseStr = "";
+            var pattern_num = /[0-9]/; // 숫자 
+            var pattern_eng = /[a-zA-Z]/; // 문자 
+            var pattern_spc = /[# }]/; // 특수문자
+            var pattern_kor = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/; // 한글체크
 
+            // 한글, 영문, 숫자, #, 스페이스바는 입력이 가능하지만 나머지는 입력할 수 없고,
+            // 입력된 글자가 있는 경우 #은 무조건 하나 이상 들어가 있어야 함.
+
+            if (str != "") {
+                if (!str.includes("#")) {
+                    // 입력 문자열에 #이 존재하지 않는 경우
+                    alert('해쉬태그는 #으로 시작해야 합니다. 1');
+                    return;
+                } else {
+                    for (var i = 0; i < str.length; i++) {
+                        var chr = str.charAt(i);
+
+                        if (pattern_num.test(chr) || pattern_eng.test(chr) || pattern_spc.test(chr) || pattern_kor.test(chr))
+                            continue;
+                        else
+                            falseStr += chr + ', ';
+                    }
+
+                    if (falseStr != "") {
+                        alert('해시태그 조건에 맞춰 입력해주세요. 2\n오류 원인: ' + falseStr);
+                        return;
+                    } else {
+                        var strArray;
+                        var strSplit = str.split(' ');
+                        var hashTagArray = "";
+
+                        for (var i in strSplit) {
+                            if (strSplit[i].startsWith("#") == false) {
+                                alert('해시태그 조건에 맞춰 입력해주세요. 3');
+                                return;
+                            } else {
+                                hashTagArray += strSplit[i] + " ";
+                            }
+                        }
+
+                        alert(hashTagArray + "이다!"); // 정상적으로 불러온 경우 hashTagArray를 불러오면 그 태그들을 불러옴.
+                        // ex) '#가나 #다라 #마바 #사아자 #파하하하하'
+                    }
+                }
+            }
+        }
 
 
         function gotoDay() {
+            
+            
+            
             var form = document.createElement("form");
             addDataAtForm(form);
 
@@ -2308,8 +2460,8 @@
         }
 
 
-        function tmpSave() {
-
+        function tmpSave(alFlg) {
+            
 
             var form = document.createElement("form");
             addDataAtForm(form);
@@ -2322,19 +2474,25 @@
                 url: 'Write_tmpSave.aspx',
                 data: data,
                 success: function(status) {
-                    if (status != 'error') {
-                        alert("저장되었습니다.");
+                    if (alFlg) {
+                        if (status != 'error') {
+                            alert("저장되었습니다.");
+                        }
                     }
+
                 },
                 processData: false,
                 contentType: false,
                 error: function() {
-                    alert("Whoops something went wrong!");
+                    if (alFlg) {
+                        alert("Whoops something went wrong!");
+                    }
                 }
             });
         }
 
         function addDay() {
+            
             var form = document.createElement("form");
             addDataAtForm(form);
             form.setAttribute('action', "Write_addDay.aspx");
@@ -2342,6 +2500,7 @@
         }
 
         function endWrite() {
+            if(HashTagCheck() == false) return;
             var form = document.createElement("form");
             addDataAtForm(form);
             form.setAttribute('action', "Write_endWrite.aspx");
@@ -2684,7 +2843,7 @@
         //----------From Post END
         //------------------------------------
 
-         //------------------------------------
+        //------------------------------------
         //----------From around category search START
         //------------------------------------
 
@@ -2790,56 +2949,58 @@
                 })(marker, places[i]);
             }
         }
-        
-//        <li id='MT1' data-order="0"> <span class="category_bg mart"> 대형마트</span></li>
-//        <li id='CS2' data-order="1"> <span class="category_bg store"> 편의점</span></li>
-//        <li id='PS3' data-order="2"> <span class="category_bg elemantry"> 어린이집, 유치원</span></li>
-//        <li id='SC4' data-order="3"> <span class="category_bg"> 학교</span></li>
-//        <li id='AC5' data-order="4"> <span class="category_bg"> 학원</span></li>
-//        <li id='PK6' data-order="5"> <span class="category_bg"> 주차장</span></li>
-//        <li id='OL7' data-order="6"> <span class="category_bg oil"> 주유소, 충전소</span></li>
-//        <li id='SW8' data-order="7"> <span class="category_bg"> 지하철역</span></li>
-//        <li id='BK9' data-order="8"> <span class="category_bg bank"> 은행</span></li>
-//        <li id='CT1' data-order="9"><span class="category_bg"> 문화시설</span></li>
-//        <li id='AG2' data-order="10"><span class="category_bg"> 중개업소</span></li>
-//        <li id='PO3' data-order="11"><span class="category_bg"> 공공기관</span></li>
-//        <li id='AT4' data-order="12"><span class="category_bg"> 관광명소</span></li>
-//        <li id='AD5' data-order="13"><span class="category_bg"> 숙박</span></li>
-//        <li id='FD6' data-order="14"><span class="category_bg"> 음식점</span></li>
-//        <li id='CE7' data-order="15"><span class="category_bg cafe"> 카페</span></li>
-//        <li id='HP8' data-order="16"><span class="category_bg"> 병원</span></li>
-//        <li id='PM9' data-order="17"><span class="category_bg pharmacy"> 약국</span></li>     
-        
+
+        //        <li id='MT1' data-order="0"> <span class="category_bg mart"> 대형마트</span></li>
+        //        <li id='CS2' data-order="1"> <span class="category_bg store"> 편의점</span></li>
+        //        <li id='PS3' data-order="2"> <span class="category_bg elemantry"> 어린이집, 유치원</span></li>
+        //        <li id='SC4' data-order="3"> <span class="category_bg"> 학교</span></li>
+        //        <li id='AC5' data-order="4"> <span class="category_bg"> 학원</span></li>
+        //        <li id='PK6' data-order="5"> <span class="category_bg"> 주차장</span></li>
+        //        <li id='OL7' data-order="6"> <span class="category_bg oil"> 주유소, 충전소</span></li>
+        //        <li id='SW8' data-order="7"> <span class="category_bg"> 지하철역</span></li>
+        //        <li id='BK9' data-order="8"> <span class="category_bg bank"> 은행</span></li>
+        //        <li id='CT1' data-order="9"><span class="category_bg"> 문화시설</span></li>
+        //        <li id='AG2' data-order="10"><span class="category_bg"> 중개업소</span></li>
+        //        <li id='PO3' data-order="11"><span class="category_bg"> 공공기관</span></li>
+        //        <li id='AT4' data-order="12"><span class="category_bg"> 관광명소</span></li>
+        //        <li id='AD5' data-order="13"><span class="category_bg"> 숙박</span></li>
+        //        <li id='FD6' data-order="14"><span class="category_bg"> 음식점</span></li>
+        //        <li id='CE7' data-order="15"><span class="category_bg cafe"> 카페</span></li>
+        //        <li id='HP8' data-order="16"><span class="category_bg"> 병원</span></li>
+        //        <li id='PM9' data-order="17"><span class="category_bg pharmacy"> 약국</span></li>     
+
 
         // 마커를 생성하고 지도 위에 마커를 표시하는 함수입니다
         function addMarkerArround(position, order) {
             var imageSize = new kakao.maps.Size(33, 44); // 마커이미지의 크기입니다
-            var imageOption = {offset: new kakao.maps.Point(27, 69)}; 
-            var iconUrl =  [
-                "./img/ico/marker/shopping.png",               //대형마트
-                "./img/ico/marker/retail-stores.png",          //편의점
-                "./img/ico/marker/play-schools.png",           //어린이집, 유치원
-                "./img/ico/marker/schools.png",                //학교
-                "./img/ico/marker/education.png",              //학원
-                "./img/ico/marker/automotive.png",             //주차장
-                "./img/ico/marker/gas-station.png",      //주유소, 충전소
-                "./img/ico/marker/transport.png",              //지하철역
-                "./img/ico/marker/financial-services.png",     //은행
-                "./img/ico/marker/tickets.png",                //문화시설
-                "./img/ico/marker/business.png",               //중개업소
-                "./img/ico/marker/government.png",             //공공기관
-                "./img/ico/marker/travel.png",                  //관광명소
-                "./img/ico/marker/residential-places.png",      //숙박
-                "./img/ico/marker/restaurants.png",            //음식점
-                "./img/ico/marker/coffee-n-tea.png",           //카페
-                "./img/ico/marker/medical.png",                //병원
-                "./img/ico/marker/health-medical.png"          //약국
-                            ];
-                
-                var marker = new kakao.maps.Marker({
-                    position: position, // 마커의 위치
-                    image: new kakao.maps.MarkerImage(iconUrl[order], imageSize, imageOption)
-                });
+            var imageOption = {
+                offset: new kakao.maps.Point(19, 45)
+            };
+            var iconUrl = [
+                "./img/ico/marker/shopping.png", //대형마트
+                "./img/ico/marker/retail-stores.png", //편의점
+                "./img/ico/marker/play-schools.png", //어린이집, 유치원
+                "./img/ico/marker/schools.png", //학교
+                "./img/ico/marker/education.png", //학원
+                "./img/ico/marker/automotive.png", //주차장
+                "./img/ico/marker/gas-station.png", //주유소, 충전소
+                "./img/ico/marker/transport.png", //지하철역
+                "./img/ico/marker/financial-services.png", //은행
+                "./img/ico/marker/tickets.png", //문화시설
+                "./img/ico/marker/business.png", //중개업소
+                "./img/ico/marker/government.png", //공공기관
+                "./img/ico/marker/travel.png", //관광명소
+                "./img/ico/marker/residential-places.png", //숙박
+                "./img/ico/marker/restaurants.png", //음식점
+                "./img/ico/marker/coffee-n-tea.png", //카페
+                "./img/ico/marker/medical.png", //병원
+                "./img/ico/marker/health-medical.png" //약국
+            ];
+
+            var marker = new kakao.maps.Marker({
+                position: position, // 마커의 위치
+                image: new kakao.maps.MarkerImage(iconUrl[order], imageSize, imageOption)
+            });
 
             marker.setMap(drawingMap); // 지도 위에 마커를 표출합니다
             markersAround.push(marker); // 배열에 생성된 마커를 추가합니다
@@ -2885,9 +3046,8 @@
             if (place.place_url != null) {
                 content += '<li class="card-body-li" style="padding: 15px 0;"><a href="' + place.place_url + '" target="_blank" style="text-decoration: none;">상세페이지</a></li>';
             }
-            
-            
-//////////////////////////////////////////////////////////////////////////////////
+
+
             content +=
                 '</blockquote>' +
                 '<div class="card-addBtn" onclick=\'AddMarkerWithTravelRouteItem("' + place.place_name + '","' + place.road_address_name + '","' + place.address_name + '","' + place.phone + '","' + place.place_url + '","' + place.x + '","' + place.y + '")\'>추가</div>' +
@@ -2943,11 +3103,38 @@
                 el.className = 'dropdown-item active';
             }
         }
-        
+
         //------------------------------------
         //----------From around category search END
         //------------------------------------
+
+
+        //-----------------------------------
+        //----------- CommonFUnction START
+        //-----------------------------------
+
+
+        function closeAllOverlay() {
+            //IN Drwaingmanger
+            closeCusOverlay();
+            //키워드 검색
+
+            closeOverlay();
+            //주변 카테고리 검색
+            closePlaceOverlay();
+        }
+
+        function closeAllSearchedMarkers() {
+            //키워드 검색
+
+            removeMarker();
+            //주변 카테고리 검색
+            removeMarkerAround();
+        }
+        //-----------------------------------
+        //----------- CommonFUnction End
+        //-----------------------------------
+
     </script>
-        
 </body>
 </html>

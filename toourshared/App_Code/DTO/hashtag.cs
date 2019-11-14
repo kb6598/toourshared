@@ -16,7 +16,7 @@ public class Hashtag
         //
     }
 
-    public Hashtag(string has_no)
+    public Hashtag(string has_no = "")
     {
         this.has_no = has_no;
     }

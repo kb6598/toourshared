@@ -13,7 +13,7 @@ public class Image
     private string img_view_name;
     private string img_caption;
 
-    public Image(string img_no = null, string mem_id = null, string img_view_name = null, string img_caption = null)
+    public Image(string img_no = "", string mem_id = "", string img_view_name = "", string img_caption = "")
     {
         this.Img_no = img_no;
         this.Mem_id = mem_id;

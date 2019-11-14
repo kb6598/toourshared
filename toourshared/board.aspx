@@ -49,56 +49,70 @@
 
     protected List<String> getTravelByTrvNo()
     {
-        int trv_no = int.Parse(Request.QueryString["trv_no"].ToString()); // 게시글 번호 받기
-
-        Travel travel = new Travel();                        // travel 객체 생성
-        List<String> returnList = new List<String>();   // return할 List 생성
-        travel.Trv_no = trv_no.ToString();                  // travel 객체에 게시글 번호 넣고
-
-        TravelDao travelDao = new TravelDao();        // TravelDao 객체 생성
-        travel = travelDao.selectTravelBytrv_no(travel); // travelDao에서 trv_no를 토대로 데이터 몽땅 긁어온 travel 객체로 바꿔치기
-
-        returnList.Add(travel.Trv_no);
-        returnList.Add(travel.Trv_secret);
-        returnList.Add(travel.Trv_views);
-
-        try
+        if (Request.QueryString["trv_no"] == null)
         {
-            double d_totRate = double.Parse(travel.Trv_tot_rate);
-            int i_totRate = (int)d_totRate;
-            String returnRate = d_totRate.ToString() + "-" + i_totRate.ToString(); // ex: 3.4-3
-
-            returnList.Add(returnRate);
-            returnList.Add(travel.Trv_main_img);
-            returnList.Add(travel.Trv_title);
-            returnList.Add(travel.Trv_tag);
-            returnList.Add(travel.Trv_timestamp);
-            returnList.Add(travel.Trv_create_time);
-            returnList.Add(travel.Loc_name);
-            returnList.Add(travel.Mem_id);
+            return new List<String>();
         }
-        catch (Exception e) {; }
-        return returnList;
+        else
+        {
+            int trv_no = int.Parse(Request.QueryString["trv_no"].ToString()); // 게시글 번호 받기
+
+            Travel travel = new Travel();                        // travel 객체 생성
+            List<String> returnList = new List<String>();   // return할 List 생성
+            travel.Trv_no = trv_no.ToString();                  // travel 객체에 게시글 번호 넣고
+
+            TravelDao travelDao = new TravelDao();        // TravelDao 객체 생성
+            travel = travelDao.selectTravelBytrv_no(travel); // travelDao에서 trv_no를 토대로 데이터 몽땅 긁어온 travel 객체로 바꿔치기
+
+            returnList.Add(travel.Trv_no);
+            returnList.Add(travel.Trv_secret);
+            returnList.Add(travel.Trv_views);
+
+            try
+            {
+                double d_totRate = double.Parse(travel.Trv_tot_rate);
+                int i_totRate = (int)d_totRate;
+                String returnRate = d_totRate.ToString() + "-" + i_totRate.ToString(); // ex: 3.4-3
+
+                returnList.Add(returnRate);
+                returnList.Add(travel.Trv_main_img);
+                returnList.Add(travel.Trv_title);
+                returnList.Add(travel.Trv_tag);
+                returnList.Add(travel.Trv_timestamp);
+                returnList.Add(travel.Trv_create_time);
+                returnList.Add(travel.Loc_name);
+                returnList.Add(travel.Mem_id);
+            }
+            catch (Exception e) {; }
+            return returnList;
+        }
     }
 
     public List<String> getTravelDayListByTrvNo()
     {
-        int trv_no = int.Parse(Request.QueryString["trv_no"].ToString()); // 게시글 번호 받기
-
-        Travel_Day travelDay = new Travel_Day();                         // travel_day 객체 생성
-        travelDay.Trv_no = trv_no.ToString();                               // travel_no 집어 넣기
-        Travel_DayDao travelDayDao = new Travel_DayDao();         // travel_day DAO 객체 생성
-
-        List<Travel_Day> travelDayList = travelDayDao.selectTravelDayListByTrvNo(travelDay);
-        // 게시글 번호에 해당하는 그 게시글의 모든 게시글 내용들(N일 차) 오름차순으로 구해온다.
-
-        List<String> returnList = new List<String>();
-        for (int i = 0; i < travelDayList.Count; i++)
+        if (Request.QueryString["trv_no"] == null)
         {
-            returnList.Add(travelDayList[i].Trv_day_content); // 게시글들을 구해온다.
+            return new List<string>();
         }
+        else
+        {
+            int trv_no = int.Parse(Request.QueryString["trv_no"].ToString()); // 게시글 번호 받기
 
-        return returnList;
+            Travel_Day travelDay = new Travel_Day();                         // travel_day 객체 생성
+            travelDay.Trv_no = trv_no.ToString();                               // travel_no 집어 넣기
+            Travel_DayDao travelDayDao = new Travel_DayDao();         // travel_day DAO 객체 생성
+
+            List<Travel_Day> travelDayList = travelDayDao.selectTravelDayListByTrvNo(travelDay);
+            // 게시글 번호에 해당하는 그 게시글의 모든 게시글 내용들(N일 차) 오름차순으로 구해온다.
+
+            List<String> returnList = new List<String>();
+            for (int i = 0; i < travelDayList.Count; i++)
+            {
+                returnList.Add(travelDayList[i].Trv_day_content); // 게시글들을 구해온다.
+            }
+
+            return returnList;
+        }
     }
 
     protected List<Map> getMapListByTrvDayNo()
@@ -109,62 +123,72 @@
 
         MapDao mapDao = new MapDao();
 
-
-
-
-
         return resultList;
     }
 
     protected int getLikeCountByTrvNo()
     {
         int returnInt = 0;
-        int trv_no = int.Parse(Request.QueryString["trv_no"].ToString()); // 게시글 번호 받고
+        if (Request.QueryString["trv_no"] == null)
+        {
+            return 0;
+        }
+        else
+        {
+            int trv_no = int.Parse(Request.QueryString["trv_no"].ToString()); // 게시글 번호 받고
 
-        Like like = new Like();                   // like 객체 생성
-        like.Trv_no = trv_no.ToString();        // like 객채에 데이터 집어넣기
-        LikeDao likeDao = new LikeDao();   // likeDao 객체 생성
+            Like like = new Like();                   // like 객체 생성
+            like.Trv_no = trv_no.ToString();        // like 객채에 데이터 집어넣기
+            LikeDao likeDao = new LikeDao();   // likeDao 객체 생성
 
-        returnInt = likeDao.selectLikeCountByTrvNo(like); // 데이터 가져오고
-        return returnInt;
+            returnInt = likeDao.selectLikeCountByTrvNo(like); // 데이터 가져오고
+            return returnInt;
+        }
     }
 
     protected List<String> getMemberByTrvNo()
     {
         List<String> returnList = new List<String>();
-        int trv_no = int.Parse(Request.QueryString["trv_no"].ToString()); // 게시글 번호 받고
-
-        Travel travel = new Travel();
-        TravelDao travelDao = new TravelDao();
-
-        travel.Trv_no = trv_no.ToString(); // travel 객채에 게시글 번호 삽입
-        travel = travelDao.selectTravelBytrv_no(travel); // 바꾸고
-        String MemberID = travel.Mem_id.ToString(); // 게시글 번호의 작성자를 구해오고
-
-        Member member = new Member(); // member 객체 생성하고
-        member.Mem_id = MemberID; // 객체에 작성자 아이디 삽입하고
-        MemberDao memberDao = new MemberDao(); // DAO 생성해서
-        member = memberDao.selectMemberByMem_id(member); // 바꾸고
-
-        returnList.Add(member.Mem_id);
-        returnList.Add(member.Mem_state);
-        returnList.Add(member.Mem_phone);
-        returnList.Add(member.Mem_pw);
-        returnList.Add(member.Mem_name);
-        returnList.Add(member.Mem_sex);
-        returnList.Add(member.Mem_ques);
-        returnList.Add(member.Mem_answer);
-        returnList.Add(member.Mem_birth);
-        returnList.Add(member.Mem_email);
-        returnList.Add(member.Mem_reg_datetime);
-        returnList.Add(member.Mem_timestmap);
-
-        String imgUrl = member.Mem_img_url;
-        if (imgUrl == "noImage")
-            returnList.Add("./img/memberNoImage.png");
+        if (Request.QueryString["trv_no"] == null)
+        {
+            return returnList;
+        }
         else
-            returnList.Add(imgUrl);
-        return returnList;
+        {
+            int trv_no = int.Parse(Request.QueryString["trv_no"].ToString()); // 게시글 번호 받고
+
+            Travel travel = new Travel();
+            TravelDao travelDao = new TravelDao();
+
+            travel.Trv_no = trv_no.ToString(); // travel 객채에 게시글 번호 삽입
+            travel = travelDao.selectTravelBytrv_no(travel); // 바꾸고
+            String MemberID = travel.Mem_id.ToString(); // 게시글 번호의 작성자를 구해오고
+
+            Member member = new Member(); // member 객체 생성하고
+            member.Mem_id = MemberID; // 객체에 작성자 아이디 삽입하고
+            MemberDao memberDao = new MemberDao(); // DAO 생성해서
+            member = memberDao.selectMemberByMem_id(member); // 바꾸고
+
+            returnList.Add(member.Mem_id);
+            returnList.Add(member.Mem_state);
+            returnList.Add(member.Mem_phone);
+            returnList.Add(member.Mem_pw);
+            returnList.Add(member.Mem_name);
+            returnList.Add(member.Mem_sex);
+            returnList.Add(member.Mem_ques);
+            returnList.Add(member.Mem_answer);
+            returnList.Add(member.Mem_birth);
+            returnList.Add(member.Mem_email);
+            returnList.Add(member.Mem_reg_datetime);
+            returnList.Add(member.Mem_timestmap);
+
+            String imgUrl = member.Mem_img_url;
+            if (imgUrl == "noImage")
+                returnList.Add("./img/memberNoImage.png");
+            else
+                returnList.Add(imgUrl);
+            return returnList;
+        }
     }
 
     protected List<String> getHashTagList()
@@ -176,89 +200,116 @@
     protected List<Comment> getCommentListByTrvNo()
     {
         List<Comment> returnList = new List<Comment>();
-        int trv_no = int.Parse(Request.QueryString["trv_no"].ToString()); // 게시글 번호 받고
+        if(Request.QueryString["trv_no"] == null)
+        {
+            return returnList;
+        }
+        else
+        {
+            int trv_no = int.Parse(Request.QueryString["trv_no"].ToString()); // 게시글 번호 받고
 
-        Travel travel = new Travel(); // Travel 객체 생성 및
-        travel.Trv_no = trv_no.ToString(); // 게시글 번호 삽입
+            Travel travel = new Travel(); // Travel 객체 생성 및
+            travel.Trv_no = trv_no.ToString(); // 게시글 번호 삽입
 
-        CommentDao commentDao = new CommentDao(); // cmtDao 생성
-        returnList = commentDao.selectCommentListByTrvNo(travel); // List받아오고
+            CommentDao commentDao = new CommentDao(); // cmtDao 생성
+            returnList = commentDao.selectCommentListByTrvNo(travel); // List받아오고
 
-        return returnList;
+            return returnList;
+        }
     }
 
     protected int getCommentByTrvNo()
     {
         int returnInt = 0;
-        int trv_no = int.Parse(Request.QueryString["trv_no"].ToString()); // 게시글 번호 받고
+        if (Request.QueryString["trv_no"] == null)
+        {
+            return returnInt;
+        }
+        else
+        {
+            int trv_no = int.Parse(Request.QueryString["trv_no"].ToString()); // 게시글 번호 받고
 
-        Travel travel = new Travel(); // Travel 객체 생성 및
-        travel.Trv_no = trv_no.ToString(); // 게시글 번호 삽입
+            Travel travel = new Travel(); // Travel 객체 생성 및
+            travel.Trv_no = trv_no.ToString(); // 게시글 번호 삽입
 
-        CommentDao commentDao = new CommentDao(); // cmtDao 생성
-        returnInt = commentDao.selectCommentCountByTrvNo(travel);
+            CommentDao commentDao = new CommentDao(); // cmtDao 생성
+            returnInt = commentDao.selectCommentCountByTrvNo(travel);
 
-        return returnInt;
+            return returnInt;
+        }
     }
 
     protected List<Map> getMapByTrvDayNo()
     {
         List<Map> mapList = new List<Map>();
-
-        int trv_no = int.Parse(Request.QueryString["trv_no"].ToString()); // 게시글 번호 받기
-
-        Travel_Day travelDay = new Travel_Day();                         // travel_day 객체 생성
-        travelDay.Trv_no = trv_no.ToString();                               // travel_no 집어 넣기
-        Travel_DayDao travelDayDao = new Travel_DayDao();         // travel_day DAO 객체 생성
-
-        List<Travel_Day> travelDayList = travelDayDao.selectTravelDayListByTrvNo(travelDay);
-        // 게시글 번호에 해당하는 그 게시글의 모든 게시글 내용들(N일 차) 오름차순으로 구해온다.
-
-        Map inMap = new Map();
-        Map tmpMap;
-        MapDao mapDao = new MapDao();
-        foreach (var item in travelDayList)
+        if (Request.QueryString["trv_no"] == null)
         {
-            inMap.Trv_day_no = item.Trv_day_no;
-            tmpMap = new Map();
-            tmpMap = mapDao.selectMapByTrv_day_no(inMap);
-            mapList.Add(tmpMap);
+            return mapList;
         }
-        return mapList;
+        else
+        {
+            int trv_no = int.Parse(Request.QueryString["trv_no"].ToString()); // 게시글 번호 받기
+
+            Travel_Day travelDay = new Travel_Day();                         // travel_day 객체 생성
+            travelDay.Trv_no = trv_no.ToString();                               // travel_no 집어 넣기
+            Travel_DayDao travelDayDao = new Travel_DayDao();         // travel_day DAO 객체 생성
+
+            List<Travel_Day> travelDayList = travelDayDao.selectTravelDayListByTrvNo(travelDay);
+            // 게시글 번호에 해당하는 그 게시글의 모든 게시글 내용들(N일 차) 오름차순으로 구해온다.
+
+            Map inMap = new Map();
+            Map tmpMap;
+            MapDao mapDao = new MapDao();
+            foreach (var item in travelDayList)
+            {
+                inMap.Trv_day_no = item.Trv_day_no;
+                tmpMap = new Map();
+                tmpMap = mapDao.selectMapByTrv_day_no(inMap);
+                mapList.Add(tmpMap);
+            }
+            return mapList;
+        }
     }
 
     protected List<string> testRouteCost()
     {
         List<string> mapRouteCost = new List<string>();
 
-        int trv_no = int.Parse(Request.QueryString["trv_no"].ToString()); // 게시글 번호 받기
-
-        Travel_Day travelDay = new Travel_Day();                         // travel_day 객체 생성
-        travelDay.Trv_no = trv_no.ToString();                               // travel_no 집어 넣기
-        Travel_DayDao travelDayDao = new Travel_DayDao();         // travel_day DAO 객체 생성
-
-        List<Travel_Day> travelDayList = travelDayDao.selectTravelDayListByTrvNo(travelDay);
-        // 게시글 번호에 해당하는 그 게시글의 모든 게시글 내용들(N일 차) 오름차순으로 구해온다.
-
-        Map inMap = new Map();
-        Map tmpMap;
-        MapDao mapDao = new MapDao();
-        foreach (var item in travelDayList)
+        if (Request.QueryString["trv_no"] == null)
         {
-            inMap.Trv_day_no = item.Trv_day_no;
-            tmpMap = new Map();
-            tmpMap = mapDao.selectMapByTrv_day_no(inMap);
-            mapRouteCost.Add(tmpMap.Map_route);
-            mapRouteCost.Add(tmpMap.Map_cost);
+            return mapRouteCost;
         }
-        return mapRouteCost;
+        else
+        {
+            int trv_no = int.Parse(Request.QueryString["trv_no"].ToString()); // 게시글 번호 받기
+
+            Travel_Day travelDay = new Travel_Day();                         // travel_day 객체 생성
+            travelDay.Trv_no = trv_no.ToString();                               // travel_no 집어 넣기
+            Travel_DayDao travelDayDao = new Travel_DayDao();         // travel_day DAO 객체 생성
+
+            List<Travel_Day> travelDayList = travelDayDao.selectTravelDayListByTrvNo(travelDay);
+            // 게시글 번호에 해당하는 그 게시글의 모든 게시글 내용들(N일 차) 오름차순으로 구해온다.
+
+            Map inMap = new Map();
+            Map tmpMap;
+            MapDao mapDao = new MapDao();
+            foreach (var item in travelDayList)
+            {
+                inMap.Trv_day_no = item.Trv_day_no;
+                tmpMap = new Map();
+                tmpMap = mapDao.selectMapByTrv_day_no(inMap);
+                mapRouteCost.Add(tmpMap.Map_route);
+                mapRouteCost.Add(tmpMap.Map_cost);
+            }
+            return mapRouteCost;
+        }
     }
 
     protected void bindMapData()
     {
         List<Map> mapList = getMapByTrvDayNo();
-
         HtmlInputHidden tmpHidden;
+
         int index = 0;
         foreach (var map in mapList)
         {
@@ -299,7 +350,9 @@
             string MemID = Session["mem_id"].ToString();
             string trvNo = Request.QueryString["trv_no"].ToString();
 
-            
+/*
+ *          게시글 신고기능 작성하세요.
+*/
         }
     }
 
@@ -352,7 +405,7 @@
 </script>
 
 <head>
-    <title>To Our Shared : milk9503 님의 글 </title>
+    <title>To Our Shared</title>
 
     <!-- Font -->
     <link href="https://fonts.googleapis.com/css?family=Mansalva|Nanum+Gothic|Nanum+Myeongjo|Noto+Sans+KR|Lora|East+Sea+Dokdo|Jua&display=swap" rel="stylesheet">
@@ -368,8 +421,10 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
     <!--KAKAO-->
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=ebcd0c1accbe0ff4bbb47bd777ef2fcf&libraries=service&libraries=services,clusterer,drawing"></script>
+
     <style>
         body,
         form {
@@ -1178,30 +1233,38 @@
         %>
         </ul>
     </div>
+
         <%
-            // ============== Data Init ================
+    // ============== Data Init ================
 
-            List<String> TravelList = getTravelByTrvNo();                        // 해당 게시글의 데이터
-            List<String> MemberList = getMemberByTrvNo();                 // 해당 게시글의 작성자의 데이터
-            List<String> TravelDayContents = getTravelDayListByTrvNo();  // 해당 게시글의 내용 데이터
-            List<Comment> CommentList = getCommentListByTrvNo();    // 해당 게시글의 댓글 데이터
-            List<Map> mapList = getMapByTrvDayNo();
-            List<string> mapRouteCost = testRouteCost();
+    List<String> TravelList = getTravelByTrvNo();                        // 해당 게시글의 데이터
+    List<String> MemberList = getMemberByTrvNo();                 // 해당 게시글의 작성자의 데이터
+    List<String> TravelDayContents = getTravelDayListByTrvNo();  // 해당 게시글의 내용 데이터
+    List<Comment> CommentList = getCommentListByTrvNo();    // 해당 게시글의 댓글 데이터
+    List<Map> mapList = getMapByTrvDayNo();
+    List<string> mapRouteCost = testRouteCost();
 
+    if (TravelList.Count <= 0 || MemberList.Count <= 0 || TravelDayContents.Count <= 0 || mapList.Count <= 0 || mapRouteCost.Count <= 0)
+    {
+        Response.Write("<script language='javascript'>alert('해당 게시글은 오류로 인해 불러올 수 없습니다.'); history.go(-1); </script language='javascript'>");
+    }
+    else
+    {
 
-            int day = 0;                                                                // 일 차
-            int goodCnt = getLikeCountByTrvNo();                             // 추천 수
-            string[] totRateArr = TravelList[3].Split(new char[] { '-' });       // 해당 게시글 평점(0.0-0) 형식이라 Split작업
-            int starCount = int.Parse(totRateArr[1]);                            // 해당 게시글의 평점(별 수)
-            string starScore = totRateArr[0];                                     // 해당 게시글의 평점(소수)
-            string starText = "";
-            int replyCount = getCommentByTrvNo();                          // 해당 게시글의 댓글 수
+        int day = 0;                                                                // 일 차
+        int goodCnt = getLikeCountByTrvNo();                             // 추천 수
+        string[] totRateArr = TravelList[3].Split(new char[] { '-' });       // 해당 게시글 평점(0.0-0) 형식이라 Split작업
+        int starCount = int.Parse(totRateArr[1]);                            // 해당 게시글의 평점(별 수)
+        string starScore = totRateArr[0];                                     // 해당 게시글의 평점(소수)
+        string starText = "";
+        int replyCount = getCommentByTrvNo();                          // 해당 게시글의 댓글 수
 
-            for (int i = 0; i < starCount; i++) // 별 수만큼 for문 반복해서 starText 변수에 ⭐ 삽입
-                starText += "⭐";
+        for (int i = 0; i < starCount; i++) // 별 수만큼 for문 반복해서 starText 변수에 ⭐ 삽입
+            starText += "⭐";
 
-            // ======================================
+        // ======================================
         %>
+
         <div id="main">
             <div class="board">
                 <div class="board-header">
@@ -1245,30 +1308,30 @@
                                 <root-header>여행 간 경로</root-header>
                                 <root-content>
                                     <% 
-                                        int routeDays = 1;
+    int routeDays = 1;
 
-                                        foreach (var map in mapList)
-                                        {
-                                            if (map.Map_route != "")
-                                            {
-                                            JToken mapRoute = JToken.Parse(map.Map_route);
-                                            
-                                                //Response.Write(route);
-                                                string placename = "";
-                                                string roadaddress = "";
-                                                string addressname = "";
-                                                string phone = "";
-                                                string info = "";
-                                                string placeurl = "";
-                                                Response.Write("<p><h4><b>" + routeDays + "일 차</b></h4></p>");
-                                                foreach (var item in mapRoute)
-                                                {
-                                                    placename = item["place_name"].ToString();
-                                                    if (item["road_address_name"].ToString() != "undefined") roadaddress = item["road_address_name"].ToString();
-                                                    if (item["address_name"].ToString() != "undefined") addressname = item["address_name"].ToString();
-                                                    phone = item["phone"].ToString();
-                                                    info = item["info"].ToString();
-                                                    placeurl = item["place_url"].ToString();
+    foreach (var map in mapList)
+    {
+        if (map.Map_route != "")
+        {
+            JToken mapRoute = JToken.Parse(map.Map_route);
+
+            //Response.Write(route);
+            string placename = "";
+            string roadaddress = "";
+            string addressname = "";
+            string phone = "";
+            string info = "";
+            string placeurl = "";
+            Response.Write("<p><h4><b>" + routeDays + "일 차</b></h4></p>");
+            foreach (var item in mapRoute)
+            {
+                placename = item["place_name"].ToString();
+                if (item["road_address_name"].ToString() != "undefined") roadaddress = item["road_address_name"].ToString();
+                if (item["address_name"].ToString() != "undefined") addressname = item["address_name"].ToString();
+                phone = item["phone"].ToString();
+                info = item["info"].ToString();
+                placeurl = item["place_url"].ToString();
                                        %>
                                                         <div class="list-group travel-cost">
                                                             <div class="card w-100 map-info-items">
@@ -1287,10 +1350,10 @@
                                                             </div>
                                                         </div>
                                                 <%
-                                                }
-                                                routeDays++;
-                                            }
-                                        }
+            }
+            routeDays++;
+        }
+    }
                                         %>
                                 </root-content>
                             </rootitem>
@@ -1300,30 +1363,30 @@
                                 <cost-header>여행 간 경비</cost-header>
                                 <cost-content>                       
                                     <%
-                                    int costDays = 1;
-                                    foreach (var map in mapList)
-                                    {
-                                        if (map.Map_cost != "")
-                                        {
-                                            JToken mapCost = JToken.Parse(map.Map_cost);
-                                            string itemlist = "";
-                                            string costtype = "";
-                                            string cost = "";
-                                            string placename = "";
-                                            string info = "";
-                                            Response.Write("<p><h4><b>" + costDays + "일 차</b></h4></p>");
-                                            foreach (var item in mapCost)
-                                            {
-                                                placename = item["place_name"].ToString();
-                                                itemlist = item["itemList"].ToString();
-                                                JToken list = JToken.Parse(itemlist);
-                                                if (!list.Equals(""))
-                                                {
-                                                    foreach (var ls in list)
-                                                    {
-                                                        costtype = ls["costType"].ToString();
-                                                        cost = ls["cost"].ToString();
-                                                        info = ls["info"].ToString();
+    int costDays = 1;
+    foreach (var map in mapList)
+    {
+        if (map.Map_cost != "")
+        {
+            JToken mapCost = JToken.Parse(map.Map_cost);
+            string itemlist = "";
+            string costtype = "";
+            string cost = "";
+            string placename = "";
+            string info = "";
+            Response.Write("<p><h4><b>" + costDays + "일 차</b></h4></p>");
+            foreach (var item in mapCost)
+            {
+                placename = item["place_name"].ToString();
+                itemlist = item["itemList"].ToString();
+                JToken list = JToken.Parse(itemlist);
+                if (!list.Equals(""))
+                {
+                    foreach (var ls in list)
+                    {
+                        costtype = ls["costType"].ToString();
+                        cost = ls["cost"].ToString();
+                        info = ls["info"].ToString();
                                                 %>
                                                         <div class="list-group travel-cost">
                                                             <div class="card w-100 map-info-items">
@@ -1341,10 +1404,10 @@
                                                             </div>
                                                         </div>
                                                 <%
-                                                    }
-                                                }
-                                                else
-                                                {
+        }
+    }
+    else
+    {
                                                 %>
                                                         <div class="list-group travel-cost">
                                                             <div class="card w-100 map-info-items">
@@ -1362,11 +1425,11 @@
                                                             </div>
                                                         </div>
                                                 <%
-                                                }
-                                                } 
-                                            costDays++;
-                                        }
-                                    }
+                }
+            }
+            costDays++;
+        }
+    }
                                                 %>
                                 </cost-content>
                             </costitem>
@@ -1376,51 +1439,51 @@
             </div>
 
             <%
-                for (int i = 0; i < TravelDayContents.Count; i++)
+    for (int i = 0; i < TravelDayContents.Count; i++)
+    {
+        int rDays = 0;
+        int curDay = day + 1;
+        int cDays = 0;
+
+        Response.Write("" +
+        "<div class = \"board-part\">\n" +
+            "<div class = \"part-board-header\">" + (day + 1) + "일 차</div>\n" +
+            "<div class = \"part-board-content\">\n" +
+                "<div class = \"part-board-map\"id='map_" + i + "'></div>\n" +
+                "<div class = \"part-board-travel\">\n" +
+                    "<div class = \"part-travel-root\">\n" +
+                        "<rootitem>\n" +
+                            "<root-header>여행 간 경로</root-header>\n" +
+                            "<root-content>\n" +
+                                "<content-item>\n" +
+                                    "<content-header>여행 경로</content-header>\n" +
+                                    "<content-body>\n");
+
+        foreach (var map in mapList)
+        {
+            if (map.Map_route != "")
+            {
+                JToken mapRoute = JToken.Parse(map.Map_route);
+                //Response.Write(route);
+                string placename = "";
+                string roadaddress = "";
+                string addressname = "";
+                string phone = "";
+                string info = "";
+                string placeurl = "";
+
+                if (curDay == rDays + 1) Response.Write("<p><h4><b>" + (rDays + 1) + "일 차</b></h4></p>");
+
+                foreach (var item in mapRoute)
                 {
-                    int rDays = 0;
-                    int curDay = day + 1;
-                    int cDays = 0;
+                    if (curDay != rDays + 1) break;
 
-                    Response.Write("" +
-                    "<div class = \"board-part\">\n" +
-                        "<div class = \"part-board-header\">" + (day + 1) + "일 차</div>\n" +
-                        "<div class = \"part-board-content\">\n" +
-                            "<div class = \"part-board-map\"id='map_" + i + "'></div>\n" +
-                            "<div class = \"part-board-travel\">\n" +
-                                "<div class = \"part-travel-root\">\n" +
-                                    "<rootitem>\n" +
-                                        "<root-header>여행 간 경로</root-header>\n" +
-                                        "<root-content>\n" +
-                                            "<content-item>\n" +
-                                                "<content-header>여행 경로</content-header>\n" +
-                                                "<content-body>\n");
-
-                    foreach (var map in mapList)
-                    {
-                        if(map.Map_route != "")
-                        {
-                        JToken mapRoute = JToken.Parse(map.Map_route);
-                        //Response.Write(route);
-                        string placename = "";
-                        string roadaddress = "";
-                        string addressname = "";
-                        string phone = "";
-                        string info = "";
-                        string placeurl = "";
-
-                        if(curDay == rDays + 1) Response.Write("<p><h4><b>" + (rDays + 1) + "일 차</b></h4></p>");
-
-                        foreach (var item in mapRoute)
-                        {
-                            if (curDay != rDays + 1) break;
-
-                            placename = item["place_name"].ToString();
-                            if (item["road_address_name"].ToString() != "undefined") roadaddress = item["road_address_name"].ToString();
-                            if (item["address_name"].ToString() != "undefined") addressname = item["address_name"].ToString();
-                            phone = item["phone"].ToString();
-                            info = item["info"].ToString();
-                            placeurl = item["place_url"].ToString();
+                    placename = item["place_name"].ToString();
+                    if (item["road_address_name"].ToString() != "undefined") roadaddress = item["road_address_name"].ToString();
+                    if (item["address_name"].ToString() != "undefined") addressname = item["address_name"].ToString();
+                    phone = item["phone"].ToString();
+                    info = item["info"].ToString();
+                    placeurl = item["place_url"].ToString();
 
                                                 %>
                                                         <div class="list-group travel-cost">
@@ -1440,48 +1503,48 @@
                                                             </div>
                                                         </div>
                                                 <%
-                                                            }
-                                                            rDays++;
-                                                        }
-                                                    }
-                                                    Response.Write(
-                                                "</content-body>\n" +
-                                            "</content-item>\n" +
-                                        "</root-content>\n" +
-                                    "</rootitem>\n" +
-                                "</div>\n" +
-                                "<div class = \"part-travel-cost\">\n" +
-                                    "<costitem>\n" +
-                                        "<cost-header>여행 간 경비</cost-header>\n" +
-                                        "<cost-content>\n" +
-                                            "<content-item>\n" +
-                                                "<content-header>여행 경비</content-header>\n" +
-                                                "<content-body>\n");
+            }
+            rDays++;
+        }
+    }
+    Response.Write(
+    "</content-body>\n" +
+    "</content-item>\n" +
+    "</root-content>\n" +
+    "</rootitem>\n" +
+    "</div>\n" +
+    "<div class = \"part-travel-cost\">\n" +
+    "<costitem>\n" +
+    "<cost-header>여행 간 경비</cost-header>\n" +
+    "<cost-content>\n" +
+    "<content-item>\n" +
+    "<content-header>여행 경비</content-header>\n" +
+    "<content-body>\n");
 
-                                                    foreach (var map in mapList)
-                                                    {
-                                                        if (map.Map_cost != "")
-                                                        {
-                                                        JToken mapCost = JToken.Parse(map.Map_cost);
-                                                        string itemlist = "";
-                                                        string costtype = "";
-                                                        string cost = "";
-                                                        string placename = "";
-                                                        string info = "";
-                                                        if(curDay == cDays + 1) Response.Write("<p><h4><b>" + (cDays + 1) + "일 차</b></h4></p>");
-                                                        foreach (var item in mapCost)
-                                                        {
-                                                            placename = item["place_name"].ToString();
-                                                            itemlist = item["itemList"].ToString();
-                                                            JToken list = JToken.Parse(itemlist);
-                                                            if (!list.Equals(""))
-                                                            {
-                                                                foreach (var ls in list)
-                                                                {
-                                                                    if (curDay != cDays + 1) break;
-                                                                    costtype = ls["costType"].ToString();
-                                                                    cost = ls["cost"].ToString();
-                                                                    info = ls["info"].ToString();
+    foreach (var map in mapList)
+    {
+        if (map.Map_cost != "")
+        {
+            JToken mapCost = JToken.Parse(map.Map_cost);
+            string itemlist = "";
+            string costtype = "";
+            string cost = "";
+            string placename = "";
+            string info = "";
+            if (curDay == cDays + 1) Response.Write("<p><h4><b>" + (cDays + 1) + "일 차</b></h4></p>");
+            foreach (var item in mapCost)
+            {
+                placename = item["place_name"].ToString();
+                itemlist = item["itemList"].ToString();
+                JToken list = JToken.Parse(itemlist);
+                if (!list.Equals(""))
+                {
+                    foreach (var ls in list)
+                    {
+                        if (curDay != cDays + 1) break;
+                        costtype = ls["costType"].ToString();
+                        cost = ls["cost"].ToString();
+                        info = ls["info"].ToString();
                                                 %>
                                                         <div class="list-group travel-cost">
                                                             <div class="card w-100 map-info-items">
@@ -1499,10 +1562,10 @@
                                                             </div>
                                                         </div>
                                                 <%
-                                                                }
-                                                            }
-                                                            else
-                                                            {
+        }
+    }
+    else
+    {
                                                 %>
                                                         <div class="list-group travel-cost">
                                                             <div class="card w-100 map-info-items">
@@ -1520,41 +1583,43 @@
                                                             </div>
                                                         </div>
                                                 <%
-                                                        }
-                                
-                                                    }
-                                                         cDays++;
-                                                    }
-                                                }
-                                 Response.Write(
-                                                            "</content-body>\n" +
-                                                        "</content-item>\n" +
-                                                    "</cost-content>\n" +
-                                                "</costitem>\n" +
-                                            "</div>\n" +
-                                        "</div>\n" +
-                                    "</div>\n" +
-                                    "<div class = \"part-board-story\">\n" +
-                                        "<div class = \"part-story\">\n" +
-                                            TravelDayContents[day++] + "\n" +
-                                        "</div>\n" +
-                                    "</div>\n" +
-                                "</div>\n");
-                                                    }
+                    }
+
+                }
+                cDays++;
+            }
+        }
+        Response.Write(
+                                   "</content-body>\n" +
+                               "</content-item>\n" +
+                           "</cost-content>\n" +
+                       "</costitem>\n" +
+                   "</div>\n" +
+               "</div>\n" +
+           "</div>\n" +
+           "<div class = \"part-board-story\">\n" +
+               "<div class = \"part-story\">\n" +
+                   TravelDayContents[day++] + "\n" +
+               "</div>\n" +
+           "</div>\n" +
+        "</div>\n");
+    }
             %>
 
             <div class="board-hashtag">
                 <%
                     // hashtag 누르면 search.aspx?hashtag=○○○○ 로 이동
                     List<String> hashtagList = getHashTagList();
-
-
-                    for (int i = 0; i < hashtagList.Count; i++)
+                    if (hashtagList.Count > 0)
                     {
-                        string HashTagKeyword = hashtagList[i].ToString().Substring(1);
-                        string EncodedHashTag = Server.UrlEncode(HashTagKeyword);
 
-                        Response.Write("<a href = \"./search.aspx?searchType=1&hashtag="+ EncodedHashTag+ "\"><div class = \"hashtag\">" + hashtagList[i].ToString() + "</div></a>\n");
+                        for (int i = 0; i < hashtagList.Count; i++)
+                        {
+                            string HashTagKeyword = hashtagList[i].ToString().Substring(1);
+                            string EncodedHashTag = Server.UrlEncode(HashTagKeyword);
+
+                            Response.Write("<a href = \"./search.aspx?searchType=1&hashtag=" + EncodedHashTag + "\"><div class = \"hashtag\">" + hashtagList[i].ToString() + "</div></a>\n");
+                        }
                     }
                 %>
             </div>
@@ -1566,51 +1631,52 @@
                 </div>
                 <div class="reply-contents">
                     <%
-                        for (int k = 0; k < CommentList.Count; k++)
-                        {
-                            Member member = new Member();
-                            MemberDao memberDao = new MemberDao();
+        for (int k = 0; k < CommentList.Count; k++)
+        {
+            Member member = new Member();
+            MemberDao memberDao = new MemberDao();
 
-                            member.Mem_id = CommentList[k].Mem_id;
-                            member = memberDao.selectMemberByMem_id(member); // 메인 이미지 찾기 작업
+            member.Mem_id = CommentList[k].Mem_id;
+            member = memberDao.selectMemberByMem_id(member); // 메인 이미지 찾기 작업
 
-                            string memMainImg = member.Mem_img_url;
-                            if (memMainImg == "noImage")
-                                memMainImg = "./img/noImage.png";
+            string memMainImg = member.Mem_img_url;
+            if (memMainImg == "noImage")
+                memMainImg = "./img/noImage.png";
 
-                            double d_replyStarCount = double.Parse(CommentList[k].Cmt_rate.ToString()); // 소수 출력
-                            int i_replyStarCount = (int)d_replyStarCount; // 별 갯수
-                            string s_replyStarCount = "";
+            double d_replyStarCount = double.Parse(CommentList[k].Cmt_rate.ToString()); // 소수 출력
+            int i_replyStarCount = (int)d_replyStarCount; // 별 갯수
+            string s_replyStarCount = "";
 
-                            for (int l = 0; l < i_replyStarCount; l++)
-                                s_replyStarCount += "⭐";
+            for (int l = 0; l < i_replyStarCount; l++)
+                s_replyStarCount += "⭐";
 
-                            Response.Write("" +
-                                               "<div class = \"replyItem\">\n" +
-                                                    "<div class = \"reply-writer\">\n" +
-                                                        "<div class=\"writer-Image\">\n" +
-                                                            "<a href=\"#\">\n" +
-                                                                "<img src=\"" + memMainImg + "\" alt=\"" + CommentList[k].Mem_id + "\" class=\"writer-ImageItem\" />\n" +
-                                                            "</a>\n" +
-                                                        "</div>\n" +
-                                                        "<div class=\"writer-Text\">\n" +
-                                                            "<div class=\"writerID\">\n" +
-                                                                "<a href=\"#\">\n" +
-                                                                    CommentList[k].Mem_id + "\n" +
-                                                                "</a>\n" +
-                                                            "</div>\n" +
-                                                            "<div class=\"writerTime\">" + timestampConvert.TimeStampToString( CommentList[k].Cmt_timestamp) + "</div>\n" +
-                                                        "</div>\n" +
-                                                    "</div>\n" +
-                                                    "<div class = \"reply-content\">\n" +
-                                                        CommentList[k].Cmt_content + "\n" +
-                                                    "</div>\n" +
-                                                    "<div class = \"reply-score\">\n" +
-                                                        "<span class=\"star\">" + s_replyStarCount + "</span>\n" +
-                                                        "<span class=\"score\">(" + d_replyStarCount + ")</span>\n" +
-                                                    "</div>\n" +
-                                                "</div>\n");
-                        }
+            Response.Write("" +
+                               "<div class = \"replyItem\">\n" +
+                                    "<div class = \"reply-writer\">\n" +
+                                        "<div class=\"writer-Image\">\n" +
+                                            "<a href=\"#\">\n" +
+                                                "<img src=\"" + memMainImg + "\" alt=\"" + CommentList[k].Mem_id + "\" class=\"writer-ImageItem\" />\n" +
+                                            "</a>\n" +
+                                        "</div>\n" +
+                                        "<div class=\"writer-Text\">\n" +
+                                            "<div class=\"writerID\">\n" +
+                                                "<a href=\"#\">\n" +
+                                                    CommentList[k].Mem_id + "\n" +
+                                                "</a>\n" +
+                                            "</div>\n" +
+                                            "<div class=\"writerTime\">" + timestampConvert.TimeStampToString(CommentList[k].Cmt_timestamp) + "</div>\n" +
+                                        "</div>\n" +
+                                    "</div>\n" +
+                                    "<div class = \"reply-content\">\n" +
+                                        CommentList[k].Cmt_content + "\n" +
+                                    "</div>\n" +
+                                    "<div class = \"reply-score\">\n" +
+                                        "<span class=\"star\">" + s_replyStarCount + "</span>\n" +
+                                        "<span class=\"score\">(" + d_replyStarCount + ")</span>\n" +
+                                    "</div>\n" +
+                                "</div>\n");
+        }
+    }
                     %>
                 </div>
                 <div class="reply-write">
@@ -2132,37 +2198,38 @@
         // c
         <%
         List<Map> mapList = getMapByTrvDayNo();
-        string [] color= { "#E53A40", "#F68657", "#EFDC05", "#58C9B9", "#a3daff", "#0080ff" , "#A593E0", "#C5C6B6", "#D09E88", "#FADAD8", "#fab1ce", "#fffff5", "#c8c8a9", "#3a5134" };
-        string[] marker = { "default_01.png", "default_02.png", "default_03.png", "default_04.png", "default_05.png", "default_06.png" , "default_07.png", "default_08.png", "default_09.png", "default_10.png", "default_11.png", "default_12.png", "default_13.png", "default_14.png" };
-        string icoDir = "./img/ico/marker/";
-        int colorIndex = 0;
-        int index = 0;
-        JObject mapCenter;
-        foreach (var map in mapList)
+        if (mapList.Count > 0)
         {
-            mapCenter = JObject.Parse(map.Map_center);
-            //일일 경로 표시 지도
-            Response.Write("var map_" + index + " = makeMapOption('map_" + index + "', new daum.maps.LatLng("+mapCenter["Ha"]+", "+mapCenter["Ga"]+"), 3, 'mapData_" + index + "', '"+color[colorIndex]+"', '"+color[colorIndex]+"','"+icoDir+marker[colorIndex]+"') ;");
-            Response.Write("setDrawingMapDataByManagerMapId(map_" + index + ".manager, 'mapData_" + index + "');");
-            // 모든 경로 표시 지도
-            Response.Write("getDataFromDrawingMap('mapData_" + index + "', '" + color[colorIndex] + "', '" + color[colorIndex] + "','"+icoDir+marker[colorIndex]+"');");
-            if (colorIndex < color.Length)
+            string[] color = { "#E53A40", "#F68657", "#EFDC05", "#58C9B9", "#a3daff", "#0080ff", "#A593E0", "#C5C6B6", "#D09E88", "#FADAD8", "#fab1ce", "#fffff5", "#c8c8a9", "#3a5134" };
+            string[] marker = { "default_01.png", "default_02.png", "default_03.png", "default_04.png", "default_05.png", "default_06.png", "default_07.png", "default_08.png", "default_09.png", "default_10.png", "default_11.png", "default_12.png", "default_13.png", "default_14.png" };
+            string icoDir = "./img/ico/marker/";
+            int colorIndex = 0;
+            int index = 0;
+            JObject mapCenter;
+            foreach (var map in mapList)
             {
-                colorIndex++;
+                if (!string.IsNullOrEmpty(map.Map_center))
+                {
+                    mapCenter = JObject.Parse(map.Map_center);
+                    //일일 경로 표시 지도
+                    Response.Write("var map_" + index + " = makeMapOption('map_" + index + "', new daum.maps.LatLng(" + mapCenter["Ha"] + ", " + mapCenter["Ga"] + "), 3, 'mapData_" + index + "', '" + color[colorIndex] + "', '" + color[colorIndex] + "','" + icoDir + marker[colorIndex] + "') ;");
+                    Response.Write("setDrawingMapDataByManagerMapId(map_" + index + ".manager, 'mapData_" + index + "');");
+                    // 모든 경로 표시 지도
+                    Response.Write("getDataFromDrawingMap('mapData_" + index + "', '" + color[colorIndex] + "', '" + color[colorIndex] + "','" + icoDir + marker[colorIndex] + "');");
+                    if (colorIndex < color.Length)
+                    {
+                        colorIndex++;
+                    }
+                    else
+                    {
+                        colorIndex = 0;
+                    }
+                    index++;
+                }
             }
-            else
-            {
-                colorIndex = 0;
-            }
-            index++;
         }
 
-
         %>
-
-       
-
-   
     </script>
 </body>
 </html>

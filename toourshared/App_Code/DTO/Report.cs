@@ -14,7 +14,7 @@ public class Report
     private string rep_mem_id;
     private string rep_reason;
 
-    public Report(string rep_no = null, string trv_no = null, string rep_timestap = null, string rep_mem_id = null, string rep_reason = null)
+    public Report(string rep_no = "", string trv_no = "", string rep_timestap = "", string rep_mem_id = "", string rep_reason = "")
     {
         this.rep_no = rep_no;
         this.trv_no = trv_no;
