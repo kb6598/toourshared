@@ -1152,6 +1152,105 @@
             font-size: 15px;
         }
 
+
+        
+
+/* 커스텀 오버레이 스타일 */
+.card-cus {
+    width: 300px;
+    border: none;
+    outline: none;
+    display: flex;
+    flex-direction: column;
+    border: .5px solid rgba(0, 0, 0, .3);
+    background-color: #eee;
+}
+
+.card-header {
+    width: 100%;
+    height: 50px;
+    padding: 0;
+    display: flex;
+    flex-direction: row;
+    background-color: #eee;
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
+.card-title {
+    width: 90%;
+    height: 100%;
+    display: flex;
+    font-size: 15px;
+    justify-content: center;
+    align-items: center;
+    color: #000;
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
+.card-input {
+    width: 95%;
+    height: 80%;
+    padding: 10px;
+    outline: none;
+}
+
+.card-close {
+    width: 10%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+    .card-close .closeBtn {
+        color: #000;
+        font-size: 25px;
+        padding-bottom: 25px;
+    }
+
+.closeBtn span {
+    cursor: pointer;
+    color: black;
+}
+
+.card-body {
+    width: 100%;
+    height: 100%;
+    padding: 20px 0px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: 'Malgun Gothic', dotum, '돋움', sans-serif;
+    text-align: center;
+    font-size: 18px;
+    overflow: auto;
+}
+
+.card-body-li {
+    font-size: 15px;
+    padding: 3px 0;
+    margin: 0;
+    list-style: none;
+}
+
+.card-addBtn {
+    width: 80px;
+    height: 27px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: .2rem;
+    font-size: .875rem;
+    cursor: pointer;
+    background-color: orange;
+    transition-duration: .9s;
+}
+
+    .card-addBtn:hover {
+        transition-duration: .9s;
+        background-color: darkorange;
+    }
+
     </style>
 
     <script>
