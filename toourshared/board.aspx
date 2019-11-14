@@ -2326,6 +2326,62 @@
         map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
 
 
+        
+        var onClick_overlay = function () {
+            
+                                 
+            var content =
+                '<div class="card card-cus" style="width:300px;">' +
+                '<div class="card-header">' +
+                '<div class="card-title">' +
+                routeItem.place_name +
+                '</div>' +
+                '<div class="card-close">' +
+                '<div class="closeBtn" onclick="closeOverlay()">' +
+                '<span >×</span>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '<div class="card-body">' +
+                '<blockquote class="blockquote mb-0">';
+            if (routeItem.info != null) {
+                content += '<li class="card-body-li">' + routeItem.info + '</li>';
+            }
+            if (routeItem.road_address_name != null) {
+                content += '<li class="card-body-li">' + routeItem.road_address_name + '</li>';
+            }
+            if (routeItem.address_name != null) {
+                content += '<li class="card-body-li">' + routeItem.address_name + '</li>';
+            }
+            if (routeItem.phone != null) {
+                content += '<li class="card-body-li">' + routeItem.phone + '</li>';
+            }
+            if (routeItem.place_url != null) {
+                content += '<li class="card-body-li" style="padding: 15px 0;"><a href="' + routeItem.place_url + '" target="_blank" style="text-decoration: none;">상세페이지</a></li>';
+            }
+            content +=
+                '</blockquote>' +
+                '</div>' +
+                '</div>';
+
+
+
+                    
+            customOverlay.setPosition(new kakao.maps.LatLng(result[0].y, result[0].x));
+            customOverlay.setContent(content);
+            customOverlay.setMap(drawingMap);
+
+
+
+
+
+        }
+
+
+
+
+
+
     </script>
 </body>
 </html>
