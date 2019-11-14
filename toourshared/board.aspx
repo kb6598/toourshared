@@ -27,7 +27,7 @@
 
     protected void btnMypage_Click(object sender, EventArgs e)
     {
-        if(Session["mem_id"] == null)
+        if (Session["mem_id"] == null)
         {
             return;
         }
@@ -37,6 +37,7 @@
             Response.Redirect("./MyPage.aspx?mem_id=" + QueryString);
         }
     }
+
     protected void btnJoin_Click(object sender, EventArgs e)
     {
         Response.Redirect("./join.aspx");
@@ -350,9 +351,9 @@
             string MemID = Session["mem_id"].ToString();
             string trvNo = Request.QueryString["trv_no"].ToString();
 
-/*
- *          게시글 신고기능 작성하세요.
-*/
+            /*
+             *          게시글 신고기능 작성하세요.
+            */
         }
     }
 
@@ -404,6 +405,45 @@
         }
     }
 
+    protected void Button2_Click(object sender, EventArgs e)
+    {
+        // 게시글 추천 기능
+        if (Session["mem_id"] == null || Request.QueryString["trv_no"] == null)
+        {
+            Response.Write("<script language='javascript'>alert('세션이 만료되었거나 현재 게시글의 정보를 불러올 수 없습니다. \r\n메인화면으로 이동됩니다.'); location.href('./index.aspx'); </script language='javascript'>");
+        }
+        else
+        {
+            string memID = Session["mem_id"].ToString();
+            string trvNo = Request.QueryString["trv_no"].ToString();
+
+            if (string.IsNullOrEmpty(memID) || string.IsNullOrEmpty(trvNo))
+            {
+                Response.Write("<script language='javascript'>alert('세션이 존재하지 않거나 혹은 게시글의 정보를 불러올 수 없습니다. \r\n메인화면으로 이동됩니다.'); location.href('./index.aspx'); </script language='javascript'>");
+            }
+            else
+            {
+
+                Like like = new Like();
+                LikeDao likeDao = new LikeDao();
+
+                like.Mem_id = memID;
+                like.Trv_no = trvNo;
+
+                if (likeDao.IsExistLikeTrvNoByMemID(like) == true)
+                {
+                    likeDao.DeleteLike(like);
+                    Response.Write("<script language='javascript'>location.reload();</script language='javascript'>");
+                }
+                else
+                {
+                    like.Like_type = "like";
+                    likeDao.InsertLike(like);
+                    Response.Write("<script language='javascript'>location.reload();</script language='javascript'>");
+                }
+            }
+        }
+    }
 </script>
 
 <head>
@@ -1272,7 +1312,7 @@
                 <div class="board-header">
                     <div class="header-item"><%Response.Write(TravelList[5].ToString());%></div>
                     <div class="good-item">
-                        <button class="goodBtn">👍</button>
+                        <asp:Button ID="Button2" runat="server" Text="👍" CssClass="goodBtn" onClick="Button2_Click"/>
                     </div>
                     <div class="good-cnt"><%Response.Write(goodCnt);%></div>
                 </div>
