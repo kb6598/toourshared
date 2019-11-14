@@ -507,7 +507,7 @@
             <!-- 메인페이지 영역 -->
             <div class="mainImgArea">
                 <div class="mainImg_wrap">
-                    <div class="mainImg_AlignLeft">
+                    <div class="mainImg_AlignUp">
                         <div class="mainImg_Label" >게시글의 메인이미지를 첨부하세요.</div>
                         <div class="mainImg_Input">
                             <!-- 이미지 업로드 -->
@@ -519,7 +519,7 @@
 
                         </div>
                     </div>
-                    <div class="mainImg_AlignRight">
+                    <div class="mainImg_AlignDown">
                         <!-- 이미지 미리보기 부분-->
                         <asp:Image ID="mainImgItem" runat="server" ImageUrl="~/img/noImage.png" alt="userMainImage" />
                         <!-- 이미지 미리보기 부분-->
@@ -543,6 +543,7 @@
                     <div onclick ="endWrite()" class="subAddItem">글 작성 완료</div>
                 </div>
             </div>
+
         </div>
 
         <!-- 장소 검색 Modal 영역 -->

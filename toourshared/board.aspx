@@ -344,28 +344,6 @@
         return returnStr;
     }
 
-    protected void boardReport(Travel travel)
-    {
-        if(Session["mem_id"] == null) // 로그인하지 않은 경우
-        {
-            Response.Write("<script language='javascript'>alert('로그인 후 이용해주세요.');</script language='javascript'>");
-        }
-        else
-        {
-            if(Request.QueryString["trv_no"] == null) // trv_no가 존재하지 않는 경우
-            {
-                Response.Write("<script language='javascript'>alert('해당 게시글은 신고할 수 없습니다. 새로고침 후 다시 시도해주세요.');</script language='javascript'>");
-            }
-
-            string MemID = Session["mem_id"].ToString();
-            string trvNo = Request.QueryString["trv_no"].ToString();
-
-            /*
-             *          게시글 신고기능 작성하세요.
-            */
-        }
-    }
-
     protected void Button1_Click(object sender, EventArgs e)
     {
         if (Session["mem_id"] == null)
@@ -392,8 +370,6 @@
                 {
                     string trv_no = Request.QueryString["trv_no"].ToString(); // 현재 게시글의 번호를 받고
                     string cmt = replyWriteText.Text.ToString();
-                    System.Diagnostics.Debug.WriteLine("현재 로그인 한 아이디: " + memID);
-                    System.Diagnostics.Debug.WriteLine("입력한 댓글 내용: " + cmt);
 
                     Comment comment = new Comment(); // commentDTO 객체 생성하고 속성 집어넣기
                     comment.Trv_no = trv_no.ToString();
@@ -409,6 +385,7 @@
                     travelDao.setTotRateByTrvNo(int.Parse(trv_no)); // TotRate 최신화 작업
                     replyWriteText.Text = "";
 
+                    Response.Redirect("./board.aspx?trv_no=" + trv_no + "#boardReply");
                 }
             }
         }
@@ -432,7 +409,6 @@
             }
             else
             {
-                System.Diagnostics.Debug.WriteLine("되는거냐?");
                 Response.Redirect("./requestLikeBoard.aspx?mem_id=" + memID + "&trv_no=" + trvNo);
             }
         }
@@ -1227,6 +1203,7 @@
 </head>
 <body>
     <form id="form1" runat="server">
+        <asp:HiddenField ID="replyHidden" runat="server" />
         <!-- navigation -->
         <div id="nav" class="topnav">
             <ul class="topnavUl">
@@ -1714,7 +1691,7 @@
                 %>
             </div>
 
-            <div class="board-reply">
+            <div class="board-reply" id="boardReply">
                 <div class="reply-header">
                     <span class="replyText">댓글</span>&nbsp;
                     <span class="replyCount"><%Response.Write(replyCount);%></span>
@@ -1744,13 +1721,13 @@
                                                    "<div class = \"replyItem\">\n" +
                                                         "<div class = \"reply-writer\">\n" +
                                                             "<div class=\"writer-Image\">\n" +
-                                                                "<a href=\"#\">\n" +
+                                                                "<a href=\"./MyPage.aspx?mem_id=" + CommentList[k].Mem_id + "\">\n" +
                                                                     "<img src=\"" + memMainImg + "\" alt=\"" + CommentList[k].Mem_id + "\" class=\"writer-ImageItem\" />\n" +
                                                                 "</a>\n" +
                                                             "</div>\n" +
                                                             "<div class=\"writer-Text\">\n" +
                                                                 "<div class=\"writerID\">\n" +
-                                                                    "<a href=\"#\">\n" +
+                                                                    "<a href=\"./MyPage.aspx?mem_id=" + CommentList[k].Mem_id + "\">\n" +
                                                                         CommentList[k].Mem_id + "\n" +
                                                                     "</a>\n" +
                                                                 "</div>\n" +
@@ -1809,8 +1786,6 @@
                 </div>
             </div>
 
-        </div>
-        <div id="footer">
         </div>
         <asp:PlaceHolder ID="PlaceHolder_hidden" runat="server"></asp:PlaceHolder>
     </form>

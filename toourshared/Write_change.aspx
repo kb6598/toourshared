@@ -271,8 +271,18 @@
     <!--파일 업로드
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 -->    <link rel="stylesheet" href="./css/write.css">
-    <style>
+  <style>
+        // summer note 이미지 삽입시 뜨는 창 스타일 처리
+        .note-modal-content {
+            margin-top: 30%;
+        }
 
+
+        .travelRoute-content,
+        .cost-body {
+
+            overflow: auto;
+        }
 
     </style>
 
