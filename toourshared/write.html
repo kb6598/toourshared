@@ -704,9 +704,9 @@
             var coord_WCONGNAMUL = getWCONGNAMULFromOverlay(this);
             console.info("-------------------------------------------- 현재 마커는");
             console.info(this);
+
             var curMkrOrder = this._order;
             var trvRoute = getTravelRouteByOrder(curMkrOrder);
-
             //----좌표값으로 주소를 가져옴
             geocoder.coord2Address(coord_WCONGNAMUL.wcongnamulX, coord_WCONGNAMUL.wcongnamulY, function(result, status) {
 
@@ -716,7 +716,6 @@
 
                     var content = "<div>ok</div>";
                     var keyword = document.getElementById('keyword');
-
 
 
                     //주소가 있다면 검색
@@ -735,7 +734,7 @@
                                 '<div class="card card-cus" style="width:300px;">' +
                                 '<div class="card-header">' +
                                 '<div class="card-title">' +
-                                '<input id="cuov-name" class="form-control card-input" type="text" placeholder="장소 이름" value="' + trvRoute.place_name + '" />' +
+                                trvRoute.place_name +
                                 '</div>' +
                                 '<div class="card-close">' +
                                 '<div class="closeBtn" onclick="closeCusOverlay()">' +
@@ -1418,14 +1417,16 @@
 
 
         function getTravelRouteByOrder(order) {
-            TravelRouteList.forEach(function(val, idx, arr) {
-                if (val.order == order) {
-                    return TravelRouteList[idx];
-
+            
+            var result;
+            TravelRouteList.forEach(function(val,idx,arr){
+                if(TravelRouteList[idx].order == order){
+                    result =  TravelRouteList[idx];
                 }
-
             });
-            return {};
+            
+            return result;
+            
         }
 
         function setTravelRouteNameByOrder(order, name) {
