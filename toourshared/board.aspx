@@ -1381,7 +1381,7 @@
                 Response.Write("" +
                 "                <div style=\"width: 100%; height: 50px; display: flex; flex-direction: row; justify-content: flex-end; align-items: center; padding-right: 10px; background-color: #e2e2e2; margin-top: -1px; border-bottom: .5px solid rgba(0, 0, 0, .2);\">\n" +
                 "                   <div style=\"width: 120px; height: 30px; display: flex; justify-content: center; align-items: center; border: 2px solid black; border-radius: 15px; background-color: orangered; \">\n" +
-                "                       <a href = \"./write.aspx?trv_no=" + Request.QueryString["trv_no"].ToString() + "\" style=\"font-size: 15px; font-family: 'Noto Sans KR', sans-serif; padding-right: 1px; font-weight: 700;justify-content: center; align-items: center;\">게시글 수정🔨</a>" +
+                "                       <a href = \"./Write_change.aspx?trv_no=" + Request.QueryString["trv_no"].ToString() + "\" style=\"font-size: 15px; font-family: 'Noto Sans KR', sans-serif; padding-right: 1px; font-weight: 700;justify-content: center; align-items: center;\">게시글 수정🔨</a>" +
                 "                   </div>\n" +
                 "                </div>\n");
             }
