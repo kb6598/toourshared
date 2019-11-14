@@ -233,9 +233,7 @@
     <title>TO OUR SHARED : 글 작성 #일차</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-    <!-- Font -->
+        <!-- Font -->
     <link href="https://fonts.googleapis.com/css?family=Mansalva|Nanum+Gothic|Nanum+Myeongjo|Noto+Sans+KR|Lora|East+Sea+Dokdo|Jua&amp;display=swap" rel="stylesheet" />
 
     <!-- ICON -->
@@ -244,13 +242,21 @@
 
     <!-- KaKao -->
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=ebcd0c1accbe0ff4bbb47bd777ef2fcf&libraries=service&libraries=services,clusterer,drawing"></script>
+
+    <!--boot strap-->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
     <!--Summer note + Ajax-->
-  <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet">
-  <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script> 
-  <script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script> 
-  <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote.css" rel="stylesheet">
-  <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote.js"></script>
+    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet">
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script>
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote.css" rel="stylesheet">
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote.js"></script>
 
    <link rel="stylesheet" href="./css/write.css">
   <style>
@@ -595,8 +601,11 @@
 
  <script src="./javascript/write.js"></script>
   
--->  
-  
+-->
+                   <script>
+    </script>
+
+
     <script>
         //사용자 편의 기능 
 
@@ -635,26 +644,6 @@
                 searchPlaces();
             }
         }
-
-
-        function setTravelRouteItemInfoByEnter(index) {
-
-            var kcode = event.keyCode;
-            if (window.event.keyCode == 13) {
-                setTravelRouteItemInfo(index);
-            }
-
-        }
-
-
-        function setTravelRouteItemNameByEnter(index) {
-            var kcode = event.keyCode;
-            if (window.event.keyCode == 13) {
-                setTravelRouteItemName(index);
-            }
-
-        }
-
     </script>
 
     <script>
@@ -698,7 +687,6 @@
             }
 
         });
-
     </script>
 
 
@@ -709,7 +697,7 @@
                 center: new daum.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
                 level: 3 // 지도의 확대 레벨
             };
-        
+
         // 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
         //var drawingMap = new daum.maps.Map(drawingMapContainer, mapOption);
         var drawingMap = new daum.maps.Map(drawingMapContainer, drawingMap);
@@ -1472,6 +1460,22 @@
 
         var TravelRouteList = Array();
 
+        function updateTravelRouteNameInfo() {
+
+
+
+            TravelRouteList.forEach(function(currentValue, index) {
+                setTravelRouteItemInfo(index);
+                setTravelRouteItemName(index);
+
+                refreashTravelRoute();
+            });
+        }
+
+        
+
+
+
         function refreashTravelRoute() {
 
             var travelRouteUl = document.getElementById('travelRoute'),
@@ -1498,7 +1502,7 @@
                     ' <table>' +
                     ' <tr>' +
                     ' <td>' +
-                    ' <input id="addTravelRoute_place_name_' + index + '" class="form-control" type="text" placeholder="장소 이름" value="' + currentValue.place_name + '" />' +
+                    ' <input id="addTravelRoute_place_name_' + index + '" class="form-control" type="text" placeholder="장소 이름" value="' + currentValue.place_name + '" onfocusout="updateTravelRouteNameInfo()"/>' +
                     ' </td>' +
                     ' <td>' +
                     ' <div class="btn btn-danger btn-sm" onclick="removeTravelRouteItem(' + index + ')"> x </div>' +
@@ -1511,7 +1515,7 @@
                     '<table>' +
                     '<tr>' +
                     '<td>' +
-                    ' <textarea id="addTravelRoute_info_' + index + '" class="form-control" type="text" placeholder="설명" rows="3" style="resize: none;overflow: auto;">' + currentValue.info + '</textarea>' +
+                    ' <textarea id="addTravelRoute_info_' + index + '" class="form-control" type="text" placeholder="설명" rows="3" style="resize: none;overflow: auto;"  onfocusout="updateTravelRouteNameInfo()">' + currentValue.info + '</textarea>' +
                     '</td>' +
                     '</tr>' +
                     '</table>';
@@ -1690,7 +1694,7 @@
             var addTravelRoute_place_nameId = "addTravelRoute_place_name_" + index;
             var place_name = document.getElementById(addTravelRoute_place_nameId).value;
             TravelRouteList[index].setName(place_name);
-            refreashTravelRoute();
+
 
             setCostItemParentName(index);
         }
@@ -1700,7 +1704,6 @@
             var addTravelRoute_infoId = "addTravelRoute_info_" + index;
             var info = document.getElementById(addTravelRoute_infoId).value;
             TravelRouteList[index].setInfo(info);
-            refreashTravelRoute();
 
             setCostItemParentName(index);
         }
@@ -2431,9 +2434,9 @@
 
 
         function gotoDay() {
-            
-            
-            
+
+
+
             var form = document.createElement("form");
             addDataAtForm(form);
 
@@ -2451,7 +2454,7 @@
 
 
         function tmpSave(alFlg) {
-            
+
 
             var form = document.createElement("form");
             addDataAtForm(form);
@@ -2482,7 +2485,7 @@
         }
 
         function addDay() {
-            
+
             var form = document.createElement("form");
             addDataAtForm(form);
             form.setAttribute('action', "Write_addDay.aspx");
@@ -2490,11 +2493,12 @@
         }
 
         function endWrite() {
-            if(HashTagCheck() == false) return;
-            var form = document.createElement("form");
-            addDataAtForm(form);
-            form.setAttribute('action', "Write_endWrite.aspx");
-            form.submit(); // 전송
+            if (HashTagCheck() == false) {
+                var form = document.createElement("form");
+                addDataAtForm(form);
+                form.setAttribute('action', "Write_endWrite.aspx");
+                form.submit(); // 전송
+            }
         }
 
         //------------------------------------
@@ -2507,6 +2511,46 @@
         //------------------------------------
         //----------Post START
         //------------------------------------
+
+
+        function getLocName() {
+
+            var firstAddress = "";
+
+            var items = getTravelRouteData();
+            if (items != null && items != [] && items.length != 0) {
+
+                var itemsMiddle = Math.floor(items.length / 2);
+                var address = "";
+
+                if (items[itemsMiddle].address_name != null) {
+                    address = items[itemsMiddle].address_name;
+                } else {
+                    address = items[itemsMiddle].road_address_name;
+                }
+
+                var addresstokens = address.split(' ');
+                firstAddress = addresstokens[0];
+            } else {
+
+                //현재 지도의 중앙부분의 주소를 가져와 가장 앞 주소(시/도)만 사용
+                var coord = drawingMap.getCenter();
+                geocoder.coord2Address(coord.Ga, coord.Ha, function(result, status) {
+                    if (status === kakao.maps.services.Status.OK) {
+                        //주소가 있다면 검색
+                        if (result[0] != null) {
+
+                            //LocName.setAttribute("value", result[0].address.region_1depth_name);
+                        }
+                    }
+                });
+            }
+
+            console.info(firstAddress);
+
+        }
+
+
 
 
         // 다음페이지로 markers, polyline, rect, circle, polygon 보내는 기능
@@ -3124,7 +3168,8 @@
         //-----------------------------------
         //----------- CommonFUnction End
         //-----------------------------------
-
     </script>
-</body>
+
+                
+                </body>
 </html>

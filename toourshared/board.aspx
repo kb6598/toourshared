@@ -27,7 +27,7 @@
 
     protected void btnMypage_Click(object sender, EventArgs e)
     {
-        if(Session["mem_id"] == null)
+        if (Session["mem_id"] == null)
         {
             return;
         }
@@ -37,6 +37,7 @@
             Response.Redirect("./MyPage.aspx?mem_id=" + QueryString);
         }
     }
+
     protected void btnJoin_Click(object sender, EventArgs e)
     {
         Response.Redirect("./join.aspx");
@@ -350,9 +351,9 @@
             string MemID = Session["mem_id"].ToString();
             string trvNo = Request.QueryString["trv_no"].ToString();
 
-/*
- *          게시글 신고기능 작성하세요.
-*/
+            /*
+             *          게시글 신고기능 작성하세요.
+            */
         }
     }
 
@@ -397,7 +398,33 @@
 
                     TravelDao travelDao = new TravelDao();
                     travelDao.setTotRateByTrvNo(int.Parse(trv_no)); // TotRate 최신화 작업
+                    replyWriteText.Text = "";
+
                 }
+            }
+        }
+    }
+
+    protected void Button2_Click(object sender, EventArgs e)
+    {
+        // 게시글 추천 기능
+        if (Session["mem_id"] == null || Request.QueryString["trv_no"] == null)
+        {
+            Response.Write("<script language='javascript'>alert('세션이 만료되었거나 현재 게시글의 정보를 불러올 수 없습니다. \r\n메인화면으로 이동됩니다.'); location.href('./index.aspx'); </script language='javascript'>");
+        }
+        else
+        {
+            string memID = Session["mem_id"].ToString();
+            string trvNo = Request.QueryString["trv_no"].ToString();
+
+            if (string.IsNullOrEmpty(memID) || string.IsNullOrEmpty(trvNo))
+            {
+                Response.Write("<script language='javascript'>alert('세션이 존재하지 않거나 혹은 게시글의 정보를 불러올 수 없습니다. \r\n메인화면으로 이동됩니다.'); location.href('./index.aspx'); </script language='javascript'>");
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine("되는거냐?");
+                Response.Redirect("./requestLikeBoard.aspx?mem_id=" + memID + "&trv_no=" + trvNo);
             }
         }
     }
@@ -1159,6 +1186,17 @@
             });
             $('#replyWriteText').keyup();
         });
+
+        function openUpdWinForm(cmtNo, trvNo) {
+            var link = "./updateReply.aspx?cmt_no=" + cmtNo + "&trv_no=" + trvNo;
+            window.open(link, 'myForm', 'width = 500, height = 300, left = 500, top = 500, toolbar = no, menubar = no, location = no, scrollbar = no, status = no, resizable = no, fullscreen = no, channelmode = no');
+        }
+
+        function openDelWinForm(cmtNo, trvNo) {
+            var link = "./deleteReply.aspx?cmt_no=" + cmtNo + "&trv_no=" + trvNo;
+            window.open(link, 'myForm', 'width = 500, height = 300, left = 500, top = 500, toolbar = no, menubar = no, location = no, scrollbar = no, status = no, resizable = no, fullscreen = no, channelmode = no');
+        }
+
     </script>
 </head>
 <body>
@@ -1270,7 +1308,7 @@
                 <div class="board-header">
                     <div class="header-item"><%Response.Write(TravelList[5].ToString());%></div>
                     <div class="good-item">
-                        <button class="goodBtn">👍</button>
+                        <asp:Button ID="Button2" runat="server" Text="👍" CssClass="goodBtn" onClick="Button2_Click"/>
                     </div>
                     <div class="good-cnt"><%Response.Write(goodCnt);%></div>
                 </div>
@@ -1366,7 +1404,7 @@
     int costDays = 1;
     foreach (var map in mapList)
     {
-        if (map.Map_cost != "")
+        if(!string.IsNullOrEmpty(map.Map_cost))
         {
             JToken mapCost = JToken.Parse(map.Map_cost);
             string itemlist = "";
@@ -1461,7 +1499,7 @@
 
         foreach (var map in mapList)
         {
-            if (map.Map_route != "")
+            if(!string.IsNullOrEmpty(map.Map_route))
             {
                 JToken mapRoute = JToken.Parse(map.Map_route);
                 //Response.Write(route);
@@ -1523,7 +1561,7 @@
 
     foreach (var map in mapList)
     {
-        if (map.Map_cost != "")
+        if(!string.IsNullOrEmpty(map.Map_cost))
         {
             JToken mapCost = JToken.Parse(map.Map_cost);
             string itemlist = "";
@@ -1633,41 +1671,56 @@
                 </div>
                 <div class="reply-contents">
                     <%
-        for (int k = 0; k < CommentList.Count; k++)
-        {
-            Member member = new Member();
-            MemberDao memberDao = new MemberDao();
+                            for (int k = 0; k < CommentList.Count; k++)
+                            {
+                                Member member = new Member();
+                                MemberDao memberDao = new MemberDao();
 
-            member.Mem_id = CommentList[k].Mem_id;
-            member = memberDao.selectMemberByMem_id(member); // 메인 이미지 찾기 작업
+                                member.Mem_id = CommentList[k].Mem_id;
+                                member = memberDao.selectMemberByMem_id(member); // 메인 이미지 찾기 작업
 
-            string memMainImg = member.Mem_img_url;
-            if (memMainImg == "noImage")
-                memMainImg = "./img/noImage.png";
+                                string memMainImg = member.Mem_img_url;
+                                if (memMainImg == "noImage")
+                                    memMainImg = "./img/noImage.png";
 
-            double d_replyStarCount = double.Parse(CommentList[k].Cmt_rate.ToString()); // 소수 출력
-            int i_replyStarCount = (int)d_replyStarCount; // 별 갯수
-            string s_replyStarCount = "";
+                                double d_replyStarCount = double.Parse(CommentList[k].Cmt_rate.ToString()); // 소수 출력
+                                int i_replyStarCount = (int)d_replyStarCount; // 별 갯수
+                                string s_replyStarCount = "";
 
-            for (int l = 0; l < i_replyStarCount; l++)
-                s_replyStarCount += "⭐";
+                                for (int l = 0; l < i_replyStarCount; l++)
+                                    s_replyStarCount += "⭐";
 
-            Response.Write("" +
-                               "<div class = \"replyItem\">\n" +
-                                    "<div class = \"reply-writer\">\n" +
-                                        "<div class=\"writer-Image\">\n" +
-                                            "<a href=\"#\">\n" +
-                                                "<img src=\"" + memMainImg + "\" alt=\"" + CommentList[k].Mem_id + "\" class=\"writer-ImageItem\" />\n" +
-                                            "</a>\n" +
-                                        "</div>\n" +
-                                        "<div class=\"writer-Text\">\n" +
-                                            "<div class=\"writerID\">\n" +
-                                                "<a href=\"#\">\n" +
-                                                    CommentList[k].Mem_id + "\n" +
-                                                "</a>\n" +
-                                            "</div>\n" +
-                                            "<div class=\"writerTime\">" + timestampConvert.TimeStampToString(CommentList[k].Cmt_timestamp) + "</div>\n" +
-                                        "</div>\n" +
+                                Response.Write("" +
+                                                   "<div class = \"replyItem\">\n" +
+                                                        "<div class = \"reply-writer\">\n" +
+                                                            "<div class=\"writer-Image\">\n" +
+                                                                "<a href=\"#\">\n" +
+                                                                    "<img src=\"" + memMainImg + "\" alt=\"" + CommentList[k].Mem_id + "\" class=\"writer-ImageItem\" />\n" +
+                                                                "</a>\n" +
+                                                            "</div>\n" +
+                                                            "<div class=\"writer-Text\">\n" +
+                                                                "<div class=\"writerID\">\n" +
+                                                                    "<a href=\"#\">\n" +
+                                                                        CommentList[k].Mem_id + "\n" +
+                                                                    "</a>\n" +
+                                                                "</div>\n" +
+                                                                "<div class=\"writerTime\">" + timestampConvert.TimeStampToString(CommentList[k].Cmt_timestamp) + "</div>\n" +
+                                                            "</div>\n");
+                                if(Session["mem_id"] != null && CommentList[k] != null && Request.QueryString["trv_no"] != null)
+                                {
+                                    if (Session["mem_id"].ToString() == CommentList[k].Mem_id)
+                                    {
+                                        if (CommentList[k].Mem_id == Session["mem_id"].ToString())
+                                            Response.Write("" +
+                                            "<div class=\"writerUpdateDelete\">\n" +
+                                                "<span style=\"padding-left: 10px; display: flex; flex-direction: row; align-items: center; width: auto; height: auto;\">" +
+                                                    "<a href=\"javascript: void(0)\" style=\"margin-right: 5px;\" onClick=\"openUpdWinForm(" + CommentList[k].Cmt_no + "," + Request.QueryString["trv_no"].ToString() + ")\">✍</a> <a href=\"javascript: void(0)\" onClick=\"openDelWinForm(" + CommentList[k].Cmt_no + "," + Request.QueryString["trv_no"].ToString() + ")\">❌</a>" +
+                                                "</span>" +
+                                            "</div>\n");
+                                    }
+                                }
+
+                                Response.Write("" +
                                     "</div>\n" +
                                     "<div class = \"reply-content\">\n" +
                                         CommentList[k].Cmt_content + "\n" +
@@ -1677,8 +1730,8 @@
                                         "<span class=\"score\">(" + d_replyStarCount + ")</span>\n" +
                                     "</div>\n" +
                                 "</div>\n");
-        }
-    }
+                            }
+                        }
                     %>
                 </div>
                 <div class="reply-write">

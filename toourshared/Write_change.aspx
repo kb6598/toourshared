@@ -42,16 +42,13 @@
 
     protected void WriteSessionProcess()
     {
-        int SESSION_TIME_OUT_MIN = 60;
+   
         //if (IsLogin.isLogin() == false)
         //{
         //    Response.Redirect("/index.aspx");
         //}
         // 테스트 코드
-        if(HttpContext.Current.Session["mem_id"] == null)
-        {
-            Response.Redirect("./index.aspx");
-        }
+
 
         //status -> 편집 페이지 정보
         //세션 status가 비어있다면 새로운 status 생성

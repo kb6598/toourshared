@@ -47,7 +47,7 @@
 
                 travelDao.setTotRateByTrvNo(int.Parse(trvNo)); // 해당 게시글 번호(trvNo) 평점 업데이트
 
-                Response.Write("<script language='javascript'>alert('삭제 되었습니다.'); this.close(); </script language='javascript'>");
+                Response.Write("<script language='javascript'>alert('댓글이 삭제 되었습니다.'); this.close(); opener.location.reload(); </script language='javascript'>");
             }
         }
     }
@@ -62,6 +62,7 @@
     <head>
         <meta charset = "utf-8">
         <meta name = "viewport" content= "width=device-width, initial-scale=1">
+        <title>댓글 삭제하기</title>
 
         <!-- Font -->
         <link href = "https://fonts.googleapis.com/css?family=Mansalva|Nanum+Gothic|Nanum+Myeongjo|Noto+Sans+KR|Lora|Jua&display=swap" rel = "stylesheet" >
@@ -172,7 +173,7 @@
                     <span class="UpText">정말 댓글을 삭제하시겠습니까?</span>
                 </div>
                 <div class = "contents_DOWN">
-                    <asp:Button ID="Button1" runat="server" Text="수정" CssClass="contentsBtn" OnClick="Button1_Click" />
+                    <asp:Button ID="Button1" runat="server" Text="삭제" CssClass="contentsBtn" OnClick="Button1_Click" />
                     <asp:Button ID="Button2" runat="server" Text="취소" CssClass="contentsCancel" OnClick="Button2_Click" />
                 </div>
             </div>

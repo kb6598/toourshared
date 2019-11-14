@@ -34,7 +34,6 @@
         Response.Redirect("./find_idpw.aspx");
     }
 
-
     //최신순
     protected string orderByTime()
     {
@@ -358,6 +357,7 @@
             Response.Redirect("./search.aspx?searchType=1&text=" + inpTxt.Text);
         }
     }
+
 </script>
 
 <html>

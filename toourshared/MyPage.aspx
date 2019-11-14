@@ -37,6 +37,20 @@
         Response.Redirect("./find_idpw.aspx");
     }
 
+    // 마이페이지 눌렀을 때 발생할 이벤트
+    protected void btnMypage_Click(object sender, EventArgs e)
+    {
+        if(Session["mem_id"] == null)
+        {
+            return;
+        }
+        else
+        {
+            string QueryString = Session["mem_id"].ToString(); // 현재 세션의 마이 페이지로 가야 하므로 세션 ToString() 받아서 redirect에 넘김
+            Response.Redirect("./MyPage.aspx?mem_id=" + QueryString);
+        }
+    }
+
     //My Travels에 뿌려줄 양식
     protected string MyTravels()
     {
@@ -958,6 +972,20 @@
             <li class = "topnavLi" >
 				<a><% string id = Session["mem_id"].ToString(); Response.Write(id); %></a>
                 <ul>
+<%
+    if (Session["mem_id"] != null && Request.QueryString["mem_id"] != null)
+    {
+        if (!string.IsNullOrEmpty(Session["mem_id"].ToString()) && !string.IsNullOrEmpty(Request.QueryString["mem_id"].ToString()))
+        {
+            if (Session["mem_id"].ToString() != Request.QueryString["mem_id"].ToString())
+            {
+%>
+                    <li><asp:Button ID="btnMypage" runat="server" Text="마이페이지" OnClick="btnMypage_Click" class ="navJoinBtn"/></li>
+<%
+            }
+        }
+    }
+%>
                     <li><asp:Button ID="btnLogout" runat="server" Text="로그아웃" OnClick="btnLogout_Click" class="navFindBtn"/></li>
                 </ul>
             </li>
