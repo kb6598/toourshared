@@ -1807,10 +1807,11 @@
         var map = new kakao.maps.Map(mapContainer, mapOptions),
             overlays = []; // 지도에 그려진 도형을 담을 배열
 
-        function getDataFromDrawingMap(mapDataId, instrokeColor, infillColor, iconUrl) {
+        function getDataFromDrawingMap(mapDataId, instrokeColor, infillColor, iconUrl, routeId) {
             // Drawing Manager에서 그려진 데이터 정보를 가져옵니다 
 
             var data = JSON.parse(document.getElementById(mapDataId).value);
+            var route = JSON.parse(document.getElementById(routeId).value);
             console.info(data);
 
 
@@ -1824,7 +1825,7 @@
             //    drawArrow(data[kakao.maps.drawing.OverlayType.POLYLINE]);
             //    drawEllipse(data[kakao.maps.drawing.OverlayType.ELLIPSE]);
 
-            drawMarker(data["marker"], iconUrl);
+            drawMarker(route, iconUrl);
             drawPolyline(data["polyline"], instrokeColor, infillColor);
             drawRectangle(data["rectangle"], instrokeColor, infillColor);
             drawCircle(data["circle"], instrokeColor, infillColor);
@@ -1902,28 +1903,185 @@
             n = n + '';
             return n.length >= width ? n : new Array(width - n.length + 1).join('0') + n;
         }
+        var infowindow = new kakao.maps.InfoWindow({
+            zIndex: 2
+        });
+        function closeOverlay() {
+            infowindow.close();
+        }
+        function panTo(Ha, Ga) {
+            // 이동할 위도 경도 위치를 생성합니다 
+            var moveLatLon = new kakao.maps.LatLng(Ha, Ga);
 
+            // 지도 중심을 부드럽게 이동시킵니다
+            // 만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동합니다
+            map.panTo(moveLatLon);
+            map.setLevel(8);
+        } 
+        // 모든 인포윈도우 닫음
 
         // Drawing Manager에서 가져온 데이터 중 마커를 아래 지도에 표시하는 함수입니다
-        function drawMarker(markers, iconUrl) {
-            if (markers != [] || markers != "" || markers != null) {
-                var len = markers.length, i = 0;
-             
-                var icon =  new kakao.maps.MarkerImage(
+        function drawMarker(route, iconUrl) {
+
+            var routeList = route;
+            //var data = mapData;
+            //console.info(data);
+
+            closeOverlay();
+            console.info(routeList);
+            if (routeList != [] && routeList != "" && routeList != null && routeList.length != 0) {
+
+
+                var maxX = parseFloat(routeList[0].x);
+                var maxY = parseFloat(routeList[0].y);
+                var minX = parseFloat(routeList[0].x);
+                var minY = parseFloat(routeList[0].y);
+                var len = routeList.length, i = 0;
+
+                var icon = new kakao.maps.MarkerImage(
                     iconUrl,
                     new kakao.maps.Size(31, 35));
 
                 for (; i < len; i++) {
+                    var curX = parseFloat(routeList[0].x);
+                    var curY = parseFloat(routeList[0].y);
+
                     var marker = new kakao.maps.Marker({
                         image: icon,
                         map: map,
-                        position: new kakao.maps.LatLng(markers[i].y, markers[i].x),
-                        zIndex: markers[i].zIndex
+                        position: new kakao.maps.LatLng(routeList[i].y, routeList[i].x),
+                        zIndex: 1
                     });
 
                     overlays.push(marker);
+                    // 마커와 검색결과 항목에 mouseover 했을때
+                    // 해당 장소에 인포윈도우에 장소명을 표시합니다
+                    // mouseout 했을 때는 인포윈도우를 닫습니다
+                    (function (marker, routeItem) {
+                        kakao.maps.event.addListener(marker, 'click', function () {
+                            displayInfowindow(marker, routeItem);
+                        });
+
+
+                    })(marker, routeList[i]);
+
+                    if (curX > maxX) {
+                        maxX = curX;
+                    }
+                    if (curY > maxY) {
+                        maxY = curY;
+                    }
+
+
+                    if (curX <= minX) {
+                        minX = curX;
+                    }
+                    if (curY <= minY) {
+                        minY = curY;
+                    }
+
+
                 }
+
+
+
+
+                if (len == 1) {
+                    len = len + 1;
+                }
+                //console.info(maxX);
+                //console.info(maxY);
+                //console.info(minX);
+                //console.info(minY);
+                //console.info((maxX + minX) / len);
+                //console.info((maxY + minY) / len);
+                var centerX = (parseFloat(maxX) + parseFloat(minX)) / parseFloat(len);
+                var centerY = (parseFloat(maxY) + parseFloat(minY)) / parseFloat(len);
+                //console.info(centerX);
+                //console.info(centerY);
+                panTo(centerY, centerX);
+
             }
+
+
+
+
+
+
+
+
+            // 인포 윈도우 생성
+            function displayInfowindow(marker, routeItem) {
+
+                var content =
+                    '<div class="card card-cus" style="width:300px;">' +
+                    '<div class="card-header">' +
+                    '<div class="card-title">' +
+                    routeItem.place_name +
+                    '</div>' +
+                    '<div class="card-close">' +
+                    '<div class="closeBtn" onclick="closeOverlay()">' +
+                    '<span >×</span>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="card-body">' +
+                    '<blockquote class="blockquote mb-0">';
+                if (routeItem.info != null) {
+                    content += '<li class="card-body-li">💬 ' + routeItem.info + '</li>';
+                }
+                if (routeItem.road_address_name != null) {
+                    content += '<li class="card-body-li">🏡 ' + routeItem.road_address_name + '</li>';
+                }
+                if (routeItem.address_name != null) {
+                    content += '<li class="card-body-li">🏠 ' + routeItem.address_name + '</li>';
+                }
+                if (routeItem.phone != null && routeItem.phone.length > 0) {
+                    content += '<li class="card-body-li">📞 ' + routeItem.phone + '</li>';
+                }
+                if (routeItem.place_url != null) {
+                    content += '<li class="card-body-li" style="padding: 15px 0;"><a href="' + routeItem.place_url + '" target="_blank" style="text-decoration: none;">상세페이지</a></li>';
+                }
+                content +=
+                    '</blockquote>' +
+                    '</div>' +
+                    '</div>';
+
+
+
+                infowindow.setContent(content);
+                infowindow.open(map, marker);
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+            //if (markers != [] || markers != "" || markers != null) {
+            //    var len = markers.length, i = 0;
+             
+            //    var icon =  new kakao.maps.MarkerImage(
+            //        iconUrl,
+            //        new kakao.maps.Size(31, 35));
+
+            //    for (; i < len; i++) {
+            //        var marker = new kakao.maps.Marker({
+            //            image: icon,
+            //            map: map,
+            //            position: new kakao.maps.LatLng(markers[i].y, markers[i].x),
+            //            zIndex: markers[i].zIndex
+            //        });
+
+            //        overlays.push(marker);
+            //    }
+            //}
         }
 
         // Drawing Manager에서 가져온 데이터 중 선을 아래 지도에 표시하는 함수입니다
@@ -2137,23 +2295,24 @@
 
 
 
-        function setDrawingMapDataByManagerMapId(inManager, mapId) {
+        function setDrawingMapDataByManagerMapId(inManager, mapId, routeId, inMap, icoUrl) {
             // Drawing Manager에서 그려진 데이터 정보를 가져옵니다 
             var data = JSON.parse(document.getElementById(mapId).value);
+            var route = JSON.parse(document.getElementById(routeId).value);
             console.info(data);
 
             // 아래 지도에 그려진 도형이 있다면 모두 지웁니다
 
 
-            console.info(data["marker"]);
-            console.info(data["polyline"]);
-            console.info(data["rectangle"]);
-            console.info(data["circle"]);
-            console.info(data["polygon"]);
-            console.info(data["ellipse"]);
-            console.info(data["arrow"]);
+            //console.info(data["marker"]);
+            //console.info(data["polyline"]);
+            //console.info(data["rectangle"]);
+            //console.info(data["circle"]);
+            //console.info(data["polygon"]);
+            //console.info(data["ellipse"]);
+            //console.info(data["arrow"]);
             // 지도에 가져온 데이터로 도형들을 그립니다
-            setMarker(inManager, data["marker"]);
+            setMarker(inMap, route, icoUrl, inMap);
             setPolyline(inManager, data["polyline"]);
             setRectangle(inManager, data["rectangle"]);
             setCircle(inManager, data["circle"]);
@@ -2190,15 +2349,152 @@
                 inManager.put(kakao.maps.drawing.OverlayType.ELLIPSE, bounds);
             }
         } // Drawing Manager에서 가져온 데이터 중 마커를 아래 지도에 표시하는 함수입니다
-        function setMarker(inManager, markers) {
+        function setPanTo(inMap, Ha, Ga) {
+            // 이동할 위도 경도 위치를 생성합니다 
+            var moveLatLon = new kakao.maps.LatLng(Ha, Ga);
 
-            var len = markers.length,
-                i = 0;
-
-            for (; i < len; i++) {
-                inManager.put(kakao.maps.drawing.OverlayType.MARKER, new kakao.maps.LatLng(markers[i].y, markers[i].x), 0);
-            }
+            // 지도 중심을 부드럽게 이동시킵니다
+            // 만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동합니다
+            inMap.panTo(moveLatLon);
+            inMap.setLevel(8);
         }
+        // 모든 인포윈도우 닫음
+
+        // Drawing Manager에서 가져온 데이터 중 마커를 아래 지도에 표시하는 함수입니다
+        function setMarker(inMap, route, iconUrl, inMap) {
+
+            var routeList = route;
+            //var data = mapData;
+            //console.info(data);
+
+            closeOverlay();
+            console.info(routeList);
+            if (routeList != [] && routeList != "" && routeList != null && routeList.length != 0) {
+
+
+                var maxX = parseFloat(routeList[0].x);
+                var maxY = parseFloat(routeList[0].y);
+                var minX = parseFloat(routeList[0].x);
+                var minY = parseFloat(routeList[0].y);
+                var len = routeList.length, i = 0;
+
+                var icon = new kakao.maps.MarkerImage(
+                    iconUrl,
+                    new kakao.maps.Size(31, 35));
+
+                for (; i < len; i++) {
+                    var curX = parseFloat(routeList[0].x);
+                    var curY = parseFloat(routeList[0].y);
+
+                    var marker = new kakao.maps.Marker({
+                        image: icon,
+                        map: inMap,
+                        position: new kakao.maps.LatLng(routeList[i].y, routeList[i].x),
+                        zIndex: 1
+                    });
+
+                    overlays.push(marker);
+                    // 마커와 검색결과 항목에 mouseover 했을때
+                    // 해당 장소에 인포윈도우에 장소명을 표시합니다
+                    // mouseout 했을 때는 인포윈도우를 닫습니다
+                    (function (marker, routeItem, inMap) {
+                        kakao.maps.event.addListener(marker, 'click', function () {
+                            setdisplayInfowindow(marker, routeItem, inMap);
+                        });
+
+
+                    })(marker, routeList[i], inMap);
+
+                    if (curX > maxX) {
+                        maxX = curX;
+                    }
+                    if (curY > maxY) {
+                        maxY = curY;
+                    }
+
+
+                    if (curX <= minX) {
+                        minX = curX;
+                    }
+                    if (curY <= minY) {
+                        minY = curY;
+                    }
+
+
+                }
+
+
+
+
+                if (len == 1) {
+                    len = len + 1;
+                }
+                //console.info(maxX);
+                //console.info(maxY);
+                //console.info(minX);
+                //console.info(minY);
+                //console.info((maxX + minX) / len);
+                //console.info((maxY + minY) / len);
+                var centerX = (parseFloat(maxX) + parseFloat(minX)) / parseFloat(len);
+                var centerY = (parseFloat(maxY) + parseFloat(minY)) / parseFloat(len);
+                //console.info(centerX);
+                //console.info(centerY);
+                setPanTo(inMap, centerY, centerX);
+
+            }
+
+
+
+        }
+
+
+
+
+            // 인포 윈도우 생성
+        function setdisplayInfowindow(marker, routeItem, inMap) {
+
+                var content =
+                    '<div class="card card-cus" style="width:300px;">' +
+                    '<div class="card-header">' +
+                    '<div class="card-title">' +
+                    routeItem.place_name +
+                    '</div>' +
+                    '<div class="card-close">' +
+                    '<div class="closeBtn" onclick="closeOverlay()">' +
+                    '<span >×</span>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="card-body">' +
+                    '<blockquote class="blockquote mb-0">';
+                if (routeItem.info != null) {
+                    content += '<li class="card-body-li">💬 ' + routeItem.info + '</li>';
+                }
+                if (routeItem.road_address_name != null) {
+                    content += '<li class="card-body-li">🏡 ' + routeItem.road_address_name + '</li>';
+                }
+                if (routeItem.address_name != null) {
+                    content += '<li class="card-body-li">🏠 ' + routeItem.address_name + '</li>';
+                }
+                if (routeItem.phone != null && routeItem.phone.length > 0) {
+                    content += '<li class="card-body-li">📞 ' + routeItem.phone + '</li>';
+                }
+                if (routeItem.place_url != null) {
+                    content += '<li class="card-body-li" style="padding: 15px 0;"><a href="' + routeItem.place_url + '" target="_blank" style="text-decoration: none;">상세페이지</a></li>';
+                }
+                content +=
+                    '</blockquote>' +
+                    '</div>' +
+                    '</div>';
+
+
+
+            infowindow.setContent(content);
+            infowindow.open(inMap, marker);
+            }
+
+
+
 
         // Drawing Manager에서 가져온 데이터 중 선을 아래 지도에 표시하는 함수입니다
         function setPolyline(inManager, lines) {
@@ -2286,16 +2582,18 @@
             int colorIndex = 0;
             int index = 0;
             JObject mapCenter;
+            JToken mapRoute;
             foreach (var map in mapList)
             {
+
                 if (!string.IsNullOrEmpty(map.Map_center))
                 {
                     mapCenter = JObject.Parse(map.Map_center);
-                    //일일 경로 표시 지도
+                    //일일 경로 표시 지도    routeId, inMap
                     Response.Write("var map_" + index + " = makeMapOption('map_" + index + "', new daum.maps.LatLng(" + mapCenter["Ha"] + ", " + mapCenter["Ga"] + "), 5, 'mapData_" + index + "', '" + color[colorIndex] + "', '" + color[colorIndex] + "','" + icoDir + marker[colorIndex] + "') ;");
-                    Response.Write("setDrawingMapDataByManagerMapId(map_" + index + ".manager, 'mapData_" + index + "');");
+                    Response.Write("setDrawingMapDataByManagerMapId(map_" + index + ".manager, 'mapData_" + index + "', 'mapRoute_"+index+"',map_" + index + ".map , '"+icoDir + marker[colorIndex]+"');");
                     // 모든 경로 표시 지도
-                    Response.Write("getDataFromDrawingMap('mapData_" + index + "', '" + color[colorIndex] + "', '" + color[colorIndex] + "','" + icoDir + marker[colorIndex] + "');");
+                    Response.Write("getDataFromDrawingMap('mapData_" + index + "', '" + color[colorIndex] + "', '" + color[colorIndex] + "','" + icoDir + marker[colorIndex] + "' , 'mapRoute_"+index+"');");
                     Response.Write("var mapTypeControl_"+index+"= new kakao.maps.MapTypeControl();map_"+index+".map.addControl(mapTypeControl_"+index+", kakao.maps.ControlPosition.TOPRIGHT);");
                     Response.Write("var zoomControl_"+index+" = new kakao.maps.ZoomControl();map_"+index+".map.addControl(zoomControl_"+index+", kakao.maps.ControlPosition.RIGHT);");
                     if (colorIndex < color.Length)
@@ -2326,58 +2624,10 @@
         map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
 
 
-        
-        var onClick_overlay = function () {
-            
-                                 
-            var content =
-                '<div class="card card-cus" style="width:300px;">' +
-                '<div class="card-header">' +
-                '<div class="card-title">' +
-                routeItem.place_name +
-                '</div>' +
-                '<div class="card-close">' +
-                '<div class="closeBtn" onclick="closeOverlay()">' +
-                '<span >×</span>' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '<div class="card-body">' +
-                '<blockquote class="blockquote mb-0">';
-            if (routeItem.info != null) {
-                content += '<li class="card-body-li">' + routeItem.info + '</li>';
-            }
-            if (routeItem.road_address_name != null) {
-                content += '<li class="card-body-li">' + routeItem.road_address_name + '</li>';
-            }
-            if (routeItem.address_name != null) {
-                content += '<li class="card-body-li">' + routeItem.address_name + '</li>';
-            }
-            if (routeItem.phone != null) {
-                content += '<li class="card-body-li">' + routeItem.phone + '</li>';
-            }
-            if (routeItem.place_url != null) {
-                content += '<li class="card-body-li" style="padding: 15px 0;"><a href="' + routeItem.place_url + '" target="_blank" style="text-decoration: none;">상세페이지</a></li>';
-            }
-            content +=
-                '</blockquote>' +
-                '</div>' +
-                '</div>';
 
 
 
-                    
-            customOverlay.setPosition(new kakao.maps.LatLng(result[0].y, result[0].x));
-            customOverlay.setContent(content);
-            customOverlay.setMap(drawingMap);
-
-
-
-
-
-        }
-
-
+       
 
 
 
