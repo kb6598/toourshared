@@ -1612,13 +1612,15 @@
                     List<String> hashtagList = getHashTagList();
                     if (hashtagList.Count > 0)
                     {
-
                         for (int i = 0; i < hashtagList.Count; i++)
                         {
-                            string HashTagKeyword = hashtagList[i].ToString().Substring(1);
-                            string EncodedHashTag = Server.UrlEncode(HashTagKeyword);
+                            if (hashtagList[i].ToString().Length > 0)
+                            {
+                                string HashTagKeyword = hashtagList[i].ToString().Substring(1);
+                                string EncodedHashTag = Server.UrlEncode(HashTagKeyword);
 
-                            Response.Write("<a href = \"./search.aspx?searchType=1&hashtag=" + EncodedHashTag + "\"><div class = \"hashtag\">" + hashtagList[i].ToString() + "</div></a>\n");
+                                Response.Write("<a href = \"./search.aspx?searchType=1&hashtag=" + EncodedHashTag + "\"><div class = \"hashtag\">" + hashtagList[i].ToString() + "</div></a>\n");
+                            }
                         }
                     }
                 %>
