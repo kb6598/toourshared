@@ -591,18 +591,51 @@
     </form>
 
  
-
-       
-
-
-
-
-
         <!-- KAKAO 
 
  <script src="./javascript/write.js"></script>
   
--->  
+-->
+
+    <script>
+        //사용자 편의 기능 
+
+        // 자동 저장 액션 5분마다 / 300초
+        setInterval(function () {
+            tmpSave(false);
+        }, 30000);
+
+
+
+        //윈도우에서 엔터 백스페이스 막기
+        window.onkeydown = function () {
+            var kcode = event.keyCode;
+            if (window.event.keyCode == 13 || kcode == 116) event.returnValue = false;
+        }
+
+
+
+
+
+
+        //엔터키를 통한 임시저장
+        function tmpSaveByEnter() {
+            var kcode = event.keyCode;
+            if (window.event.keyCode == 13) {
+                tmpSave(false);
+            }
+
+        }
+
+
+
+        function searchPlacesByEnter() {
+            var kcode = event.keyCode;
+            if (window.event.keyCode == 13) {
+                searchPlaces();
+            }
+        }
+    </script>
 
     <script>
         //이미지 업로드 AJAX
@@ -652,14 +685,29 @@
         // Drawing Manager로 도형을 그릴 지도 div
         var drawingMapContainer = document.getElementById('drawingMap'),
             drawingMap = {
-                center: new daum.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
-                level: 3 // 지도의 확대 레벨
+
+                center: new kakao.maps.LatLng(36.02842431988845, 127.7253356124315), // 지도의 중심좌표
+                level: 13 // 지도의 확대 레벨
             };
-        //현재 선택한 오버레이
-        var curOverlay = Array(1);
+
         // 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
         //var drawingMap = new daum.maps.Map(drawingMapContainer, mapOption);
         var drawingMap = new daum.maps.Map(drawingMapContainer, drawingMap);
+
+
+        // 지도 타입 변경 컨트롤을 생성한다
+        var mapTypeControl = new kakao.maps.MapTypeControl();
+
+        // 지도의 상단 우측에 지도 타입 변경 컨트롤을 추가한다
+        drawingMap.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
+
+        // 지도에 확대 축소 컨트롤을 생성한다
+        var zoomControl = new kakao.maps.ZoomControl();
+
+        // 지도의 우측에 확대 축소 컨트롤을 추가한다
+        drawingMap.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
+
+
 
         var options = { // Drawing Manager를 생성할 때 사용할 옵션입니다
             map: drawingMap, // Drawing Manager로 그리기 요소를 그릴 map 객체입니다
@@ -708,7 +756,7 @@
             },
             markerOptions: { // 마커 옵션입니다
                 draggable: false, // 마커를 그리고 나서 드래그 가능하게 합니다
-                removable: true, // 마커를 삭제 할 수 있도록 x 버튼이 표시됩니다
+                removable: false, // 마커를 삭제 할 수 있도록 x 버튼이 표시됩니다
                 markerImages: [
                     null, // API에서 제공하는 기본 마커 이미지
                     {
@@ -778,29 +826,6 @@
 
 
 
-        class History {
-            constructor() {
-                this._cursor = 0;
-                this.cur_overlay
-                this.history = Array();
-                this.history.push({
-                    PlaceList: Array(),
-                    TravelRouteItemList: Array(),
-                    CostItemList: Array()
-                });
-            }
-            setRoute(place_name, road_address_name, address_name, phone, place_url, x, y) {
-
-                this.place_name = place_name;
-                this.road_address_name = road_address_name;
-                this.address_name = address_name;
-                this.phone = phone;
-                this.place_url = place_url;
-                this.x = x;
-                this.y = y;
-            }
-            push
-        }
 
 
 
@@ -813,11 +838,6 @@
             manager.select(daum.maps.drawing.OverlayType[type]);
         }
 
-
-        manager.addListener('select', function (data) {
-
-            
-        });
 
 
 
@@ -840,10 +860,7 @@
         // 애초에 리스너가 ExtenedMarker의 부분 요소로 들어가기 때문에
         // 같이 삭제됨
         manager.addListener('remove', function (e) {
-            console.info("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-            console.info(e);
-            console.info("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-            curOverlay[0] = e;
+
         });
         //http://localhost:49862/
 
@@ -889,13 +906,24 @@
         function closeCusOverlay() {
             customOverlay.setMap(null);
         }
-        function deleteMrker() {
-            manager.remove(curOverlay[0]);
-        }
+
+        manager.addListener('drawend', function (data) {
+            console.log('drawend', data);
+            if (data.overlayType == 'marker') {
+                //new daum.maps.LatLng(ellipse[i].center.y, ellipse[i].center.x),
+                //new kakao.maps.LatLng(Ha, Ga);
+                //Ga: 123.00653858724844, Ha: 35.44766808679386
+                var coords = data.target.getPosition();
+
+                pushTravelRouteItem("", "", "", "", "", coords.Ga, coords.Ha);
+            }
+        });
 
 
 
-        
+
+
+
 
         //-----------------------------------------------
         // 클릭시 발생하는 이벤트
@@ -911,7 +939,14 @@
             //---- 오버레이 타입마다 좌표가 존재하는 위치가 다름
 
             var coord_WCONGNAMUL = getWCONGNAMULFromOverlay(this);
-            curOverlay[0] = this;
+            console.info("-------------------------------------------- 현재 마커는");
+            console.info(this);
+
+            var curMkrOrder = this._order;
+            var trvRoute = getTravelRouteByOrder(curMkrOrder);
+
+
+
 
 
             //----좌표값으로 주소를 가져옴
@@ -925,7 +960,6 @@
                     var keyword = document.getElementById('keyword');
 
 
-
                     //주소가 있다면 검색
                     if (result[0].address != null) {
                         if (result[0].address.address_name != null) {
@@ -934,13 +968,15 @@
                             //                                ps.keywordSearch(keyword.value, placesSearchByStateChange);
                             //                                $('#searchPlaceModal').modal('show');
 
+
+
                             content =
 
 
                                 '<div class="card card-cus" style="width:300px;">' +
                                 '<div class="card-header">' +
                                 '<div class="card-title">' +
-                                '<input class="form-control card-input" type="text" placeholder="장소 이름" value="" />' +
+                                trvRoute.place_name +
                                 '</div>' +
                                 '<div class="card-close">' +
                                 '<div class="closeBtn" onclick="closeCusOverlay()">' +
@@ -959,16 +995,13 @@
                                 '<li class="card-body-li"> </li>' +
                                 '</blockquote>' +
                                 '<table style="margin-top: 10px;"><tr>' +
-                                '<td>' +
-                                '<div class="card-addBtn" onclick=\'pushTravelRouteItem("","","","","","' + coord_WCONGNAMUL.wcongnamulX + '","' + coord_WCONGNAMUL.wcongnamulY + '")\'>추가</div>' +
-                                '</td>' +
                                 '<td>';
                             if (result[0].address.address_name != null) {
                                 content += '<div class="card-addBtn" onclick=\'searchPlacesByAddress("' + result[0].address.address_name + '")\'>주소로 검색</div>'
                             } else {
                                 content += '<div class="card-addBtn" onclick=\'searchPlacesByAddress("' + result[0].address.road_address_name + '")\'>주소로 검색</div>'
                             }
-                            content +=
+                            content += '<div class="btn btn-danger btn-sm" onclick="removeMarkNTrvRouteByOrder(' + curMkrOrder + ')">삭제</div>' +
                                 '</td>' +
                                 '</tr></table>' +
                                 '</div>';
@@ -1001,6 +1034,8 @@
 
 
         }
+
+
 
 
         function getWCONGNAMULFromOverlay(overlay) {
@@ -1039,7 +1074,10 @@
 
 
         // 검색 시스템
+        function openCatego() {
 
+            $('.dropdown-toggle').dropdown('show');
+        }
 
 
         var find_AroundMarkers = [];
@@ -1115,7 +1153,7 @@
         function placesSearchByAddressCB(data, status, pagination) {
             if (status === kakao.maps.services.Status.OK) {
 
-                manager.remove(curOverlay[0]);
+
                 // 정상적으로 검색이 완료됐으면
                 // 검색 목록과 마커를 표출합니다
                 displayPlaces(data);
@@ -1125,22 +1163,22 @@
                 $('#searchPlaceModal').modal('show');
             } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
 
-                alert('검색 결과가 존재하지 않아 더 넓은 주소로 찾습니다.');
-                var keyword = document.getElementById('keyword');
-                var keywordArr = keyword.value.split(' ');
-
-                console.info(keywordArr);
-                var str = "";
-
-                for (var i = 0; i < keywordArr.length - 1; i++) {
-                    str += keywordArr[i] + " ";
-                }
-
-
-
-                //console.info(str);
-                keyword.value = str;
-                ps.keywordSearch(keyword.value, placesSearchByAddressCB);
+                //                alert('검색 결과가 존재하지 않아 더 넓은 주소로 찾습니다.');
+                //                var keyword = document.getElementById('keyword');
+                //                var keywordArr = keyword.value.split(' ');
+                //
+                //                console.info(keywordArr);
+                //                var str = "";
+                //
+                //                for (var i = 0; i < keywordArr.length - 1; i++) {
+                //                    str += keywordArr[i] + " ";
+                //                }
+                //
+                //
+                //
+                //                //console.info(str);
+                //                keyword.value = str;
+                //                ps.keywordSearch(keyword.value, placesSearchByAddressCB);
                 return;
 
             } else if (status === kakao.maps.services.Status.ERROR) {
@@ -1359,37 +1397,11 @@
             }
             content +=
                 '</blockquote>' +
-                '<div class="card-addBtn" onclick=\'pushTravelRouteItem("' + place.place_name + '","' + place.road_address_name + '","' + place.address_name + '","' + place.phone + '","' + place.place_url + '","' + place.x + '","' + place.y + '")\'>추가</div>' +
+                '<div class="card-addBtn" onclick=\'AddMarkerWithTravelRouteItem("' + place.place_name + '","' + place.road_address_name + '","' + place.address_name + '","' + place.phone + '","' + place.place_url + '","' + place.x + '","' + place.y + '")\'>추가</div>' +
                 '</div>' +
                 '</div>';
 
-            //console.info(place);
 
-
-            //            var content =
-            //                '<div class="card">' +
-            //                '<div class="card-header">' +
-            //                place.place_name +
-            //                '<div class="btn btn-link" onclick="closeOverlay()" title="닫기" style="float: right">X</div>' +
-            //                '</div>' +
-            //                '<blockquote class="blockquote mb-0">';
-            //
-            //            if (place.road_address_name != null) {
-            //                content += '<li class="card-body-li">' + place.road_address_name + '</li>';
-            //            }
-            //            if (place.address_name != null) {
-            //                content += '<li class="card-body-li">' + place.address_name + '</li>';
-            //            }
-            //            if (place.phone != null) {
-            //                content += '<li class="card-body-li">' + place.phone + '</li>';
-            //            }
-            //            if (place.place_url != null) {
-            //                content += '<li class="card-body-li"><a href="' + place.place_url + '" target="_blank" class="link">상세페이지</a></li>';
-            //            }
-            //            content +=
-            //                '<div class="btn btn-secondary" onclick=\'pushTravelRouteItem("' + place.place_name + '","' + place.road_address_name + '","' + place.ddress_name + '","' + place.phone + '","' + place.place_url + '","' + place.x + '","' + place.y + '")\'>여행경로에 추가</div>' +
-            //                '</blockquote>' +
-            //                '</div>';
 
             infowindow.setContent(content);
             infowindow.open(drawingMap, marker);
@@ -1410,7 +1422,7 @@
         //------------------------------------
         //----------TravelRouteItem and travelRouteList Start
         //------------------------------------
-
+        var TravelOrder = 0;
         class TravelRouteItem {
             constructor(place_name, road_address_name, address_name, phone, place_url, x, y) {
                 this.place_name = place_name;
@@ -1421,7 +1433,8 @@
                 this.x = x;
                 this.y = y;
                 this.info = "";
-
+                this.order = TravelOrder;
+                TravelOrder++;
             }
             setRoute(place_name, road_address_name, address_name, phone, place_url, x, y) {
 
@@ -1444,6 +1457,24 @@
         }
 
         var TravelRouteList = Array();
+
+        function updateTravelRouteNameInfo() {
+
+
+
+            TravelRouteList.forEach(function (currentValue, index) {
+                setTravelRouteItemInfo(index);
+                setTravelRouteItemName(index);
+
+
+            });
+
+            refreashTravelRoute();
+        }
+
+
+
+
 
         function refreashTravelRoute() {
 
@@ -1471,10 +1502,7 @@
                     ' <table>' +
                     ' <tr>' +
                     ' <td>' +
-                    ' <input id="addTravelRoute_place_name_' + index + '" class="form-control form-control-sm" type="text" placeholder="장소 이름" value="' + currentValue.place_name + '" style="width:130px;" />' +
-                    ' </td>' +
-                    ' <td>' +
-                    ' <div class="btn btn-secondary btn-sm" onclick="setTravelRouteItemName(' + index + ')">이름변경</div>' +
+                    ' <input id="addTravelRoute_place_name_' + index + '" class="form-control" type="text" placeholder="장소 이름" value="' + currentValue.place_name + '" onfocusout="updateTravelRouteNameInfo()"/>' +
                     ' </td>' +
                     ' <td>' +
                     ' <div class="btn btn-danger btn-sm" onclick="removeTravelRouteItem(' + index + ')"> x </div>' +
@@ -1487,10 +1515,7 @@
                     '<table>' +
                     '<tr>' +
                     '<td>' +
-                    ' <textarea id="addTravelRoute_info_' + index + '" class="form-control form-control-sm" type="text" placeholder="설명" rows="3" >' + currentValue.info + '</textarea>' +
-                    '</td>' +
-                    '<td style="vertical-align:top">' +
-                    ' <div class="btn btn-secondary btn-sm" onclick="setTravelRouteItemInfo(' + index + ')" >설명저장</div>' +
+                    ' <textarea id="addTravelRoute_info_' + index + '" class="form-control" type="text" placeholder="설명" rows="3" style="resize: none;overflow: auto;"  onfocusout="updateTravelRouteNameInfo()">' + currentValue.info + '</textarea>' +
                     '</td>' +
                     '</tr>' +
                     '</table>';
@@ -1539,6 +1564,32 @@
 
         }
 
+
+
+
+
+
+
+        function AddMarkerWithTravelRouteItem(place_name, road_address_name, address_name, phone, place_url, x, y) {
+            pushTravelRouteItem(place_name, road_address_name, address_name, phone, place_url, x, y);
+
+            var position = new kakao.maps.LatLng(y, x);
+            manager.put(kakao.maps.drawing.OverlayType.MARKER, position, 0);
+
+            ///글작성 
+            closeAllOverlay();
+            closeAllSearchedMarkers();
+
+
+        }
+
+
+
+
+
+
+
+
         function pushTravelRouteItem(place_name, road_address_name, address_name, phone, place_url, x, y) {
 
             TravelRouteList.push(new TravelRouteItem(place_name, road_address_name, address_name, phone, place_url, x, y));
@@ -1549,16 +1600,87 @@
 
         }
 
-
+        // TravelROute 삭제시 마커도 같이 삭제되도록 하는 함수
         function removeTravelRouteItem(index) {
+            var removingOrder = TravelRouteList[index].order;
+            checkMarkerNRemove(removingOrder);
             TravelRouteList.splice(index, 1);
             removeCostItemParent(index);
             refreashTravelRoute();
 
+        }
 
+
+
+        // TravelROute 삭제함수
+        function removeTravelRouteItem(index) {
+            var removingOrder = TravelRouteList[index].order;
+            checkMarkerNRemove(removingOrder);
+            TravelRouteList.splice(index, 1);
+            removeCostItemParent(index);
+            refreashTravelRoute();
 
         }
 
+        // manger의 마커의 order의 값을 비교하여 삭제 
+
+        function checkMarkerNRemove(order) {
+            var markers = manager.getOverlays([kakao.maps.drawing.OverlayType.MARKER]);
+            markers.marker.forEach(function (value, idx, arr) {
+                if (value._order == order) {
+                    manager.remove(value);
+                }
+            });
+        }
+
+
+
+        // order를 입력받아 travelRoute와 marker 삭제
+        function removeMarkNTrvRouteByOrder(order) {
+            TravelRouteList.forEach(function (val, idx, arr) {
+                if (val.order == order) {
+                    TravelRouteList.splice(idx, 1);
+                    removeCostItemParent(idx);
+                    refreashTravelRoute();
+                }
+
+            });
+
+
+
+
+            var markers = manager.getOverlays([kakao.maps.drawing.OverlayType.MARKER]);
+            markers.marker.forEach(function (value, idx, arr) {
+                if (value._order == order) {
+                    manager.remove(value);
+                }
+            });
+        }
+
+
+        function getTravelRouteByOrder(order) {
+
+            var result = null;
+            TravelRouteList.forEach(function (val, idx, arr) {
+                if (TravelRouteList[idx].order == order) {
+                    result = TravelRouteList[idx];
+                }
+            });
+
+            return result;
+
+        }
+
+        function setTravelRouteNameByOrder(order, name) {
+            TravelRouteList.forEach(function (val, idx, arr) {
+                if (val.order == order) {
+                    TravelRouteList[idx].setName(name);
+
+                }
+
+            });
+            return [];
+        }
 
 
 
@@ -1574,7 +1696,7 @@
             var addTravelRoute_place_nameId = "addTravelRoute_place_name_" + index;
             var place_name = document.getElementById(addTravelRoute_place_nameId).value;
             TravelRouteList[index].setName(place_name);
-            refreashTravelRoute();
+
 
             setCostItemParentName(index);
         }
@@ -1584,7 +1706,6 @@
             var addTravelRoute_infoId = "addTravelRoute_info_" + index;
             var info = document.getElementById(addTravelRoute_infoId).value;
             TravelRouteList[index].setInfo(info);
-            refreashTravelRoute();
 
             setCostItemParentName(index);
         }
@@ -2263,10 +2384,67 @@
         //------------------------------------
 
 
+        function HashTagCheck() {
+            var str = document.getElementById('hashtag').value;
+            var falseStr = "";
+            var pattern_num = /[0-9]/; // 숫자 
+            var pattern_eng = /[a-zA-Z]/; // 문자 
+            var pattern_spc = /[# }]/; // 특수문자
+            var pattern_kor = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/; // 한글체크
 
+            // 한글, 영문, 숫자, #, 스페이스바는 입력이 가능하지만 나머지는 입력할 수 없고,
+            // 입력된 글자가 있는 경우 #은 무조건 하나 이상 들어가 있어야 함.
+            var returnVal;
+            if (str != "") {
+                if (!str.includes("#")) {
+                    // 입력 문자열에 #이 존재하지 않는 경우
+                    alert('해쉬태그는 #으로 시작해야 합니다.');
+                    returnVal = false;
+                } else {
+                    for (var i = 0; i < str.length; i++) {
+                        var chr = str.charAt(i);
+
+                        if (pattern_num.test(chr) || pattern_eng.test(chr) || pattern_spc.test(chr) || pattern_kor.test(chr))
+                            continue;
+                        else
+                            falseStr += chr + ', ';
+                    }
+
+                    if (falseStr != "") {
+                        alert('해시태그 조건에 맞춰 입력해주세요.\n오류 원인: ' + falseStr);
+                        returnVal = false;
+                    } else {
+                        var strArray;
+                        var strSplit = str.split(' ');
+                        var hashTagArray = "";
+
+                        for (var i in strSplit) {
+                            if (strSplit[i].startsWith("#") == false) {
+                                alert('해시태그 조건에 맞춰 입력해주세요.');
+                                returnVal = false;
+                            } else {
+                                hashTagArray += strSplit[i] + " ";
+                            }
+                        }
+
+                        //alert(hashTagArray + "이다!"); // 정상적으로 불러온 경우 hashTagArray를 불러오면 그 태그들을 불러옴.
+                        // ex) '#가나 #다라 #마바 #사아자 #파하하하하'
+                        returnVal = true;
+                    }
+                }
+            }
+            else {
+                alert('해쉬태그는 반드시 입력해야 합니다. ');
+                returnVal = false;
+            }
+            return returnVal;
+        }
 
 
         function gotoDay() {
+
+
+
             var form = document.createElement("form");
             addDataAtForm(form);
 
@@ -2283,7 +2461,7 @@
         }
 
 
-        function tmpSave() {
+        function tmpSave(alFlg) {
 
 
             var form = document.createElement("form");
@@ -2297,19 +2475,25 @@
                 url: 'Write_tmpSave.aspx',
                 data: data,
                 success: function (status) {
-                    if (status != 'error') {
-                        alert("저장되었습니다.");
+                    if (alFlg) {
+                        if (status != 'error') {
+                            alert("저장되었습니다.");
+                        }
                     }
+
                 },
                 processData: false,
                 contentType: false,
                 error: function () {
-                    alert("Whoops something went wrong!");
+                    if (alFlg) {
+                        alert("Whoops something went wrong!");
+                    }
                 }
             });
         }
 
         function addDay() {
+
             var form = document.createElement("form");
             addDataAtForm(form);
             form.setAttribute('action', "Write_addDay.aspx");
@@ -2317,10 +2501,12 @@
         }
 
         function endWrite() {
-            var form = document.createElement("form");
-            addDataAtForm(form);
-            form.setAttribute('action', "Write_endWrite.aspx");
-            form.submit(); // 전송
+            if (HashTagCheck() == true) {
+                var form = document.createElement("form");
+                addDataAtForm(form);
+                form.setAttribute('action', "Write_endWrite.aspx");
+                form.submit(); // 전송
+            }
         }
 
         //------------------------------------
@@ -2335,8 +2521,54 @@
         //------------------------------------
 
 
+        function getLocName() {
+
+
+
+            var items = getTravelRouteData();
+            if (items != null && items != [] && items.length != 0) {
+
+                var itemsMiddle = Math.floor(items.length / 2);
+                var address = "";
+
+                if (items[itemsMiddle].address_name != null) {
+                    address = items[itemsMiddle].address_name;
+                } else {
+                    address = items[itemsMiddle].road_address_name;
+                }
+
+                var addresstokens = address.split(' ');
+                addresstokens[0];
+                LocName.setAttribute("value", addresstokens[0]);
+            } else {
+
+                //현재 지도의 중앙부분의 주소를 가져와 가장 앞 주소(시/도)만 사용
+                var coord = drawingMap.getCenter();
+                geocoder.coord2Address(coord.Ga, coord.Ha, function (result, status) {
+                    if (status === kakao.maps.services.Status.OK) {
+                        //주소가 있다면 검색
+                        if (result[0] != null) {
+                            console.info(result[0]);
+
+                            LocName.setAttribute("value", result[0].address.region_1depth_name);
+                        }
+                    }
+                });
+            }
+
+
+
+        }
+
+
+
+
         // 다음페이지로 markers, polyline, rect, circle, polygon 보내는 기능
         function addDataAtForm(form) {
+
+
+
+
 
             //var title = document.getElementById("title").value;
             //var article = document.getElementById("article").value;
@@ -2391,44 +2623,40 @@
 
             // -- TravelRouteList중 중간 노드의 주소를 가져와 파싱하여 가장 앞 주소(시/도)ㄴ만 가져온다.
 
-            var firstAddress = "";
-
-            var items = getTravelRouteData();
-            if (items != null && items != [] && items.length != 0) {
-
-                var itemsMiddle = Math.floor(items.length / 2);
-                var address = "";
-
-                if (items[itemsMiddle].address_name != null) {
-                    address = items[itemsMiddle].address_name;
-                } else {
-                    address = items[itemsMiddle].road_address_name;
-                }
-
-                var addresstokens = address.split(' ');
-                firstAddress = addresstokens[0];
-            } else {
-
-                //현재 지도의 중앙부분의 주소를 가져와 가장 앞 주소(시/도)만 사용
-                var coord = drawingMap.getCenter();
-                geocoder.coord2Address(coord.Ga, coord.Ha, function (result, status) {
-                    if (status === kakao.maps.services.Status.OK) {
-                        //주소가 있다면 검색
-                        if (result[0] != null) {
-
-                            LocName.setAttribute("value", result[0].address.region_1depth_name);
-                        }
-                    }
-                });
-            }
-
-
 
             var LocName = document.createElement("input"); // input 엘리멘트 생성
             LocName.setAttribute("type", "hidden"); // type 속성을 hidden으로 설정
             LocName.setAttribute("name", "loc_name"); // name 속성을 'stadium'으로 설정
-            LocName.setAttribute("value", tmpLocName); // value 속성을 삽입
+
             form.appendChild(LocName);
+
+
+
+
+
+
+
+            //현재 지도의 중앙부분의 주소를 가져와 가장 앞 주소(시/도)만 사용
+            var coord = drawingMap.getCenter();
+            geocoder.coord2Address(coord.Ga, coord.Ha, function (result, status) {
+                if (status === kakao.maps.services.Status.OK) {
+                    //주소가 있다면 검색
+                    if (result[0] != null) {
+                        console.info(result[0]);
+
+                        LocName.setAttribute("value", result[0].address.region_1depth_name);
+                    }
+                }
+            });
+
+
+
+
+
+
+
+
+
 
             var map_center = drawingMap.getCenter();
             var mapCenter = document.createElement("input"); // input 엘리멘트 생성
@@ -2436,6 +2664,7 @@
             mapCenter.setAttribute("name", "map_center"); // name 속성을 'stadium'으로 설정
             mapCenter.setAttribute("value", JSON.stringify(map_center)); // value 속성을 삽입
             form.appendChild(mapCenter);
+
 
 
 
@@ -2754,7 +2983,7 @@
             for (var i = 0; i < places.length; i++) {
 
                 // 마커를 생성하고 지도에 표시합니다
-                var marker = addMarker(new kakao.maps.LatLng(places[i].y, places[i].x), order);
+                var marker = addMarkerArround(new kakao.maps.LatLng(places[i].y, places[i].x), order);
 
                 // 마커와 검색결과 항목을 클릭 했을 때
                 // 장소정보를 표출하도록 클릭 이벤트를 등록합니다
@@ -2787,28 +3016,30 @@
 
 
         // 마커를 생성하고 지도 위에 마커를 표시하는 함수입니다
-        function addMarker(position, order) {
+        function addMarkerArround(position, order) {
             var imageSize = new kakao.maps.Size(33, 44); // 마커이미지의 크기입니다
-            var imageOption = { offset: new kakao.maps.Point(27, 69) };
+            var imageOption = {
+                offset: new kakao.maps.Point(19, 45)
+            };
             var iconUrl = [
-                "./img/ico/marker/shopping.png",               //대형마트
-                "./img/ico/marker/retail-stores.png",          //편의점
-                "./img/ico/marker/play-schools.png",           //어린이집, 유치원
-                "./img/ico/marker/schools.png",                //학교
-                "./img/ico/marker/education.png",              //학원
-                "./img/ico/marker/automotive.png",             //주차장
-                "./img/ico/marker/gas-station.png",      //주유소, 충전소
-                "./img/ico/marker/transport.png",              //지하철역
-                "./img/ico/marker/financial-services.png",     //은행
-                "./img/ico/marker/tickets.png",                //문화시설
-                "./img/ico/marker/business.png",               //중개업소
-                "./img/ico/marker/government.png",             //공공기관
-                "./img/ico/marker/travel.png",                  //관광명소
-                "./img/ico/marker/residential-places.png",      //숙박
-                "./img/ico/marker/restaurants.png",            //음식점
-                "./img/ico/marker/coffee-n-tea.png",           //카페
-                "./img/ico/marker/medical.png",                //병원
-                "./img/ico/marker/health-medical.png"          //약국
+                "./img/ico/marker/shopping.png", //대형마트
+                "./img/ico/marker/retail-stores.png", //편의점
+                "./img/ico/marker/play-schools.png", //어린이집, 유치원
+                "./img/ico/marker/schools.png", //학교
+                "./img/ico/marker/education.png", //학원
+                "./img/ico/marker/automotive.png", //주차장
+                "./img/ico/marker/gas-station.png", //주유소, 충전소
+                "./img/ico/marker/transport.png", //지하철역
+                "./img/ico/marker/financial-services.png", //은행
+                "./img/ico/marker/tickets.png", //문화시설
+                "./img/ico/marker/business.png", //중개업소
+                "./img/ico/marker/government.png", //공공기관
+                "./img/ico/marker/travel.png", //관광명소
+                "./img/ico/marker/residential-places.png", //숙박
+                "./img/ico/marker/restaurants.png", //음식점
+                "./img/ico/marker/coffee-n-tea.png", //카페
+                "./img/ico/marker/medical.png", //병원
+                "./img/ico/marker/health-medical.png" //약국
             ];
 
             var marker = new kakao.maps.Marker({
@@ -2860,9 +3091,11 @@
             if (place.place_url != null) {
                 content += '<li class="card-body-li" style="padding: 15px 0;"><a href="' + place.place_url + '" target="_blank" style="text-decoration: none;">상세페이지</a></li>';
             }
+
+
             content +=
                 '</blockquote>' +
-                '<div class="card-addBtn" onclick=\'pushTravelRouteItem("' + place.place_name + '","' + place.road_address_name + '","' + place.address_name + '","' + place.phone + '","' + place.place_url + '","' + place.x + '","' + place.y + '")\'>추가</div>' +
+                '<div class="card-addBtn" onclick=\'AddMarkerWithTravelRouteItem("' + place.place_name + '","' + place.road_address_name + '","' + place.address_name + '","' + place.phone + '","' + place.place_url + '","' + place.x + '","' + place.y + '")\'>추가</div>' +
                 '</div>' +
                 '</div>';
 
@@ -2919,7 +3152,37 @@
         //------------------------------------
         //----------From around category search END
         //------------------------------------
+
+
+        //-----------------------------------
+        //----------- CommonFUnction START
+        //-----------------------------------
+
+
+        function closeAllOverlay() {
+            //IN Drwaingmanger
+            closeCusOverlay();
+            //키워드 검색
+
+            closeOverlay();
+            //주변 카테고리 검색
+            closePlaceOverlay();
+        }
+
+        function closeAllSearchedMarkers() {
+            //키워드 검색
+
+            removeMarker();
+            //주변 카테고리 검색
+            removeMarkerAround();
+        }
+        //-----------------------------------
+        //----------- CommonFUnction End
+        //-----------------------------------
     </script>
+
+                
+
         
 </body>
 </html>
