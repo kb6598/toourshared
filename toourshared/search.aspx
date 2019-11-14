@@ -556,37 +556,40 @@
             setMapDatasByIndex(index);
             //setMapCenterByIndex(index);
         }
-
+        cur_trv = 0;
         function setMapDatasByIndex(index) {
-            removeOverlays();
-            var data = trvMapDatas[index];
-            if (data != null && data != "" && data != '""') {               
-                
-                //console.info(data);
-                data.forEach(function (value, index, array) {
-                    if (value != null && value != "" && value != '""') {
-                        //console.info(value);
-                        getDataFromDrawingMap(value, color[index], color[index], icoDir + markerIco[index]);
-                        //getDataFromRoute(mapData, instrokeColor, infillColor, iconUrl);
-                    }
-                });
+            if (cur_trv != index) {
+
+
+                removeOverlays();
+                var data = trvMapDatas[index];
+                if (data != null && data != "" && data != '""') {
+
+                    //console.info(data);
+                    data.forEach(function (value, index, array) {
+                        if (value != null && value != "" && value != '""') {
+                            //console.info(value);
+                            getDataFromDrawingMap(value, color[index], color[index], icoDir + markerIco[index]);
+                            //getDataFromRoute(mapData, instrokeColor, infillColor, iconUrl);
+                        }
+                    });
+                }
+
+                var data = trvMapRoutes[index];
+                if (data != null && data != "" && data != '""') {
+
+
+                    //console.info(data);
+                    data.forEach(function (value, index, array) {
+                        if (value != null && value != "" && value != '""') {
+
+                            //getDataFromDrawingMap(value, color[index], color[index], icoDir + markerIco[index]);
+                            getDataFromRoute(value, color[index], color[index], icoDir + markerIco[index]);
+                        }
+                    });
+                }
             }
-
-            var data = trvMapRoutes[index];
-            if (data != null && data != "" && data != '""') {
-
-
-                //console.info(data);
-                data.forEach(function (value, index, array) {
-                    if (value != null && value != "" && value != '""') {
-                        
-                        //getDataFromDrawingMap(value, color[index], color[index], icoDir + markerIco[index]);
-                        getDataFromRoute(value, color[index], color[index], icoDir + markerIco[index]);
-                    }
-                });
-            }
-
-
+            cur_trv = index;
         }
 
         function setMapCenterByIndex(index) {
@@ -674,7 +677,7 @@
             //var data = mapData;
             //console.info(data);
 
-
+            closeOverlay();
             console.info(routeList);
             if (routeList != [] && routeList != "" && routeList != null && routeList.length != 0) {
                
