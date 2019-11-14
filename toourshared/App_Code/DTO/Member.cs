@@ -27,7 +27,7 @@ namespace tooushared.DTO
 
 
 
-        public Member(string mem_id = null, string mem_state = null, string mem_phone = null, string mem_pw = null, string mem_name = null, string mem_sex = null, string mem_ques = null, string mem_answer = null, string mem_birth = null, string mem_email = null, string mem_reg_datetime = null, string mem_timestmap = null, string mem_img_url = null)
+        public Member(string mem_id = "", string mem_state = "", string mem_phone = "", string mem_pw = "", string mem_name = "", string mem_sex = "", string mem_ques = "", string mem_answer = "", string mem_birth = "", string mem_email = "", string mem_reg_datetime = "", string mem_timestmap = "", string mem_img_url = "")
         {
             this.mem_id = mem_id;
             this.mem_state = mem_state;

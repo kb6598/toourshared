@@ -13,7 +13,7 @@ public class Member_Block
     private string mem_blo_length;
     private string mem_id;
 
-    public Member_Block(string mem_blo_no = null, string mem_blo_date = null, string mem_blo_length = null, string mem_id = null)
+    public Member_Block(string mem_blo_no = "", string mem_blo_date = "", string mem_blo_length = "", string mem_id = "")
     {
         this.Mem_blo_no = mem_blo_no;
         this.Mem_blo_date = mem_blo_date;

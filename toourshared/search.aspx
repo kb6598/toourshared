@@ -610,6 +610,20 @@
         var map = new kakao.maps.Map(mapContainer, mapOptions),
             overlays = []; // 지도에 그려진 도형을 담을 배열
 
+        // 지도 타입 변경 컨트롤을 생성한다
+		var mapTypeControl = new kakao.maps.MapTypeControl();
+
+		// 지도의 상단 우측에 지도 타입 변경 컨트롤을 추가한다
+		map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);	
+
+		// 지도에 확대 축소 컨트롤을 생성한다
+		var zoomControl = new kakao.maps.ZoomControl();
+
+		// 지도의 우측에 확대 축소 컨트롤을 추가한다
+		map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
+
+
+
         function getDataFromDrawingMap(mapData, instrokeColor, infillColor, iconUrl) {
             // Drawing Manager에서 그려진 데이터 정보를 가져옵니다 
             //console.info(mapData);

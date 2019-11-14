@@ -1142,7 +1142,7 @@
         <ul class="topnavUl">
             <li class="topnavLi">
                 <div class="nav-logo">
-                    <a href="index.aspx" class="nav-logo-item">To Our Shared</a>
+                    <a href="./index.aspx" class="nav-logo-item">To Our Shared</a>
                 </div>
             </li>
             <li class="topnavLi">
@@ -1154,7 +1154,8 @@
             <li class="topnavLi">
                 <a>Shared</a>
                 <ul>
-                    <li><a href="search.aspx">검색</a></li>
+                    <li><a href="./search.aspx">검색</a></li>
+                    <li><a href="./write.aspx">글 쓰기</a></li>
                 </ul>
             </li>
             <li class="topnavLi">
@@ -1167,7 +1168,7 @@
             <li class="topnavLi">
                 <a>Help</a>
                 <ul>
-                    <li><a href="FAQ.aspx">자주 찾는 질문</a></li>
+                    <li><a href="./FAQ.aspx">자주 찾는 질문</a></li>
                 </ul>
             </li>
         <% 

@@ -19,7 +19,7 @@ public class Video
         //
     }
 
-    public Video(string vid_no, string mem_id, string vid_name, string vid_caption)
+    public Video(string vid_no = "", string mem_id = "", string vid_name = "", string vid_caption = "")
     {
         this.Vid_no = vid_no;
         this.Mem_id = mem_id;
