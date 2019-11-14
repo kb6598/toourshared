@@ -580,7 +580,7 @@
                         console.info(totalHa);
                     }
                 });
-                map.setLevel(4, { animate: true });
+                map.setLevel(8, { animate: true });
 
                 if (cnt == 1) {
                     panTo(totalHa , totalGa );
