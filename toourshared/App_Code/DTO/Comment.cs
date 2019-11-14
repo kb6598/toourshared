@@ -15,7 +15,7 @@ public class Comment
     private string cmt_content;
     private string mem_id;
 
-    public Comment(string cmt_no = null, string cmt_rate = null, string cmt_timestamp = null, string trv_no = null, string cmt_content = null, string mem_id = null)
+    public Comment(string cmt_no = "", string cmt_rate = "", string cmt_timestamp = "", string trv_no = "", string cmt_content = "", string mem_id = "")
     {
         this.Cmt_no = cmt_no;
         this.Cmt_rate = cmt_rate;

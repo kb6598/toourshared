@@ -20,7 +20,7 @@ public class Like
         //
     }
 
-    public Like(string mem_id, string like_type, string trv_no)
+    public Like(string mem_id = "", string like_type = "", string trv_no = "")
     {
         this.Mem_id = mem_id;
         this.Like_type = like_type;

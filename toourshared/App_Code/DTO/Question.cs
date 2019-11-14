@@ -13,7 +13,7 @@ public class Question
     private string qus_content;
     private string qus_ask;
 
-    public Question(string qus_no = null, string qus__title = null, string qus_content = null, string qus_ask = null)
+    public Question(string qus_no = "", string qus__title = "", string qus_content = "", string qus_ask = "")
     {
         this.Qus_no = qus_no;
         this.Qus__title = qus__title;

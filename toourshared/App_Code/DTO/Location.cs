@@ -10,7 +10,7 @@ public class Location
 {
     private string loc_name;
 
-    public Location(string loc_name = null)
+    public Location(string loc_name = "")
     {
         this.Loc_name = loc_name;
         //

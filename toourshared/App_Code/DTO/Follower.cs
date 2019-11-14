@@ -11,7 +11,7 @@ public class Follower
     public object fol_no;
     private string mem_id;
     private string fol_id;
-    public Follower(string mem_id = null, string fol_id = null)
+    public Follower(string mem_id = "", string fol_id = "")
     {
         this.Mem_id = mem_id;
         this.Fol_id = fol_id;
