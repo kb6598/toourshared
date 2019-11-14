@@ -683,7 +683,7 @@
     }
 
     .ID {
-        width: 25%;
+        width: auto;
         display: block;
     }
 
@@ -695,6 +695,7 @@
 
     .Setting {
         width: auto;
+        padding-left: 10px;
     }
 
     .settingButton {

@@ -1721,13 +1721,13 @@
                                                    "<div class = \"replyItem\">\n" +
                                                         "<div class = \"reply-writer\">\n" +
                                                             "<div class=\"writer-Image\">\n" +
-                                                                "<a href=\"#\">\n" +
+                                                                "<a href=\"./MyPage.aspx?mem_id=" + CommentList[k].Mem_id + "\">\n" +
                                                                     "<img src=\"" + memMainImg + "\" alt=\"" + CommentList[k].Mem_id + "\" class=\"writer-ImageItem\" />\n" +
                                                                 "</a>\n" +
                                                             "</div>\n" +
                                                             "<div class=\"writer-Text\">\n" +
                                                                 "<div class=\"writerID\">\n" +
-                                                                    "<a href=\"#\">\n" +
+                                                                    "<a href=\"./MyPage.aspx?mem_id=" + CommentList[k].Mem_id + "\">\n" +
                                                                         CommentList[k].Mem_id + "\n" +
                                                                     "</a>\n" +
                                                                 "</div>\n" +
