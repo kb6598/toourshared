@@ -233,7 +233,7 @@
     <title>TO OUR SHARED : 글 작성 #일차</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Font -->
+       <!-- Font -->
     <link href="https://fonts.googleapis.com/css?family=Mansalva|Nanum+Gothic|Nanum+Myeongjo|Noto+Sans+KR|Lora|East+Sea+Dokdo|Jua&amp;display=swap" rel="stylesheet" />
 
     <!-- ICON -->
@@ -253,15 +253,16 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
 
 
+
+    <!-- ajax
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js" type="text/javascript"></script>
+        -->
     <!-- summernote-->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" type="text/javascript"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote-lite.css" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote-lite.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote-lite.js" type="text/javascript"></script>
 
-
-    <!--파일 업로드
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
--->    <link rel="stylesheet" href="./css/write.css">
+   <link rel="stylesheet" href="./css/write.css">
   <style>
         // summer note 이미지 삽입시 뜨는 창 스타일 처리
         .note-modal-content {
