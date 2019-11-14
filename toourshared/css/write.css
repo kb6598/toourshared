@@ -856,4 +856,23 @@ a {
     height: 10px;
 }
 
+.navJoinBtn {
+    border: none;
+    outline: none;
+    background-color: transparent;
+    color: white;
+    font-size: 14px;
+    padding-bottom: 20px;
+}
 
+    .navFindBtn:hover, .navJoinBtn:hover {
+        font-weight: bold;
+    }
+
+.navFindBtn {
+    border: none;
+    outline: none;
+    background-color: transparent;
+    color: white;
+    font-size: 14px;
+}
