@@ -49,56 +49,70 @@
 
     protected List<String> getTravelByTrvNo()
     {
-        int trv_no = int.Parse(Request.QueryString["trv_no"].ToString()); // 게시글 번호 받기
-
-        Travel travel = new Travel();                        // travel 객체 생성
-        List<String> returnList = new List<String>();   // return할 List 생성
-        travel.Trv_no = trv_no.ToString();                  // travel 객체에 게시글 번호 넣고
-
-        TravelDao travelDao = new TravelDao();        // TravelDao 객체 생성
-        travel = travelDao.selectTravelBytrv_no(travel); // travelDao에서 trv_no를 토대로 데이터 몽땅 긁어온 travel 객체로 바꿔치기
-
-        returnList.Add(travel.Trv_no);
-        returnList.Add(travel.Trv_secret);
-        returnList.Add(travel.Trv_views);
-
-        try
+        if (Request.QueryString["trv_no"] == null)
         {
-            double d_totRate = double.Parse(travel.Trv_tot_rate);
-            int i_totRate = (int)d_totRate;
-            String returnRate = d_totRate.ToString() + "-" + i_totRate.ToString(); // ex: 3.4-3
-
-            returnList.Add(returnRate);
-            returnList.Add(travel.Trv_main_img);
-            returnList.Add(travel.Trv_title);
-            returnList.Add(travel.Trv_tag);
-            returnList.Add(travel.Trv_timestamp);
-            returnList.Add(travel.Trv_create_time);
-            returnList.Add(travel.Loc_name);
-            returnList.Add(travel.Mem_id);
+            return new List<String>();
         }
-        catch (Exception e) {; }
-        return returnList;
+        else
+        {
+            int trv_no = int.Parse(Request.QueryString["trv_no"].ToString()); // 게시글 번호 받기
+
+            Travel travel = new Travel();                        // travel 객체 생성
+            List<String> returnList = new List<String>();   // return할 List 생성
+            travel.Trv_no = trv_no.ToString();                  // travel 객체에 게시글 번호 넣고
+
+            TravelDao travelDao = new TravelDao();        // TravelDao 객체 생성
+            travel = travelDao.selectTravelBytrv_no(travel); // travelDao에서 trv_no를 토대로 데이터 몽땅 긁어온 travel 객체로 바꿔치기
+
+            returnList.Add(travel.Trv_no);
+            returnList.Add(travel.Trv_secret);
+            returnList.Add(travel.Trv_views);
+
+            try
+            {
+                double d_totRate = double.Parse(travel.Trv_tot_rate);
+                int i_totRate = (int)d_totRate;
+                String returnRate = d_totRate.ToString() + "-" + i_totRate.ToString(); // ex: 3.4-3
+
+                returnList.Add(returnRate);
+                returnList.Add(travel.Trv_main_img);
+                returnList.Add(travel.Trv_title);
+                returnList.Add(travel.Trv_tag);
+                returnList.Add(travel.Trv_timestamp);
+                returnList.Add(travel.Trv_create_time);
+                returnList.Add(travel.Loc_name);
+                returnList.Add(travel.Mem_id);
+            }
+            catch (Exception e) {; }
+            return returnList;
+        }
     }
 
     public List<String> getTravelDayListByTrvNo()
     {
-        int trv_no = int.Parse(Request.QueryString["trv_no"].ToString()); // 게시글 번호 받기
-
-        Travel_Day travelDay = new Travel_Day();                         // travel_day 객체 생성
-        travelDay.Trv_no = trv_no.ToString();                               // travel_no 집어 넣기
-        Travel_DayDao travelDayDao = new Travel_DayDao();         // travel_day DAO 객체 생성
-
-        List<Travel_Day> travelDayList = travelDayDao.selectTravelDayListByTrvNo(travelDay);
-        // 게시글 번호에 해당하는 그 게시글의 모든 게시글 내용들(N일 차) 오름차순으로 구해온다.
-
-        List<String> returnList = new List<String>();
-        for (int i = 0; i < travelDayList.Count; i++)
+        if (Request.QueryString["trv_no"] == null)
         {
-            returnList.Add(travelDayList[i].Trv_day_content); // 게시글들을 구해온다.
+            return new List<string>();
         }
+        else
+        {
+            int trv_no = int.Parse(Request.QueryString["trv_no"].ToString()); // 게시글 번호 받기
 
-        return returnList;
+            Travel_Day travelDay = new Travel_Day();                         // travel_day 객체 생성
+            travelDay.Trv_no = trv_no.ToString();                               // travel_no 집어 넣기
+            Travel_DayDao travelDayDao = new Travel_DayDao();         // travel_day DAO 객체 생성
+
+            List<Travel_Day> travelDayList = travelDayDao.selectTravelDayListByTrvNo(travelDay);
+            // 게시글 번호에 해당하는 그 게시글의 모든 게시글 내용들(N일 차) 오름차순으로 구해온다.
+
+            List<String> returnList = new List<String>();
+            for (int i = 0; i < travelDayList.Count; i++)
+            {
+                returnList.Add(travelDayList[i].Trv_day_content); // 게시글들을 구해온다.
+            }
+
+            return returnList;
+        }
     }
 
     protected List<Map> getMapListByTrvDayNo()
@@ -109,62 +123,72 @@
 
         MapDao mapDao = new MapDao();
 
-
-
-
-
         return resultList;
     }
 
     protected int getLikeCountByTrvNo()
     {
         int returnInt = 0;
-        int trv_no = int.Parse(Request.QueryString["trv_no"].ToString()); // 게시글 번호 받고
+        if (Request.QueryString["trv_no"] == null)
+        {
+            return 0;
+        }
+        else
+        {
+            int trv_no = int.Parse(Request.QueryString["trv_no"].ToString()); // 게시글 번호 받고
 
-        Like like = new Like();                   // like 객체 생성
-        like.Trv_no = trv_no.ToString();        // like 객채에 데이터 집어넣기
-        LikeDao likeDao = new LikeDao();   // likeDao 객체 생성
+            Like like = new Like();                   // like 객체 생성
+            like.Trv_no = trv_no.ToString();        // like 객채에 데이터 집어넣기
+            LikeDao likeDao = new LikeDao();   // likeDao 객체 생성
 
-        returnInt = likeDao.selectLikeCountByTrvNo(like); // 데이터 가져오고
-        return returnInt;
+            returnInt = likeDao.selectLikeCountByTrvNo(like); // 데이터 가져오고
+            return returnInt;
+        }
     }
 
     protected List<String> getMemberByTrvNo()
     {
         List<String> returnList = new List<String>();
-        int trv_no = int.Parse(Request.QueryString["trv_no"].ToString()); // 게시글 번호 받고
-
-        Travel travel = new Travel();
-        TravelDao travelDao = new TravelDao();
-
-        travel.Trv_no = trv_no.ToString(); // travel 객채에 게시글 번호 삽입
-        travel = travelDao.selectTravelBytrv_no(travel); // 바꾸고
-        String MemberID = travel.Mem_id.ToString(); // 게시글 번호의 작성자를 구해오고
-
-        Member member = new Member(); // member 객체 생성하고
-        member.Mem_id = MemberID; // 객체에 작성자 아이디 삽입하고
-        MemberDao memberDao = new MemberDao(); // DAO 생성해서
-        member = memberDao.selectMemberByMem_id(member); // 바꾸고
-
-        returnList.Add(member.Mem_id);
-        returnList.Add(member.Mem_state);
-        returnList.Add(member.Mem_phone);
-        returnList.Add(member.Mem_pw);
-        returnList.Add(member.Mem_name);
-        returnList.Add(member.Mem_sex);
-        returnList.Add(member.Mem_ques);
-        returnList.Add(member.Mem_answer);
-        returnList.Add(member.Mem_birth);
-        returnList.Add(member.Mem_email);
-        returnList.Add(member.Mem_reg_datetime);
-        returnList.Add(member.Mem_timestmap);
-
-        String imgUrl = member.Mem_img_url;
-        if (imgUrl == "noImage")
-            returnList.Add("./img/memberNoImage.png");
+        if (Request.QueryString["trv_no"] == null)
+        {
+            return returnList;
+        }
         else
-            returnList.Add(imgUrl);
-        return returnList;
+        {
+            int trv_no = int.Parse(Request.QueryString["trv_no"].ToString()); // 게시글 번호 받고
+
+            Travel travel = new Travel();
+            TravelDao travelDao = new TravelDao();
+
+            travel.Trv_no = trv_no.ToString(); // travel 객채에 게시글 번호 삽입
+            travel = travelDao.selectTravelBytrv_no(travel); // 바꾸고
+            String MemberID = travel.Mem_id.ToString(); // 게시글 번호의 작성자를 구해오고
+
+            Member member = new Member(); // member 객체 생성하고
+            member.Mem_id = MemberID; // 객체에 작성자 아이디 삽입하고
+            MemberDao memberDao = new MemberDao(); // DAO 생성해서
+            member = memberDao.selectMemberByMem_id(member); // 바꾸고
+
+            returnList.Add(member.Mem_id);
+            returnList.Add(member.Mem_state);
+            returnList.Add(member.Mem_phone);
+            returnList.Add(member.Mem_pw);
+            returnList.Add(member.Mem_name);
+            returnList.Add(member.Mem_sex);
+            returnList.Add(member.Mem_ques);
+            returnList.Add(member.Mem_answer);
+            returnList.Add(member.Mem_birth);
+            returnList.Add(member.Mem_email);
+            returnList.Add(member.Mem_reg_datetime);
+            returnList.Add(member.Mem_timestmap);
+
+            String imgUrl = member.Mem_img_url;
+            if (imgUrl == "noImage")
+                returnList.Add("./img/memberNoImage.png");
+            else
+                returnList.Add(imgUrl);
+            return returnList;
+        }
     }
 
     protected List<String> getHashTagList()
@@ -176,89 +200,116 @@
     protected List<Comment> getCommentListByTrvNo()
     {
         List<Comment> returnList = new List<Comment>();
-        int trv_no = int.Parse(Request.QueryString["trv_no"].ToString()); // 게시글 번호 받고
+        if(Request.QueryString["trv_no"] == null)
+        {
+            return returnList;
+        }
+        else
+        {
+            int trv_no = int.Parse(Request.QueryString["trv_no"].ToString()); // 게시글 번호 받고
 
-        Travel travel = new Travel(); // Travel 객체 생성 및
-        travel.Trv_no = trv_no.ToString(); // 게시글 번호 삽입
+            Travel travel = new Travel(); // Travel 객체 생성 및
+            travel.Trv_no = trv_no.ToString(); // 게시글 번호 삽입
 
-        CommentDao commentDao = new CommentDao(); // cmtDao 생성
-        returnList = commentDao.selectCommentListByTrvNo(travel); // List받아오고
+            CommentDao commentDao = new CommentDao(); // cmtDao 생성
+            returnList = commentDao.selectCommentListByTrvNo(travel); // List받아오고
 
-        return returnList;
+            return returnList;
+        }
     }
 
     protected int getCommentByTrvNo()
     {
         int returnInt = 0;
-        int trv_no = int.Parse(Request.QueryString["trv_no"].ToString()); // 게시글 번호 받고
+        if (Request.QueryString["trv_no"] == null)
+        {
+            return returnInt;
+        }
+        else
+        {
+            int trv_no = int.Parse(Request.QueryString["trv_no"].ToString()); // 게시글 번호 받고
 
-        Travel travel = new Travel(); // Travel 객체 생성 및
-        travel.Trv_no = trv_no.ToString(); // 게시글 번호 삽입
+            Travel travel = new Travel(); // Travel 객체 생성 및
+            travel.Trv_no = trv_no.ToString(); // 게시글 번호 삽입
 
-        CommentDao commentDao = new CommentDao(); // cmtDao 생성
-        returnInt = commentDao.selectCommentCountByTrvNo(travel);
+            CommentDao commentDao = new CommentDao(); // cmtDao 생성
+            returnInt = commentDao.selectCommentCountByTrvNo(travel);
 
-        return returnInt;
+            return returnInt;
+        }
     }
 
     protected List<Map> getMapByTrvDayNo()
     {
         List<Map> mapList = new List<Map>();
-
-        int trv_no = int.Parse(Request.QueryString["trv_no"].ToString()); // 게시글 번호 받기
-
-        Travel_Day travelDay = new Travel_Day();                         // travel_day 객체 생성
-        travelDay.Trv_no = trv_no.ToString();                               // travel_no 집어 넣기
-        Travel_DayDao travelDayDao = new Travel_DayDao();         // travel_day DAO 객체 생성
-
-        List<Travel_Day> travelDayList = travelDayDao.selectTravelDayListByTrvNo(travelDay);
-        // 게시글 번호에 해당하는 그 게시글의 모든 게시글 내용들(N일 차) 오름차순으로 구해온다.
-
-        Map inMap = new Map();
-        Map tmpMap;
-        MapDao mapDao = new MapDao();
-        foreach (var item in travelDayList)
+        if (Request.QueryString["trv_no"] == null)
         {
-            inMap.Trv_day_no = item.Trv_day_no;
-            tmpMap = new Map();
-            tmpMap = mapDao.selectMapByTrv_day_no(inMap);
-            mapList.Add(tmpMap);
+            return mapList;
         }
-        return mapList;
+        else
+        {
+            int trv_no = int.Parse(Request.QueryString["trv_no"].ToString()); // 게시글 번호 받기
+
+            Travel_Day travelDay = new Travel_Day();                         // travel_day 객체 생성
+            travelDay.Trv_no = trv_no.ToString();                               // travel_no 집어 넣기
+            Travel_DayDao travelDayDao = new Travel_DayDao();         // travel_day DAO 객체 생성
+
+            List<Travel_Day> travelDayList = travelDayDao.selectTravelDayListByTrvNo(travelDay);
+            // 게시글 번호에 해당하는 그 게시글의 모든 게시글 내용들(N일 차) 오름차순으로 구해온다.
+
+            Map inMap = new Map();
+            Map tmpMap;
+            MapDao mapDao = new MapDao();
+            foreach (var item in travelDayList)
+            {
+                inMap.Trv_day_no = item.Trv_day_no;
+                tmpMap = new Map();
+                tmpMap = mapDao.selectMapByTrv_day_no(inMap);
+                mapList.Add(tmpMap);
+            }
+            return mapList;
+        }
     }
 
     protected List<string> testRouteCost()
     {
         List<string> mapRouteCost = new List<string>();
 
-        int trv_no = int.Parse(Request.QueryString["trv_no"].ToString()); // 게시글 번호 받기
-
-        Travel_Day travelDay = new Travel_Day();                         // travel_day 객체 생성
-        travelDay.Trv_no = trv_no.ToString();                               // travel_no 집어 넣기
-        Travel_DayDao travelDayDao = new Travel_DayDao();         // travel_day DAO 객체 생성
-
-        List<Travel_Day> travelDayList = travelDayDao.selectTravelDayListByTrvNo(travelDay);
-        // 게시글 번호에 해당하는 그 게시글의 모든 게시글 내용들(N일 차) 오름차순으로 구해온다.
-
-        Map inMap = new Map();
-        Map tmpMap;
-        MapDao mapDao = new MapDao();
-        foreach (var item in travelDayList)
+        if (Request.QueryString["trv_no"] == null)
         {
-            inMap.Trv_day_no = item.Trv_day_no;
-            tmpMap = new Map();
-            tmpMap = mapDao.selectMapByTrv_day_no(inMap);
-            mapRouteCost.Add(tmpMap.Map_route);
-            mapRouteCost.Add(tmpMap.Map_cost);
+            return mapRouteCost;
         }
-        return mapRouteCost;
+        else
+        {
+            int trv_no = int.Parse(Request.QueryString["trv_no"].ToString()); // 게시글 번호 받기
+
+            Travel_Day travelDay = new Travel_Day();                         // travel_day 객체 생성
+            travelDay.Trv_no = trv_no.ToString();                               // travel_no 집어 넣기
+            Travel_DayDao travelDayDao = new Travel_DayDao();         // travel_day DAO 객체 생성
+
+            List<Travel_Day> travelDayList = travelDayDao.selectTravelDayListByTrvNo(travelDay);
+            // 게시글 번호에 해당하는 그 게시글의 모든 게시글 내용들(N일 차) 오름차순으로 구해온다.
+
+            Map inMap = new Map();
+            Map tmpMap;
+            MapDao mapDao = new MapDao();
+            foreach (var item in travelDayList)
+            {
+                inMap.Trv_day_no = item.Trv_day_no;
+                tmpMap = new Map();
+                tmpMap = mapDao.selectMapByTrv_day_no(inMap);
+                mapRouteCost.Add(tmpMap.Map_route);
+                mapRouteCost.Add(tmpMap.Map_cost);
+            }
+            return mapRouteCost;
+        }
     }
 
     protected void bindMapData()
     {
         List<Map> mapList = getMapByTrvDayNo();
-
         HtmlInputHidden tmpHidden;
+
         int index = 0;
         foreach (var map in mapList)
         {
@@ -299,7 +350,9 @@
             string MemID = Session["mem_id"].ToString();
             string trvNo = Request.QueryString["trv_no"].ToString();
 
-            
+/*
+ *          게시글 신고기능 작성하세요.
+*/
         }
     }
 
@@ -352,7 +405,7 @@
 </script>
 
 <head>
-    <title>To Our Shared : milk9503 님의 글 </title>
+    <title>To Our Shared</title>
 
     <!-- Font -->
     <link href="https://fonts.googleapis.com/css?family=Mansalva|Nanum+Gothic|Nanum+Myeongjo|Noto+Sans+KR|Lora|East+Sea+Dokdo|Jua&display=swap" rel="stylesheet">
