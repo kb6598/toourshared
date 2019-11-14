@@ -355,12 +355,12 @@
             "<div class=\"boardItem\">\n" +
                 "<div class=\"article1\">\n" +
                     "<div class=\"boardImage\">\n" +
-                        "<a href = \"./board.aspx?trv_no=" + travelList[i].Trv_no.ToString() + "\" onmouseover=\"setMapByIndex("+i+")\">\n" +
+                        "<a href = \"./board.aspx?trv_no=" + travelList[i].Trv_no.ToString() + "\" onmouseover=\"setMapByIndex("+travelList[i].Trv_no.ToString() +")\">\n" +
                             "<img src = \"" + travelMainImage + "\" alt=\"" + member.Mem_id.ToString() + "\" class=\"boardImageItem\">\n" +
                         "</a>\n" +
                     "</div>\n" +
                     "<div class=\"boardContent\">" +
-                        "<a href = \"./board.aspx?trv_no=" + travelList[i].Trv_no.ToString() + "\" onmouseover=\"setMapByIndex("+i+")\">\n" +
+                        "<a href = \"./board.aspx?trv_no=" + travelList[i].Trv_no.ToString() + "\" onmouseover=\"setMapByIndex("+travelList[i].Trv_no.ToString() +")\">\n" +
                             "<div class=\"boardTitle\">" +
                                 "<span>" + travelList[i].Trv_title.ToString() + "</span>" +
                             "</div>\n" +
@@ -501,7 +501,7 @@
 
 
                         //console.info(data);
-                        trvMapCenters.push(data);
+                        trvMapCenters[travel_no] = data;
                         
 
 
@@ -519,7 +519,7 @@
                         //console.info(travel_no);
 
                         //console.info(data);
-                        trvMapDatas.push(data);
+                        trvMapDatas[travel_no] = data;
 
 
 
