@@ -1423,7 +1423,10 @@
         //------------------------------------
         //----------TravelRouteItem and travelRouteList Start
         //------------------------------------
-        var TravelOrder = 0;
+
+
+        var TravelRouteList = Array();
+        var TravelOrder = TravelRouteList.length;;
         class TravelRouteItem {
             constructor(place_name, road_address_name, address_name, phone, place_url, x, y) {
                 this.place_name = place_name;
@@ -1457,7 +1460,7 @@
 
         }
 
-        var TravelRouteList = Array();
+        
 
         function updateTravelRouteNameInfo() {
 
