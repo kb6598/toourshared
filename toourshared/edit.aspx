@@ -19,6 +19,16 @@
         //selectMyInfo();
     }
 
+    protected void btnJoin_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("./join.aspx");
+    }
+
+    protected void btnFindIDPW_Click(object sender, EventArgs e)
+    {
+        Response.Redirect("./find_idpw.aspx");
+    }
+
     protected void selectMyInfo()
     {
         if (Session["mem_id"] != null)
@@ -153,6 +163,7 @@
 
             font-size: 20px;
             font-family: '맑은고딕';
+            cursor : default;
 		}
 		
 		.topnavLi ul, li{
@@ -360,9 +371,10 @@
 			position: relative;
 		}
 		
-		.profileImage img{
-			width: 130px;
-			height: 130px;
+		.profileImage .userImageStyle{
+			width: 150px;
+			height: 150px;
+            border-radius: 100%;
 		}
 		
 		.profileID{
@@ -820,8 +832,10 @@
 
 <body>
     <form id="form1" runat="server">
-        <div id= "nav" class= "topnav" >
-        <ul class = "topnavUl" >
+
+    <!-- navbar 영역 -->
+    <div id="nav" class="topnav">
+        <ul class="topnavUl">
             <li class="topnavLi">
                 <div class="nav-logo">
                     <a href="./index.aspx" class="nav-logo-item">To Our Shared</a>
@@ -830,7 +844,7 @@
             <li class="topnavLi">
                 <a>Intro</a>
                 <ul>
-                    <li><a href="./index.aspx#relAndTOU">TOUPLE</a></li>
+                    <li><a href="#relAndTOU">TOUPLE</a></li>
                 </ul>
             </li>
             <li class="topnavLi">
@@ -853,19 +867,41 @@
                     <li><a href="./FAQ.aspx">자주 찾는 질문</a></li>
                 </ul>
             </li>
-             <li class = "topnavLi" >
-                 <% if (Session["mem_id"] != null)
-                     {%>
-				<a href = "#" ><% string id = Session["mem_id"].ToString(); Response.Write(id); %></a>
+        <% 
+            if (IsLogin.isLogin() == false)
+            {
+        %>
+            <li class="topnavLi">
+                <div class="nav-log">
+                    <a>
+                        <div class="nav-log-area">
+                            <asp:Button ID="btnLogin" runat="server" Text="로그인" class="nav-log-item" PostBackUrl="./login.aspx"/>
+                        </div>
+                    </a>
+                </div>
                 <ul>
-                    <li><asp:Button ID="btnMypage" runat="server" Text="마이페이지" OnClick="btnMypage_Click" class="navJoinBtn"/></li>
-                    <li><asp:Button ID="btnLogout" runat="server" Text="로그아웃" OnClick="btnLogout_Click" class="navFindBtn"/></li>
-
+                    <br />
+                    <li><asp:Button ID="btnJoin" runat="server" Text="회원가입" OnClick="btnJoin_Click" class ="navJoinBtn"/></li>
+                    <li><asp:Button ID="btnFindIDPW" runat="server" Text="계정찾기" OnClick="btnFindIDPW_Click" class ="navFindBtn" /></li>
                 </ul>
-                 <%} %>
             </li>
+        <%  
+            }
+            else
+            {
+        %>
+            <li class = "topnavLi" >
+				<a><% string id = Session["mem_id"].ToString(); Response.Write(id); %></a>
+                <ul>
+                    <li><asp:Button ID="btnMypage" runat="server" Text="마이페이지" OnClick="btnMypage_Click" class ="navJoinBtn"/></li>
+                    <li><asp:Button ID="btnLogout" runat="server" Text="로그아웃" OnClick="btnLogout_Click" class ="navFindBtn"/></li>
+                </ul>
+            </li>
+        <% 
+            }
+        %>
         </ul>
-	</div>
+    </div>
 	<div class = "section">
 		
 		<!-- profile edit -->
@@ -874,15 +910,14 @@
 				<div class = "profileHeader">
 					<div class = "profileItem1">
 						<div class = "profileImage">
-                                 <!-- 이미지 미리보기 부분-->
-                                <!-- 이미지 미리보기 부분-->
-                        <asp:Image ID="mainImgItem" runat="server" ImageUrl="./img/UserNoneImage.png"	CssClass="userImageStyle"/>
+                             <!-- 이미지 미리보기 -->
+                            <asp:Image ID="mainImgItem" runat="server" ImageUrl="./img/UserNoneImage.png"	CssClass="userImageStyle"/>
 						</div>
 						<div class = "profileID">
 							<div class = "ID">
 								<span class = "idSpan1">
                                     <asp:Label ID="mem_id" runat="server" Text=""></asp:Label></span>
-								<span class = "idSpan2">(<asp:Label ID="mem_name" runat="server" Text=""/></span>
+								<span class = "idSpan2">(<asp:Label ID="mem_name" runat="server" Text=""/>)</span>
 							</div>
 							<div class = "imageEdit">
 
