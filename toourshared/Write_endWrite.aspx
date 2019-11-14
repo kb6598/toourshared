@@ -47,6 +47,7 @@
             curTravel.Trv_secret = Request.Form["trv_secret"];
             curTravel.Trv_tag = Request.Form["hashtag"];
             curTravel.Trv_timestamp = TimeLib.GetTimeStamp();
+            
             curTravel.Trv_title = Request.Form["title"];
             travelDao.UpdatetTravel(curTravel);
 

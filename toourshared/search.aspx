@@ -582,7 +582,12 @@
                 });
                 map.setLevel(4, { animate: true });
 
-                panTo(totalHa / cnt, totalGa / cnt);
+                if (cnt == 1) {
+                    panTo(totalHa , totalGa );
+                } else {
+                    panTo(totalHa / cnt, totalGa / cnt);
+                }
+ 
                 
                 
             }
@@ -595,6 +600,7 @@
             // 지도 중심을 부드럽게 이동시킵니다
             // 만약 이동할 거리가 지도 화면보다 크면 부드러운 효과 없이 이동합니다
             map.panTo(moveLatLon);
+            map.setLevel(8);
         } 
 
         
@@ -602,8 +608,8 @@
         //center 좌표 계산 필요
         var mapContainer = document.getElementById('mapArea'),
             mapOptions = {
-                center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
-                level: 3 // 지도의 확대 레벨
+                center: new kakao.maps.LatLng(35.5106573685836, 125.63245499592271), // 지도의 중심좌표
+                level: 13 // 지도의 확대 레벨
             };
 
         // 지도 div와 지도 옵션으로 지도를 생성합니다
@@ -737,20 +743,7 @@
                     new kakao.maps.Size(31, 35));
 
                 for (; i < len; i++) {
-                    //지도의 중심 좌표를 구하기 위한 코드
-                    if (markers[i].x > maxX) {
-                        maxX = markers[i].x
-                    }
-                    if (markers[i].y > maxY) {
-                        maxY = markers[i].y
-                    }
-                    if (markers[i].x <= minX) {
-                        minX = markers[i].x
-                    }
-                    if (markers[i].y <= minY) {
-                        minY = markers[i].y
-                    }
-
+                  
                     var marker = new kakao.maps.Marker({
                         image: icon,
                         map: map,
@@ -771,6 +764,58 @@
                 panTo(centerY, centerX);
             }
         }
+
+
+
+        //// Drawing Manager에서 가져온 데이터 중 마커를 아래 지도에 표시하는 함수입니다
+        //function drawMarker(markers, iconUrl) {
+        //    if (markers != [] || markers != "" || markers != null) {
+        //        var maxX = markers[0].x;
+        //        var maxY = markers[0].y;
+        //        var minX = markers[0].x;
+        //        var minY = markers[0].y;
+        //        var len = markers.length, i = 0;
+
+        //        var icon = new kakao.maps.MarkerImage(
+        //            iconUrl,
+        //            new kakao.maps.Size(31, 35));
+
+        //        for (; i < len; i++) {
+        //            //지도의 중심 좌표를 구하기 위한 코드
+        //            if (markers[i].x > maxX) {
+        //                maxX = markers[i].x
+        //            }
+        //            if (markers[i].y > maxY) {
+        //                maxY = markers[i].y
+        //            }
+        //            if (markers[i].x <= minX) {
+        //                minX = markers[i].x
+        //            }
+        //            if (markers[i].y <= minY) {
+        //                minY = markers[i].y
+        //            }
+
+        //            var marker = new kakao.maps.Marker({
+        //                image: icon,
+        //                map: map,
+        //                position: new kakao.maps.LatLng(markers[i].y, markers[i].x),
+        //                zIndex: markers[i].zIndex
+        //            });
+
+        //            overlays.push(marker);
+
+        //        }
+        //        if (len == 1) {
+        //            len = len + 1;
+        //        }
+        //        var centerX = (maxX + maxX) / len;
+        //        var centerY = (minY + minY) / len;
+        //        console.info(centerX);
+        //        console.info(centerY);
+        //        panTo(centerY, centerX);
+        //    }
+        //}
+
 
         // Drawing Manager에서 가져온 데이터 중 선을 아래 지도에 표시하는 함수입니다
         function drawPolyline(lines, instrokeColor, infillColor) {
