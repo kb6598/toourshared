@@ -11,7 +11,7 @@
         // 게시글 추천 기능
         if (Session["mem_id"] == null || Request.QueryString["trv_no"] == null || Request.QueryString["mem_id"] == null)
         {
-            Response.Write("<script language='javascript'>alert('세션이 만료되었거나 현재 게시글의 정보를 불러올 수 없습니다. \r\n메인화면으로 이동됩니다.'); location.href('./index.aspx'); </script language='javascript'>");
+            Response.Write("<script language='javascript'>alert('세션이 만료되었거나 현재 게시글의 정보를 불러올 수 없습니다. \r\n메인화면으로 이동됩니다.'); location.href('./index.aspx');</script language='javascript'>");
         }
         else
         {

@@ -551,7 +551,7 @@
             {
         %>
             <li class = "topnavLi" >
-				<a href = "#" ><% string id = Session["mem_id"].ToString(); Response.Write(id); %></a>
+				<a><% string id = Session["mem_id"].ToString(); Response.Write(id); %></a>
                 <ul>
                     <li><asp:Button ID="btnMypage" runat="server" Text="마이페이지" OnClick="btnMypage_Click" class="navJoinBtn"/></li>
                     <li><asp:Button ID="btnLogout" runat="server" Text="로그아웃" OnClick="btnLogout_Click" class="navFindBtn"/></li>

@@ -472,6 +472,7 @@
         text-decoration: none;
         font-size: 20px;
         font-family: '맑은고딕';
+       cursor: default;
     }
 
         .topnavLi ul, li {
