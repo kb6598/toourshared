@@ -27,7 +27,6 @@
                 if (check == 1)
                 {
                     Session["mem_id"] = mem.Mem_id;
-                    Session.Timeout = 2;
                     Response.Redirect("./index.aspx");
                 }
                 else
