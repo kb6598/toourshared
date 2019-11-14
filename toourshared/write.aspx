@@ -603,7 +603,7 @@
         // 자동 저장 액션 5분마다 / 300초
         setInterval(function() {
             tmpSave(false);
-        }, 300000);
+        }, 30000);
 
 
 
