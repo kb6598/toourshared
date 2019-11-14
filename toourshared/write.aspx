@@ -686,7 +686,8 @@
         // Drawing Manager로 도형을 그릴 지도 div
         var drawingMapContainer = document.getElementById('drawingMap'),
             drawingMap = {
-                center: new kakao.maps.LatLng(35.5106573685836, 125.63245499592271), // 지도의 중심좌표
+                
+        center: new kakao.maps.LatLng(36.02842431988845, 127.7253356124315), // 지도의 중심좌표
                 level: 13 // 지도의 확대 레벨
             };
 
@@ -907,13 +908,15 @@
             customOverlay.setMap(null);
         }
 
-        manager.addListener('drawend', function(data) {
+        manager.addListener('drawend', function (data) {
             console.log('drawend', data);
             if (data.overlayType == 'marker') {
+                //new daum.maps.LatLng(ellipse[i].center.y, ellipse[i].center.x),
+                //new kakao.maps.LatLng(Ha, Ga);
+                //Ga: 123.00653858724844, Ha: 35.44766808679386
+                var coords = data.target.getPosition();
 
-
-
-                pushTravelRouteItem("", "", "", "", "", "", "");
+                pushTravelRouteItem("", "", "", "", "", coords.Ga, coords.Ha);
             }
         });
 
@@ -942,6 +945,11 @@
 
             var curMkrOrder = this._order;
             var trvRoute = getTravelRouteByOrder(curMkrOrder);
+            
+                
+            
+
+            
             //----좌표값으로 주소를 가져옴
             geocoder.coord2Address(coord_WCONGNAMUL.wcongnamulX, coord_WCONGNAMUL.wcongnamulY, function(result, status) {
 
@@ -1653,7 +1661,7 @@
 
         function getTravelRouteByOrder(order) {
             
-            var result;
+            var result = null;
             TravelRouteList.forEach(function(val,idx,arr){
                 if(TravelRouteList[idx].order == order){
                     result =  TravelRouteList[idx];
