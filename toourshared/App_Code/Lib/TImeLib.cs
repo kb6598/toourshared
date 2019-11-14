@@ -27,7 +27,7 @@ namespace tooushared.Lib
         }
         public static string GetToday()
         {
-            string now = DateTime.Now.ToString("yyyy-MM-dd");
+            string now = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             return now;
         }
         public static string CreateDate(int year,int month, int date)
