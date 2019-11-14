@@ -55,7 +55,7 @@ public class imageUploader : IHttpHandler,System.Web.SessionState.IRequiresSessi
         try
         {
 
-            string saveDir = @"\Upload";
+            string saveDir = @"\Upload\";
             string dirFullPath = HttpContext.Current.Server.MapPath(saveDir);
             Directory.CreateDirectory(dirFullPath);
 
