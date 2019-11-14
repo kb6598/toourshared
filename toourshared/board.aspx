@@ -1244,7 +1244,7 @@
     List<Map> mapList = getMapByTrvDayNo();
     List<string> mapRouteCost = testRouteCost();
 
-    if (TravelList.Count <= 0 || MemberList.Count <= 0 || TravelDayContents.Count <= 0 || CommentList.Count <= 0 || mapList.Count <= 0 || mapRouteCost.Count <= 0)
+    if (TravelList.Count <= 0 || MemberList.Count <= 0 || TravelDayContents.Count <= 0 || mapList.Count <= 0 || mapRouteCost.Count <= 0)
     {
         Response.Write("<script language='javascript'>alert('해당 게시글은 오류로 인해 불러올 수 없습니다.'); history.go(-1); </script language='javascript'>");
     }
@@ -1608,17 +1608,19 @@
 
             <div class="board-hashtag">
                 <%
-    // hashtag 누르면 search.aspx?hashtag=○○○○ 로 이동
-    List<String> hashtagList = getHashTagList();
+                    // hashtag 누르면 search.aspx?hashtag=○○○○ 로 이동
+                    List<String> hashtagList = getHashTagList();
+                    if (hashtagList.Count > 0)
+                    {
 
+                        for (int i = 0; i < hashtagList.Count; i++)
+                        {
+                            string HashTagKeyword = hashtagList[i].ToString().Substring(1);
+                            string EncodedHashTag = Server.UrlEncode(HashTagKeyword);
 
-    for (int i = 0; i < hashtagList.Count; i++)
-    {
-        string HashTagKeyword = hashtagList[i].ToString().Substring(1);
-        string EncodedHashTag = Server.UrlEncode(HashTagKeyword);
-
-        Response.Write("<a href = \"./search.aspx?searchType=1&hashtag=" + EncodedHashTag + "\"><div class = \"hashtag\">" + hashtagList[i].ToString() + "</div></a>\n");
-    }
+                            Response.Write("<a href = \"./search.aspx?searchType=1&hashtag=" + EncodedHashTag + "\"><div class = \"hashtag\">" + hashtagList[i].ToString() + "</div></a>\n");
+                        }
+                    }
                 %>
             </div>
 
