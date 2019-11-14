@@ -73,7 +73,18 @@
             inputText.Text = HashTag.ToString();
             search(1); // hashTag로 search 실행 시 
         }
+    }
 
+    protected string HtmlTagConvert(string Str)
+    {
+        string returnStr = Str;
+        returnStr = returnStr.Replace("&", "&amp");
+        returnStr = returnStr.Replace("\"", "&quot");
+        returnStr = returnStr.Replace("'", "&#039");
+        returnStr = returnStr.Replace("<", "&lt");
+        returnStr = returnStr.Replace(">", "&gt");
+
+        return returnStr;
     }
 
     protected void search(int n = 0)
@@ -345,10 +356,12 @@
         string content = "";
         if (string.IsNullOrEmpty(travelDay.Trv_day_content) == false)
         {
-            if (travelDay.Trv_day_content.Length > 10)
-                content = travelDay.Trv_day_content.Substring(0, 10).ToString();
+            content = HtmlTagConvert(travelDay.Trv_day_content.ToString());
+
+            if (content.Length > 10)
+                content = content.Substring(0, 10).ToString() + "...";
             else
-                content = travelDay.Trv_day_content.ToString();
+                content = content.ToString();
         }
 
         Response.Write("" +
@@ -362,7 +375,7 @@
                     "<div class=\"boardContent\">" +
                         "<a href = \"./board.aspx?trv_no=" + travelList[i].Trv_no.ToString() + "\" onmouseover=\"setMapByIndex("+travelList[i].Trv_no.ToString() +")\">\n" +
                             "<div class=\"boardTitle\">" +
-                                "<span>" + travelList[i].Trv_title.ToString() + "</span>" +
+                                "<span>" + travelList[i].Trv_title.ToString() + "</span>\n" +
                             "</div>\n" +
                             "<div class=\"boardBody\">\n" +
                                 "<span>\n" +
@@ -390,14 +403,15 @@
 
         if (i_starCount > 0)
         {
-            Response.Write("<div class=\"boardScore\" style=\"cursor: default;\">\n" +
-                                    "<span class=\"Score1\">" + starText + "</span>\n" +
-                                    "<span class=\"Score3\">(" + d_starCount + ")</span>\n" +
-                                "</div>\n");
+Response.Write("    <div class=\"boardScore\" style=\"cursor: default;\">\n" +
+"                           <span class=\"Score1\">" + starText + "</span>\n" +
+"                           <span class=\"Score3\">(" + d_starCount + ")</span>\n" +
+"                        </div>\n");
         }
-        Response.Write("</div>\n" +
-                    "</div>\n" +
-                "</div>\n"+"<input type=\"hidden\" class=\"hidden_trv_no\" value=\""+travelList[i].Trv_no.ToString()+"\" />");
+Response.Write("</div>\n" +
+"               </div>\n" +
+"           </div>\n"+
+"           <input type=\"hidden\" class=\"hidden_trv_no\" value=\""+travelList[i].Trv_no.ToString()+"\" />");
     }
     %>
                             </div>
@@ -473,6 +487,7 @@
         var trvMapRoutes = [];
         $(document).ready(function () {
             var hiddenFileds = document.getElementsByClassName("hidden_trv_no");
+          
 
             for (var i = 0; i < hiddenFileds.length; i++) {
                 console.log(hiddenFileds[i].value); //second console output
