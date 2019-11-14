@@ -17,45 +17,32 @@ public class LikeDao
         // TODO: 여기에 생성자 논리를 추가합니다.
         //
     }
-    public string InsertLike(Like like)
-    {
 
-        string result = "";
+    public int InsertLike(Like like)
+    {
         MyDB myDB = new MyDB();
-        MySqlConnection con = myDB.GetCon();
+        MySqlConnection con;
 
         try
         {
-            string Sql = "INSERT INTO toourshared.like (mem_id,like_type,trv_no) VALUES(@mem_id,@like_type,@trv_no); select last_insert_id()";
-            MySqlCommand cmd = new MySqlCommand(Sql, con);
+            con = myDB.GetCon();
+            string Sql = "INSERT INTO toourshared.like(mem_id, lik_type, trv_no) VALUES(@mem_id, @like_type, @trv_no)";
 
+            MySqlCommand cmd = new MySqlCommand(Sql, con);
             cmd.Parameters.AddWithValue("@mem_id", like.Mem_id);
             cmd.Parameters.AddWithValue("@like_type", like.Like_type);
             cmd.Parameters.AddWithValue("@trv_no", like.Trv_no);
 
-
             con.Open();
-
             cmd.ExecuteNonQuery();
-
-            result = cmd.LastInsertedId.ToString();
-
-
-        }
-        catch (Exception ex)
-        {
-            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
-            con.Close();
-
-        }
-        finally
-        {
             con.Close();
         }
+        catch(Exception e) {
+            System.Diagnostics.Debug.WriteLine(e.StackTrace.ToString());
+        }
 
-        return result;
+        return 0;
     }
-    //public void DeleteCommentBy(mem_id)
 
     public void DeleteLike(Like like)
     {
@@ -77,6 +64,7 @@ public class LikeDao
         }
         catch(Exception e){;}
     }
+
     public DataSet SelectLike()
     {
         MyDB myDB = new MyDB();

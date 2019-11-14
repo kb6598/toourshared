@@ -423,27 +423,12 @@
             }
             else
             {
-
-                Like like = new Like();
-                LikeDao likeDao = new LikeDao();
-
-                like.Mem_id = memID;
-                like.Trv_no = trvNo;
-
-                if (likeDao.IsExistLikeTrvNoByMemID(like) == true)
-                {
-                    likeDao.DeleteLike(like);
-                    Response.Write("<script language='javascript'>location.reload();</script language='javascript'>");
-                }
-                else
-                {
-                    like.Like_type = "like";
-                    likeDao.InsertLike(like);
-                    Response.Write("<script language='javascript'>location.reload();</script language='javascript'>");
-                }
+                System.Diagnostics.Debug.WriteLine("되는거냐?");
+                Response.Redirect("./requestLikeBoard.aspx?mem_id=" + memID + "&trv_no=" + trvNo);
             }
         }
     }
+
 </script>
 
 <head>
