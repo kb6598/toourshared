@@ -1155,9 +1155,26 @@
         .map-info-items:hover {
             background: RGBA(0, 0, 255, .05);
         }
+
+        .report-item{
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-end;
+            margin-left: 30px;
+        }
+
+        .reportIco{
+            font-size: 15px;
+        }
+
     </style>
 
     <script>
+
+        $(document).ready(function(){
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+
         /* scroll할 때 발생할 이벤트 */
         window.onscroll = function () {
             scrollFunction();
@@ -1187,9 +1204,9 @@
             $('#replyWriteText').keyup();
         });
 
-        function openUpdWinForm(cmtNo, trvNo) {
-            var link = "./updateReply.aspx?cmt_no=" + cmtNo + "&trv_no=" + trvNo;
-            window.open(link, 'myForm', 'width = 500, height = 300, left = 500, top = 500, toolbar = no, menubar = no, location = no, scrollbar = no, status = no, resizable = no, fullscreen = no, channelmode = no');
+        function reportFunc(trvNo) {
+            var link = "./reportBoard.aspx?trv_no=" + trvNo;
+            window.open(link, 'myForm', 'width = 520, height = 320, left = 500, top = 500, toolbar = no, menubar = no, location = no, scrollbar = no, status = no, resizable = no, fullscreen = no, channelmode = no');
         }
 
         function openDelWinForm(cmtNo, trvNo) {
@@ -1306,7 +1323,9 @@
         <div id="main">
             <div class="board">
                 <div class="board-header">
-                    <div class="header-item"><%Response.Write(TravelList[5].ToString());%></div>
+                    <div class="header-item">
+                        <%Response.Write(TravelList[5].ToString());%>
+                    </div>
                     <div class="good-item">
                         <asp:Button ID="Button2" runat="server" Text="👍" CssClass="goodBtn" onClick="Button2_Click"/>
                     </div>
@@ -1326,6 +1345,11 @@
                         </div>
                         <div class="writerTime"><%Response.Write(TravelList[8].ToString());%></div>
                     </div>
+                    <div class="report-item" style="padding-left: 25px;">
+                        <a href ="javascript:void(0)" onClick="reportFunc(<%Response.Write(Request.QueryString["trv_no"].ToString());%>)">
+                            <span data-toggle="tooltip" title="게시글 신고하기" style="font-size: 25px; display: flex; margin-top: 5px;">🚨</span>
+                        </a>
+                    </div>
                 </div>
                 <div class="board-score">
 <%
@@ -1338,6 +1362,23 @@
     }
 %>
                 </div>
+<%
+    if (Session["mem_id"] != null && Request.QueryString["trv_no"] != null)
+    {
+        if (!string.IsNullOrEmpty(Session["mem_id"].ToString()) || !string.IsNullOrEmpty(Request.QueryString["trv_no"].ToString()))
+        {
+            if (Session["mem_id"].ToString() == MemberList[0].ToString())
+            {
+                Response.Write("" +
+                "                <div style=\"width: 100%; height: 50px; display: flex; flex-direction: row; justify-content: flex-end; align-items: center; padding-right: 10px; background-color: #e2e2e2; margin-top: -1px; border-bottom: .5px solid rgba(0, 0, 0, .2);\">\n" +
+                "                   <div style=\"width: 120px; height: 30px; display: flex; justify-content: center; align-items: center; border: 2px solid black; border-radius: 15px; background-color: orangered; \">\n" +
+                "                       <a href = \"./write.aspx?trv_no=" + Request.QueryString["trv_no"].ToString() + "\" style=\"font-size: 15px; font-family: 'Noto Sans KR', sans-serif; padding-right: 1px; font-weight: 700;justify-content: center; align-items: center;\">게시글 수정🔨</a>" +
+                "                   </div>\n" +
+                "                </div>\n");
+            }
+        }
+    }
+%>
                 <div class="board-content">
                     <div class="board-map" id="total_map"></div>
                     <div class="board-travel">
@@ -1714,7 +1755,7 @@
                                             Response.Write("" +
                                             "<div class=\"writerUpdateDelete\">\n" +
                                                 "<span style=\"padding-left: 10px; display: flex; flex-direction: row; align-items: center; width: auto; height: auto;\">" +
-                                                    "<a href=\"javascript: void(0)\" style=\"margin-right: 5px;\" onClick=\"openUpdWinForm(" + CommentList[k].Cmt_no + "," + Request.QueryString["trv_no"].ToString() + ")\">✍</a> <a href=\"javascript: void(0)\" onClick=\"openDelWinForm(" + CommentList[k].Cmt_no + "," + Request.QueryString["trv_no"].ToString() + ")\">❌</a>" +
+                                                    "<a href=\"javascript: void(0)\" onClick=\"openDelWinForm(" + CommentList[k].Cmt_no + "," + Request.QueryString["trv_no"].ToString() + ")\">❌</a>" +
                                                 "</span>" +
                                             "</div>\n");
                                     }
@@ -1766,13 +1807,13 @@
     </form>
 
     <script>
-
-
-
-
-        // Drawing Manager에서 데이터를 가져와 도형을 표시할 아래쪽 지도 div
-        //center 좌표 계산 필요
-        var mapContainer = document.getElementById('total_map'),
+          
+          
+          
+          
+                  // Drawing Manager에서 데이터를 가져와 도형을 표시할 아래쪽 지도 div
+                  //center 좌표 계산 필요
+                  var mapContainer = document.getElementById('total_map'),
             mapOptions = {
                 center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
                 level: 3 // 지도의 확대 레벨

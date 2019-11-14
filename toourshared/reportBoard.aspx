@@ -60,7 +60,7 @@
                     else
                     {
                         reportDao.InsertReport(report);
-                        Response.Write("<script language='javascript'>alert('게시글이 신고되었습니다.\r\n해당 게시글은 운영자의 판단에 따라 조치될 예정입니다.'); this.close(); </script language='javascript'>");
+                        Response.Write("<script language='javascript'>alert('신고가 접수되었습니다.'); this.close(); </script language='javascript'>");
                     }
                 }
             }
