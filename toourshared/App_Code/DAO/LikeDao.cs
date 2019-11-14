@@ -17,44 +17,54 @@ public class LikeDao
         // TODO: 여기에 생성자 논리를 추가합니다.
         //
     }
-    public string InsertLike(Like like)
+
+    public int InsertLike(Like like)
     {
-
-        string result = "";
         MyDB myDB = new MyDB();
-        MySqlConnection con = myDB.GetCon();
+        MySqlConnection con;
 
-        try { 
-        string Sql = "INSERT INTO toourshared.like (mem_id,like_type,trv_no) VALUES(@mem_id,@like_type,@trv_no); select last_insert_id()";
-        MySqlCommand cmd = new MySqlCommand(Sql, con);
-
-        cmd.Parameters.AddWithValue("@mem_id", like.Mem_id);
-        cmd.Parameters.AddWithValue("@like_type",like.Like_type);
-        cmd.Parameters.AddWithValue("@trv_no", like.Trv_no);
-
-
-        con.Open();
-
-        cmd.ExecuteNonQuery();
-
-        result = cmd.LastInsertedId.ToString();
-
-        
-        }
-        catch (Exception ex)
+        try
         {
-            System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
-            con.Close();
+            con = myDB.GetCon();
+            string Sql = "INSERT INTO toourshared.like(mem_id, lik_type, trv_no) VALUES(@mem_id, @like_type, @trv_no)";
 
-        }
-        finally
-        {
+            MySqlCommand cmd = new MySqlCommand(Sql, con);
+            cmd.Parameters.AddWithValue("@mem_id", like.Mem_id);
+            cmd.Parameters.AddWithValue("@like_type", like.Like_type);
+            cmd.Parameters.AddWithValue("@trv_no", like.Trv_no);
+
+            con.Open();
+            cmd.ExecuteNonQuery();
             con.Close();
         }
+        catch(Exception e) {
+            System.Diagnostics.Debug.WriteLine(e.StackTrace.ToString());
+        }
 
-        return result;
+        return 0;
     }
-    //public void DeleteCommentBy(mem_id)
+
+    public void DeleteLike(Like like)
+    {
+        MyDB mydb = new MyDB();
+        MySqlConnection con;
+
+        try
+        {
+            con = mydb.GetCon();
+            string Sql = "DELETE FROM toourshared.like WHERE mem_id = @mem_id AND trv_no = @trv_no";
+
+            MySqlCommand cmd = new MySqlCommand(Sql, con);
+            cmd.Parameters.AddWithValue("@mem_id", like.Mem_id);
+            cmd.Parameters.AddWithValue("@trv_no", like.Trv_no);
+
+            con.Open();
+            cmd.ExecuteNonQuery();
+            con.Close();
+        }
+        catch(Exception e){;}
+    }
+
     public DataSet SelectLike()
     {
         MyDB myDB = new MyDB();
@@ -68,7 +78,7 @@ public class LikeDao
 
             MySqlDataAdapter ad = new MySqlDataAdapter();
             ad.SelectCommand = cmd;
-           
+
             ad.Fill(ds);
         }
         catch (Exception ex)
@@ -90,7 +100,7 @@ public class LikeDao
     {
         MyDB mydb = new MyDB();
         int result = 0;
-        MySqlConnection con = null ;
+        MySqlConnection con = null;
         MySqlDataReader reader = null;
         try
         {
@@ -103,14 +113,15 @@ public class LikeDao
             con.Open();
             reader = cmd.ExecuteReader();
 
-            if(reader.Read())
+            if (reader.Read())
             {
                 result = int.Parse(reader["cnt"].ToString());
             }
 
-            
+
         }
-        catch(Exception e) {
+        catch (Exception e)
+        {
             reader.Close();
             con.Close();
         }
@@ -129,7 +140,7 @@ public class LikeDao
         MySqlConnection con = null;
         MySqlDataReader rd = null;
         Like result = new Like();
-      
+
 
         try
         {
@@ -174,4 +185,37 @@ public class LikeDao
         return result;
     }
 
+    public bool IsExistLikeTrvNoByMemID(Like like)
+    {
+        MyDB mydb = new MyDB();
+        MySqlConnection con;
+        int getCount = 0;
+
+        try
+        {
+            con = mydb.GetCon();
+            string Sql = "SELECT count(*) as cnt FROM toourshared.like WHERE mem_id = @mem_id AND trv_no = @trv_no";
+
+            MySqlCommand cmd = new MySqlCommand(Sql, con);
+            cmd.Parameters.AddWithValue("@mem_id", like.Mem_id);
+            cmd.Parameters.AddWithValue("@trv_no", like.Trv_no);
+
+            con.Open();
+            MySqlDataReader reader = cmd.ExecuteReader();
+
+            if(reader.Read())
+            {
+                getCount = int.Parse(reader["cnt"].ToString());
+            }
+
+            reader.Close();
+            con.Close();
+        }
+        catch(Exception e){;}
+
+        if (getCount > 0) // 존재할 시 1 이상일거고
+            return true;
+        else // 존재하지 않는 경우
+            return false;
+    }
 }

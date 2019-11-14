@@ -27,7 +27,7 @@
 
     protected void btnMypage_Click(object sender, EventArgs e)
     {
-        if(Session["mem_id"] == null)
+        if (Session["mem_id"] == null)
         {
             return;
         }
@@ -37,6 +37,7 @@
             Response.Redirect("./MyPage.aspx?mem_id=" + QueryString);
         }
     }
+
     protected void btnJoin_Click(object sender, EventArgs e)
     {
         Response.Redirect("./join.aspx");
@@ -350,9 +351,9 @@
             string MemID = Session["mem_id"].ToString();
             string trvNo = Request.QueryString["trv_no"].ToString();
 
-/*
- *          게시글 신고기능 작성하세요.
-*/
+            /*
+             *          게시글 신고기능 작성하세요.
+            */
         }
     }
 
@@ -397,7 +398,33 @@
 
                     TravelDao travelDao = new TravelDao();
                     travelDao.setTotRateByTrvNo(int.Parse(trv_no)); // TotRate 최신화 작업
+                    replyWriteText.Text = "";
+
                 }
+            }
+        }
+    }
+
+    protected void Button2_Click(object sender, EventArgs e)
+    {
+        // 게시글 추천 기능
+        if (Session["mem_id"] == null || Request.QueryString["trv_no"] == null)
+        {
+            Response.Write("<script language='javascript'>alert('세션이 만료되었거나 현재 게시글의 정보를 불러올 수 없습니다. \r\n메인화면으로 이동됩니다.'); location.href('./index.aspx'); </script language='javascript'>");
+        }
+        else
+        {
+            string memID = Session["mem_id"].ToString();
+            string trvNo = Request.QueryString["trv_no"].ToString();
+
+            if (string.IsNullOrEmpty(memID) || string.IsNullOrEmpty(trvNo))
+            {
+                Response.Write("<script language='javascript'>alert('세션이 존재하지 않거나 혹은 게시글의 정보를 불러올 수 없습니다. \r\n메인화면으로 이동됩니다.'); location.href('./index.aspx'); </script language='javascript'>");
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine("되는거냐?");
+                Response.Redirect("./requestLikeBoard.aspx?mem_id=" + memID + "&trv_no=" + trvNo);
             }
         }
     }
@@ -1270,7 +1297,7 @@
                 <div class="board-header">
                     <div class="header-item"><%Response.Write(TravelList[5].ToString());%></div>
                     <div class="good-item">
-                        <button class="goodBtn">👍</button>
+                        <asp:Button ID="Button2" runat="server" Text="👍" CssClass="goodBtn" onClick="Button2_Click"/>
                     </div>
                     <div class="good-cnt"><%Response.Write(goodCnt);%></div>
                 </div>
@@ -1366,7 +1393,7 @@
     int costDays = 1;
     foreach (var map in mapList)
     {
-        if (map.Map_cost != "")
+        if(!string.IsNullOrEmpty(map.Map_cost))
         {
             JToken mapCost = JToken.Parse(map.Map_cost);
             string itemlist = "";
@@ -1461,7 +1488,7 @@
 
         foreach (var map in mapList)
         {
-            if (map.Map_route != "")
+            if(!string.IsNullOrEmpty(map.Map_route))
             {
                 JToken mapRoute = JToken.Parse(map.Map_route);
                 //Response.Write(route);
@@ -1523,7 +1550,7 @@
 
     foreach (var map in mapList)
     {
-        if (map.Map_cost != "")
+        if(!string.IsNullOrEmpty(map.Map_cost))
         {
             JToken mapCost = JToken.Parse(map.Map_cost);
             string itemlist = "";
