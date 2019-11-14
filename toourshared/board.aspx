@@ -319,6 +319,15 @@
             tmpHidden.ID = "mapData_" + index; // set the id
             tmpHidden.Value = map.Map_data;
             PlaceHolder_hidden.Controls.Add(tmpHidden);
+
+            tmpHidden = new HtmlInputHidden();
+            tmpHidden.Name = "mapRoute_" + index;
+            tmpHidden.ID = "mapRoute_" + index; // set the id
+            tmpHidden.Value = map.Map_route;
+            PlaceHolder_hidden.Controls.Add(tmpHidden);
+
+
+
             index++;
         }
     }
@@ -2308,10 +2317,12 @@
                 {
                     mapCenter = JObject.Parse(map.Map_center);
                     //일일 경로 표시 지도
-                    Response.Write("var map_" + index + " = makeMapOption('map_" + index + "', new daum.maps.LatLng(" + mapCenter["Ha"] + ", " + mapCenter["Ga"] + "), 3, 'mapData_" + index + "', '" + color[colorIndex] + "', '" + color[colorIndex] + "','" + icoDir + marker[colorIndex] + "') ;");
+                    Response.Write("var map_" + index + " = makeMapOption('map_" + index + "', new daum.maps.LatLng(" + mapCenter["Ha"] + ", " + mapCenter["Ga"] + "), 5, 'mapData_" + index + "', '" + color[colorIndex] + "', '" + color[colorIndex] + "','" + icoDir + marker[colorIndex] + "') ;");
                     Response.Write("setDrawingMapDataByManagerMapId(map_" + index + ".manager, 'mapData_" + index + "');");
                     // 모든 경로 표시 지도
                     Response.Write("getDataFromDrawingMap('mapData_" + index + "', '" + color[colorIndex] + "', '" + color[colorIndex] + "','" + icoDir + marker[colorIndex] + "');");
+                    Response.Write("var mapTypeControl_"+index+"= new kakao.maps.MapTypeControl();map_"+index+".map.addControl(mapTypeControl_"+index+", kakao.maps.ControlPosition.TOPRIGHT);");
+                    Response.Write("var zoomControl_"+index+" = new kakao.maps.ZoomControl();map_"+index+".map.addControl(zoomControl_"+index+", kakao.maps.ControlPosition.RIGHT);");
                     if (colorIndex < color.Length)
                     {
                         colorIndex++;
@@ -2326,6 +2337,20 @@
         }
 
         %>
+
+        // 지도 타입 변경 컨트롤을 생성한다
+        var mapTypeControl = new kakao.maps.MapTypeControl();
+
+        // 지도의 상단 우측에 지도 타입 변경 컨트롤을 추가한다
+        map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
+
+        // 지도에 확대 축소 컨트롤을 생성한다
+        var zoomControl = new kakao.maps.ZoomControl();
+
+        // 지도의 우측에 확대 축소 컨트롤을 추가한다
+        map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
+
+
     </script>
 </body>
 </html>
