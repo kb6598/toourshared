@@ -470,6 +470,7 @@
 
         var trvMapDatas = [];
         var trvMapCenters = [];
+        var trvMapRoutes = [];
         $(document).ready(function () {
             var hiddenFileds = document.getElementsByClassName("hidden_trv_no");
 
@@ -513,7 +514,7 @@
 
                 $.ajax({
                     type: "GET",
-                    url: "./getMaps.ashx?trv_no=" + travel_no,
+                    url: "./getMapData.ashx?trv_no=" + travel_no,
                     dataType: 'json',
                     success: function (data) {     
                         //console.info(travel_no);
@@ -525,7 +526,22 @@
 
                     }
 
-                });        
+                });  
+            $.ajax({
+                type: "GET",
+                url: "./getMapRoute.ashx?trv_no=" + travel_no,
+                dataType: 'json',
+                success: function (data) {
+                    //console.info(travel_no);
+
+                    //console.info(data);
+                    trvMapRoutes[travel_no] = data;
+
+
+
+                }
+
+            });  
 
 
             
@@ -544,17 +560,33 @@
         function setMapDatasByIndex(index) {
             removeOverlays();
             var data = trvMapDatas[index];
-            if (data != null && data != "" && data != '""') {
-                
+            if (data != null && data != "" && data != '""') {               
                 
                 //console.info(data);
                 data.forEach(function (value, index, array) {
                     if (value != null && value != "" && value != '""') {
                         //console.info(value);
                         getDataFromDrawingMap(value, color[index], color[index], icoDir + markerIco[index]);
+                        //getDataFromRoute(mapData, instrokeColor, infillColor, iconUrl);
                     }
                 });
             }
+
+            var data = trvMapRoutes[index];
+            if (data != null && data != "" && data != '""') {
+
+
+                //console.info(data);
+                data.forEach(function (value, index, array) {
+                    if (value != null && value != "" && value != '""') {
+                        
+                        //getDataFromDrawingMap(value, color[index], color[index], icoDir + markerIco[index]);
+                        getDataFromRoute(value, color[index], color[index], icoDir + markerIco[index]);
+                    }
+                });
+            }
+
+
         }
 
         function setMapCenterByIndex(index) {
@@ -628,6 +660,158 @@
 		// 지도의 우측에 확대 축소 컨트롤을 추가한다
 		map.addControl(zoomControl, kakao.maps.ControlPosition.RIGHT);
 
+        // 지도에 마커와 보여줄 인포 윈도우
+        var infowindow = new kakao.maps.InfoWindow({
+            zIndex: 2
+        });
+
+
+        function getDataFromRoute(mapRoute, instrokeColor, infillColor, iconUrl) {
+            // Drawing Manager에서 그려진 데이터 정보를 가져옵니다 
+            //console.info(mapData);
+            //var data = mapData;
+            var routeList = JSON.parse(mapRoute);
+            //var data = mapData;
+            //console.info(data);
+
+
+            console.info(routeList);
+            if (routeList != [] && routeList != "" && routeList != null && routeList.length != 0) {
+               
+
+                var maxX = parseFloat(routeList[0].x);
+                var maxY = parseFloat(routeList[0].y);
+                var minX = parseFloat(routeList[0].x);
+                var minY = parseFloat(routeList[0].y);
+                var len = routeList.length, i = 0;
+
+                    var icon = new kakao.maps.MarkerImage(
+                        iconUrl,
+                        new kakao.maps.Size(31, 35));
+
+                for (; i < len; i++) {
+                    var curX = parseFloat(routeList[0].x);
+                    var curY = parseFloat(routeList[0].y);
+
+                        var marker = new kakao.maps.Marker({
+                            image: icon,
+                            map: map,
+                            position: new kakao.maps.LatLng(routeList[i].y, routeList[i].x),
+                            zIndex: 1
+                        });
+
+                        overlays.push(marker);
+                        // 마커와 검색결과 항목에 mouseover 했을때
+                        // 해당 장소에 인포윈도우에 장소명을 표시합니다
+                        // mouseout 했을 때는 인포윈도우를 닫습니다
+                        (function (marker, routeItem) {
+                            kakao.maps.event.addListener(marker, 'click', function () {
+                                displayInfowindow(marker, routeItem);
+                            });
+
+
+                        })(marker, routeList[i]);
+
+                    if (curX > maxX) {
+                        maxX = curX;
+                    }
+                    if (curY > maxY) {
+                        maxY = curY;
+                        }
+
+
+                    if (curX <= minX) {
+                        minX = curX;
+                        }
+                    if (curY <= minY) {
+                        minY = curY;
+                        }
+
+
+                    }
+
+
+
+
+                if (len == 1) {
+                    len = len + 1;
+                }
+                //console.info(maxX);
+                //console.info(maxY);
+                //console.info(minX);
+                //console.info(minY);
+                //console.info((maxX + minX) / len);
+                //console.info((maxY + minY) / len);
+                var centerX = (parseFloat(maxX) + parseFloat(minX)) / parseFloat(len);
+                var centerY = (parseFloat(maxY) + parseFloat(minY)) / parseFloat(len);
+                //console.info(centerX);
+                //console.info(centerY);
+                panTo(centerY, centerX);
+
+
+            }
+
+
+
+           
+                    
+
+             
+
+
+
+
+
+        }
+        // 인포 윈도우 생성
+        function displayInfowindow(marker, routeItem) {
+
+            var content =
+                '<div class="card card-cus" style="width:300px;">' +
+                '<div class="card-header">' +
+                '<div class="card-title">' +
+                routeItem.place_name +
+                '</div>' +
+                '<div class="card-close">' +
+                '<div class="closeBtn" onclick="closeOverlay()">' +
+                '<span >×</span>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '<div class="card-body">' +
+                '<blockquote class="blockquote mb-0">';
+            if (routeItem.info != null) {
+                content += '<li class="card-body-li">' + routeItem.info + '</li>';
+            }
+            if (routeItem.road_address_name != null) {
+                content += '<li class="card-body-li">' + routeItem.road_address_name + '</li>';
+            }
+            if (routeItem.address_name != null) {
+                content += '<li class="card-body-li">' + routeItem.address_name + '</li>';
+            }
+            if (routeItem.phone != null) {
+                content += '<li class="card-body-li">' + routeItem.phone + '</li>';
+            }
+            if (routeItem.place_url != null) {
+                content += '<li class="card-body-li" style="padding: 15px 0;"><a href="' + routeItem.place_url + '" target="_blank" style="text-decoration: none;">상세페이지</a></li>';
+            }
+            content +=
+                '</blockquote>' +     
+                '</div>' +
+                '</div>';
+
+
+
+            infowindow.setContent(content);
+            infowindow.open(drawingMap, marker);
+        }
+
+
+        // 모든 인포윈도우 닫음
+        function closeOverlay() {
+            infowindow.close();
+        }
+
 
 
         function getDataFromDrawingMap(mapData, instrokeColor, infillColor, iconUrl) {
@@ -649,7 +833,7 @@
             //    drawArrow(data[kakao.maps.drawing.OverlayType.POLYLINE]);
             //    drawEllipse(data[kakao.maps.drawing.OverlayType.ELLIPSE]);
 
-            drawMarker(data["marker"], iconUrl);
+            //drawMarker(data["marker"], iconUrl);
             drawPolyline(data["polyline"], instrokeColor, infillColor);
             drawRectangle(data["rectangle"], instrokeColor, infillColor);
             drawCircle(data["circle"], instrokeColor, infillColor);
