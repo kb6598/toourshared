@@ -803,7 +803,7 @@
 
 
             infowindow.setContent(content);
-            infowindow.open(drawingMap, marker);
+            infowindow.open(map, marker);
         }
 
 
