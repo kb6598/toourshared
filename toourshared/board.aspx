@@ -2206,21 +2206,24 @@
             JObject mapCenter;
             foreach (var map in mapList)
             {
-                mapCenter = JObject.Parse(map.Map_center);
-                //일일 경로 표시 지도
-                Response.Write("var map_" + index + " = makeMapOption('map_" + index + "', new daum.maps.LatLng(" + mapCenter["Ha"] + ", " + mapCenter["Ga"] + "), 3, 'mapData_" + index + "', '" + color[colorIndex] + "', '" + color[colorIndex] + "','" + icoDir + marker[colorIndex] + "') ;");
-                Response.Write("setDrawingMapDataByManagerMapId(map_" + index + ".manager, 'mapData_" + index + "');");
-                // 모든 경로 표시 지도
-                Response.Write("getDataFromDrawingMap('mapData_" + index + "', '" + color[colorIndex] + "', '" + color[colorIndex] + "','" + icoDir + marker[colorIndex] + "');");
-                if (colorIndex < color.Length)
+                if (!string.IsNullOrEmpty(map.Map_center))
                 {
-                    colorIndex++;
+                    mapCenter = JObject.Parse(map.Map_center);
+                    //일일 경로 표시 지도
+                    Response.Write("var map_" + index + " = makeMapOption('map_" + index + "', new daum.maps.LatLng(" + mapCenter["Ha"] + ", " + mapCenter["Ga"] + "), 3, 'mapData_" + index + "', '" + color[colorIndex] + "', '" + color[colorIndex] + "','" + icoDir + marker[colorIndex] + "') ;");
+                    Response.Write("setDrawingMapDataByManagerMapId(map_" + index + ".manager, 'mapData_" + index + "');");
+                    // 모든 경로 표시 지도
+                    Response.Write("getDataFromDrawingMap('mapData_" + index + "', '" + color[colorIndex] + "', '" + color[colorIndex] + "','" + icoDir + marker[colorIndex] + "');");
+                    if (colorIndex < color.Length)
+                    {
+                        colorIndex++;
+                    }
+                    else
+                    {
+                        colorIndex = 0;
+                    }
+                    index++;
                 }
-                else
-                {
-                    colorIndex = 0;
-                }
-                index++;
             }
         }
 
