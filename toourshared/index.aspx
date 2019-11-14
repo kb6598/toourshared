@@ -351,7 +351,12 @@
     // 검색 창 옆에 있는 버튼 눌렀을 경우 발생할 이벤트
     protected void inputBtn_Click(object sender, EventArgs e)
     {
-        System.Diagnostics.Debug.WriteLine(TimeLib.GetTimeStamp());
+        if (string.IsNullOrEmpty(inpTxt.Text))
+            return;
+        else
+        {
+            Response.Redirect("./search.aspx?searchType=1&text=" + inpTxt.Text);
+        }
     }
 </script>
 
