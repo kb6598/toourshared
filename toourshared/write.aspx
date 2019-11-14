@@ -629,6 +629,8 @@
 
 
 
+
+
         function searchPlacesByEnter() {
             var kcode = event.keyCode;
             if (window.event.keyCode == 13) {
@@ -1490,6 +1492,7 @@
 
                 ////console.info(index);
                 ////console.info(currentValue);
+                setTravelRouteItemInfo
                 el = document.createElement('li'),
                     itemStr =
 
@@ -1498,7 +1501,7 @@
                     ' <table>' +
                     ' <tr>' +
                     ' <td>' +
-                    ' <input id="addTravelRoute_place_name_' + index + '" class="form-control" type="text" placeholder="장소 이름" value="' + currentValue.place_name + '" />' +
+                ' <input id="addTravelRoute_place_name_' + index + '" class="form-control" type="text" placeholder="장소 이름" value="' + currentValue.place_name + '" onkeyup="setTravelRouteItemName('+i+')"/>' +
                     ' </td>' +
                     ' <td>' +
                     ' <div class="btn btn-danger btn-sm" onclick="removeTravelRouteItem(' + index + ')"> x </div>' +
@@ -1511,7 +1514,7 @@
                     '<table>' +
                     '<tr>' +
                     '<td>' +
-                    ' <textarea id="addTravelRoute_info_' + index + '" class="form-control" type="text" placeholder="설명" rows="3" style="resize: none;overflow: auto;">' + currentValue.info + '</textarea>' +
+                ' <textarea id="addTravelRoute_info_' + index + '" class="form-control" type="text" placeholder="설명" rows="3" style="resize: none;overflow: auto;" onkeyup="setTravelRouteItemInfo(' + i +')>' + currentValue.info + '</textarea>' +
                     '</td>' +
                     '</tr>' +
                     '</table>';
@@ -2489,12 +2492,14 @@
             form.submit(); // 전송
         }
 
+
         function endWrite() {
-            if(HashTagCheck() == false) return;
-            var form = document.createElement("form");
-            addDataAtForm(form);
-            form.setAttribute('action', "Write_endWrite.aspx");
-            form.submit(); // 전송
+            if (HashTagCheck() == false) {
+                var form = document.createElement("form");
+                addDataAtForm(form);
+                form.setAttribute('action', "Write_endWrite.aspx");
+                form.submit(); // 전송
+            }
         }
 
         //------------------------------------
