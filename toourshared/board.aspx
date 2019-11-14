@@ -2196,37 +2196,35 @@
         // c
         <%
         List<Map> mapList = getMapByTrvDayNo();
-        string [] color= { "#E53A40", "#F68657", "#EFDC05", "#58C9B9", "#a3daff", "#0080ff" , "#A593E0", "#C5C6B6", "#D09E88", "#FADAD8", "#fab1ce", "#fffff5", "#c8c8a9", "#3a5134" };
-        string[] marker = { "default_01.png", "default_02.png", "default_03.png", "default_04.png", "default_05.png", "default_06.png" , "default_07.png", "default_08.png", "default_09.png", "default_10.png", "default_11.png", "default_12.png", "default_13.png", "default_14.png" };
-        string icoDir = "./img/ico/marker/";
-        int colorIndex = 0;
-        int index = 0;
-        JObject mapCenter;
-        foreach (var map in mapList)
+        if (mapList.Count > 0)
         {
-            mapCenter = JObject.Parse(map.Map_center);
-            //일일 경로 표시 지도
-            Response.Write("var map_" + index + " = makeMapOption('map_" + index + "', new daum.maps.LatLng("+mapCenter["Ha"]+", "+mapCenter["Ga"]+"), 3, 'mapData_" + index + "', '"+color[colorIndex]+"', '"+color[colorIndex]+"','"+icoDir+marker[colorIndex]+"') ;");
-            Response.Write("setDrawingMapDataByManagerMapId(map_" + index + ".manager, 'mapData_" + index + "');");
-            // 모든 경로 표시 지도
-            Response.Write("getDataFromDrawingMap('mapData_" + index + "', '" + color[colorIndex] + "', '" + color[colorIndex] + "','"+icoDir+marker[colorIndex]+"');");
-            if (colorIndex < color.Length)
+            string[] color = { "#E53A40", "#F68657", "#EFDC05", "#58C9B9", "#a3daff", "#0080ff", "#A593E0", "#C5C6B6", "#D09E88", "#FADAD8", "#fab1ce", "#fffff5", "#c8c8a9", "#3a5134" };
+            string[] marker = { "default_01.png", "default_02.png", "default_03.png", "default_04.png", "default_05.png", "default_06.png", "default_07.png", "default_08.png", "default_09.png", "default_10.png", "default_11.png", "default_12.png", "default_13.png", "default_14.png" };
+            string icoDir = "./img/ico/marker/";
+            int colorIndex = 0;
+            int index = 0;
+            JObject mapCenter;
+            foreach (var map in mapList)
             {
-                colorIndex++;
+                mapCenter = JObject.Parse(map.Map_center);
+                //일일 경로 표시 지도
+                Response.Write("var map_" + index + " = makeMapOption('map_" + index + "', new daum.maps.LatLng(" + mapCenter["Ha"] + ", " + mapCenter["Ga"] + "), 3, 'mapData_" + index + "', '" + color[colorIndex] + "', '" + color[colorIndex] + "','" + icoDir + marker[colorIndex] + "') ;");
+                Response.Write("setDrawingMapDataByManagerMapId(map_" + index + ".manager, 'mapData_" + index + "');");
+                // 모든 경로 표시 지도
+                Response.Write("getDataFromDrawingMap('mapData_" + index + "', '" + color[colorIndex] + "', '" + color[colorIndex] + "','" + icoDir + marker[colorIndex] + "');");
+                if (colorIndex < color.Length)
+                {
+                    colorIndex++;
+                }
+                else
+                {
+                    colorIndex = 0;
+                }
+                index++;
             }
-            else
-            {
-                colorIndex = 0;
-            }
-            index++;
         }
 
-
         %>
-
-       
-
-   
     </script>
 </body>
 </html>
