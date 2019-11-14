@@ -421,8 +421,10 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
     <!--KAKAO-->
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=ebcd0c1accbe0ff4bbb47bd777ef2fcf&libraries=service&libraries=services,clusterer,drawing"></script>
+
     <style>
         body,
         form {
@@ -1231,30 +1233,38 @@
         %>
         </ul>
     </div>
+
         <%
-            // ============== Data Init ================
+    // ============== Data Init ================
 
-            List<String> TravelList = getTravelByTrvNo();                        // 해당 게시글의 데이터
-            List<String> MemberList = getMemberByTrvNo();                 // 해당 게시글의 작성자의 데이터
-            List<String> TravelDayContents = getTravelDayListByTrvNo();  // 해당 게시글의 내용 데이터
-            List<Comment> CommentList = getCommentListByTrvNo();    // 해당 게시글의 댓글 데이터
-            List<Map> mapList = getMapByTrvDayNo();
-            List<string> mapRouteCost = testRouteCost();
+    List<String> TravelList = getTravelByTrvNo();                        // 해당 게시글의 데이터
+    List<String> MemberList = getMemberByTrvNo();                 // 해당 게시글의 작성자의 데이터
+    List<String> TravelDayContents = getTravelDayListByTrvNo();  // 해당 게시글의 내용 데이터
+    List<Comment> CommentList = getCommentListByTrvNo();    // 해당 게시글의 댓글 데이터
+    List<Map> mapList = getMapByTrvDayNo();
+    List<string> mapRouteCost = testRouteCost();
 
+    if (TravelList.Count <= 0 || MemberList.Count <= 0 || TravelDayContents.Count <= 0 || CommentList.Count <= 0 || mapList.Count <= 0 || mapRouteCost.Count <= 0)
+    {
+        Response.Write("<script language='javascript'>alert('해당 게시글은 오류로 인해 불러올 수 없습니다.'); history.go(-1); </script language='javascript'>");
+    }
+    else
+    {
 
-            int day = 0;                                                                // 일 차
-            int goodCnt = getLikeCountByTrvNo();                             // 추천 수
-            string[] totRateArr = TravelList[3].Split(new char[] { '-' });       // 해당 게시글 평점(0.0-0) 형식이라 Split작업
-            int starCount = int.Parse(totRateArr[1]);                            // 해당 게시글의 평점(별 수)
-            string starScore = totRateArr[0];                                     // 해당 게시글의 평점(소수)
-            string starText = "";
-            int replyCount = getCommentByTrvNo();                          // 해당 게시글의 댓글 수
+        int day = 0;                                                                // 일 차
+        int goodCnt = getLikeCountByTrvNo();                             // 추천 수
+        string[] totRateArr = TravelList[3].Split(new char[] { '-' });       // 해당 게시글 평점(0.0-0) 형식이라 Split작업
+        int starCount = int.Parse(totRateArr[1]);                            // 해당 게시글의 평점(별 수)
+        string starScore = totRateArr[0];                                     // 해당 게시글의 평점(소수)
+        string starText = "";
+        int replyCount = getCommentByTrvNo();                          // 해당 게시글의 댓글 수
 
-            for (int i = 0; i < starCount; i++) // 별 수만큼 for문 반복해서 starText 변수에 ⭐ 삽입
-                starText += "⭐";
+        for (int i = 0; i < starCount; i++) // 별 수만큼 for문 반복해서 starText 변수에 ⭐ 삽입
+            starText += "⭐";
 
-            // ======================================
+        // ======================================
         %>
+
         <div id="main">
             <div class="board">
                 <div class="board-header">
@@ -1298,30 +1308,30 @@
                                 <root-header>여행 간 경로</root-header>
                                 <root-content>
                                     <% 
-                                        int routeDays = 1;
+    int routeDays = 1;
 
-                                        foreach (var map in mapList)
-                                        {
-                                            if (map.Map_route != "")
-                                            {
-                                            JToken mapRoute = JToken.Parse(map.Map_route);
-                                            
-                                                //Response.Write(route);
-                                                string placename = "";
-                                                string roadaddress = "";
-                                                string addressname = "";
-                                                string phone = "";
-                                                string info = "";
-                                                string placeurl = "";
-                                                Response.Write("<p><h4><b>" + routeDays + "일 차</b></h4></p>");
-                                                foreach (var item in mapRoute)
-                                                {
-                                                    placename = item["place_name"].ToString();
-                                                    if (item["road_address_name"].ToString() != "undefined") roadaddress = item["road_address_name"].ToString();
-                                                    if (item["address_name"].ToString() != "undefined") addressname = item["address_name"].ToString();
-                                                    phone = item["phone"].ToString();
-                                                    info = item["info"].ToString();
-                                                    placeurl = item["place_url"].ToString();
+    foreach (var map in mapList)
+    {
+        if (map.Map_route != "")
+        {
+            JToken mapRoute = JToken.Parse(map.Map_route);
+
+            //Response.Write(route);
+            string placename = "";
+            string roadaddress = "";
+            string addressname = "";
+            string phone = "";
+            string info = "";
+            string placeurl = "";
+            Response.Write("<p><h4><b>" + routeDays + "일 차</b></h4></p>");
+            foreach (var item in mapRoute)
+            {
+                placename = item["place_name"].ToString();
+                if (item["road_address_name"].ToString() != "undefined") roadaddress = item["road_address_name"].ToString();
+                if (item["address_name"].ToString() != "undefined") addressname = item["address_name"].ToString();
+                phone = item["phone"].ToString();
+                info = item["info"].ToString();
+                placeurl = item["place_url"].ToString();
                                        %>
                                                         <div class="list-group travel-cost">
                                                             <div class="card w-100 map-info-items">
@@ -1340,10 +1350,10 @@
                                                             </div>
                                                         </div>
                                                 <%
-                                                }
-                                                routeDays++;
-                                            }
-                                        }
+            }
+            routeDays++;
+        }
+    }
                                         %>
                                 </root-content>
                             </rootitem>
@@ -1353,30 +1363,30 @@
                                 <cost-header>여행 간 경비</cost-header>
                                 <cost-content>                       
                                     <%
-                                    int costDays = 1;
-                                    foreach (var map in mapList)
-                                    {
-                                        if (map.Map_cost != "")
-                                        {
-                                            JToken mapCost = JToken.Parse(map.Map_cost);
-                                            string itemlist = "";
-                                            string costtype = "";
-                                            string cost = "";
-                                            string placename = "";
-                                            string info = "";
-                                            Response.Write("<p><h4><b>" + costDays + "일 차</b></h4></p>");
-                                            foreach (var item in mapCost)
-                                            {
-                                                placename = item["place_name"].ToString();
-                                                itemlist = item["itemList"].ToString();
-                                                JToken list = JToken.Parse(itemlist);
-                                                if (!list.Equals(""))
-                                                {
-                                                    foreach (var ls in list)
-                                                    {
-                                                        costtype = ls["costType"].ToString();
-                                                        cost = ls["cost"].ToString();
-                                                        info = ls["info"].ToString();
+    int costDays = 1;
+    foreach (var map in mapList)
+    {
+        if (map.Map_cost != "")
+        {
+            JToken mapCost = JToken.Parse(map.Map_cost);
+            string itemlist = "";
+            string costtype = "";
+            string cost = "";
+            string placename = "";
+            string info = "";
+            Response.Write("<p><h4><b>" + costDays + "일 차</b></h4></p>");
+            foreach (var item in mapCost)
+            {
+                placename = item["place_name"].ToString();
+                itemlist = item["itemList"].ToString();
+                JToken list = JToken.Parse(itemlist);
+                if (!list.Equals(""))
+                {
+                    foreach (var ls in list)
+                    {
+                        costtype = ls["costType"].ToString();
+                        cost = ls["cost"].ToString();
+                        info = ls["info"].ToString();
                                                 %>
                                                         <div class="list-group travel-cost">
                                                             <div class="card w-100 map-info-items">
@@ -1394,10 +1404,10 @@
                                                             </div>
                                                         </div>
                                                 <%
-                                                    }
-                                                }
-                                                else
-                                                {
+        }
+    }
+    else
+    {
                                                 %>
                                                         <div class="list-group travel-cost">
                                                             <div class="card w-100 map-info-items">
@@ -1415,11 +1425,11 @@
                                                             </div>
                                                         </div>
                                                 <%
-                                                }
-                                                } 
-                                            costDays++;
-                                        }
-                                    }
+                }
+            }
+            costDays++;
+        }
+    }
                                                 %>
                                 </cost-content>
                             </costitem>
@@ -1429,51 +1439,51 @@
             </div>
 
             <%
-                for (int i = 0; i < TravelDayContents.Count; i++)
+    for (int i = 0; i < TravelDayContents.Count; i++)
+    {
+        int rDays = 0;
+        int curDay = day + 1;
+        int cDays = 0;
+
+        Response.Write("" +
+        "<div class = \"board-part\">\n" +
+            "<div class = \"part-board-header\">" + (day + 1) + "일 차</div>\n" +
+            "<div class = \"part-board-content\">\n" +
+                "<div class = \"part-board-map\"id='map_" + i + "'></div>\n" +
+                "<div class = \"part-board-travel\">\n" +
+                    "<div class = \"part-travel-root\">\n" +
+                        "<rootitem>\n" +
+                            "<root-header>여행 간 경로</root-header>\n" +
+                            "<root-content>\n" +
+                                "<content-item>\n" +
+                                    "<content-header>여행 경로</content-header>\n" +
+                                    "<content-body>\n");
+
+        foreach (var map in mapList)
+        {
+            if (map.Map_route != "")
+            {
+                JToken mapRoute = JToken.Parse(map.Map_route);
+                //Response.Write(route);
+                string placename = "";
+                string roadaddress = "";
+                string addressname = "";
+                string phone = "";
+                string info = "";
+                string placeurl = "";
+
+                if (curDay == rDays + 1) Response.Write("<p><h4><b>" + (rDays + 1) + "일 차</b></h4></p>");
+
+                foreach (var item in mapRoute)
                 {
-                    int rDays = 0;
-                    int curDay = day + 1;
-                    int cDays = 0;
+                    if (curDay != rDays + 1) break;
 
-                    Response.Write("" +
-                    "<div class = \"board-part\">\n" +
-                        "<div class = \"part-board-header\">" + (day + 1) + "일 차</div>\n" +
-                        "<div class = \"part-board-content\">\n" +
-                            "<div class = \"part-board-map\"id='map_" + i + "'></div>\n" +
-                            "<div class = \"part-board-travel\">\n" +
-                                "<div class = \"part-travel-root\">\n" +
-                                    "<rootitem>\n" +
-                                        "<root-header>여행 간 경로</root-header>\n" +
-                                        "<root-content>\n" +
-                                            "<content-item>\n" +
-                                                "<content-header>여행 경로</content-header>\n" +
-                                                "<content-body>\n");
-
-                    foreach (var map in mapList)
-                    {
-                        if(map.Map_route != "")
-                        {
-                        JToken mapRoute = JToken.Parse(map.Map_route);
-                        //Response.Write(route);
-                        string placename = "";
-                        string roadaddress = "";
-                        string addressname = "";
-                        string phone = "";
-                        string info = "";
-                        string placeurl = "";
-
-                        if(curDay == rDays + 1) Response.Write("<p><h4><b>" + (rDays + 1) + "일 차</b></h4></p>");
-
-                        foreach (var item in mapRoute)
-                        {
-                            if (curDay != rDays + 1) break;
-
-                            placename = item["place_name"].ToString();
-                            if (item["road_address_name"].ToString() != "undefined") roadaddress = item["road_address_name"].ToString();
-                            if (item["address_name"].ToString() != "undefined") addressname = item["address_name"].ToString();
-                            phone = item["phone"].ToString();
-                            info = item["info"].ToString();
-                            placeurl = item["place_url"].ToString();
+                    placename = item["place_name"].ToString();
+                    if (item["road_address_name"].ToString() != "undefined") roadaddress = item["road_address_name"].ToString();
+                    if (item["address_name"].ToString() != "undefined") addressname = item["address_name"].ToString();
+                    phone = item["phone"].ToString();
+                    info = item["info"].ToString();
+                    placeurl = item["place_url"].ToString();
 
                                                 %>
                                                         <div class="list-group travel-cost">
@@ -1493,48 +1503,48 @@
                                                             </div>
                                                         </div>
                                                 <%
-                                                            }
-                                                            rDays++;
-                                                        }
-                                                    }
-                                                    Response.Write(
-                                                "</content-body>\n" +
-                                            "</content-item>\n" +
-                                        "</root-content>\n" +
-                                    "</rootitem>\n" +
-                                "</div>\n" +
-                                "<div class = \"part-travel-cost\">\n" +
-                                    "<costitem>\n" +
-                                        "<cost-header>여행 간 경비</cost-header>\n" +
-                                        "<cost-content>\n" +
-                                            "<content-item>\n" +
-                                                "<content-header>여행 경비</content-header>\n" +
-                                                "<content-body>\n");
+            }
+            rDays++;
+        }
+    }
+    Response.Write(
+    "</content-body>\n" +
+    "</content-item>\n" +
+    "</root-content>\n" +
+    "</rootitem>\n" +
+    "</div>\n" +
+    "<div class = \"part-travel-cost\">\n" +
+    "<costitem>\n" +
+    "<cost-header>여행 간 경비</cost-header>\n" +
+    "<cost-content>\n" +
+    "<content-item>\n" +
+    "<content-header>여행 경비</content-header>\n" +
+    "<content-body>\n");
 
-                                                    foreach (var map in mapList)
-                                                    {
-                                                        if (map.Map_cost != "")
-                                                        {
-                                                        JToken mapCost = JToken.Parse(map.Map_cost);
-                                                        string itemlist = "";
-                                                        string costtype = "";
-                                                        string cost = "";
-                                                        string placename = "";
-                                                        string info = "";
-                                                        if(curDay == cDays + 1) Response.Write("<p><h4><b>" + (cDays + 1) + "일 차</b></h4></p>");
-                                                        foreach (var item in mapCost)
-                                                        {
-                                                            placename = item["place_name"].ToString();
-                                                            itemlist = item["itemList"].ToString();
-                                                            JToken list = JToken.Parse(itemlist);
-                                                            if (!list.Equals(""))
-                                                            {
-                                                                foreach (var ls in list)
-                                                                {
-                                                                    if (curDay != cDays + 1) break;
-                                                                    costtype = ls["costType"].ToString();
-                                                                    cost = ls["cost"].ToString();
-                                                                    info = ls["info"].ToString();
+    foreach (var map in mapList)
+    {
+        if (map.Map_cost != "")
+        {
+            JToken mapCost = JToken.Parse(map.Map_cost);
+            string itemlist = "";
+            string costtype = "";
+            string cost = "";
+            string placename = "";
+            string info = "";
+            if (curDay == cDays + 1) Response.Write("<p><h4><b>" + (cDays + 1) + "일 차</b></h4></p>");
+            foreach (var item in mapCost)
+            {
+                placename = item["place_name"].ToString();
+                itemlist = item["itemList"].ToString();
+                JToken list = JToken.Parse(itemlist);
+                if (!list.Equals(""))
+                {
+                    foreach (var ls in list)
+                    {
+                        if (curDay != cDays + 1) break;
+                        costtype = ls["costType"].ToString();
+                        cost = ls["cost"].ToString();
+                        info = ls["info"].ToString();
                                                 %>
                                                         <div class="list-group travel-cost">
                                                             <div class="card w-100 map-info-items">
@@ -1552,10 +1562,10 @@
                                                             </div>
                                                         </div>
                                                 <%
-                                                                }
-                                                            }
-                                                            else
-                                                            {
+        }
+    }
+    else
+    {
                                                 %>
                                                         <div class="list-group travel-cost">
                                                             <div class="card w-100 map-info-items">
@@ -1573,42 +1583,42 @@
                                                             </div>
                                                         </div>
                                                 <%
-                                                        }
-                                
-                                                    }
-                                                         cDays++;
-                                                    }
-                                                }
-                                 Response.Write(
-                                                            "</content-body>\n" +
-                                                        "</content-item>\n" +
-                                                    "</cost-content>\n" +
-                                                "</costitem>\n" +
-                                            "</div>\n" +
-                                        "</div>\n" +
-                                    "</div>\n" +
-                                    "<div class = \"part-board-story\">\n" +
-                                        "<div class = \"part-story\">\n" +
-                                            TravelDayContents[day++] + "\n" +
-                                        "</div>\n" +
-                                    "</div>\n" +
-                                "</div>\n");
-                                                    }
+                    }
+
+                }
+                cDays++;
+            }
+        }
+        Response.Write(
+                                   "</content-body>\n" +
+                               "</content-item>\n" +
+                           "</cost-content>\n" +
+                       "</costitem>\n" +
+                   "</div>\n" +
+               "</div>\n" +
+           "</div>\n" +
+           "<div class = \"part-board-story\">\n" +
+               "<div class = \"part-story\">\n" +
+                   TravelDayContents[day++] + "\n" +
+               "</div>\n" +
+           "</div>\n" +
+        "</div>\n");
+    }
             %>
 
             <div class="board-hashtag">
                 <%
-                    // hashtag 누르면 search.aspx?hashtag=○○○○ 로 이동
-                    List<String> hashtagList = getHashTagList();
+    // hashtag 누르면 search.aspx?hashtag=○○○○ 로 이동
+    List<String> hashtagList = getHashTagList();
 
 
-                    for (int i = 0; i < hashtagList.Count; i++)
-                    {
-                        string HashTagKeyword = hashtagList[i].ToString().Substring(1);
-                        string EncodedHashTag = Server.UrlEncode(HashTagKeyword);
+    for (int i = 0; i < hashtagList.Count; i++)
+    {
+        string HashTagKeyword = hashtagList[i].ToString().Substring(1);
+        string EncodedHashTag = Server.UrlEncode(HashTagKeyword);
 
-                        Response.Write("<a href = \"./search.aspx?searchType=1&hashtag="+ EncodedHashTag+ "\"><div class = \"hashtag\">" + hashtagList[i].ToString() + "</div></a>\n");
-                    }
+        Response.Write("<a href = \"./search.aspx?searchType=1&hashtag=" + EncodedHashTag + "\"><div class = \"hashtag\">" + hashtagList[i].ToString() + "</div></a>\n");
+    }
                 %>
             </div>
 
@@ -1619,51 +1629,52 @@
                 </div>
                 <div class="reply-contents">
                     <%
-                        for (int k = 0; k < CommentList.Count; k++)
-                        {
-                            Member member = new Member();
-                            MemberDao memberDao = new MemberDao();
+        for (int k = 0; k < CommentList.Count; k++)
+        {
+            Member member = new Member();
+            MemberDao memberDao = new MemberDao();
 
-                            member.Mem_id = CommentList[k].Mem_id;
-                            member = memberDao.selectMemberByMem_id(member); // 메인 이미지 찾기 작업
+            member.Mem_id = CommentList[k].Mem_id;
+            member = memberDao.selectMemberByMem_id(member); // 메인 이미지 찾기 작업
 
-                            string memMainImg = member.Mem_img_url;
-                            if (memMainImg == "noImage")
-                                memMainImg = "./img/noImage.png";
+            string memMainImg = member.Mem_img_url;
+            if (memMainImg == "noImage")
+                memMainImg = "./img/noImage.png";
 
-                            double d_replyStarCount = double.Parse(CommentList[k].Cmt_rate.ToString()); // 소수 출력
-                            int i_replyStarCount = (int)d_replyStarCount; // 별 갯수
-                            string s_replyStarCount = "";
+            double d_replyStarCount = double.Parse(CommentList[k].Cmt_rate.ToString()); // 소수 출력
+            int i_replyStarCount = (int)d_replyStarCount; // 별 갯수
+            string s_replyStarCount = "";
 
-                            for (int l = 0; l < i_replyStarCount; l++)
-                                s_replyStarCount += "⭐";
+            for (int l = 0; l < i_replyStarCount; l++)
+                s_replyStarCount += "⭐";
 
-                            Response.Write("" +
-                                               "<div class = \"replyItem\">\n" +
-                                                    "<div class = \"reply-writer\">\n" +
-                                                        "<div class=\"writer-Image\">\n" +
-                                                            "<a href=\"#\">\n" +
-                                                                "<img src=\"" + memMainImg + "\" alt=\"" + CommentList[k].Mem_id + "\" class=\"writer-ImageItem\" />\n" +
-                                                            "</a>\n" +
-                                                        "</div>\n" +
-                                                        "<div class=\"writer-Text\">\n" +
-                                                            "<div class=\"writerID\">\n" +
-                                                                "<a href=\"#\">\n" +
-                                                                    CommentList[k].Mem_id + "\n" +
-                                                                "</a>\n" +
-                                                            "</div>\n" +
-                                                            "<div class=\"writerTime\">" + timestampConvert.TimeStampToString( CommentList[k].Cmt_timestamp) + "</div>\n" +
-                                                        "</div>\n" +
-                                                    "</div>\n" +
-                                                    "<div class = \"reply-content\">\n" +
-                                                        CommentList[k].Cmt_content + "\n" +
-                                                    "</div>\n" +
-                                                    "<div class = \"reply-score\">\n" +
-                                                        "<span class=\"star\">" + s_replyStarCount + "</span>\n" +
-                                                        "<span class=\"score\">(" + d_replyStarCount + ")</span>\n" +
-                                                    "</div>\n" +
-                                                "</div>\n");
-                        }
+            Response.Write("" +
+                               "<div class = \"replyItem\">\n" +
+                                    "<div class = \"reply-writer\">\n" +
+                                        "<div class=\"writer-Image\">\n" +
+                                            "<a href=\"#\">\n" +
+                                                "<img src=\"" + memMainImg + "\" alt=\"" + CommentList[k].Mem_id + "\" class=\"writer-ImageItem\" />\n" +
+                                            "</a>\n" +
+                                        "</div>\n" +
+                                        "<div class=\"writer-Text\">\n" +
+                                            "<div class=\"writerID\">\n" +
+                                                "<a href=\"#\">\n" +
+                                                    CommentList[k].Mem_id + "\n" +
+                                                "</a>\n" +
+                                            "</div>\n" +
+                                            "<div class=\"writerTime\">" + timestampConvert.TimeStampToString(CommentList[k].Cmt_timestamp) + "</div>\n" +
+                                        "</div>\n" +
+                                    "</div>\n" +
+                                    "<div class = \"reply-content\">\n" +
+                                        CommentList[k].Cmt_content + "\n" +
+                                    "</div>\n" +
+                                    "<div class = \"reply-score\">\n" +
+                                        "<span class=\"star\">" + s_replyStarCount + "</span>\n" +
+                                        "<span class=\"score\">(" + d_replyStarCount + ")</span>\n" +
+                                    "</div>\n" +
+                                "</div>\n");
+        }
+    }
                     %>
                 </div>
                 <div class="reply-write">
