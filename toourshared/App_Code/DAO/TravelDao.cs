@@ -1405,7 +1405,51 @@ public class TravelDao
         }
         
     }
-     
+
+    public int checkMemberIdTravelNo(string mem_id, string trv_no)
+    {
+        if (String.IsNullOrEmpty(mem_id) && String.IsNullOrEmpty(trv_no)) // 파라미터로 받은 memberID 값이 null 혹은 empty 인 경우 0을 반환한다.
+        {
+            return 0;
+        }
+        else
+        {
+            MyDB myDB = new MyDB();
+            MySqlConnection con = null;
+            MySqlDataReader reader = null;
+            int returnInt = 0;
+
+            try
+            {
+                con = myDB.GetCon();
+                String Sql = "SELECT trv_no FROM toourshared.travel WHERE mem_id = " + "'" + mem_id+ "' and trv_no = " + "'" + trv_no + "'";
+
+                MySqlCommand cmd = new MySqlCommand(Sql, con);
+                con.Open();
+
+                reader = cmd.ExecuteReader();
+                if (reader.Read())
+                {
+                    returnInt = 1;
+                }
+
+                reader.Close();
+                con.Close();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
+                reader.Close();
+                con.Close();
+            }
+            finally
+            {
+                reader.Close();
+                con.Close();
+            }
+            return returnInt;
+        }
+    }
 }
 
 
