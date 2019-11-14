@@ -153,14 +153,14 @@
                 color: #fff;
                 cursor: pointer;
                 font-size: 12px;
-                background-color: orangered;
+                background-color: orange;
                 transition-duration: .5s;
                 margin-left: 10px;
                 font-family: 'Noto Sans KR', sans-serif;
             }
             
             .contentsCancel:hover{
-                background-color: #2e2e2e;
+                background-color: orangered;
             }
             
         </style>

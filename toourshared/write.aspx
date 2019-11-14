@@ -537,11 +537,11 @@
             <div class="btnArea">
                 <!-- 임시 저장 버튼 -->
                 <div class="tempSaveBtn">
-                    <div onclick ="tmpSave()" class="btnAreaItem">임시 저장</div>
+                    <div onclick ="tmpSave()" class="subAddItem">임시 저장</div>
                 </div>
                 <!-- 글 작성 완료 버튼 -->
                 <div class="finishBtn">
-                    <div onclick ="endWrite()" class="btnAreaItem">글 작성 완료</div>
+                    <div onclick ="endWrite()" class="subAddItem">글 작성 완료</div>
                 </div>
             </div>
         </div>
@@ -2387,12 +2387,12 @@
 
             // 한글, 영문, 숫자, #, 스페이스바는 입력이 가능하지만 나머지는 입력할 수 없고,
             // 입력된 글자가 있는 경우 #은 무조건 하나 이상 들어가 있어야 함.
-
+            var returnVal;
             if (str != "") {
                 if (!str.includes("#")) {
                     // 입력 문자열에 #이 존재하지 않는 경우
-                    alert('해쉬태그는 #으로 시작해야 합니다. 1');
-                    return;
+                    alert('해쉬태그는 #으로 시작해야 합니다.');
+                    returnVal = false;
                 } else {
                     for (var i = 0; i < str.length; i++) {
                         var chr = str.charAt(i);
@@ -2404,8 +2404,8 @@
                     }
 
                     if (falseStr != "") {
-                        alert('해시태그 조건에 맞춰 입력해주세요. 2\n오류 원인: ' + falseStr);
-                        return;
+                        alert('해시태그 조건에 맞춰 입력해주세요.\n오류 원인: ' + falseStr);
+                        returnVal = false;
                     } else {
                         var strArray;
                         var strSplit = str.split(' ');
@@ -2413,18 +2413,24 @@
 
                         for (var i in strSplit) {
                             if (strSplit[i].startsWith("#") == false) {
-                                alert('해시태그 조건에 맞춰 입력해주세요. 3');
-                                return;
+                                alert('해시태그 조건에 맞춰 입력해주세요.');
+                                returnVal = false;
                             } else {
                                 hashTagArray += strSplit[i] + " ";
                             }
                         }
 
-                        alert(hashTagArray + "이다!"); // 정상적으로 불러온 경우 hashTagArray를 불러오면 그 태그들을 불러옴.
+                        //alert(hashTagArray + "이다!"); // 정상적으로 불러온 경우 hashTagArray를 불러오면 그 태그들을 불러옴.
                         // ex) '#가나 #다라 #마바 #사아자 #파하하하하'
+                        returnVal = true;
                     }
                 }
             }
+            else {
+                alert('해쉬태그는 반드시 입력해야 합니다. ');
+                returnVal =  false;
+            }
+            return returnVal;
         }
 
 
@@ -2488,7 +2494,7 @@
         }
 
         function endWrite() {
-            if (HashTagCheck() == false) {
+            if (HashTagCheck() == true) {
                 var form = document.createElement("form");
                 addDataAtForm(form);
                 form.setAttribute('action', "Write_endWrite.aspx");
