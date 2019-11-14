@@ -46,12 +46,14 @@
         .note-modal-content {
             margin-top: 30%;
         }
-        
-        
-        .travelRoute-content, .cost-body{
-           
+
+
+        .travelRoute-content,
+        .cost-body {
+
             overflow: auto;
         }
+
     </style>
 
 
@@ -78,6 +80,7 @@
                 height: 600, //set editable area's height
             });
         });
+
     </script>
 </head>
 
@@ -265,7 +268,7 @@
             <!-- 중앙 영역 2 -->
             <div class="taArea">
                 <div class="form-group">
-                    <textarea name="article" rows="2" cols="20" id="article" type="text" name="article" onkeyup="tmpSaveByEnter()">
+                    <textarea name="article" rows="2" cols="20" id="article" type="text" name="article">
 </textarea>
                 </div>
             </div>
@@ -362,6 +365,11 @@
   
 -->
     <script>
+
+    </script>
+
+
+    <script>
         //사용자 편의 기능 
 
         // 자동 저장 액션 5분마다 / 300초
@@ -388,7 +396,7 @@
             if (window.event.keyCode == 13) {
                 tmpSave(false);
             }
-          
+
         }
 
 
@@ -418,6 +426,7 @@
             }
 
         }
+
     </script>
 
     <script>
@@ -461,6 +470,7 @@
             }
 
         });
+
     </script>
 
 
@@ -690,7 +700,7 @@
 
 
 
-        
+
         //-----------------------------------------------
         // 클릭시 발생하는 이벤트
         //----------------------------------------------
@@ -708,7 +718,7 @@
             console.info("-------------------------------------------- 현재 마커는");
             console.info(this);
             var curMkrOrder = this._order;
-            
+            var trvRoute = getTravelRouteByOrder(curMkrOrder);
 
             //----좌표값으로 주소를 가져옴
             geocoder.coord2Address(coord_WCONGNAMUL.wcongnamulX, coord_WCONGNAMUL.wcongnamulY, function(result, status) {
@@ -736,16 +746,16 @@
 
 
                                 '<div class="card card-cus" style="width:300px;">' +
-                                    '<div class="card-header">' +
-                                        '<div class="card-title">' +
-                                            '<input class="form-control card-input" type="text" placeholder="장소 이름" value="" />' +
-                                        '</div>' +
-                                        '<div class="card-close">' +
-                                            '<div class="closeBtn" onclick="closeCusOverlay()">' +
-                                                '<span>×</span>' +
-                                            '</div>' +
-                                        '</div>' +
-                                    '</div>' +
+                                '<div class="card-header">' +
+                                '<div class="card-title">' +
+                                '<input id="cuov-name" class="form-control card-input" type="text" placeholder="장소 이름" value="' + trvRoute.place_name + '" />' +
+                                '</div>' +
+                                '<div class="card-close">' +
+                                '<div class="closeBtn" onclick="closeCusOverlay()">' +
+                                '<span>×</span>' +
+                                '</div>' +
+                                '</div>' +
+                                '</div>' +
                                 '<div class="card-body">' +
                                 '<blockquote class="blockquote mb-0">';
 
@@ -763,7 +773,7 @@
                             } else {
                                 content += '<div class="card-addBtn" onclick=\'searchPlacesByAddress("' + result[0].address.road_address_name + '")\'>주소로 검색</div>'
                             }
-                            content += '<div class="btn btn-danger btn-sm" onclick="removeMarkNTrvRouteByOrder('+curMkrOrder+')">삭제</div>' +
+                            content += '<div class="btn btn-danger btn-sm" onclick="removeMarkNTrvRouteByOrder(' + curMkrOrder + ')">삭제</div>' +
                                 '</td>' +
                                 '</tr></table>' +
                                 '</div>';
@@ -1389,8 +1399,8 @@
                 }
 
             });
-            
-        
+
+
 
 
             var markers = manager.getOverlays([kakao.maps.drawing.OverlayType.MARKER]);
@@ -1401,12 +1411,23 @@
             });
         }
 
-        
-        function getTravelRouteByOrder(order){
+
+        function getTravelRouteByOrder(order) {
             TravelRouteList.forEach(function(val, idx, arr) {
                 if (val.order == order) {
                     return TravelRouteList[idx];
-                    
+
+                }
+
+            });
+            return {};
+        }
+
+        function setTravelRouteNameByOrder(order, name) {
+            TravelRouteList.forEach(function(val, idx, arr) {
+                if (val.order == order) {
+                    TravelRouteList[idx].setName(name);
+
                 }
 
             });
@@ -2116,10 +2137,61 @@
         //------------------------------------
 
 
+        function HashTagCheck() {
+            var str = document.getElementById('hashtag').value;
+            var falseStr = "";
+            var pattern_num = /[0-9]/; // 숫자 
+            var pattern_eng = /[a-zA-Z]/; // 문자 
+            var pattern_spc = /[# }]/; // 특수문자
+            var pattern_kor = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/; // 한글체크
 
+            // 한글, 영문, 숫자, #, 스페이스바는 입력이 가능하지만 나머지는 입력할 수 없고,
+            // 입력된 글자가 있는 경우 #은 무조건 하나 이상 들어가 있어야 함.
+
+            if (str != "") {
+                if (!str.includes("#")) {
+                    // 입력 문자열에 #이 존재하지 않는 경우
+                    alert('해쉬태그는 #으로 시작해야 합니다. 1');
+                    return;
+                } else {
+                    for (var i = 0; i < str.length; i++) {
+                        var chr = str.charAt(i);
+
+                        if (pattern_num.test(chr) || pattern_eng.test(chr) || pattern_spc.test(chr) || pattern_kor.test(chr))
+                            continue;
+                        else
+                            falseStr += chr + ', ';
+                    }
+
+                    if (falseStr != "") {
+                        alert('해시태그 조건에 맞춰 입력해주세요. 2\n오류 원인: ' + falseStr);
+                        return;
+                    } else {
+                        var strArray;
+                        var strSplit = str.split(' ');
+                        var hashTagArray = "";
+
+                        for (var i in strSplit) {
+                            if (strSplit[i].startsWith("#") == false) {
+                                alert('해시태그 조건에 맞춰 입력해주세요. 3');
+                                return;
+                            } else {
+                                hashTagArray += strSplit[i] + " ";
+                            }
+                        }
+
+                        alert(hashTagArray + "이다!"); // 정상적으로 불러온 경우 hashTagArray를 불러오면 그 태그들을 불러옴.
+                        // ex) '#가나 #다라 #마바 #사아자 #파하하하하'
+                    }
+                }
+            }
+        }
 
 
         function gotoDay() {
+            
+            
+            
             var form = document.createElement("form");
             addDataAtForm(form);
 
@@ -2137,7 +2209,7 @@
 
 
         function tmpSave(alFlg) {
-
+            
 
             var form = document.createElement("form");
             addDataAtForm(form);
@@ -2168,6 +2240,7 @@
         }
 
         function addDay() {
+            
             var form = document.createElement("form");
             addDataAtForm(form);
             form.setAttribute('action', "Write_addDay.aspx");
@@ -2175,6 +2248,7 @@
         }
 
         function endWrite() {
+            if(HashTagCheck() == false) return;
             var form = document.createElement("form");
             addDataAtForm(form);
             form.setAttribute('action', "Write_endWrite.aspx");
@@ -2808,6 +2882,9 @@
         //-----------------------------------
         //----------- CommonFUnction End
         //-----------------------------------
+
     </script>
 
-</body></html>
+</body>
+
+</html>
