@@ -44,7 +44,16 @@
 
     protected void btnMypage_Click(object sender, EventArgs e)
     {
-        Response.Redirect("./MyPage.aspx");
+       if(Session["mem_id"] == null)
+        {
+            return;
+        }
+        else
+        {
+            string QueryString = Session["mem_id"].ToString(); // 현재 세션의 마이 페이지로 가야 하므로 세션 ToString() 받아서 redirect에 넘김
+            Response.Redirect("./MyPage.aspx?mem_id=" + QueryString);
+        }
+
     }
 
 
@@ -76,11 +85,11 @@
             int check = member.UpdatetMember(mem);
             if(check == 1)
             {
-                Response.Write("<script language=javascript>alert('정상적으로 수정이 완료되었습니다.'); location.replace('./MyPage.aspx');</script language=javascript>");
+                Response.Write("<script language=javascript>alert('정상적으로 수정이 완료되었습니다.'); location.replace('./MyPage.aspx?mem_id="+Session["mem_id"].ToString()+"');</script language=javascript>");
             }
             else
             {
-                Response.Write("<script language=javascript>alert('수정이 정상적으로 되지 않았습니다.'); location.replace('./MyPage.aspx');</script language=javascript>");
+                Response.Write("<script language=javascript>alert('수정이 정상적으로 되지 않았습니다.'); location.replace('./MyPage.aspx?mem_id="+Session["mem_id"].ToString()+"');</script language=javascript>");
             }
             
         }
@@ -815,19 +824,20 @@
         <ul class = "topnavUl" >
             <li class="topnavLi">
                 <div class="nav-logo">
-                    <a href="index.aspx" class="nav-logo-item">To Our Shared</a>
+                    <a href="./index.aspx" class="nav-logo-item">To Our Shared</a>
                 </div>
             </li>
             <li class="topnavLi">
                 <a>Intro</a>
                 <ul>
-                    <li><a href="#">TOUPLE</a></li>
+                    <li><a href="./index.aspx#relAndTOU">TOUPLE</a></li>
                 </ul>
             </li>
             <li class="topnavLi">
                 <a>Shared</a>
                 <ul>
-                    <li><a href="search.aspx">검색</a></li>
+                    <li><a href="./search.aspx">검색</a></li>
+                    <li><a href="./write.aspx">글 쓰기</a></li>
                 </ul>
             </li>
             <li class="topnavLi">
@@ -840,7 +850,7 @@
             <li class="topnavLi">
                 <a>Help</a>
                 <ul>
-                    <li><a href="FAQ.aspx">자주 찾는 질문</a></li>
+                    <li><a href="./FAQ.aspx">자주 찾는 질문</a></li>
                 </ul>
             </li>
              <li class = "topnavLi" >

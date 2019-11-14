@@ -464,6 +464,7 @@ namespace tooushared.DAO
             MySqlConnection con = null;
             try
             {
+                con = myDB.GetCon();
                 string Sql = "UPDATE toourshared.member SET mem_pw =@mem_pw, mem_phone =@mem_phone, mem_ques =@mem_ques, mem_answer =@mem_answer, mem_timestmap =@mem_timestmap, mem_img_url =@mem_img_url  WHERE mem_id = @mem_id";
 
 
