@@ -1186,6 +1186,17 @@
             });
             $('#replyWriteText').keyup();
         });
+
+        function openUpdWinForm(cmtNo, trvNo) {
+            var link = "./updateReply.aspx?cmt_no=" + cmtNo + "&trv_no=" + trvNo;
+            window.open(link, 'myForm', 'width = 500, height = 300, left = 500, top = 500, toolbar = no, menubar = no, location = no, scrollbar = no, status = no, resizable = no, fullscreen = no, channelmode = no');
+        }
+
+        function openDelWinForm(cmtNo, trvNo) {
+            var link = "./deleteReply.aspx?cmt_no=" + cmtNo + "&trv_no=" + trvNo;
+            window.open(link, 'myForm', 'width = 500, height = 300, left = 500, top = 500, toolbar = no, menubar = no, location = no, scrollbar = no, status = no, resizable = no, fullscreen = no, channelmode = no');
+        }
+
     </script>
 </head>
 <body>
@@ -1660,41 +1671,56 @@
                 </div>
                 <div class="reply-contents">
                     <%
-        for (int k = 0; k < CommentList.Count; k++)
-        {
-            Member member = new Member();
-            MemberDao memberDao = new MemberDao();
+                            for (int k = 0; k < CommentList.Count; k++)
+                            {
+                                Member member = new Member();
+                                MemberDao memberDao = new MemberDao();
 
-            member.Mem_id = CommentList[k].Mem_id;
-            member = memberDao.selectMemberByMem_id(member); // 메인 이미지 찾기 작업
+                                member.Mem_id = CommentList[k].Mem_id;
+                                member = memberDao.selectMemberByMem_id(member); // 메인 이미지 찾기 작업
 
-            string memMainImg = member.Mem_img_url;
-            if (memMainImg == "noImage")
-                memMainImg = "./img/noImage.png";
+                                string memMainImg = member.Mem_img_url;
+                                if (memMainImg == "noImage")
+                                    memMainImg = "./img/noImage.png";
 
-            double d_replyStarCount = double.Parse(CommentList[k].Cmt_rate.ToString()); // 소수 출력
-            int i_replyStarCount = (int)d_replyStarCount; // 별 갯수
-            string s_replyStarCount = "";
+                                double d_replyStarCount = double.Parse(CommentList[k].Cmt_rate.ToString()); // 소수 출력
+                                int i_replyStarCount = (int)d_replyStarCount; // 별 갯수
+                                string s_replyStarCount = "";
 
-            for (int l = 0; l < i_replyStarCount; l++)
-                s_replyStarCount += "⭐";
+                                for (int l = 0; l < i_replyStarCount; l++)
+                                    s_replyStarCount += "⭐";
 
-            Response.Write("" +
-                               "<div class = \"replyItem\">\n" +
-                                    "<div class = \"reply-writer\">\n" +
-                                        "<div class=\"writer-Image\">\n" +
-                                            "<a href=\"#\">\n" +
-                                                "<img src=\"" + memMainImg + "\" alt=\"" + CommentList[k].Mem_id + "\" class=\"writer-ImageItem\" />\n" +
-                                            "</a>\n" +
-                                        "</div>\n" +
-                                        "<div class=\"writer-Text\">\n" +
-                                            "<div class=\"writerID\">\n" +
-                                                "<a href=\"#\">\n" +
-                                                    CommentList[k].Mem_id + "\n" +
-                                                "</a>\n" +
-                                            "</div>\n" +
-                                            "<div class=\"writerTime\">" + timestampConvert.TimeStampToString(CommentList[k].Cmt_timestamp) + "</div>\n" +
-                                        "</div>\n" +
+                                Response.Write("" +
+                                                   "<div class = \"replyItem\">\n" +
+                                                        "<div class = \"reply-writer\">\n" +
+                                                            "<div class=\"writer-Image\">\n" +
+                                                                "<a href=\"#\">\n" +
+                                                                    "<img src=\"" + memMainImg + "\" alt=\"" + CommentList[k].Mem_id + "\" class=\"writer-ImageItem\" />\n" +
+                                                                "</a>\n" +
+                                                            "</div>\n" +
+                                                            "<div class=\"writer-Text\">\n" +
+                                                                "<div class=\"writerID\">\n" +
+                                                                    "<a href=\"#\">\n" +
+                                                                        CommentList[k].Mem_id + "\n" +
+                                                                    "</a>\n" +
+                                                                "</div>\n" +
+                                                                "<div class=\"writerTime\">" + timestampConvert.TimeStampToString(CommentList[k].Cmt_timestamp) + "</div>\n" +
+                                                            "</div>\n");
+                                if(Session["mem_id"] != null && CommentList[k] != null && Request.QueryString["trv_no"] != null)
+                                {
+                                    if (Session["mem_id"].ToString() == CommentList[k].Mem_id)
+                                    {
+                                        if (CommentList[k].Mem_id == Session["mem_id"].ToString())
+                                            Response.Write("" +
+                                            "<div class=\"writerUpdateDelete\">\n" +
+                                                "<span style=\"padding-left: 10px; display: flex; flex-direction: row; align-items: center; width: auto; height: auto;\">" +
+                                                    "<a href=\"javascript: void(0)\" style=\"margin-right: 5px;\" onClick=\"openUpdWinForm(" + CommentList[k].Cmt_no + "," + Request.QueryString["trv_no"].ToString() + ")\">✍</a> <a href=\"javascript: void(0)\" onClick=\"openDelWinForm(" + CommentList[k].Cmt_no + "," + Request.QueryString["trv_no"].ToString() + ")\">❌</a>" +
+                                                "</span>" +
+                                            "</div>\n");
+                                    }
+                                }
+
+                                Response.Write("" +
                                     "</div>\n" +
                                     "<div class = \"reply-content\">\n" +
                                         CommentList[k].Cmt_content + "\n" +
@@ -1704,8 +1730,8 @@
                                         "<span class=\"score\">(" + d_replyStarCount + ")</span>\n" +
                                     "</div>\n" +
                                 "</div>\n");
-        }
-    }
+                            }
+                        }
                     %>
                 </div>
                 <div class="reply-write">

@@ -16,7 +16,15 @@
     }
     protected void btnMypage_Click(object sender, EventArgs e)
     {
-        Response.Redirect("./MyPage.aspx");
+        if(Session["mem_id"] == null)
+        {
+            return;
+        }
+        else
+        {
+            string QueryString = Session["mem_id"].ToString(); // 현재 세션의 마이 페이지로 가야 하므로 세션 ToString() 받아서 redirect에 넘김
+            Response.Redirect("./MyPage.aspx?mem_id=" + QueryString);
+        }
     }
     protected void btnJoin_Click(object sender, EventArgs e)
     {
@@ -44,65 +52,53 @@
 
         //status -> 편집 페이지 정보
         //세션 status가 비어있다면 새로운 status 생성
+        //?trv
         if (HttpContext.Current.Session["write_status"] == null)
         {
-
-
-
-            // create Travel
-            Travel inTravel = new Travel();
-            inTravel.Mem_id = HttpContext.Current.Session["mem_id"].ToString();
-            inTravel.Trv_create_time = TimeLib.GetTimeStamp();
-            inTravel.Trv_secret = 0.ToString();
-            inTravel.Trv_timestamp = TimeLib.GetTimeStamp();
-            inTravel.Trv_title = Request.Form["title"];
-            inTravel.Trv_tot_rate = 0.ToString();
-            inTravel.Trv_views = 0.ToString();
-
-            // insert new travel
-            TravelDao travelDao = new TravelDao();
-            string trv_no = travelDao.InsertTravel(inTravel);
-
-
-
-            //create travel_day
-            Travel_Day travel_Day = new Travel_Day();
-
-            travel_Day.Trv_no = trv_no;
-            Travel_DayDao travel_DayDao = new Travel_DayDao();
-            //insert new travel_day
-            string trv_day_no = travel_DayDao.InsertTravel_Day(travel_Day);
-
-
-            //create map
-            Map inMap = new Map();
-            MapDao mapDao = new MapDao();
-            // insert new map
-            inMap.Trv_day_no = trv_day_no;
-            mapDao.InsertMap(inMap);
-
             // 현재폼 정보를 저장할 딕셔너리 생성 나중에 세션에 넘겨줌
-            Dictionary<string, string> newWriteStatus = new Dictionary<string, string>()
+
+            //Dictionary<string, string> newWriteStatus = new Dictionary<string, string>()
+            //{
+            //    { "trv_no", travel.Trv_no},
+            //    { "cur_trv_day_no",trv_day_no},
+            //    { "cur_day","1"}
+            //};
+            //for(int i = 1; i <= count; i++)
+            //{
+            //    newWriteStatus.Add(i.ToString(), trv_day_no);
+            //}
+
+            //Session["write_status"] = newWriteStatus;
+            Travel travel = new Travel();
+            Travel_Day travel_Day = new Travel_Day();
+            Travel_DayDao travel_DayDao = new Travel_DayDao();
+            string travelnumber = Request.QueryString["trv_no"].ToString();
+            travel.Trv_no = travelnumber;
+            travel_Day.Trv_no = Request.QueryString["trv_no"].ToString();
+            int count = travel_DayDao.getTravelCountByTrvNo(travel.Trv_no);
+
+
+
+
+            List<Travel_Day> result = travel_DayDao.selectTravelDayListByTrvNo(travel_Day);
+            foreach (var item in result)
             {
-                { "trv_no", trv_no},
-                { "cur_trv_day_no",trv_day_no},
-                { "cur_day","1"},
-                {"1",trv_day_no }
-
+                Dictionary<string, string> newWriteStatus = new Dictionary<string, string>()
+            {
+                { "trv_no", travel.Trv_no},
+                { "cur_trv_day_no",item.Trv_day_no},
+                { "cur_day","1"}
             };
-            Session["write_status"] = newWriteStatus;
 
+                for (int i = 1; i <= count; i++)
+                {
+                    newWriteStatus.Add(i.ToString(), item.Trv_day_no);
+                }
 
-
-
+                Session["write_status"] = newWriteStatus;
+            }
 
         }
-        Dictionary<string, string> readWriteStatus = SessionLib.getWriteStatus();
-        foreach (var item in readWriteStatus)
-        {
-            Response.Write(item.Key + " : " + item.Value + "<br/>");
-        }
-
     }
     protected void BindTables()
     {
@@ -113,6 +109,7 @@
         {
             // 일차수 표시
             Literal_day.Text = readWriteStatus["cur_day"];
+
 
             //Travel Day 가져오기
             Travel_Day inputTravel_day = new Travel_Day();
@@ -212,19 +209,30 @@
 
     protected void Page_Load(object sender, EventArgs e)
     {
-
-        WriteSessionProcess();
-        BindDropDownList();
-
-        BindTables();
-         if(Session["mem_id"]!= null)
+        TravelDao travelDao = new TravelDao();
+        if(Request.QueryString["trv_no"] == null)
+        {
+            Response.Write("./index.aspx");
+        }
+        if(Session["mem_id"]== null)
         {
             Response.Redirect("./index.aspx");
         }
-          if (Request.QueryString["?trv_no=100"] == null)
-        { 
-            Response.Redirect("/MyPage.aspx");
+
+        string trv_no = Request.QueryString["trv_no"];
+        string mem_id = Session["mem_id"].ToString();
+
+        int check = travelDao.checkMemberIdTravelNo(mem_id, trv_no);
+
+        if(check != 1)
+        {
+            Response.Redirect("./MyPage.aspx?mem_id=" + Session["mem_id"].ToString());
         }
+
+        WriteSessionProcess();
+        BindDropDownList();
+        BindTables();
+
     }
 
 
@@ -305,7 +313,7 @@
             <ul class="topnavUl">
                 <li class="topnavLi">
                     <div class="nav-logo">
-                        <a href="index.aspx" class="nav-logo-item">To Our Shared</a>
+                        <a href="./index.aspx" class="nav-logo-item">To Our Shared</a>
                     </div>
                 </li>
                 <li class="topnavLi">
@@ -317,7 +325,7 @@
                 <li class="topnavLi">
                     <a>Shared</a>
                     <ul>
-                        <li><a href="search.aspx">검색</a></li>
+                        <li><a href="./search.aspx">검색</a></li>
                     </ul>
                 </li>
                 <li class="topnavLi">
@@ -330,7 +338,7 @@
                 <li class="topnavLi">
                     <a>Help</a>
                     <ul>
-                        <li><a href="FAQ.aspx">자주 찾는 질문</a></li>
+                        <li><a href="./FAQ.aspx">자주 찾는 질문</a></li>
                     </ul>
                 </li>
                 <% 
@@ -348,9 +356,9 @@
                     <ul>
                         <br />
                         <li>
-                            <asp:Button ID="btnJoin" runat="server" Text="회원가입" OnClick="btnJoin_Click" /></li>
+                            <asp:Button ID="btnJoin" runat="server" Text="회원가입" OnClick="btnJoin_Click" class="navJoinBtn"/></li>
                         <li>
-                            <asp:Button ID="btnFindIDPW" runat="server" Text="계정찾기" OnClick="btnFindIDPW_Click" /></li>
+                            <asp:Button ID="btnFindIDPW" runat="server" Text="계정찾기" OnClick="btnFindIDPW_Click" class="navFindBtn"/></li>
                     </ul>
                 </li>
                 <%  
@@ -362,9 +370,9 @@
                     <a href="#"><% string id = Session["mem_id"].ToString(); Response.Write(id); %></a>
                     <ul>
                         <li>
-                            <asp:Button ID="btnMypage" runat="server" Text="마이페이지" OnClick="btnMypage_Click" /></li>
+                            <asp:Button ID="btnMypage" runat="server" Text="마이페이지" OnClick="btnMypage_Click" class="navJoinBtn"/></li>
                         <li>
-                            <asp:Button ID="btnLogout" runat="server" Text="로그아웃" OnClick="btnLogout_Click" /></li>
+                            <asp:Button ID="btnLogout" runat="server" Text="로그아웃" OnClick="btnLogout_Click" class="navFindBtn"/></li>
 
                     </ul>
                 </li>

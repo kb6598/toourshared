@@ -51,10 +51,10 @@
                 string cmtNo = Request.QueryString["cmt_no"].ToString(); // comment No 불러오고
                 string trvNo = Request.QueryString["trv_no"].ToString(); // travel No 불러오고
 
-                String inputText = TextBox1.Text;
-                int DropdownListIndex = DropDownList1.SelectedIndex;
+                string inputText = TextBox1.Text;
+                System.Diagnostics.Debug.WriteLine(DropDownList1.Items[DropDownList1.SelectedIndex].Text);
 
-                if (string.IsNullOrEmpty(inputText) || DropDownList1.SelectedIndex == 0)
+                if (string.IsNullOrEmpty(inputText) || DropDownList1.Items[DropDownList1.SelectedIndex].Text == "평점")
                 {
                     Response.Write("<script language='javascript'>alert('평점을 선택하지 않으셨거나 혹은 댓글을 입력하지 않았습니다.');</script language='javascript'>");
                 }
@@ -71,14 +71,14 @@
                     setComment.Cmt_no = cmtNo; // cmt_no
                     setComment.Cmt_content = inputText; // cmt_content
                     setComment.Cmt_timestamp = getComment.Cmt_timestamp.ToString(); // 기존 시간값으로 설정
-                    setComment.Cmt_rate = DropDownList1.SelectedValue.ToString(); // cmt_rate  DTO 설정
+                    setComment.Cmt_rate = DropDownList1.Items[DropDownList1.SelectedIndex].Text.ToString(); // cmt_rate  DTO 설정
 
                     commentDao.UpdateComment(setComment); // 댓글 업데이트
 
                     TravelDao travelDao = new TravelDao();
                     travelDao.setTotRateByTrvNo(int.Parse(trvNo)); // 게시글 평점 업데이트
 
-                    Response.Write("<script language='javascript'>alert('댓글이 수정되었습니다.'); this.close(); </script language='javascript'>");
+                    Response.Write("<script language='javascript'>alert('댓글이 수정되었습니다.'); this.close(); opener.location.reload(); </script language='javascript'>");
                 }
             }
         }
@@ -90,6 +90,7 @@
     <head>
         <meta charset = "utf-8">
         <meta name = "viewport" content= "width=device-width, initial-scale=1">
+        <title>댓글 수정하기</title>
 
         <!-- Font -->
         <link href = "https://fonts.googleapis.com/css?family=Mansalva|Nanum+Gothic|Nanum+Myeongjo|Noto+Sans+KR|Lora|Jua&display=swap" rel = "stylesheet" >
@@ -108,7 +109,6 @@
                 flex-direction: column;
                 justify-content: center;
                 align-items: center;
-                border: 2px solid black;
             }
             
             div{
@@ -119,7 +119,7 @@
                 width: 100%;
                 height: 50px;
                 flex-direction: row;
-                justify-content: flex-end;
+                justify-content: center;
                 align-items: center;
                 padding-top: 40px;
                 padding-right: 50px;
