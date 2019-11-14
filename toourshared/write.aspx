@@ -360,7 +360,7 @@
                     {
                 %>
                 <li class="topnavLi">
-                    <a href="#"><% string id = Session["mem_id"].ToString(); Response.Write(id); %></a>
+                    <a><% string id = Session["mem_id"].ToString(); Response.Write(id); %></a>
                     <ul>
                         <li>
                             <asp:Button ID="btnMypage" runat="server" Text="마이페이지" OnClick="btnMypage_Click" class="navJoinBtn" /></li>
@@ -413,8 +413,7 @@
                         </div>
                     </div>
                     <div class="travelRouteItem-Center">
- <div class="travelRoute-header">
-
+                        <div class="travelRoute-header">
                             <button type="button" class="TIFIRST" onclick="selectOverlay('MARKER')">
                                 <p>📌</p>
                                 <p>마커</p>
