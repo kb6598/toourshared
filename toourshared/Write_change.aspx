@@ -42,7 +42,7 @@
 
     protected void WriteSessionProcess()
     {
-   
+
         //if (IsLogin.isLogin() == false)
         //{
         //    Response.Redirect("/index.aspx");
@@ -53,8 +53,22 @@
         //status -> 편집 페이지 정보
         //세션 status가 비어있다면 새로운 status 생성
         //?trv
+
+
+         if(HttpContext.Current.Session["write_status"] != null)
+        {
+            Dictionary<string, string> readWriteStatus = SessionLib.getWriteStatus();
+            if(readWriteStatus["state"] != "change")
+            {
+                Session.Remove("write_status");
+                Response.Redirect("./MyPage.aspx");
+            }
+        }
+
+
         if (HttpContext.Current.Session["write_status"] == null)
         {
+
             // 현재폼 정보를 저장할 딕셔너리 생성 나중에 세션에 넘겨줌
 
             //Dictionary<string, string> newWriteStatus = new Dictionary<string, string>()
@@ -77,28 +91,28 @@
             travel_Day.Trv_no = Request.QueryString["trv_no"].ToString();
             int count = travel_DayDao.getTravelCountByTrvNo(travel.Trv_no);
 
-
-
-
             List<Travel_Day> result = travel_DayDao.selectTravelDayListByTrvNo(travel_Day);
-            foreach (var item in result)
+            Dictionary<string, string> newWriteStatus = new Dictionary<string, string>()
             {
-                Dictionary<string, string> newWriteStatus = new Dictionary<string, string>()
-            {
+                { "state", "change"},
                 { "trv_no", travel.Trv_no},
-                { "cur_trv_day_no",item.Trv_day_no},
+                { "cur_trv_day_no",result[0].Trv_day_no},
                 { "cur_day","1"}
             };
 
-                for (int i = 1; i <= count; i++)
-                {
-                    newWriteStatus.Add(i.ToString(), item.Trv_day_no);
-                }
 
-                Session["write_status"] = newWriteStatus;
+
+
+            for (int i = 1; i <= count; i++)
+            {
+                newWriteStatus.Add(i.ToString(), result[i].Trv_day_no);
             }
 
+            Session["write_status"] = newWriteStatus;
+
+
         }
+
     }
     protected void BindTables()
     {
