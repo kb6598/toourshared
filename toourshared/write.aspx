@@ -58,9 +58,8 @@
         {
             Response.Redirect("./MyPage.aspx?mem_id=" + Session["mem_id"].ToString());
         }
-        
-        
-            if(readWriteStatus.ContainsKey("state") && readWriteStatus["state"] != "create")
+                                         
+            if(readWriteStatus["state"] != "create")
             {
                 Session.Remove("write_status");
 

@@ -58,7 +58,7 @@
          if(HttpContext.Current.Session["write_status"] != null)
         {
             Dictionary<string, string> readWriteStatus = SessionLib.getWriteStatus();
-            if(readWriteStatus.ContainsKey("state") &&readWriteStatus["state"] != "change")
+            if(readWriteStatus["state"] != "change")
             {
                 Session.Remove("write_status");
                 Response.Redirect("./MyPage.aspx");
