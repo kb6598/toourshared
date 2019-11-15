@@ -40,41 +40,15 @@
         //    Response.Redirect("/index.aspx");
         //}
         // 테스트 코드
-
-
-
-
-         if(HttpContext.Current.Session["write_status"] != null)
+        if(HttpContext.Current.Session["mem_id"] == null)
         {
-        TravelDao travelDao = new TravelDao();
-
-         Dictionary<string, string> readWriteStatus = SessionLib.getWriteStatus();
-        string trv_no = readWriteStatus["trv_no"];
-        string mem_id = Session["mem_id"].ToString();
-
-        int check = travelDao.checkMemberIdTravelNo(mem_id, trv_no);
-
-        if(check != 1)
-        {
-            Response.Redirect("./MyPage.aspx?mem_id=" + Session["mem_id"].ToString());
+            Response.Redirect("./index.aspx");
         }
-                                         
-            if(readWriteStatus["state"] != "create")
-            {
-                Session.Remove("write_status");
-
-            }
-        }
-
-
-
 
         //status -> 편집 페이지 정보
         //세션 status가 비어있다면 새로운 status 생성
         if (HttpContext.Current.Session["write_status"] == null)
         {
-
-
 
 
 
@@ -113,7 +87,6 @@
             // 현재폼 정보를 저장할 딕셔너리 생성 나중에 세션에 넘겨줌
             Dictionary<string, string> newWriteStatus = new Dictionary<string, string>()
             {
-                {"state","create" },
                 { "trv_no", trv_no},
                 { "cur_trv_day_no",trv_day_no},
                 { "cur_day","1"},
@@ -127,7 +100,6 @@
 
 
         }
-
 
     }
     protected void BindTables()
@@ -238,12 +210,6 @@
 
     protected void Page_Load(object sender, EventArgs e)
     {
-                if(HttpContext.Current.Session["mem_id"] == null)
-        {
-            Response.Redirect("./index.aspx");
-        }
-
-
 
         WriteSessionProcess();
         BindDropDownList();
@@ -1457,10 +1423,7 @@
         //------------------------------------
         //----------TravelRouteItem and travelRouteList Start
         //------------------------------------
-
-
-        var TravelRouteList = Array();
-        var TravelOrder = TravelRouteList.length;;
+        var TravelOrder = 0;
         class TravelRouteItem {
             constructor(place_name, road_address_name, address_name, phone, place_url, x, y) {
                 this.place_name = place_name;
@@ -1494,7 +1457,7 @@
 
         }
 
-        
+        var TravelRouteList = Array();
 
         function updateTravelRouteNameInfo() {
 
