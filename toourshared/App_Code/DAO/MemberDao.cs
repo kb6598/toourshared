@@ -128,15 +128,17 @@ namespace tooushared.DAO
             try
             {
                 con = mydb.GetCon();
-                string Sql = "SELECT * FROM toourshared.member as mem WHERE mem.mem_id = '" + memberDTO.Mem_id + "'";
+                string Sql = "SELECT * FROM toourshared.member as mem WHERE mem.mem_id = @mem_id";
 
                 MySqlCommand cmd = new MySqlCommand(Sql, con);
+                cmd.Parameters.AddWithValue("@mem_id", memberDTO.Mem_id);
                 con.Open();
 
                 rd = cmd.ExecuteReader();
 
                 if(rd.Read())
                 {
+                    mem = new Member();
                     mem.Mem_id = rd["mem_id"].ToString();
                     mem.Mem_state = rd["mem_state"].ToString();
                     mem.Mem_phone = rd["mem_phone"].ToString();
@@ -155,23 +157,26 @@ namespace tooushared.DAO
                     if(string.IsNullOrEmpty(mem.Mem_img_url) || mem.Mem_img_url == "noImage")
                         mem.Mem_img_url = "./img/memberNoImage.png";
                 }
-
-
-
             }
             catch (Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine(ex.StackTrace.ToString());
-                rd.Close();
-                con.Close();
 
+                if(rd != null)
+                    rd.Close();
+
+                if(con != null)
+                    con.Close();
             }
-
             finally
             {
-                rd.Close();
-                con.Close();
+                if (rd != null)
+                    rd.Close();
+
+                if (con != null)
+                    con.Close();
             }
+            
             return mem;
         }
 
