@@ -45,6 +45,7 @@
             //update Travel
             //loc_name을 가져와야함
             //curTravel.Loc_name = Request.Form["loc_name"];
+            curTravel.Mem_id = Session["mem_id"].ToString();
             curTravel.Trv_secret = "0";
             curTravel.Loc_name = Request.Form["loc_name"];
             curTravel.Trv_main_img = Request.Form["main_img"];
@@ -86,6 +87,16 @@
 
 
             Session["write_status"] = WriteStatus;
+
+       
+            // 현재 페이지의 상태를 구별하여 리턴 리다이레트 페이지를 선별
+            if(WriteStatus["state"] == "create")
+            {
+                form1.Action = "write.aspx";
+            }else if (WriteStatus["state"] == "change")
+            {
+                form1.Action = "Write_change.aspx?trv_no="+WriteStatus["trv_no"];
+            }
 
         }
 

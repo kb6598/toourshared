@@ -1,6 +1,6 @@
-﻿<%@ Page Language="C#"  EnableEventValidation="false" ValidateRequest="false" Debug="true"%>
+﻿<%@ Page Language="C#" EnableEventValidation="false" ValidateRequest="false" Debug="true" %>
 
-<%@ Import Namespace="System.IO" %>  
+<%@ Import Namespace="System.IO" %>
 
 
 <!DOCTYPE html>
@@ -44,23 +44,23 @@
 
 
 
-         if(HttpContext.Current.Session["write_status"] != null)
+        if (HttpContext.Current.Session["write_status"] != null)
         {
-        TravelDao travelDao = new TravelDao();
+            TravelDao travelDao = new TravelDao();
 
-         Dictionary<string, string> readWriteStatus = SessionLib.getWriteStatus();
-        string trv_no = readWriteStatus["trv_no"];
-        string mem_id = Session["mem_id"].ToString();
+            Dictionary<string, string> readWriteStatus = SessionLib.getWriteStatus();
+            string trv_no = readWriteStatus["trv_no"];
+            string mem_id = Session["mem_id"].ToString();
 
-        int check = travelDao.checkMemberIdTravelNo(mem_id, trv_no);
+            int check = travelDao.checkMemberIdTravelNo(mem_id, trv_no);
 
-        if(check != 1)
-        {
-            Response.Redirect("./MyPage.aspx?mem_id=" + Session["mem_id"].ToString());
-        }
-        
-        
-            if(readWriteStatus.ContainsKey("state") && readWriteStatus["state"] != "create")
+            if (check != 1)
+            {
+                Response.Redirect("./MyPage.aspx?mem_id=" + Session["mem_id"].ToString());
+            }
+
+
+            if (readWriteStatus.ContainsKey("state") && readWriteStatus["state"] != "create")
             {
                 Session.Remove("write_status");
 
@@ -161,7 +161,7 @@
             // 바인드
             title.Text = outputTravel.Trv_title;
             hashtag.Text = outputTravel.Trv_tag;
-            if(outputTravel.Trv_main_img != null && outputTravel.Trv_main_img != "")
+            if (outputTravel.Trv_main_img != null && outputTravel.Trv_main_img != "")
             {
                 mainImgItem.ImageUrl = outputTravel.Trv_main_img;
             }
@@ -185,11 +185,15 @@
 
 
 
-
+            foreach (var i in readWriteStatus)
+            {
+                Response.Write(i.Key.ToString() + " :" + i.Value.ToString() + "<br/>");
+            }
 
 
 
         }
+
 
     }
 
@@ -208,13 +212,13 @@
             {
                 if (!readWriteStatus.ContainsKey(i.ToString())) break;
                 // 들어가는 값이 현재일과 같을경우 option을 selected 요소로 추가
-                if(i.ToString().Equals(readWriteStatus["cur_day"]))
+                if (i.ToString().Equals(readWriteStatus["cur_day"]))
                 {
-                    Literal_goDay.Text += "<option value='"+i.ToString()+"' selected>"+i.ToString()+" 일차</option>";
+                    Literal_goDay.Text += "<option value='" + i.ToString() + "' selected>" + i.ToString() + " 일차</option>";
                 }
                 else
                 {
-                    Literal_goDay.Text += "<option value='"+i.ToString()+"'>"+i.ToString()+" 일차</option>";
+                    Literal_goDay.Text += "<option value='" + i.ToString() + "'>" + i.ToString() + " 일차</option>";
                 }
 
                 i++;
@@ -226,7 +230,7 @@
     protected void DropDownList_goDay_SelectedIndexChanged(object sender, EventArgs e)
     {
 
-        if(HttpContext.Current.Session["write_status"] != null)
+        if (HttpContext.Current.Session["write_status"] != null)
         {
             Dictionary<string, string> readWriteStatus = new Dictionary<string, string>();
             readWriteStatus = (Dictionary<string, string>)Session["write_status"];
@@ -239,7 +243,7 @@
 
     protected void Page_Load(object sender, EventArgs e)
     {
-                if(HttpContext.Current.Session["mem_id"] == null)
+        if (HttpContext.Current.Session["mem_id"] == null)
         {
             Response.Redirect("./index.aspx");
         }
@@ -263,7 +267,7 @@
     <title>TO OUR SHARED : 글 작성 #일차</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
-        <!-- Font -->
+    <!-- Font -->
     <link href="https://fonts.googleapis.com/css?family=Mansalva|Nanum+Gothic|Nanum+Myeongjo|Noto+Sans+KR|Lora|East+Sea+Dokdo|Jua&amp;display=swap" rel="stylesheet" />
 
     <!-- ICON -->
@@ -276,10 +280,10 @@
     <!--boot strap-->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
     <!--Summer note + Ajax-->
     <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet">
@@ -288,8 +292,8 @@
     <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote.css" rel="stylesheet">
     <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote.js"></script>
 
-   <link rel="stylesheet" href="./css/write.css">
-  <style>
+    <link rel="stylesheet" href="./css/write.css">
+    <style>
         // summer note 이미지 삽입시 뜨는 창 스타일 처리
         .note-modal-content {
             margin-top: 30%;
@@ -298,10 +302,8 @@
 
         .travelRoute-content,
         .cost-body {
-
             overflow: auto;
         }
-
     </style>
 
 
@@ -323,13 +325,52 @@
         }
 
         /* TextArea Summernote */
+
+
         $(document).ready(function () {
             $('#article').summernote({
-                height: 600, //set editable area's height
+                height: 600,
+                minHeight: null,
+                maxHeight: null,
+                focus: true,
+                callbacks: {
+                    onImageUpload: function (files, editor, welEditable) {
+                        for (var i = files.length - 1; i >= 0; i--) {
+                            sendFileInSummernote(files[i], this);
+                        }
+                    }
+                }
             });
         });
 
-      
+        function sendFileInSummernote(file, el) {
+            var form_data = new FormData();
+            form_data.append('file', file);
+            $.ajax({
+                data: form_data,
+                type: "POST",
+                url: './imageUploader.ashx',
+                enctype: 'multipart/form-data',
+                success: function (url) {
+                    $(el).summernote('editor.insertImage', url);
+                    $('#imageBoard > ul').append('<li><img src="' + url + '" width="480" height="auto"/></li>');
+
+
+
+                },
+                processData: false,
+                contentType: false,
+                error: function () {
+                    alert("Whoops something went wrong!");
+                }
+            });
+
+
+        }
+
+
+
+
 
 
     </script>
@@ -384,7 +425,7 @@
                     <ul>
                         <br />
                         <li>
-                            <asp:Button ID="btnJoin" runat="server" Text="회원가입" OnClick="btnJoin_Click" class="navJoinBtn"/></li>
+                            <asp:Button ID="btnJoin" runat="server" Text="회원가입" OnClick="btnJoin_Click" class="navJoinBtn" /></li>
                         <li>
                             <asp:Button ID="btnFindIDPW" runat="server" Text="계정찾기" OnClick="btnFindIDPW_Click" class="navFindBtn" /></li>
                     </ul>
@@ -400,7 +441,7 @@
                         <li>
                             <asp:Button ID="btnMypage" runat="server" Text="마이페이지" OnClick="btnMypage_Click" class="navJoinBtn" /></li>
                         <li>
-                            <asp:Button ID="btnLogout" runat="server" Text="로그아웃" OnClick="btnLogout_Click" class="navFindBtn"/></li>
+                            <asp:Button ID="btnLogout" runat="server" Text="로그아웃" OnClick="btnLogout_Click" class="navFindBtn" /></li>
 
                     </ul>
                 </li>
@@ -414,7 +455,7 @@
             <div class="TitleArea">
                 <div class="TitleAlign">
 
-                    <asp:TextBox ID="title"  runat="server" type="text" placeholder="게시글의 제목을 정해주세요." autocomplete="off" onkeyup="tmpSaveByEnter()"/>
+                    <asp:TextBox ID="title" runat="server" type="text" placeholder="게시글의 제목을 정해주세요." autocomplete="off" onkeyup="tmpSaveByEnter()" />
                 </div>
                 <div class="TitleSub">
                     <div class="SubItem">
@@ -428,8 +469,8 @@
                         </select>
                     </div>
                     <div class="SubItem">
-                        <div  class="nextPageBtn">
-                            <div onclick ="addDay()" class="subAddItem">일 추가 (+)</div>
+                        <div class="nextPageBtn">
+                            <div onclick="addDay()" class="subAddItem">일 추가 (+)</div>
                         </div>
                     </div>
                 </div>
@@ -486,25 +527,25 @@
                                     <p>🍳</p>
                                     <p>주변검색</p>
                                 </button>
-                                <div id="category" class="dropdown-menu">                                                                     
-                                            <a id='MT1' class="dropdown-item" data-order="0">  대형마트</a>
-                                            <a id='CS2' class="dropdown-item" data-order="1">  편의점</a>
-                                            <a id='PS3' class="dropdown-item" data-order="2">  어린이집, 유치원</a>
-                                            <a id='SC4' class="dropdown-item" data-order="3">  학교</a>
-                                            <a id='AC5' class="dropdown-item" data-order="4">  학원</a>
-                                            <a id='PK6' class="dropdown-item" data-order="5">  주차장</a>
-                                            <a id='OL7' class="dropdown-item" data-order="6">  주유소, 충전소</a>
-                                            <a id='SW8' class="dropdown-item" data-order="7">  지하철역</a>
-                                            <a id='BK9' class="dropdown-item" data-order="8">  은행</a>
-                                            <a id='CT1' class="dropdown-item" data-order="9">  문화시설</a>
-                                            <a id='AG2' class="dropdown-item" data-order="10"> 중개업소</a>
-                                            <a id='PO3' class="dropdown-item" data-order="11"> 공공기관</a>
-                                            <a id='AT4' class="dropdown-item" data-order="12"> 관광명소</a>
-                                            <a id='AD5' class="dropdown-item" data-order="13"> 숙박</a>
-                                            <a id='FD6' class="dropdown-item" data-order="14"> 음식점</a>
-                                            <a id='CE7' class="dropdown-item" data-order="15"> 카페</a>
-                                            <a id='HP8' class="dropdown-item" data-order="16"> 병원</a>
-                                            <a id='PM9' class="dropdown-item" data-order="17"> 약국</a>                                   
+                                <div id="category" class="dropdown-menu">
+                                    <a id='MT1' class="dropdown-item" data-order="0">대형마트</a>
+                                    <a id='CS2' class="dropdown-item" data-order="1">편의점</a>
+                                    <a id='PS3' class="dropdown-item" data-order="2">어린이집, 유치원</a>
+                                    <a id='SC4' class="dropdown-item" data-order="3">학교</a>
+                                    <a id='AC5' class="dropdown-item" data-order="4">학원</a>
+                                    <a id='PK6' class="dropdown-item" data-order="5">주차장</a>
+                                    <a id='OL7' class="dropdown-item" data-order="6">주유소, 충전소</a>
+                                    <a id='SW8' class="dropdown-item" data-order="7">지하철역</a>
+                                    <a id='BK9' class="dropdown-item" data-order="8">은행</a>
+                                    <a id='CT1' class="dropdown-item" data-order="9">문화시설</a>
+                                    <a id='AG2' class="dropdown-item" data-order="10">중개업소</a>
+                                    <a id='PO3' class="dropdown-item" data-order="11">공공기관</a>
+                                    <a id='AT4' class="dropdown-item" data-order="12">관광명소</a>
+                                    <a id='AD5' class="dropdown-item" data-order="13">숙박</a>
+                                    <a id='FD6' class="dropdown-item" data-order="14">음식점</a>
+                                    <a id='CE7' class="dropdown-item" data-order="15">카페</a>
+                                    <a id='HP8' class="dropdown-item" data-order="16">병원</a>
+                                    <a id='PM9' class="dropdown-item" data-order="17">약국</a>
                                 </div>
                             </div>
 
@@ -535,7 +576,7 @@
             <!-- 중앙 영역 2 -->
             <div class="taArea">
                 <div class="form-group">
-                    <asp:TextBox ID="article" runat="server" TextMode="MultiLine" type="text"  name="article" onkeyup="tmpSaveByEnter()"></asp:TextBox>
+                    <asp:TextBox ID="article" runat="server" TextMode="MultiLine" type="text" name="article" onkeyup="tmpSaveByEnter()"></asp:TextBox>
                 </div>
             </div>
 
@@ -543,13 +584,13 @@
             <div class="mainImgArea">
                 <div class="mainImg_wrap">
                     <div class="mainImg_AlignUp">
-                        <div class="mainImg_Label" >게시글의 메인이미지를 첨부하세요.</div>
+                        <div class="mainImg_Label">게시글의 메인이미지를 첨부하세요.</div>
                         <div class="mainImg_Input">
                             <!-- 이미지 업로드 -->
-                            <input type="file" class="upload"  id="FileUpload_main_img" accept="image/*" multiple="false"/>
-                            <asp:HiddenField ID="main_img" runat="server" Value="noImage"/>
+                            <input type="file" class="upload" id="FileUpload_main_img" accept="image/*" multiple="false" />
+                            <asp:HiddenField ID="main_img" runat="server" Value="noImage" />
 
-                            
+
                             <!-- 이미지 업로드 -->
 
                         </div>
@@ -564,18 +605,18 @@
 
             <!-- 해쉬태그 영역 -->
             <div class="hashArea">
-                <asp:TextBox ID="hashtag" runat="server" type="text" placeholder="해쉬태그를 입력하세요. (ex : #여행 #추억) (스페이스바로 구분지어 주세요.)" class="hashAreaItem" onkeyup="tmpSaveByEnter()"/>
+                <asp:TextBox ID="hashtag" runat="server" type="text" placeholder="해쉬태그를 입력하세요. (ex : #여행 #추억) (스페이스바로 구분지어 주세요.)" class="hashAreaItem" onkeyup="tmpSaveByEnter()" />
             </div>
 
             <!-- 하단부 영역 -->
             <div class="btnArea">
                 <!-- 임시 저장 버튼 -->
                 <div class="tempSaveBtn">
-                    <div onclick ="tmpSave()" class="subAddItem">임시 저장</div>
+                    <div onclick="tmpSave()" class="subAddItem">임시 저장</div>
                 </div>
                 <!-- 글 작성 완료 버튼 -->
                 <div class="finishBtn">
-                    <div onclick ="endWrite()" class="subAddItem">글 작성 완료</div>
+                    <div onclick="endWrite()" class="subAddItem">글 작성 완료</div>
                 </div>
             </div>
 
@@ -595,8 +636,7 @@
                         <div id="menu_wrap" class="bg_white">
                             <div class="option">
                                 <div>
-                                 
-키워드 :
+                                    키워드 :
                                     <input id="keyword" value="" type="text" onkeyup="searchPlacesByEnter();" />
                                     <div class="btn btn-secondary" onclick="searchPlaces();">검색하기</div>
                                 </div>
@@ -612,22 +652,22 @@
                 </div>
             </div>
         </div>
-                <asp:HiddenField ID="mapData" runat="server" />
+        <asp:HiddenField ID="mapData" runat="server" />
         <asp:HiddenField ID="mapRoute" runat="server" />
         <asp:HiddenField ID="mapCost" runat="server" />
         <asp:HiddenField ID="mapCenter" runat="server" />
 
     </form>
 
- 
-
-       
 
 
 
 
 
-        <!-- KAKAO 
+
+
+
+    <!-- KAKAO 
 
  <script src="./javascript/write.js"></script>
   
@@ -637,14 +677,14 @@
         //사용자 편의 기능 
 
         // 자동 저장 액션 5분마다 / 300초
-        setInterval(function() {
+        setInterval(function () {
             tmpSave(false);
         }, 30000);
 
 
 
         //윈도우에서 엔터 백스페이스 막기
-        window.onkeydown = function() {
+        window.onkeydown = function () {
             var kcode = event.keyCode;
             if (window.event.keyCode == 13 || kcode == 116) event.returnValue = false;
         }
@@ -683,7 +723,7 @@
                 type: 'post',
                 url: './imageUploader.ashx',
                 data: formData,
-                success: function(status) {
+                success: function (status) {
                     if (status != 'error') {
                         var my_path = status;
                         $("#mainImgItem").attr("src", my_path);
@@ -692,22 +732,22 @@
                 },
                 processData: false,
                 contentType: false,
-                error: function() {
+                error: function () {
                     alert("Whoops something went wrong!");
                 }
             });
         }
 
         var _URL = window.URL || window.webkitURL;
-        $("#FileUpload_main_img").on('change', function() {
+        $("#FileUpload_main_img").on('change', function () {
 
             var file, img;
             if ((file = this.files[0])) {
                 img = new Image();
-                img.onload = function() {
+                img.onload = function () {
                     sendFile(file);
                 };
-                img.onerror = function() {
+                img.onerror = function () {
                     alert("Not a valid file:" + file.type);
                 };
                 img.src = _URL.createObjectURL(file);
@@ -721,8 +761,8 @@
         // Drawing Manager로 도형을 그릴 지도 div
         var drawingMapContainer = document.getElementById('drawingMap'),
             drawingMap = {
-                
-        center: new kakao.maps.LatLng(36.02842431988845, 127.7253356124315), // 지도의 중심좌표
+
+                center: new kakao.maps.LatLng(36.02842431988845, 127.7253356124315), // 지도의 중심좌표
                 level: 13 // 지도의 확대 레벨
             };
 
@@ -884,7 +924,7 @@
 
         // drawManager의 상태가 변경되고
         // travelRoute와 변경
-        manager.addListener('state_changed', function() {
+        manager.addListener('state_changed', function () {
             closeCusOverlay();
             //console.info(this._historyStroage);
             refreshOverlayListener();
@@ -895,7 +935,7 @@
         // 대상이 삭제되면 listener 도 같이 삭제됨
         // 애초에 리스너가 ExtenedMarker의 부분 요소로 들어가기 때문에
         // 같이 삭제됨
-        manager.addListener('remove', function(e) {
+        manager.addListener('remove', function (e) {
 
         });
         //http://localhost:49862/
@@ -905,13 +945,13 @@
             var data = manager.getOverlays();
             //var overlayType = ["circle", "ellipse", "marker", "polygon", "rectangle"];
             var overlayType = ["marker"];
-            overlayType.forEach(function(overlay, overlayIndex, overlayArray) {
+            overlayType.forEach(function (overlay, overlayIndex, overlayArray) {
                 // 각 오버레이들은 길이가 0인 배열로 최초부터 존제
                 //if (data[overlay] != null) {
                 if (data[overlay].length > 0) {
                     //현재 상태와 이전 상태의 오버레이 갯수가 같다면 해당 리스트 전부 새로고침
                     //console.info(overlay + " : " + data[overlay]._index + "를 새로 고침");
-                    data[overlay].forEach(function(value, index, array) {
+                    data[overlay].forEach(function (value, index, array) {
                         try {
                             //removeListener 시도
                             // 리스너를 만드는중에 오버레이를 전달
@@ -964,7 +1004,7 @@
         //-----------------------------------------------
         // 클릭시 발생하는 이벤트
         //----------------------------------------------
-        var onClick_overlay = function() {
+        var onClick_overlay = function () {
 
             //console.info(overlay.constructor.name + '_' + overlay._index);
 
@@ -980,13 +1020,13 @@
 
             var curMkrOrder = this._order;
             var trvRoute = getTravelRouteByOrder(curMkrOrder);
-            
-                
-            
 
-            
+
+
+
+
             //----좌표값으로 주소를 가져옴
-            geocoder.coord2Address(coord_WCONGNAMUL.wcongnamulX, coord_WCONGNAMUL.wcongnamulY, function(result, status) {
+            geocoder.coord2Address(coord_WCONGNAMUL.wcongnamulX, coord_WCONGNAMUL.wcongnamulY, function (result, status) {
 
 
                 if (status === kakao.maps.services.Status.OK) {
@@ -1050,7 +1090,7 @@
 
 
                     geocoder.transCoord(coord_WCONGNAMUL.wcongnamulX, coord_WCONGNAMUL.wcongnamulY,
-                        function(result, status) {
+                        function (result, status) {
 
                             // 정상적으로 검색이 완료됐으면
                             if (status === kakao.maps.services.Status.OK) {
@@ -1065,8 +1105,8 @@
 
                 }
             }, {
-                input_coord: kakao.maps.services.Coords.WCONGNAMUL
-            });
+                    input_coord: kakao.maps.services.Coords.WCONGNAMUL
+                });
 
 
         }
@@ -1091,7 +1131,7 @@
                 //ExtendedPolygon has ig{0: {ga: ha:}, }
                 var gaTotal = 0;
                 var haTotal = 0;
-                overlay.Ig.forEach(function(value, index, array) {
+                overlay.Ig.forEach(function (value, index, array) {
                     gaTotal += value.Ga;
                     haTotal += value.Ha;
                 });
@@ -1262,16 +1302,16 @@
                 // 마커와 검색결과 항목에 mouseover 했을때
                 // 해당 장소에 인포윈도우에 장소명을 표시합니다
                 // mouseout 했을 때는 인포윈도우를 닫습니다
-                (function(marker, place) {
-                    kakao.maps.event.addListener(marker, 'click', function() {
+                (function (marker, place) {
+                    kakao.maps.event.addListener(marker, 'click', function () {
                         displayInfowindow(marker, place);
                     });
 
-                    itemEl.onmouseover = function() {
+                    itemEl.onmouseover = function () {
                         displayInfowindow(marker, place);
                     };
 
-                    itemEl.onmouseclick = function() {
+                    itemEl.onmouseclick = function () {
                         displayInfowindow(marker, place);
                         $('#searchPlaceModal').modal('hide');
 
@@ -1322,8 +1362,8 @@
 
             var el = document.createElement('li'),
                 itemStr = '<span class="markerbg marker_' + (index + 1) + '"></span>' +
-                '<div class="info">' +
-                '   <h5 data-dismiss="modal">' + places.place_name + '</h5>';
+                    '<div class="info">' +
+                    '   <h5 data-dismiss="modal">' + places.place_name + '</h5>';
 
             if (places.road_address_name) {
                 itemStr += '    <span data-dismiss="modal">' + places.road_address_name + '</span>' +
@@ -1389,8 +1429,8 @@
                 if (i === pagination.current) {
                     el.className = 'on';
                 } else {
-                    el.onclick = (function(i) {
-                        return function() {
+                    el.onclick = (function (i) {
+                        return function () {
                             pagination.gotoPage(i);
                         }
                     })(i);
@@ -1461,7 +1501,7 @@
 
 
         var TravelRouteList = Array();
-        var TravelOrder = TravelRouteList.length;;
+        var TravelOrder = TravelRouteList.length;
         class TravelRouteItem {
             constructor(place_name, road_address_name, address_name, phone, place_url, x, y) {
                 this.place_name = place_name;
@@ -1495,19 +1535,19 @@
 
         }
 
-        
+
 
         function updateTravelRouteNameInfo() {
 
 
 
-            TravelRouteList.forEach(function(currentValue, index) {
+            TravelRouteList.forEach(function (currentValue, index) {
                 setTravelRouteItemInfo(index);
                 setTravelRouteItemName(index);
 
-                
+
             });
-            
+
             refreashTravelRoute();
         }
 
@@ -1529,7 +1569,7 @@
             while (travelRouteUl.hasChildNodes()) {
                 travelRouteUl.removeChild(travelRouteUl.firstChild);
             }
-            TravelRouteList.forEach(function(currentValue, index) {
+            TravelRouteList.forEach(function (currentValue, index) {
 
                 ////console.info(index);
                 ////console.info(currentValue);
@@ -1665,7 +1705,7 @@
 
         function checkMarkerNRemove(order) {
             var markers = manager.getOverlays([kakao.maps.drawing.OverlayType.MARKER]);
-            markers.marker.forEach(function(value, idx, arr) {
+            markers.marker.forEach(function (value, idx, arr) {
                 if (value._order == order) {
                     manager.remove(value);
                 }
@@ -1676,7 +1716,7 @@
 
         // order를 입력받아 travelRoute와 marker 삭제
         function removeMarkNTrvRouteByOrder(order) {
-            TravelRouteList.forEach(function(val, idx, arr) {
+            TravelRouteList.forEach(function (val, idx, arr) {
                 if (val.order == order) {
                     TravelRouteList.splice(idx, 1);
                     removeCostItemParent(idx);
@@ -1689,7 +1729,7 @@
 
 
             var markers = manager.getOverlays([kakao.maps.drawing.OverlayType.MARKER]);
-            markers.marker.forEach(function(value, idx, arr) {
+            markers.marker.forEach(function (value, idx, arr) {
                 if (value._order == order) {
                     manager.remove(value);
                 }
@@ -1698,20 +1738,20 @@
 
 
         function getTravelRouteByOrder(order) {
-            
+
             var result = null;
-            TravelRouteList.forEach(function(val,idx,arr){
-                if(TravelRouteList[idx].order == order){
-                    result =  TravelRouteList[idx];
+            TravelRouteList.forEach(function (val, idx, arr) {
+                if (TravelRouteList[idx].order == order) {
+                    result = TravelRouteList[idx];
                 }
             });
-            
+
             return result;
-            
+
         }
 
         function setTravelRouteNameByOrder(order, name) {
-            TravelRouteList.forEach(function(val, idx, arr) {
+            TravelRouteList.forEach(function (val, idx, arr) {
                 if (val.order == order) {
                     TravelRouteList[idx].setName(name);
 
@@ -1813,7 +1853,7 @@
             while (costBody.hasChildNodes()) {
                 costBody.removeChild(costBody.firstChild);
             }
-            CostItemList.forEach(function(currentValue, pindex) {
+            CostItemList.forEach(function (currentValue, pindex) {
                 pindexTmp = pindex;
                 ////console.info(pindex);
                 ////console.info(currentValue);
@@ -1826,7 +1866,7 @@
                     '   <div class="costItem-body">' +
                     '       <ul>';
 
-                currentValue.itemList.forEach(function(currentValue, index) {
+                currentValue.itemList.forEach(function (currentValue, index) {
                     itemStr += '<li>' + currentValue.costType +
                         '               <div class="btn btn-sm btn-warning" onclick="removeCostItemChild(' + pindex + ',' + index + ')">x</div>' +
                         '<br/>' +
@@ -2022,15 +2062,15 @@
                 travelRoutes: [],
                 currentContainer: null,
 
-                add: function(travelRoute) {
+                add: function (travelRoute) {
                     this.travelRoutes.push(travelRoute);
                 },
 
-                handleEvent: function(event) {
+                handleEvent: function (event) {
                     ////console.info(event.target);
                     if (event.type == 'dragstart') {
                         //console.info("dragstart");
-                        var containers = this.travelRoutes.filter(function(container) {
+                        var containers = this.travelRoutes.filter(function (container) {
 
                             return container.contains(event.target);
                         });
@@ -2064,12 +2104,12 @@
                 DragManager.add(this);
             }
 
-            travelRoute.prototype.contains = function(target) {
+            travelRoute.prototype.contains = function (target) {
                 ////console.info(target);
                 return $(this.element).find(target).length;
             }
 
-            travelRoute.prototype.handleEvent = function(event) {
+            travelRoute.prototype.handleEvent = function (event) {
                 // NOTE: We've bound `this` to the travelRoute object, not
                 // the element the event was fired on.
                 var $t = $(event.target);
@@ -2146,7 +2186,7 @@
                 }
             }
 
-            travelRoute.prototype.activate = function() {
+            travelRoute.prototype.activate = function () {
                 for (var i = 0, j = this.items.length; i < j; i++) {
                     // Make sure `this` is always a travelRoute instead of the element the
                     // event was activated on.
@@ -2157,7 +2197,7 @@
                 }
             }
 
-            travelRoute.prototype.deactivate = function() {
+            travelRoute.prototype.deactivate = function () {
                 this.draggingItem = null;
                 for (var i = 0, j = this.items.length; i < j; i++) {
                     //this.items[i].removeEventListener('dragenter', this.handleEvent);
@@ -2474,7 +2514,7 @@
             }
             else {
                 alert('해쉬태그는 반드시 입력해야 합니다. ');
-                returnVal =  false;
+                returnVal = false;
             }
             return returnVal;
         }
@@ -2513,7 +2553,7 @@
                 type: 'post',
                 url: 'Write_tmpSave.aspx',
                 data: data,
-                success: function(status) {
+                success: function (status) {
                     if (alFlg) {
                         if (status != 'error') {
                             alert("저장되었습니다.");
@@ -2523,7 +2563,7 @@
                 },
                 processData: false,
                 contentType: false,
-                error: function() {
+                error: function () {
                     if (alFlg) {
                         alert("Whoops something went wrong!");
                     }
@@ -2583,7 +2623,7 @@
 
                 //현재 지도의 중앙부분의 주소를 가져와 가장 앞 주소(시/도)만 사용
                 var coord = drawingMap.getCenter();
-                geocoder.coord2Address(coord.Ga, coord.Ha, function(result, status) {
+                geocoder.coord2Address(coord.Ga, coord.Ha, function (result, status) {
                     if (status === kakao.maps.services.Status.OK) {
                         //주소가 있다면 검색
                         if (result[0] != null) {
@@ -2604,10 +2644,10 @@
 
         // 다음페이지로 markers, polyline, rect, circle, polygon 보내는 기능
         function addDataAtForm(form) {
-            
-            
 
-            
+
+
+
 
             //var title = document.getElementById("title").value;
             //var article = document.getElementById("article").value;
@@ -2662,7 +2702,7 @@
 
             // -- TravelRouteList중 중간 노드의 주소를 가져와 파싱하여 가장 앞 주소(시/도)ㄴ만 가져온다.
 
-            
+
             var LocName = document.createElement("input"); // input 엘리멘트 생성
             LocName.setAttribute("type", "hidden"); // type 속성을 hidden으로 설정
             LocName.setAttribute("name", "loc_name"); // name 속성을 'stadium'으로 설정
@@ -2672,24 +2712,24 @@
 
 
 
-                  
-     
 
-                //현재 지도의 중앙부분의 주소를 가져와 가장 앞 주소(시/도)만 사용
-                var coord = drawingMap.getCenter();
-                geocoder.coord2Address(coord.Ga, coord.Ha, function(result, status) {
-                    if (status === kakao.maps.services.Status.OK) {
-                        //주소가 있다면 검색
-                        if (result[0] != null) {
-                            console.info(result[0]);
 
-                            LocName.setAttribute("value", result[0].address.region_1depth_name);
-                        }
+
+            //현재 지도의 중앙부분의 주소를 가져와 가장 앞 주소(시/도)만 사용
+            var coord = drawingMap.getCenter();
+            geocoder.coord2Address(coord.Ga, coord.Ha, function (result, status) {
+                if (status === kakao.maps.services.Status.OK) {
+                    //주소가 있다면 검색
+                    if (result[0] != null) {
+                        console.info(result[0]);
+
+                        LocName.setAttribute("value", result[0].address.region_1depth_name);
                     }
-                });
-  
+                }
+            });
 
-            
+
+
 
 
 
@@ -2705,7 +2745,7 @@
             form.appendChild(mapCenter);
 
 
-          
+
 
 
 
@@ -2934,11 +2974,11 @@
 
         // 마커를 클릭했을 때 해당 장소의 상세정보를 보여줄 커스텀오버레이입니다
         var placeOverlay = new kakao.maps.CustomOverlay({
-                xAnchor: 0.5,
-                yAnchor: 1.25,
-                zIndex: 3
+            xAnchor: 0.5,
+            yAnchor: 1.25,
+            zIndex: 3
 
-            }),
+        }),
             contentNode = document.createElement('div'), // 커스텀 오버레이의 컨텐츠 엘리먼트 입니다 
             markersAround = [], // 마커를 담을 배열입니다
             currCategory = ''; // 현재 선택된 카테고리를 가지고 있을 변수입니다
@@ -3026,8 +3066,8 @@
 
                 // 마커와 검색결과 항목을 클릭 했을 때
                 // 장소정보를 표출하도록 클릭 이벤트를 등록합니다
-                (function(marker, place) {
-                    kakao.maps.event.addListener(marker, 'click', function() {
+                (function (marker, place) {
+                    kakao.maps.event.addListener(marker, 'click', function () {
                         displayPlaceInfo(place);
                     });
                 })(marker, places[i]);
@@ -3220,6 +3260,6 @@
         //-----------------------------------
     </script>
 
-                
-                </body>
+
+</body>
 </html>

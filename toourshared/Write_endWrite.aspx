@@ -35,11 +35,12 @@
             //-----------------------------------
             //
             TravelDao travelDao = new TravelDao();
-            Travel inTravel = new Travel();
-            inTravel.Trv_no = WriteStatus["trv_no"];
-            Travel curTravel = travelDao.selectTravelBytrv_no(inTravel);
+            Travel curTravel = new Travel();
+            curTravel.Trv_no = WriteStatus["trv_no"];
+
 
             //update Travel
+            curTravel.Mem_id = Session["mem_id"].ToString();
             curTravel.Trv_secret = "0";
             curTravel.Loc_name = Request.Form["loc_name"];
             curTravel.Trv_main_img = Request.Form["main_img"];
@@ -47,7 +48,7 @@
             curTravel.Trv_secret = Request.Form["trv_secret"];
             curTravel.Trv_tag = Request.Form["hashtag"];
             curTravel.Trv_timestamp = TimeLib.GetTimeStamp();
-            
+
             curTravel.Trv_title = Request.Form["title"];
             travelDao.UpdatetTravel(curTravel);
 

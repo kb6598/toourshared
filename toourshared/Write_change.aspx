@@ -55,15 +55,15 @@
         //?trv
 
 
-         if(HttpContext.Current.Session["write_status"] != null)
-        {
-            Dictionary<string, string> readWriteStatus = SessionLib.getWriteStatus();
-            if(readWriteStatus.ContainsKey("state") &&readWriteStatus["state"] != "change")
-            {
-                Session.Remove("write_status");
-                Response.Redirect("./MyPage.aspx");
-            }
-        }
+        //if(HttpContext.Current.Session["write_status"] != null)
+        //{
+        //    Dictionary<string, string> readWriteStatus = SessionLib.getWriteStatus();
+        //    if(readWriteStatus.ContainsKey("state") &&readWriteStatus["state"] != "change")
+        //    {
+        //        Session.Remove("write_status");
+        //        Response.Redirect("./MyPage.aspx");
+        //    }
+        //}
 
 
         if (HttpContext.Current.Session["write_status"] == null)
@@ -89,7 +89,7 @@
             string travelnumber = Request.QueryString["trv_no"].ToString();
             travel.Trv_no = travelnumber;
             travel_Day.Trv_no = Request.QueryString["trv_no"].ToString();
-            int count = travel_DayDao.getTravelCountByTrvNo(travel.Trv_no);
+            int count = travel_DayDao.getTravelCountByTrvNo(travel_Day.Trv_no);
 
             List<Travel_Day> result = travel_DayDao.selectTravelDayListByTrvNo(travel_Day);
             Dictionary<string, string> newWriteStatus = new Dictionary<string, string>()
@@ -100,18 +100,21 @@
                 { "cur_day","1"}
             };
 
-
-
-
-            for (int i = 1; i <= count; i++)
+            int day = 1;
+            foreach(var trv_day in result)
             {
-                newWriteStatus.Add(i.ToString(), result[i].Trv_day_no);
+                newWriteStatus.Add(day.ToString(), trv_day.Trv_day_no);
+                day++;
             }
+
+
 
             Session["write_status"] = newWriteStatus;
 
 
         }
+
+
 
     }
     protected void BindTables()
@@ -169,6 +172,11 @@
 
 
 
+
+             foreach(var item in readWriteStatus)
+            {
+                Response.Write(item.ToString());
+            }
 
 
 
@@ -318,12 +326,49 @@
             }
         }
 
-        /* TextArea Summernote */
+ /* TextArea Summernote */
+
+
         $(document).ready(function () {
             $('#article').summernote({
-                height: 600, //set editable area's height
+                height: 600,
+                minHeight: null,
+                maxHeight: null,
+                focus: true,
+                callbacks: {
+                    onImageUpload: function (files, editor, welEditable) {
+                        for (var i = files.length - 1; i >= 0; i--) {
+                            sendFileInSummernote(files[i], this);
+                        }
+                    }
+                }
             });
         });
+
+        function sendFileInSummernote(file, el) {
+            var form_data = new FormData();
+            form_data.append('file', file);
+            $.ajax({
+                data: form_data,
+                type: "POST",
+                url: './imageUploader.ashx',
+                enctype: 'multipart/form-data',
+                success: function (url) {
+                    $(el).summernote('editor.insertImage', url);
+                    $('#imageBoard > ul').append('<li><img src="' + url + '" width="480" height="auto"/></li>');
+
+
+
+                },
+                processData: false,
+                contentType: false,
+                error: function () {
+                    alert("Whoops something went wrong!");
+                }
+            });
+
+
+        }
 
       
 
@@ -2187,6 +2232,7 @@
 
         function setTravelRouteData(data) {
             TravelRouteList = data;
+            TravelOrder = TravelRouteList.length;
         }
 
         function setCostData(data) {
@@ -2873,6 +2919,8 @@
             document.getElementById("mapData").value != '""') {
             var inputMapData = JSON.parse(document.getElementById("mapData").value);
 
+            
+
             setDrawingMapData(inputMapData);
             closeCusOverlay();
             refreshOverlayListener();
@@ -2883,7 +2931,20 @@
             document.getElementById("mapRoute").value != [] &&
             document.getElementById("mapRoute").value != null &&
             document.getElementById("mapRoute").value != '""') {
+
+
+
             TravelRouteList = JSON.parse(document.getElementById("mapRoute").value);
+                        //drawingmap에 삽입되는 marker 의 order가 다시 0부터로 초기화 되므로
+            //TravelRoute의 order도 초기화 해야한다.
+            if (TravelRouteList.length == 0) {
+                TravelRouteList.order = 0;
+            } else {
+                TravelRouteList.forEach(function (val, idx, arr) {
+                val.order = idx;
+            });
+            }
+            TravelOrder = TravelRouteList.length;
             refreashTravelRoute();
 
         }
