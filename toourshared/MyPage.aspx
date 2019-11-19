@@ -932,6 +932,7 @@
                     <a>Shared</a>
                     <ul>
                         <li><a href="./search.aspx">검색</a></li>
+                        <li><a href="./write.aspx">글 쓰기</a></li>
                     </ul>
                 </li>
                 <li class="topnavLi">
