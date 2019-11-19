@@ -2085,17 +2085,14 @@
 
 
 
-                if (len == 1) {
-                    len = len + 1;
-                }
                 //console.info(maxX);
                 //console.info(maxY);
                 //console.info(minX);
                 //console.info(minY);
                 //console.info((maxX + minX) / len);
                 //console.info((maxY + minY) / len);
-                var centerX = (parseFloat(maxX) + parseFloat(minX)) / parseFloat(len);
-                var centerY = (parseFloat(maxY) + parseFloat(minY)) / parseFloat(len);
+                var centerX = (parseFloat(maxX) + parseFloat(minX)) / parseFloat(2);
+                var centerY = (parseFloat(maxY) + parseFloat(minY)) / parseFloat(2);
                 //console.info(centerX);
                 //console.info(centerY);
                 panTo(centerY, centerX);
@@ -2525,17 +2522,19 @@
 
 
 
-                if (len == 1) {
-                    len = len + 1;
-                }
-                //console.info(maxX);
-                //console.info(maxY);
-                //console.info(minX);
-                //console.info(minY);
-                //console.info((maxX + minX) / len);
-                //console.info((maxY + minY) / len);
-                var centerX = (parseFloat(maxX) + parseFloat(minX)) / parseFloat(len);
-                var centerY = (parseFloat(maxY) + parseFloat(minY)) / parseFloat(len);
+
+                console.info("+++++++++++++++++++++++++++++++++++++");
+                console.info(maxX);
+                console.info(maxY);
+                console.info(minX);
+                console.info(minY);
+                console.info(len);
+
+                var centerX = (parseFloat(maxX) + parseFloat(minX)) / parseFloat(2);
+                var centerY = (parseFloat(maxY) + parseFloat(minY)) / parseFloat(2);
+                console.info(centerX);
+                console.info(centerY);
+                console.info("--------------------------------------");
                 //console.info(centerX);
                 //console.info(centerY);
                 setPanTo(inMap, centerY, centerX);
