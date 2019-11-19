@@ -185,10 +185,10 @@
 
 
 
-            foreach (var i in readWriteStatus)
-            {
-                Response.Write(i.Key.ToString() + " :" + i.Value.ToString() + "<br/>");
-            }
+            //foreach (var i in readWriteStatus)
+            //{
+            //    Response.Write(i.Key.ToString() + " :" + i.Value.ToString() + "<br/>");
+            //}
 
 
 

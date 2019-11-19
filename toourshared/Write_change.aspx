@@ -173,10 +173,10 @@
 
 
 
-             foreach(var item in readWriteStatus)
-            {
-                Response.Write(item.ToString());
-            }
+            // foreach(var item in readWriteStatus)
+            //{
+            //    Response.Write(item.ToString());
+            //}
 
 
 
