@@ -886,7 +886,7 @@
             },
             rectangleOptions: {
                 draggable: true,
-                removable: false,
+                removable: true,
                 editable: true,
                 strokeColor: '#39f', // 외곽선 색
                 fillColor: '#39f', // 채우기 색
