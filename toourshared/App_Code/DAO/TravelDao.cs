@@ -1414,14 +1414,21 @@ public class TravelDao
             MyDB myDB = new MyDB();
             MySqlConnection con = null;
             MySqlDataReader reader = null;
+            MySqlCommand cmd = null;
             int returnInt = 0;
 
             try
             {
                 con = myDB.GetCon();
-                String Sql = "SELECT trv_no FROM toourshared.travel WHERE mem_id = " + "'" + mem_id+ "' and trv_no = " + "'" + trv_no + "'";
+                String Sql = "SELECT count(trv_no) FROM toourshared.travel WHERE mem_id = @mem_id and trv_no = @trv_no";
+                cmd = new MySqlCommand(Sql, con);
 
-                MySqlCommand cmd = new MySqlCommand(Sql, con);
+
+
+                cmd.Parameters.AddWithValue("@trv_no", trv_no);
+                cmd.Parameters.AddWithValue("@mem_id", mem_id);
+
+
                 con.Open();
 
                 reader = cmd.ExecuteReader();
