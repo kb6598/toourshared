@@ -915,87 +915,78 @@
      <!-- navbar 영역 -->
     <body>
     <form name="form1" runat="server">
-         <div id="nav" class="topnav">
-        <ul class="topnavUl">
-            <li class="topnavLi">
-                <div class="nav-logo">
-                    <a href="./index.aspx" class="nav-logo-item">To Our Shared</a>
-                </div>
-            </li>
-            <li class="topnavLi">
-                <a>Intro</a>
-                <ul>
-                    <li><a href="./index.aspx#relAndTOU">TOUPLE</a></li>
-                </ul>
-            </li>
-            <li class="topnavLi">
-                <a>Shared</a>
-                <ul>
-                    <li><a href="./search.aspx">검색</a></li>
-                    <li><a href="./write.aspx">글 쓰기</a></li>
-                </ul>
-            </li>
-            <li class="topnavLi">
-                <a>Event</a>
-                <ul>
-                    <li><a>진행중인 이벤트</a></li>
-                    <li><a>종료된 이벤트</a></li>
-                </ul>
-            </li>
-            <li class="topnavLi">
-                <a>Help</a>
-                <ul>
-                    <li><a href="FAQ.aspx">자주 찾는 질문</a></li>
-                </ul>
-            </li>
-        <% 
-            if (IsLogin.isLogin() == false)
-            {
-        %>
-            <li class="topnavLi">
-                <div class="nav-log">
-                    <a>
-                        <div class="nav-log-area">
-                            <asp:Button ID="btnLogin" runat="server" Text="로그인" CssClass="nav-log-item" PostBackUrl="./login.aspx" />
-                        </div>
-                    </a>
-                </div>
-                <ul>
-                    <br />
-                    <li><asp:Button ID="btnJoin" runat="server" Text="회원가입" OnClick="btnJoin_Click" /></li>
-                    <li><asp:Button ID="btnFindIDPW" runat="server" Text="계정찾기" OnClick="btnFindIDPW_Click" /></li>
-                </ul>
-            </li>
-        <%  
-            }
-            else
-            {
-        %>
-            <li class = "topnavLi" >
-				<a><% string id = Session["mem_id"].ToString(); Response.Write(id); %></a>
-                <ul>
-<%
-    if (Session["mem_id"] != null && Request.QueryString["mem_id"] != null)
-    {
-        if (!string.IsNullOrEmpty(Session["mem_id"].ToString()) && !string.IsNullOrEmpty(Request.QueryString["mem_id"].ToString()))
-        {
-            if (Session["mem_id"].ToString() != Request.QueryString["mem_id"].ToString())
-            {
-%>
-                    <li><asp:Button ID="btnMypage" runat="server" Text="마이페이지" OnClick="btnMypage_Click" class ="navJoinBtn"/></li>
-<%
-            }
-        }
-    }
-%>
-                    <li><asp:Button ID="btnLogout" runat="server" Text="로그아웃" OnClick="btnLogout_Click" class="navFindBtn"/></li>
-                </ul>
-            </li>
-        <% 
-            }
-        %>
-        </ul>
-    </div>
+              <div id="nav" class="topnav">
+            <ul class="topnavUl">
+                <li class="topnavLi">
+                    <div class="nav-logo">
+                        <a href="./index.aspx" class="nav-logo-item">To Our Shared</a>
+                    </div>
+                </li>
+                <li class="topnavLi">
+                    <a>Intro</a>
+                    <ul>
+                        <li><a href="./index.aspx#relAndTOU">TOUPLE</a></li>
+                    </ul>
+                </li>
+                <li class="topnavLi">
+                    <a>Shared</a>
+                    <ul>
+                        <li><a href="./search.aspx">검색</a></li>
+                    </ul>
+                </li>
+                <li class="topnavLi">
+                    <a>Event</a>
+                    <ul>
+                        <li><a>진행중인 이벤트</a></li>
+                        <li><a>종료된 이벤트</a></li>
+                    </ul>
+                </li>
+                <li class="topnavLi">
+                    <a>Help</a>
+                    <ul>
+                        <li><a href="./FAQ.aspx">자주 찾는 질문</a></li>
+                    </ul>
+                </li>
+                <% 
+                    if (IsLogin.isLogin() == false)
+                    {
+                %>
+                <li class="topnavLi">
+                    <div class="nav-log">
+                        <a>
+                            <div class="nav-log-area">
+                                <asp:Button ID="btnLogin" runat="server" Text="로그인" class="nav-log-item" PostBackUrl="~/login.aspx" />
+                            </div>
+                        </a>
+                    </div>
+                    <ul>
+                        <br />
+                        <li>
+                            <asp:Button ID="btnJoin" runat="server" Text="회원가입" OnClick="btnJoin_Click" class="navJoinBtn"/></li>
+                        <li>
+                            <asp:Button ID="btnFindIDPW" runat="server" Text="계정찾기" OnClick="btnFindIDPW_Click" class="navFindBtn" /></li>
+                    </ul>
+                </li>
+                <%  
+                    }
+                    else
+                    {
+                %>
+                <li class="topnavLi">
+                    <a><% string id = Session["mem_id"].ToString(); Response.Write(id); %></a>
+                    <ul>
+                        <li>
+                            <asp:Button ID="btnMypage" runat="server" Text="마이페이지" OnClick="btnMypage_Click" class="navJoinBtn" /></li>
+                        <li>
+                            <asp:Button ID="btnLogout" runat="server" Text="로그아웃" OnClick="btnLogout_Click" class="navFindBtn"/></li>
+
+                    </ul>
+                </li>
+                <% 
+                    }
+                %>
+            </ul>
+        </div>
 
         <asp:HiddenField ID="hdf_MemberID" runat="server" />
 
