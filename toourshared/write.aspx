@@ -1020,6 +1020,7 @@
 
             var curMkrOrder = this._order;
             var trvRoute = getTravelRouteByOrder(curMkrOrder);
+            
 
 
 
@@ -1065,6 +1066,7 @@
 
                             if (result[0].address.address_name != null) {
                                 content += '<li class="card-body-li">' + result[0].address.address_name + '</li>';
+
                             }
                             content +=
                                 '<li class="card-body-li"> </li>' +
@@ -1074,8 +1076,10 @@
                                 '<td>';
                             if (result[0].address.address_name != null) {
                                 content += '<div class="card-addBtn" onclick=\'searchPlacesByAddress("' + result[0].address.address_name + '")\'>주소로 검색</div>'
+                                setTravelRouteAddressByOrder(curMkrOrder, result[0].address.address_name);
                             } else {
                                 content += '<div class="card-addBtn" onclick=\'searchPlacesByAddress("' + result[0].address.road_address_name + '")\'>주소로 검색</div>'
+                                setTravelRouteRoadAddressByOrder(curMkrOrder, result[0].address.road_address_name);
                             }
                             content += '<div class="btn btn-danger btn-sm" onclick="removeMarkNTrvRouteByOrder(' + curMkrOrder + ')">삭제</div>' +
                                 '</td>' +
@@ -1529,6 +1533,12 @@
             setName(place_name) {
                 this.place_name = place_name;
             }
+            setAddress_name(address_name) {
+                this.address_name = address_name;
+            }
+            setRoadAddress_name(road_address_name) {
+                this.road_address_name = road_address_name;
+            }
             setInfo(info) {
                 this.info = info;
             }
@@ -1758,7 +1768,27 @@
                 }
 
             });
-            return [];
+            
+        }
+                function setTravelRouteAddressByOrder(order, address) {
+            TravelRouteList.forEach(function (val, idx, arr) {
+                if (val.order == order) {
+                    TravelRouteList[idx].setAddress_name(name);
+
+                }
+
+            });
+            
+        }
+                function setTravelRouteRoadAddressByOrder(order, roadAddress) {
+            TravelRouteList.forEach(function (val, idx, arr) {
+                if (val.order == order) {
+                    TravelRouteList[idx].setRoadAddress_name(name);
+
+                }
+
+            });
+            
         }
 
 
@@ -2599,8 +2629,8 @@
         //----------Post START
         //------------------------------------
 
-
-        function getLocName() {
+        var loc_name = "";
+        function setLocName() {
 
 
 
@@ -2610,30 +2640,56 @@
                 var itemsMiddle = Math.floor(items.length / 2);
                 var address = "";
 
-                if (items[itemsMiddle].address_name != null) {
+                if (items[itemsMiddle].address_name != null && items[itemsMiddle].address_name != "") {
                     address = items[itemsMiddle].address_name;
-                } else {
+                    var addresstokens = address.split(' ');
+                    addresstokens[0];
+                    loc_name = addresstokens[0];
+                }
+                else if (items[itemsMiddle].road_address_name != null && items[itemsMiddle].road_address_name != "") {
                     address = items[itemsMiddle].road_address_name;
+
+
+                    var addresstokens = address.split(' ');
+                    addresstokens[0];
+                    loc_name = addresstokens[0];
                 }
 
-                var addresstokens = address.split(' ');
-                addresstokens[0];
-                LocName.setAttribute("value", addresstokens[0]);
-            } else {
+                else {
 
-                //현재 지도의 중앙부분의 주소를 가져와 가장 앞 주소(시/도)만 사용
-                var coord = drawingMap.getCenter();
-                geocoder.coord2Address(coord.Ga, coord.Ha, function (result, status) {
-                    if (status === kakao.maps.services.Status.OK) {
-                        //주소가 있다면 검색
-                        if (result[0] != null) {
-                            console.info(result[0]);
+                    //현재 지도의 중앙부분의 주소를 가져와 가장 앞 주소(시/도)만 사용
+                    var coord = drawingMap.getCenter();
+                    geocoder.coord2Address(coord.Ga, coord.Ha, function (result, status) {
+                        if (status === kakao.maps.services.Status.OK) {
+                            //주소가 있다면 검색
+                            if (result[0] != null) {
+                                console.info(result[0]);
 
-                            LocName.setAttribute("value", result[0].address.region_1depth_name);
+                                loc_name = result[0].address.region_1depth_name;
+                            }
                         }
-                    }
-                });
-            }
+                    });
+                }
+
+
+
+            }else {
+
+                    //현재 지도의 중앙부분의 주소를 가져와 가장 앞 주소(시/도)만 사용
+                    var coord = drawingMap.getCenter();
+                    geocoder.coord2Address(coord.Ga, coord.Ha, function (result, status) {
+                        if (status === kakao.maps.services.Status.OK) {
+                            //주소가 있다면 검색
+                            if (result[0] != null) {
+                                console.info(result[0]);
+
+                                loc_name = result[0].address.region_1depth_name;
+                            }
+                        }
+                    });
+                }
+
+
 
 
 
@@ -2644,7 +2700,7 @@
 
         // 다음페이지로 markers, polyline, rect, circle, polygon 보내는 기능
         function addDataAtForm(form) {
-
+            setLocName();
 
 
 
@@ -2700,12 +2756,15 @@
             form.appendChild(CostItemListData);
 
 
+
+
             // -- TravelRouteList중 중간 노드의 주소를 가져와 파싱하여 가장 앞 주소(시/도)ㄴ만 가져온다.
 
 
             var LocName = document.createElement("input"); // input 엘리멘트 생성
             LocName.setAttribute("type", "hidden"); // type 속성을 hidden으로 설정
             LocName.setAttribute("name", "loc_name"); // name 속성을 'stadium'으로 설정
+            LocName.setAttribute("value", loc_name);
 
             form.appendChild(LocName);
 
@@ -2714,19 +2773,6 @@
 
 
 
-
-            //현재 지도의 중앙부분의 주소를 가져와 가장 앞 주소(시/도)만 사용
-            var coord = drawingMap.getCenter();
-            geocoder.coord2Address(coord.Ga, coord.Ha, function (result, status) {
-                if (status === kakao.maps.services.Status.OK) {
-                    //주소가 있다면 검색
-                    if (result[0] != null) {
-                        console.info(result[0]);
-
-                        LocName.setAttribute("value", result[0].address.region_1depth_name);
-                    }
-                }
-            });
 
 
 
